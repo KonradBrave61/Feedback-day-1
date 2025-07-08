@@ -5,14 +5,14 @@ export const mockCharacters = [
     name: "Riccardo Di Rigo",
     nickname: "Riccardo",
     title: "Divine Maestro",
-    level: 30,
-    rarity: "Legendary",
+    baseLevel: 30,
+    baseRarity: "Legendary",
     position: "MF",
     element: "Fire",
     jerseyNumber: 18,
     portrait: "/api/placeholder/150/150",
     teamLogo: "/api/placeholder/40/40",
-    stats: {
+    baseStats: {
       kick: { main: 122, secondary: 180 },
       control: { main: 139, secondary: 202 },
       technique: { main: 154, secondary: 224 },
@@ -22,11 +22,10 @@ export const mockCharacters = [
       physical: { main: 88, secondary: 139 }
     },
     description: "He guides his team so precisely it's as if he were conducting an orchestra. A genius playmaker known as the 'Virtuoso' by many.",
-    equipment: [
-      { name: "Omega Boots", rarity: "Legendary", category: "Boots", icon: "/api/placeholder/40/40" },
-      { name: "Genesis Bangle", rarity: "Epic", category: "Bracelet", icon: "/api/placeholder/40/40" },
-      { name: "Shiny Mascot", rarity: "Rare", category: "Pendant", icon: "/api/placeholder/40/40" },
-      { name: "Professor Layton Accessory", rarity: "Special", category: "Special", icon: "/api/placeholder/40/40" }
+    hissatsu: [
+      { name: "Orchestral Conduct", description: "Divine control technique that guides the ball with perfect precision", type: "Dribble", icon: "/api/placeholder/40/40" },
+      { name: "Maestro's Shot", description: "A shooting technique that finds the perfect angle every time", type: "Shot", icon: "/api/placeholder/40/40" },
+      { name: "Virtuoso Pass", description: "A passing technique that creates perfect opportunities", type: "Pass", icon: "/api/placeholder/40/40" }
     ],
     teamPassives: [
       { name: "Virtuoso Conduct", description: "Team's Focus value +25% when outside of Zone", icon: "/api/placeholder/30/30" },
@@ -34,11 +33,6 @@ export const mockCharacters = [
       { name: "Divine Inspiration", description: "Focus value +5% to different position players", icon: "/api/placeholder/30/30" },
       { name: "Maestro's Guidance", description: "Team's Tension is below 50%, team's Shot AT +20%", icon: "/api/placeholder/30/30" },
       { name: "Perfect Pitch", description: "When opponent commits a foul, Shot Power increased by 4%", icon: "/api/placeholder/30/30" }
-    ],
-    tactics: [
-      { name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal, temporarily doubling the potency of your defence.", effect: "DF +100%", icon: "/api/placeholder/40/40" },
-      { name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP increase by 10%", icon: "/api/placeholder/40/40" },
-      { name: "Mount Fuji", description: "Immovable mountain defense", effect: "Physical +15%", icon: "/api/placeholder/40/40" }
     ]
   },
   {
@@ -46,14 +40,14 @@ export const mockCharacters = [
     name: "Mark Evans",
     nickname: "Mark",
     title: "Legendary Keeper",
-    level: 30,
-    rarity: "Epic",
+    baseLevel: 30,
+    baseRarity: "Epic",
     position: "GK",
     element: "Earth",
     jerseyNumber: 1,
     portrait: "/api/placeholder/150/150",
     teamLogo: "/api/placeholder/40/40",
-    stats: {
+    baseStats: {
       kick: { main: 85, secondary: 125 },
       control: { main: 95, secondary: 140 },
       technique: { main: 110, secondary: 160 },
@@ -63,11 +57,10 @@ export const mockCharacters = [
       physical: { main: 130, secondary: 185 }
     },
     description: "A passionate goalkeeper who never gives up. His determination inspires the entire team.",
-    equipment: [
-      { name: "Keeper Gloves", rarity: "Epic", category: "Boots", icon: "/api/placeholder/40/40" },
-      { name: "Guardian Bangle", rarity: "Rare", category: "Bracelet", icon: "/api/placeholder/40/40" },
-      { name: "Shield Pendant", rarity: "Common", category: "Pendant", icon: "/api/placeholder/40/40" },
-      { name: "Captain's Armband", rarity: "Special", category: "Special", icon: "/api/placeholder/40/40" }
+    hissatsu: [
+      { name: "God Hand", description: "Divine protection that blocks any shot", type: "Block", icon: "/api/placeholder/40/40" },
+      { name: "Majin The Hand", description: "Demonic power that crushes incoming attacks", type: "Block", icon: "/api/placeholder/40/40" },
+      { name: "Keeper's Punch", description: "Powerful punch that clears dangerous situations", type: "Punch", icon: "/api/placeholder/40/40" }
     ],
     teamPassives: [
       { name: "Goalkeeper's Spirit", description: "When goal is conceded, team's morale increases by 10%", icon: "/api/placeholder/30/30" },
@@ -75,11 +68,6 @@ export const mockCharacters = [
       { name: "Inspiring Presence", description: "Team's pressure +5% for all players", icon: "/api/placeholder/30/30" },
       { name: "Never Give Up", description: "Team recovers 20% faster from negative effects", icon: "/api/placeholder/30/30" },
       { name: "Guardian's Watch", description: "DF +25% when opponent is in critical zone", icon: "/api/placeholder/30/30" }
-    ],
-    tactics: [
-      { name: "God Hand", description: "Divine protection blocks any shot", effect: "Block +200%", icon: "/api/placeholder/40/40" },
-      { name: "Majin The Hand", description: "Demonic power crushes incoming attacks", effect: "Counter +150%", icon: "/api/placeholder/40/40" },
-      { name: "Diamond Defense", description: "Unbreakable formation", effect: "Team DF +50%", icon: "/api/placeholder/40/40" }
     ]
   },
   {
@@ -87,14 +75,14 @@ export const mockCharacters = [
     name: "Axel Blaze",
     nickname: "Axel",
     title: "Flame Striker",
-    level: 28,
-    rarity: "Epic",
+    baseLevel: 28,
+    baseRarity: "Epic",
     position: "FW",
     element: "Fire",
     jerseyNumber: 10,
     portrait: "/api/placeholder/150/150",
     teamLogo: "/api/placeholder/40/40",
-    stats: {
+    baseStats: {
       kick: { main: 155, secondary: 220 },
       control: { main: 120, secondary: 175 },
       technique: { main: 135, secondary: 195 },
@@ -104,11 +92,10 @@ export const mockCharacters = [
       physical: { main: 105, secondary: 150 }
     },
     description: "A striker with blazing passion. His fire burns brightest when the team needs him most.",
-    equipment: [
-      { name: "Flame Boots", rarity: "Epic", category: "Boots", icon: "/api/placeholder/40/40" },
-      { name: "Striker's Band", rarity: "Rare", category: "Bracelet", icon: "/api/placeholder/40/40" },
-      { name: "Fire Pendant", rarity: "Common", category: "Pendant", icon: "/api/placeholder/40/40" },
-      { name: "Ace Number", rarity: "Special", category: "Special", icon: "/api/placeholder/40/40" }
+    hissatsu: [
+      { name: "Fire Tornado", description: "Blazing whirlwind of destruction", type: "Shot", icon: "/api/placeholder/40/40" },
+      { name: "Flame Dance", description: "Elegant dribbling technique with fire", type: "Dribble", icon: "/api/placeholder/40/40" },
+      { name: "Blazing Pass", description: "High-speed pass that burns through defenses", type: "Pass", icon: "/api/placeholder/40/40" }
     ],
     teamPassives: [
       { name: "Burning Spirit", description: "Shot power +20% when HP is below 50%", icon: "/api/placeholder/30/30" },
@@ -116,12 +103,82 @@ export const mockCharacters = [
       { name: "Fire Element", description: "Fire-based moves deal +25% damage", icon: "/api/placeholder/30/30" },
       { name: "Leader's Call", description: "Team's morale +10% when scoring", icon: "/api/placeholder/30/30" },
       { name: "Blazing Path", description: "Movement speed +20% when chasing ball", icon: "/api/placeholder/30/30" }
-    ],
-    tactics: [
-      { name: "Fire Tornado", description: "Blazing whirlwind of destruction", effect: "Shot +180%", icon: "/api/placeholder/40/40" },
-      { name: "Flame Fortress", description: "Defensive wall of fire", effect: "DF +100%", icon: "/api/placeholder/40/40" },
-      { name: "Heat Wave", description: "Overwhelming offensive pressure", effect: "Team AT +30%", icon: "/api/placeholder/40/40" }
     ]
+  }
+];
+
+export const mockTactics = [
+  { id: 1, name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal", effect: "DF +100%", icon: "/api/placeholder/40/40" },
+  { id: 2, name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP +10%", icon: "/api/placeholder/40/40" },
+  { id: 3, name: "Mount Fuji", description: "Immovable mountain defense", effect: "Physical +15%", icon: "/api/placeholder/40/40" },
+  { id: 4, name: "Waxing Moon", description: "Crescent moon slicing technique", effect: "Technique +20%", icon: "/api/placeholder/40/40" },
+  { id: 5, name: "Diamond Defense", description: "Unbreakable formation", effect: "Team DF +50%", icon: "/api/placeholder/40/40" },
+  { id: 6, name: "Bond Protocol", description: "Team synchronization boost", effect: "Control +25%", icon: "/api/placeholder/40/40" },
+  { id: 7, name: "Bull Horns", description: "Charging attack formation", effect: "Shot +40%", icon: "/api/placeholder/40/40" },
+  { id: 8, name: "Claymore", description: "Devastating single strike", effect: "Kick +60%", icon: "/api/placeholder/40/40" },
+  { id: 9, name: "Three-Pronged Attack", description: "Triple threat offensive", effect: "Team AT +35%", icon: "/api/placeholder/40/40" }
+];
+
+export const mockEquipment = {
+  boots: [
+    { id: 1, name: "Omega Boots", rarity: "Legendary", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 15, agility: 10 } },
+    { id: 2, name: "Genesis Boots", rarity: "Epic", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 12, agility: 8 } },
+    { id: 3, name: "Flame Boots", rarity: "Rare", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 8, agility: 6 } },
+    { id: 4, name: "Basic Boots", rarity: "Common", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 5, agility: 3 } },
+  ],
+  bracelets: [
+    { id: 5, name: "Genesis Bangle", rarity: "Legendary", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 15, technique: 10 } },
+    { id: 6, name: "Striker's Band", rarity: "Epic", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 12, technique: 8 } },
+    { id: 7, name: "Guardian Bangle", rarity: "Rare", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 8, technique: 6 } },
+    { id: 8, name: "Simple Band", rarity: "Common", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 5, technique: 3 } },
+  ],
+  pendants: [
+    { id: 9, name: "Shiny Mascot", rarity: "Legendary", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 15, pressure: 10 } },
+    { id: 10, name: "Fire Pendant", rarity: "Epic", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 12, pressure: 8 } },
+    { id: 11, name: "Shield Pendant", rarity: "Rare", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 8, pressure: 6 } },
+    { id: 12, name: "Lucky Charm", rarity: "Common", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 5, pressure: 3 } },
+  ],
+  special: [
+    { id: 13, name: "Professor Layton Accessory", rarity: "Legendary", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 15, agility: 10 } },
+    { id: 14, name: "Captain's Armband", rarity: "Epic", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 12, agility: 8 } },
+    { id: 15, name: "Ace Number", rarity: "Rare", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 8, agility: 6 } },
+    { id: 16, name: "Team Badge", rarity: "Common", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 5, agility: 3 } },
+  ]
+};
+
+export const mockCoaches = [
+  {
+    id: 1,
+    name: "Mark Evans Sr.",
+    title: "Veteran Coach",
+    portrait: "/api/placeholder/150/150",
+    bonuses: {
+      teamStats: { kick: 10, control: 8, technique: 12 },
+      description: "Increases team's offensive capabilities"
+    },
+    specialties: ["Offensive Training", "Team Spirit", "Shot Power"]
+  },
+  {
+    id: 2,
+    name: "Ray Dark",
+    title: "Tactical Genius",
+    portrait: "/api/placeholder/150/150",
+    bonuses: {
+      teamStats: { intelligence: 15, pressure: 10, control: 5 },
+      description: "Enhances team's tactical awareness"
+    },
+    specialties: ["Tactical Analysis", "Defense Formation", "Mental Training"]
+  },
+  {
+    id: 3,
+    name: "Hibiki Seigou",
+    title: "Legendary Coach",
+    portrait: "/api/placeholder/150/150",
+    bonuses: {
+      teamStats: { physical: 12, agility: 8, technique: 10 },
+      description: "Balanced training for all aspects"
+    },
+    specialties: ["Physical Training", "Endurance", "Technique Mastery"]
   }
 ];
 
@@ -162,44 +219,6 @@ export const mockFormations = [
   }
 ];
 
-export const mockTactics = [
-  { id: 1, name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal", effect: "DF +100%", icon: "/api/placeholder/40/40" },
-  { id: 2, name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP +10%", icon: "/api/placeholder/40/40" },
-  { id: 3, name: "Mount Fuji", description: "Immovable mountain defense", effect: "Physical +15%", icon: "/api/placeholder/40/40" },
-  { id: 4, name: "Waxing Moon", description: "Crescent moon slicing technique", effect: "Technique +20%", icon: "/api/placeholder/40/40" },
-  { id: 5, name: "Diamond Defense", description: "Unbreakable formation", effect: "Team DF +50%", icon: "/api/placeholder/40/40" },
-  { id: 6, name: "Bond Protocol", description: "Team synchronization boost", effect: "Control +25%", icon: "/api/placeholder/40/40" },
-  { id: 7, name: "Bull Horns", description: "Charging attack formation", effect: "Shot +40%", icon: "/api/placeholder/40/40" },
-  { id: 8, name: "Claymore", description: "Devastating single strike", effect: "Kick +60%", icon: "/api/placeholder/40/40" },
-  { id: 9, name: "Three-Pronged Attack", description: "Triple threat offensive", effect: "Team AT +35%", icon: "/api/placeholder/40/40" }
-];
-
-export const mockEquipment = [
-  // Boots
-  { id: 1, name: "Omega Boots", rarity: "Legendary", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 15, agility: 10 } },
-  { id: 2, name: "Genesis Boots", rarity: "Epic", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 12, agility: 8 } },
-  { id: 3, name: "Flame Boots", rarity: "Rare", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 8, agility: 6 } },
-  { id: 4, name: "Basic Boots", rarity: "Common", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 5, agility: 3 } },
-  
-  // Bracelets
-  { id: 5, name: "Genesis Bangle", rarity: "Legendary", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 15, technique: 10 } },
-  { id: 6, name: "Striker's Band", rarity: "Epic", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 12, technique: 8 } },
-  { id: 7, name: "Guardian Bangle", rarity: "Rare", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 8, technique: 6 } },
-  { id: 8, name: "Simple Band", rarity: "Common", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 5, technique: 3 } },
-  
-  // Pendants
-  { id: 9, name: "Shiny Mascot", rarity: "Legendary", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 15, pressure: 10 } },
-  { id: 10, name: "Fire Pendant", rarity: "Epic", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 12, pressure: 8 } },
-  { id: 11, name: "Shield Pendant", rarity: "Rare", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 8, pressure: 6 } },
-  { id: 12, name: "Lucky Charm", rarity: "Common", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 5, pressure: 3 } },
-  
-  // Special
-  { id: 13, name: "Professor Layton Accessory", rarity: "Legendary", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 15, agility: 10 } },
-  { id: 14, name: "Captain's Armband", rarity: "Epic", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 12, agility: 8 } },
-  { id: 15, name: "Ace Number", rarity: "Rare", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 8, agility: 6 } },
-  { id: 16, name: "Team Badge", rarity: "Common", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 5, agility: 3 } }
-];
-
 // Generate more mock characters to reach a good sample size
 for (let i = 4; i <= 54; i++) {
   const elements = ['Fire', 'Earth', 'Wind', 'Wood', 'Void'];
@@ -228,14 +247,14 @@ for (let i = 4; i <= 54; i++) {
     name: `${randomName} ${i}`,
     nickname: randomName,
     title: `${randomElement} ${randomPosition}`,
-    level: Math.floor(Math.random() * 100) + 1,
-    rarity: randomRarity,
+    baseLevel: Math.floor(Math.random() * 100) + 1,
+    baseRarity: randomRarity,
     position: randomPosition,
     element: randomElement,
     jerseyNumber: Math.floor(Math.random() * 99) + 1,
     portrait: "/api/placeholder/150/150",
     teamLogo: "/api/placeholder/40/40",
-    stats: {
+    baseStats: {
       kick: { main: Math.floor(Math.random() * 100) + 50, secondary: Math.floor(Math.random() * 100) + 100 },
       control: { main: Math.floor(Math.random() * 100) + 50, secondary: Math.floor(Math.random() * 100) + 100 },
       technique: { main: Math.floor(Math.random() * 100) + 50, secondary: Math.floor(Math.random() * 100) + 100 },
@@ -245,11 +264,10 @@ for (let i = 4; i <= 54; i++) {
       physical: { main: Math.floor(Math.random() * 100) + 50, secondary: Math.floor(Math.random() * 100) + 100 }
     },
     description: `A talented ${randomPosition} player with ${randomElement} element abilities.`,
-    equipment: [
-      mockEquipment[Math.floor(Math.random() * 4)],
-      mockEquipment[Math.floor(Math.random() * 4) + 4],
-      mockEquipment[Math.floor(Math.random() * 4) + 8],
-      mockEquipment[Math.floor(Math.random() * 4) + 12]
+    hissatsu: [
+      { name: "Technique 1", description: "Sample technique", type: "Shot", icon: "/api/placeholder/40/40" },
+      { name: "Technique 2", description: "Sample technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+      { name: "Technique 3", description: "Sample technique", type: "Pass", icon: "/api/placeholder/40/40" }
     ],
     teamPassives: [
       { name: "Passive 1", description: "Sample passive ability", icon: "/api/placeholder/30/30" },
@@ -257,11 +275,6 @@ for (let i = 4; i <= 54; i++) {
       { name: "Passive 3", description: "Sample passive ability", icon: "/api/placeholder/30/30" },
       { name: "Passive 4", description: "Sample passive ability", icon: "/api/placeholder/30/30" },
       { name: "Passive 5", description: "Sample passive ability", icon: "/api/placeholder/30/30" }
-    ],
-    tactics: [
-      mockTactics[Math.floor(Math.random() * mockTactics.length)],
-      mockTactics[Math.floor(Math.random() * mockTactics.length)],
-      mockTactics[Math.floor(Math.random() * mockTactics.length)]
     ]
   });
 }
@@ -274,13 +287,38 @@ export const getCharactersByPosition = (position) => {
   return mockCharacters.filter(char => char.position === position);
 };
 
-export const getCharactersByRarity = (rarity) => {
-  return mockCharacters.filter(char => char.rarity === rarity);
-};
-
 export const searchCharacters = (query) => {
   return mockCharacters.filter(char => 
     char.name.toLowerCase().includes(query.toLowerCase()) ||
     char.nickname.toLowerCase().includes(query.toLowerCase())
   );
+};
+
+// Helper function to calculate stats with equipment bonuses
+export const calculateStats = (character, equipment, userLevel = 99, userRarity = 'Legendary') => {
+  const baseStats = { ...character.baseStats };
+  const levelMultiplier = userLevel / character.baseLevel;
+  const rarityMultiplier = userRarity === 'Legendary' ? 1.3 : userRarity === 'Epic' ? 1.2 : userRarity === 'Rare' ? 1.1 : 1.0;
+  
+  // Apply level and rarity scaling
+  Object.keys(baseStats).forEach(stat => {
+    baseStats[stat].main = Math.floor(baseStats[stat].main * levelMultiplier * rarityMultiplier);
+    baseStats[stat].secondary = Math.floor(baseStats[stat].secondary * levelMultiplier * rarityMultiplier);
+  });
+  
+  // Apply equipment bonuses
+  if (equipment) {
+    Object.keys(equipment).forEach(slot => {
+      const item = equipment[slot];
+      if (item && item.stats) {
+        Object.keys(item.stats).forEach(stat => {
+          if (baseStats[stat]) {
+            baseStats[stat].main += item.stats[stat];
+          }
+        });
+      }
+    });
+  }
+  
+  return baseStats;
 };
