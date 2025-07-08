@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
-import { mockCharacters, mockFormations } from '../data/mock';
+import { mockCharacters, mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import Navigation from '../components/Navigation';
 import FormationField from '../components/FormationField';
 import PlayerSearch from '../components/PlayerSearch';
+import TacticsSelector from '../components/TacticsSelector';
+import CoachSelector from '../components/CoachSelector';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Users, Trophy, Target, Shield } from 'lucide-react';
+import { Users, Trophy, Target, Shield, Zap, UserCheck } from 'lucide-react';
 
 const TeamBuilder = () => {
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
   const [teamPlayers, setTeamPlayers] = useState({});
+  const [selectedTactics, setSelectedTactics] = useState([]);
+  const [selectedCoach, setSelectedCoach] = useState(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
+  const [showTacticsSelector, setShowTacticsSelector] = useState(false);
+  const [showCoachSelector, setShowCoachSelector] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null);
 
   const handleFormationChange = (formationId) => {
@@ -45,21 +51,38 @@ const TeamBuilder = () => {
     });
   };
 
+  const handleTacticsSelect = (tactics) => {
+    setSelectedTactics(tactics);
+  };
+
+  const handleCoachSelect = (coach) => {
+    setSelectedCoach(coach);
+  };
+
   const getTeamStats = () => {
     const players = Object.values(teamPlayers);
     if (players.length === 0) return null;
 
     const totalStats = players.reduce((acc, player) => {
-      Object.keys(player.stats).forEach(stat => {
-        acc[stat] = (acc[stat] || 0) + player.stats[stat].main;
+      Object.keys(player.baseStats).forEach(stat => {
+        acc[stat] = (acc[stat] || 0) + player.baseStats[stat].main;
       });
       return acc;
     }, {});
 
+    // Apply coach bonuses
+    if (selectedCoach) {
+      Object.keys(selectedCoach.bonuses.teamStats).forEach(stat => {
+        if (totalStats[stat]) {
+          totalStats[stat] += selectedCoach.bonuses.teamStats[stat];
+        }
+      });
+    }
+
     return {
       ...totalStats,
       playerCount: players.length,
-      avgLevel: Math.round(players.reduce((acc, player) => acc + player.level, 0) / players.length)
+      avgLevel: Math.round(players.reduce((acc, player) => acc + player.baseLevel, 0) / players.length)
     };
   };
 
@@ -80,8 +103,9 @@ const TeamBuilder = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Formation Selection */}
-          <div className="lg:col-span-1">
+          {/* Left Panel - Formation & Controls */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* Formation Selection */}
             <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -105,9 +129,88 @@ const TeamBuilder = () => {
               </CardContent>
             </Card>
 
+            {/* Tactics Selection */}
+            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5" />
+                  Tactics ({selectedTactics.length}/3)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 mb-4">
+                  {selectedTactics.length > 0 ? (
+                    selectedTactics.map((tactic, index) => (
+                      <div key={index} className="p-2 bg-blue-600/20 rounded-lg border border-blue-500/30">
+                        <div className="font-medium text-sm">{tactic.name}</div>
+                        <div className="text-xs text-gray-300">{tactic.effect}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-sm">No tactics selected</div>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full text-white border-white/20"
+                  onClick={() => setShowTacticsSelector(true)}
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  Change Tactics
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Coach Selection */}
+            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserCheck className="h-5 w-5" />
+                  Coach
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {selectedCoach ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={selectedCoach.portrait}
+                        alt={selectedCoach.name}
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div>
+                        <div className="font-medium">{selectedCoach.name}</div>
+                        <div className="text-sm text-gray-300">{selectedCoach.title}</div>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {selectedCoach.bonuses.description}
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {selectedCoach.specialties.map((specialty, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-400 text-sm mb-4">No coach selected</div>
+                )}
+                <Button
+                  variant="outline"
+                  className="w-full text-white border-white/20"
+                  onClick={() => setShowCoachSelector(true)}
+                >
+                  <UserCheck className="h-4 w-4 mr-2" />
+                  Select Coach
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Team Stats */}
             {teamStats && (
-              <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white mt-4">
+              <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Trophy className="h-5 w-5" />
@@ -128,6 +231,11 @@ const TeamBuilder = () => {
                         {teamStats.avgLevel}
                       </Badge>
                     </div>
+                    {selectedCoach && (
+                      <div className="text-xs text-green-400">
+                        Coach bonuses applied
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="flex justify-between">
                         <span>Kick:</span>
@@ -164,7 +272,7 @@ const TeamBuilder = () => {
             )}
           </div>
 
-          {/* Formation Field */}
+          {/* Right Panel - Formation Field */}
           <div className="lg:col-span-2">
             <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
               <CardHeader>
@@ -185,13 +293,31 @@ const TeamBuilder = () => {
           </div>
         </div>
 
-        {/* Player Search Modal */}
+        {/* Modals */}
         {showPlayerSearch && (
           <PlayerSearch
             isOpen={showPlayerSearch}
             onClose={() => setShowPlayerSearch(false)}
             onPlayerSelect={handlePlayerSelect}
             position={selectedPosition}
+          />
+        )}
+
+        {showTacticsSelector && (
+          <TacticsSelector
+            isOpen={showTacticsSelector}
+            onClose={() => setShowTacticsSelector(false)}
+            onTacticSelect={handleTacticsSelect}
+            selectedTactics={selectedTactics}
+          />
+        )}
+
+        {showCoachSelector && (
+          <CoachSelector
+            isOpen={showCoachSelector}
+            onClose={() => setShowCoachSelector(false)}
+            onCoachSelect={handleCoachSelect}
+            selectedCoach={selectedCoach}
           />
         )}
       </div>
