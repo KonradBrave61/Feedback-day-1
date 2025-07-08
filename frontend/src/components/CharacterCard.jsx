@@ -27,11 +27,24 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
     }
   };
 
+  const getElementIcon = (element) => {
+    switch (element) {
+      case 'Fire': return '/icons/elements/fire.png';
+      case 'Earth': return '/icons/elements/earth.png';
+      case 'Air': return '/icons/elements/air.png';
+      case 'Wind': return '/icons/elements/air.png'; // Alias for Air
+      case 'Wood': return '/icons/elements/wood.png';
+      case 'Void': return '/api/placeholder/16/16'; // No icon yet
+      default: return '/api/placeholder/16/16';
+    }
+  };
+
   const getElementColor = (element) => {
     switch (element) {
       case 'Fire': return 'text-red-400';
       case 'Water': return 'text-blue-400';
       case 'Earth': return 'text-green-400';
+      case 'Air': return 'text-cyan-400';
       case 'Wind': return 'text-cyan-400';
       case 'Wood': return 'text-emerald-400';
       case 'Void': return 'text-purple-400';
