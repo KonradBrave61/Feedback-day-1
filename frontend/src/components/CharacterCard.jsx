@@ -39,18 +39,22 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
     }
   };
 
+  // Use base values for display (user will control level/rarity in modal)
+  const displayLevel = character.baseLevel;
+  const displayRarity = character.baseRarity;
+
   const StatPreview = () => (
     <div className="absolute inset-0 bg-black/90 backdrop-blur-sm rounded-lg flex flex-col justify-center items-center p-4 opacity-0 group-hover:opacity-100 transition-all duration-200">
       <div className="text-center">
         <h3 className="text-white font-bold mb-2">{character.name}</h3>
-        <Badge className={`${getRarityColor(character.rarity)} mb-2`}>
-          {character.rarity}
+        <Badge className={`${getRarityColor(displayRarity)} mb-2`}>
+          {displayRarity}
         </Badge>
         <div className="grid grid-cols-2 gap-1 text-xs">
-          <div className="text-red-400">Kick: {character.stats.kick.main}</div>
-          <div className="text-orange-400">Control: {character.stats.control.main}</div>
-          <div className="text-yellow-400">Tech: {character.stats.technique.main}</div>
-          <div className="text-blue-400">Intel: {character.stats.intelligence.main}</div>
+          <div className="text-red-400">Kick: {character.baseStats.kick.main}</div>
+          <div className="text-orange-400">Control: {character.baseStats.control.main}</div>
+          <div className="text-yellow-400">Tech: {character.baseStats.technique.main}</div>
+          <div className="text-blue-400">Intel: {character.baseStats.intelligence.main}</div>
         </div>
       </div>
     </div>
@@ -80,12 +84,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
               <h3 className="text-white font-bold">{character.name}</h3>
               <p className="text-gray-300 text-sm">{character.nickname}</p>
               <div className="flex items-center gap-2 mt-1">
-                <Badge variant="outline" className="text-blue-400 border-blue-400">
-                  Lv. {character.level}
-                </Badge>
-                <Badge className={`${getRarityColor(character.rarity)} text-xs`}>
-                  {character.rarity}
-                </Badge>
                 <span className={`text-sm ${getElementColor(character.element)}`}>
                   {character.element}
                 </span>
@@ -117,13 +115,13 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
       <CardContent className="p-3">
         <div className="relative">
           {/* Character Portrait */}
-          <div className={`w-full aspect-square ${character.rarity === 'Legendary' ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-gradient-to-br from-blue-500 to-purple-600'} rounded-lg mb-2 flex items-center justify-center overflow-hidden`}>
+          <div className={`w-full aspect-square ${displayRarity === 'Legendary' ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-gradient-to-br from-blue-500 to-purple-600'} rounded-lg mb-2 flex items-center justify-center overflow-hidden`}>
             <img 
               src={character.portrait} 
               alt={character.name}
               className="w-full h-full object-cover"
             />
-            {character.rarity === 'Legendary' && (
+            {displayRarity === 'Legendary' && (
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-lg">
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMGwzIDdsNyAwLTUuNSA0IDIgNi41LTYuNS00LjUtNi41IDQuNSAyLTYuNS01LjUtNCA3IDB6IiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz48L3N2Zz4=')] opacity-20"></div>
               </div>
@@ -152,18 +150,11 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
         <div className="space-y-2">
           <h3 className="text-white font-bold text-sm truncate">{character.name}</h3>
           
-          <div className="flex items-center justify-between">
-            <Badge variant="outline" className="text-blue-400 border-blue-400 text-xs">
-              Lv. {character.level}
-            </Badge>
+          <div className="flex items-center justify-center">
             <span className={`text-xs ${getElementColor(character.element)}`}>
               {character.element}
             </span>
           </div>
-
-          <Badge className={`${getRarityColor(character.rarity)} text-xs w-full justify-center`}>
-            {character.rarity}
-          </Badge>
         </div>
       </CardContent>
     </Card>

@@ -3,21 +3,28 @@ import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
-import { mockTactics, mockEquipment } from '../data/mock';
+import { mockEquipment, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 
 const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
     allCharacters.findIndex(c => c.id === character.id)
   );
-  const [selectedTactics, setSelectedTactics] = useState(character.tactics);
-  const [selectedEquipment, setSelectedEquipment] = useState(character.equipment);
-  const [showTacticsList, setShowTacticsList] = useState(false);
+  const [userLevel, setUserLevel] = useState(99);
+  const [userRarity, setUserRarity] = useState('Legendary');
+  const [selectedEquipment, setSelectedEquipment] = useState({
+    boots: null,
+    bracelet: null,
+    pendant: null,
+    special: null
+  });
   const [showEquipmentList, setShowEquipmentList] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const currentCharacter = allCharacters[currentCharacterIndex];
+  const calculatedStats = calculateStats(currentCharacter, selectedEquipment, userLevel, userRarity);
 
   const getPositionColor = (position) => {
     switch (position) {
@@ -55,36 +62,34 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
       : (currentCharacterIndex - 1 + allCharacters.length) % allCharacters.length;
     
     setCurrentCharacterIndex(newIndex);
-    const newCharacter = allCharacters[newIndex];
-    setSelectedTactics(newCharacter.tactics);
-    setSelectedEquipment(newCharacter.equipment);
-  };
-
-  const handleTacticSelect = (tactic) => {
-    const newTactics = [...selectedTactics];
-    newTactics[selectedSlot] = tactic;
-    setSelectedTactics(newTactics);
-    setShowTacticsList(false);
-    setSelectedSlot(null);
-    toast.success(`Tactic "${tactic.name}" equipped!`);
+    // Reset user preferences for new character
+    setUserLevel(99);
+    setUserRarity('Legendary');
+    setSelectedEquipment({
+      boots: null,
+      bracelet: null,
+      pendant: null,
+      special: null
+    });
   };
 
   const handleEquipmentSelect = (equipment) => {
-    const newEquipment = [...selectedEquipment];
-    newEquipment[selectedSlot] = equipment;
-    setSelectedEquipment(newEquipment);
+    setSelectedEquipment(prev => ({
+      ...prev,
+      [selectedCategory]: equipment
+    }));
     setShowEquipmentList(false);
-    setSelectedSlot(null);
-    toast.success(`Equipment "${equipment.name}" equipped!`);
+    setSelectedCategory(null);
+    toast.success(`${equipment.name} equipped!`);
   };
 
   const addToTeam = () => {
-    toast.success(`${currentCharacter.name} added to team!`);
+    toast.success(`${currentCharacter.name} (Lv.${userLevel}) added to team!`);
   };
 
   const StatRadarChart = ({ stats }) => {
     const statNames = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
-    const maxValue = 200;
+    const maxValue = 300;
     const center = 60;
     const radius = 50;
     
@@ -184,7 +189,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Button>
 
           {/* Character Header */}
-          <div className={`${currentCharacter.rarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-blue-500 to-purple-600'} rounded-lg p-4 mt-8`}>
+          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-blue-500 to-purple-600'} rounded-lg p-4 mt-8`}>
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">{currentCharacter.title}</h2>
@@ -196,11 +201,44 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                   {currentCharacter.position}
                 </Badge>
                 <div className="text-2xl font-bold">#{currentCharacter.jerseyNumber}</div>
-                <div className="text-lg">Lv. {currentCharacter.level}</div>
-                <Badge className={`${getRarityColor(currentCharacter.rarity)} mt-1`}>
-                  {currentCharacter.rarity}
+                <div className="text-lg">Lv. {userLevel}</div>
+                <Badge className={`${getRarityColor(userRarity)} mt-1`}>
+                  {userRarity}
                 </Badge>
               </div>
+            </div>
+          </div>
+
+          {/* User Controls */}
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Level (1-99)</label>
+              <Select value={userLevel.toString()} onValueChange={(value) => setUserLevel(parseInt(value))}>
+                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 99 }, (_, i) => i + 1).map(level => (
+                    <SelectItem key={level} value={level.toString()}>
+                      Level {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Rarity</label>
+              <Select value={userRarity} onValueChange={setUserRarity}>
+                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Common">Common</SelectItem>
+                  <SelectItem value="Rare">Rare</SelectItem>
+                  <SelectItem value="Epic">Epic</SelectItem>
+                  <SelectItem value="Legendary">Legendary</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -218,10 +256,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <StatRadarChart stats={currentCharacter.stats} />
+                  <StatRadarChart stats={calculatedStats} />
                 </div>
                 <div className="space-y-2">
-                  {Object.entries(currentCharacter.stats).map(([stat, values]) => (
+                  {Object.entries(calculatedStats).map(([stat, values]) => (
                     <div key={stat} className="flex items-center justify-between">
                       <span className="text-sm capitalize">{stat}</span>
                       <div className="flex items-center gap-2">
@@ -245,22 +283,31 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
               <h4 className="text-lg font-bold mb-4">EQUIPMENT</h4>
               
               <div className="grid grid-cols-2 gap-3">
-                {selectedEquipment.map((item, index) => (
+                {Object.entries(selectedEquipment).map(([category, item]) => (
                   <div
-                    key={index}
-                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${getRarityColor(item.rarity)} hover:scale-105`}
+                    key={category}
+                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                      item ? getRarityColor(item.rarity) : 'border-dashed border-white/30 bg-white/5'
+                    } hover:scale-105`}
                     onClick={() => {
-                      setSelectedSlot(index);
+                      setSelectedCategory(category);
                       setShowEquipmentList(true);
                     }}
                   >
-                    <div className="flex items-center gap-2">
-                      <img src={item.icon} alt={item.name} className="w-8 h-8" />
-                      <div>
-                        <div className="font-medium text-sm">{item.name}</div>
-                        <div className="text-xs text-gray-200">{item.category}</div>
+                    {item ? (
+                      <div className="flex items-center gap-2">
+                        <img src={item.icon} alt={item.name} className="w-8 h-8" />
+                        <div>
+                          <div className="font-medium text-sm">{item.name}</div>
+                          <div className="text-xs text-gray-200">{item.category}</div>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="text-center">
+                        <Plus className="h-6 w-6 mx-auto mb-1 text-gray-400" />
+                        <div className="text-xs text-gray-400 capitalize">{category}</div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -286,27 +333,25 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             </CardContent>
           </Card>
 
-          {/* Tactics Panel */}
+          {/* Hissatsu Panel */}
           <Card className="bg-black/20 backdrop-blur-md border-white/10">
             <CardContent className="p-4">
-              <h4 className="text-lg font-bold mb-4">TACTICS</h4>
+              <h4 className="text-lg font-bold mb-4">HISSATSU (TECHNIQUES)</h4>
               
               <div className="space-y-3">
-                {selectedTactics.map((tactic, index) => (
+                {currentCharacter.hissatsu.map((technique, index) => (
                   <div
                     key={index}
-                    className="p-3 bg-blue-600/20 rounded-lg border border-blue-500/30 cursor-pointer hover:bg-blue-600/30 transition-all"
-                    onClick={() => {
-                      setSelectedSlot(index);
-                      setShowTacticsList(true);
-                    }}
+                    className="p-3 bg-purple-600/20 rounded-lg border border-purple-500/30"
                   >
                     <div className="flex items-center gap-3">
-                      <img src={tactic.icon} alt={tactic.name} className="w-8 h-8" />
+                      <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
                       <div>
-                        <div className="font-medium">{tactic.name}</div>
-                        <div className="text-sm text-gray-300">{tactic.description}</div>
-                        <div className="text-xs text-green-400">{tactic.effect}</div>
+                        <div className="font-medium">{technique.name}</div>
+                        <div className="text-sm text-gray-300">{technique.description}</div>
+                        <Badge variant="outline" className="mt-1 text-purple-400 border-purple-400">
+                          {technique.type}
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -327,45 +372,18 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Button>
         </div>
 
-        {/* Tactics List Modal */}
-        {showTacticsList && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-slate-800 p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Select Tactic</h3>
-                <Button variant="ghost" size="sm" onClick={() => setShowTacticsList(false)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {mockTactics.map((tactic) => (
-                  <div
-                    key={tactic.id}
-                    className="p-3 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600 transition-all"
-                    onClick={() => handleTacticSelect(tactic)}
-                  >
-                    <div className="font-medium">{tactic.name}</div>
-                    <div className="text-sm text-gray-300">{tactic.description}</div>
-                    <div className="text-xs text-green-400">{tactic.effect}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Equipment List Modal */}
-        {showEquipmentList && (
+        {showEquipmentList && selectedCategory && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-slate-800 p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Select Equipment</h3>
+                <h3 className="text-lg font-bold">Select {selectedCategory}</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowEquipmentList(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               <div className="space-y-2">
-                {mockEquipment.map((equipment) => (
+                {mockEquipment[selectedCategory]?.map((equipment) => (
                   <div
                     key={equipment.id}
                     className={`p-3 rounded-lg cursor-pointer hover:scale-105 transition-all ${getRarityColor(equipment.rarity)}`}
@@ -376,6 +394,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                       <div>
                         <div className="font-medium">{equipment.name}</div>
                         <div className="text-sm text-gray-200">{equipment.category}</div>
+                        <div className="text-xs text-green-400">
+                          {Object.entries(equipment.stats).map(([stat, value]) => 
+                            `${stat}: +${value}`
+                          ).join(', ')}
+                        </div>
                       </div>
                     </div>
                   </div>
