@@ -11,10 +11,10 @@ import uuid
 from datetime import datetime
 
 # Import routes
-from routes.characters import router as characters_router
-from routes.teams import router as teams_router
-from routes.equipment import router as equipment_router
-from database import init_database
+from .routes.characters import router as characters_router
+from .routes.teams import router as teams_router
+from .routes.equipment import router as equipment_router
+from .database import init_database
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
