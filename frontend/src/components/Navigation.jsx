@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Home, Users, Target, Settings } from 'lucide-react';
+import { Home, Target } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
 
   const navItems = [
     { path: '/', label: 'Characters', icon: Home },
-    { path: '/characters', label: 'Characters Sub', icon: Users },
     { path: '/team-builder', label: 'Team Builder', icon: Target },
   ];
 

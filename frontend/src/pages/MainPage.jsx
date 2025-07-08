@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { mockCharacters } from '../data/mock';
 import CharacterCard from '../components/CharacterCard';
 import CharacterModal from '../components/CharacterModal';
@@ -8,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Grid, List } from 'lucide-react';
 
 const MainPage = () => {
   const [characters] = useState(mockCharacters);
@@ -66,9 +65,6 @@ const MainPage = () => {
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
-      case 'level':
-        filtered.sort((a, b) => b.level - a.level);
-        break;
       case 'position':
         filtered.sort((a, b) => a.position.localeCompare(b.position));
         break;
@@ -96,16 +92,6 @@ const MainPage = () => {
       case 'MF': return 'bg-orange-500';
       case 'DF': return 'bg-sky-400';
       case 'GK': return 'bg-white text-black';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  const getRarityColor = (rarity) => {
-    switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-r from-yellow-400 to-orange-500';
-      case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500';
-      case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
-      case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
       default: return 'bg-gray-500';
     }
   };
@@ -170,7 +156,6 @@ const MainPage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="name">Name</SelectItem>
-                <SelectItem value="level">Level</SelectItem>
                 <SelectItem value="position">Position</SelectItem>
                 <SelectItem value="element">Element</SelectItem>
               </SelectContent>
