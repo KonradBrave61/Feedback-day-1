@@ -164,9 +164,12 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
           <h3 className="text-white font-bold text-sm truncate">{character.name}</h3>
           
           <div className="flex items-center justify-center">
-            <span className={`text-xs ${getElementColor(character.element)}`}>
-              {character.element}
-            </span>
+            <div className="flex items-center gap-1">
+              <img src={getElementIcon(character.element)} alt={character.element} className="w-4 h-4" />
+              <span className={`text-xs ${getElementColor(character.element)}`}>
+                {character.element}
+              </span>
+            </div>
           </div>
         </div>
       </CardContent>
