@@ -107,6 +107,68 @@ export const mockCharacters = [
   }
 ];
 
+export const mockHissatsu = [
+  // Shot Techniques
+  { id: 1, name: "Fire Tornado", description: "Blazing whirlwind of destruction", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 2, name: "Megaton Head", description: "Powerful header technique", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 3, name: "Inazuma Break", description: "Lightning-fast strike", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 4, name: "Dragon Crash", description: "Devastating dragon-powered shot", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 5, name: "Bakunetsu Screw", description: "Spinning flame shot", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 6, name: "Gigant Wall", description: "Powerful defensive shot", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 7, name: "Excalibur", description: "Legendary sword technique", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 8, name: "Big Bang", description: "Explosive finishing move", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 9, name: "Galaxy Eleven", description: "Stellar power shot", type: "Shot", icon: "/api/placeholder/40/40" },
+  { id: 10, name: "Omega Phoenix", description: "Phoenix fire technique", type: "Shot", icon: "/api/placeholder/40/40" },
+  
+  // Dribble Techniques
+  { id: 11, name: "Sonic Dash", description: "Lightning-fast dribbling", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 12, name: "Spiral Draw", description: "Spinning evasion technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 13, name: "Flame Dance", description: "Elegant fire dribbling", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 14, name: "Shadow Clone", description: "Illusion dribbling technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 15, name: "Rolling Kick", description: "Acrobatic dribbling move", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 16, name: "Spinning Cut", description: "Spinning breakthrough technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 17, name: "Magnum Force", description: "Powerful breakthrough move", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 18, name: "Illusion Ball", description: "Deceptive dribbling technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 19, name: "Wind Dash", description: "Wind-powered speed technique", type: "Dribble", icon: "/api/placeholder/40/40" },
+  { id: 20, name: "Earth Breaker", description: "Ground-shaking dribble", type: "Dribble", icon: "/api/placeholder/40/40" },
+  
+  // Pass Techniques
+  { id: 21, name: "Killer Pass", description: "Devastating pass technique", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 22, name: "Spinning Pass", description: "Curved ball pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 23, name: "Thunder Pass", description: "Lightning-fast pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 24, name: "Astro Pass", description: "Stellar trajectory pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 25, name: "Flame Pass", description: "Fire-powered pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 26, name: "Wind Pass", description: "Wind-assisted pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 27, name: "Drill Pass", description: "Piercing pass technique", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 28, name: "Magnet Pass", description: "Magnetic attraction pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 29, name: "Quantum Pass", description: "Quantum mechanics pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  { id: 30, name: "Galaxy Pass", description: "Cosmic power pass", type: "Pass", icon: "/api/placeholder/40/40" },
+  
+  // Block Techniques
+  { id: 31, name: "God Hand", description: "Divine protection technique", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 32, name: "Majin The Hand", description: "Demonic blocking power", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 33, name: "Fist of Justice", description: "Righteous blocking technique", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 34, name: "Diamond Hand", description: "Unbreakable defense", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 35, name: "Burning Catch", description: "Flame-powered catch", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 36, name: "Omega Wall", description: "Ultimate defensive barrier", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 37, name: "Thunder Block", description: "Lightning-fast block", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 38, name: "Iron Wall", description: "Immovable defense", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 39, name: "Phantom Block", description: "Ghostly defensive technique", type: "Block", icon: "/api/placeholder/40/40" },
+  { id: 40, name: "Galaxy Block", description: "Cosmic defensive power", type: "Block", icon: "/api/placeholder/40/40" },
+  
+  // Catch Techniques
+  { id: 41, name: "Keeper's Catch", description: "Basic goalkeeping technique", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 42, name: "Super Catch", description: "Enhanced catching ability", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 43, name: "Flame Catch", description: "Fire-powered catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 44, name: "Wind Catch", description: "Wind-assisted catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 45, name: "Earth Catch", description: "Ground-based catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 46, name: "Thunder Catch", description: "Lightning-fast catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 47, name: "Ice Catch", description: "Freezing catch technique", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 48, name: "Magnet Catch", description: "Magnetic attraction catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 49, name: "Quantum Catch", description: "Quantum mechanics catch", type: "Catch", icon: "/api/placeholder/40/40" },
+  { id: 50, name: "Galaxy Catch", description: "Cosmic power catch", type: "Catch", icon: "/api/placeholder/40/40" }
+];
+
 export const mockTactics = [
   { id: 1, name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal", effect: "DF +100%", icon: "/api/placeholder/40/40" },
   { id: 2, name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP +10%", icon: "/api/placeholder/40/40" },
