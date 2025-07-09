@@ -329,6 +329,7 @@ const TeamBuilder = () => {
                   teamPlayers={teamPlayers}
                   onAddPlayer={handleAddPlayer}
                   onRemovePlayer={handleRemovePlayer}
+                  onMovePlayer={handleMovePlayer}
                 />
               </CardContent>
             </Card>
