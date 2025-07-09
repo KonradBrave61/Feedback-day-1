@@ -551,27 +551,29 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
         )}
 
         {/* Hissatsu Selection Modal */}
-        {showHissatsuList && (
+        {showHissatsuList && selectedCategory !== null && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-orange-900 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto border border-orange-400/30">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Select Hissatsu Techniques ({selectedHissatsu.length}/4)</h3>
+                <h3 className="text-lg font-bold">Select Technique for Slot {selectedCategory + 1}</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowHissatsuList(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {mockHissatsu.map((hissatsu) => {
-                  const isSelected = selectedHissatsu.some(h => h.id === hissatsu.id);
+                  const currentPreset = `preset${activePreset}`;
+                  const isUsedInPreset = selectedHissatsu[currentPreset].some(h => h && h.id === hissatsu.id);
+                  
                   return (
                     <div
                       key={hissatsu.id}
                       className={`p-3 rounded-lg cursor-pointer transition-all ${
-                        isSelected 
-                          ? 'bg-orange-600/30 border-orange-500' 
+                        isUsedInPreset
+                          ? 'bg-gray-600/30 border-gray-500 opacity-50 cursor-not-allowed' 
                           : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
                       } border`}
-                      onClick={() => handleHissatsuToggle(hissatsu)}
+                      onClick={() => !isUsedInPreset && handleHissatsuSelect(hissatsu)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -584,8 +586,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                             </Badge>
                           </div>
                         </div>
-                        {isSelected && (
-                          <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
+                        {isUsedInPreset && (
+                          <Badge variant="outline" className="text-gray-400 border-gray-400">
+                            Already Selected
+                          </Badge>
                         )}
                       </div>
                     </div>
@@ -595,10 +599,6 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
               <div className="flex justify-end gap-3 mt-4">
                 <Button variant="outline" onClick={() => setShowHissatsuList(false)} className="text-white border-orange-400/30">
                   Cancel
-                </Button>
-                <Button onClick={handleHissatsuConfirm} className="bg-green-600 hover:bg-green-700">
-                  <Check className="h-4 w-4 mr-2" />
-                  Confirm
                 </Button>
               </div>
             </div>
