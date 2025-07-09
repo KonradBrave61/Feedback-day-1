@@ -1,116 +1,83 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Plus, Eye } from 'lucide-react';
+import { Users, Zap } from 'lucide-react';
 
-const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
   const getPositionColor = (position) => {
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
       case 'MF': return 'bg-orange-500 text-white';
-      case 'DF': return 'bg-sky-400 text-white';
+      case 'DF': return 'bg-blue-500 text-white';
       case 'GK': return 'bg-white text-black';
       default: return 'bg-gray-500 text-white';
-    }
-  };
-
-  const getRarityColor = (rarity) => {
-    switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-r from-yellow-400 to-orange-500';
-      case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500';
-      case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
-      case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  const getElementIcon = (element) => {
-    switch (element) {
-      case 'Fire': return '/icons/elements/fire.png';
-      case 'Earth': return '/icons/elements/earth.png';
-      case 'Air': return '/icons/elements/air.png';
-      case 'Wind': return '/icons/elements/air.png'; // Alias for Air
-      case 'Wood': return '/icons/elements/wood.png';
-      case 'Void': return '/api/placeholder/16/16'; // No icon yet
-      default: return '/api/placeholder/16/16';
     }
   };
 
   const getElementColor = (element) => {
     switch (element) {
       case 'Fire': return 'text-red-400';
-      case 'Water': return 'text-blue-400';
-      case 'Earth': return 'text-green-400';
-      case 'Air': return 'text-cyan-400';
+      case 'Earth': return 'text-orange-400';
       case 'Wind': return 'text-cyan-400';
-      case 'Wood': return 'text-emerald-400';
+      case 'Wood': return 'text-green-400';
       case 'Void': return 'text-purple-400';
       default: return 'text-gray-400';
     }
   };
 
-  // Use base values for display (user will control level/rarity in modal)
-  const displayLevel = character.baseLevel;
-  const displayRarity = character.baseRarity;
+  const getRarityColor = (rarity) => {
+    switch (rarity) {
+      case 'Legendary': return 'bg-gradient-to-br from-yellow-400 to-orange-500';
+      case 'Epic': return 'bg-gradient-to-br from-purple-500 to-pink-500';
+      case 'Rare': return 'bg-gradient-to-br from-blue-500 to-cyan-500';
+      case 'Common': return 'bg-gradient-to-br from-gray-400 to-gray-600';
+      default: return 'bg-gray-500';
+    }
+  };
 
-  const StatPreview = () => (
-    <div className="absolute inset-0 bg-black/90 backdrop-blur-sm rounded-lg flex flex-col justify-center items-center p-4 opacity-0 group-hover:opacity-100 transition-all duration-200">
-      <div className="text-center">
-        <h3 className="text-white font-bold mb-2">{character.name}</h3>
-        <Badge className={`${getRarityColor(displayRarity)} mb-2`}>
-          {displayRarity}
-        </Badge>
-        <div className="grid grid-cols-2 gap-1 text-xs">
-          <div className="text-red-400">Kick: {character.baseStats.kick.main}</div>
-          <div className="text-orange-400">Control: {character.baseStats.control.main}</div>
-          <div className="text-yellow-400">Tech: {character.baseStats.technique.main}</div>
-          <div className="text-blue-400">Intel: {character.baseStats.intelligence.main}</div>
-        </div>
-      </div>
-    </div>
-  );
-
-  if (viewMode === 'list') {
+  if (viewMode === 'grid') {
     return (
       <Card 
-        className="bg-black/20 backdrop-blur-md border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer group"
+        className="cursor-pointer hover:scale-105 transition-all duration-200 bg-black/30 backdrop-blur-lg border-orange-400/20 text-white"
         onClick={onClick}
       >
-        <CardContent className="p-4">
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <img 
-                  src={character.portrait} 
-                  alt={character.name}
-                  className="w-14 h-14 rounded-full object-cover"
-                />
-              </div>
-              <Badge className={`${getPositionColor(character.position)} absolute -bottom-1 -right-1 text-xs px-1`}>
+        <CardContent className="p-2">
+          <div className="relative">
+            <img
+              src={character.portrait}
+              alt={character.name}
+              className="w-full aspect-square object-cover rounded-lg mb-2"
+            />
+            <div className="absolute top-1 right-1">
+              <Badge className={`${getPositionColor(character.position)} text-xs`}>
                 {character.position}
               </Badge>
             </div>
-            <div className="flex-1">
-              <h3 className="text-white font-bold">{character.name}</h3>
-              <p className="text-gray-300 text-sm">{character.nickname}</p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className={`text-sm ${getElementColor(character.element)}`}>
-                  {character.element}
-                </span>
-              </div>
+            <div className="absolute top-1 left-1">
+              <Badge className={`${getRarityColor(character.baseRarity)} text-xs`}>
+                {character.baseRarity}
+              </Badge>
             </div>
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); onClick(); }}>
-                <Eye className="h-4 w-4" />
-              </Button>
-              {onAddToTeam && (
-                <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); onAddToTeam(character); }}>
-                  <Plus className="h-4 w-4" />
-                </Button>
-              )}
+          </div>
+          
+          <div className="space-y-1">
+            <h3 className="font-medium text-sm truncate">{character.name}</h3>
+            <div className="flex items-center justify-between text-xs">
+              <span className={getElementColor(character.element)}>
+                {character.element}
+              </span>
+              <span className="text-gray-400">
+                Lv. {character.baseLevel}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-400">
+                #{character.jerseyNumber}
+              </span>
+              <div className="flex items-center gap-1">
+                <Zap className="h-3 w-3 text-orange-400" />
+                <span className="text-orange-400">{character.hissatsu?.length || 0}</span>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -120,55 +87,57 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid', onAddToTeam }) =
 
   return (
     <Card 
-      className="bg-black/20 backdrop-blur-md border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer group relative overflow-hidden"
+      className="cursor-pointer hover:bg-orange-700/20 transition-colors bg-black/30 backdrop-blur-lg border-orange-400/20 text-white"
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      <CardContent className="p-3">
-        <div className="relative">
-          {/* Character Portrait */}
-          <div className={`w-full aspect-square ${displayRarity === 'Legendary' ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-gradient-to-br from-blue-500 to-purple-600'} rounded-lg mb-2 flex items-center justify-center overflow-hidden`}>
-            <img 
-              src={character.portrait} 
+      <CardContent className="p-4">
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <img
+              src={character.portrait}
               alt={character.name}
-              className="w-full h-full object-cover"
+              className="w-16 h-16 rounded-lg object-cover"
             />
-            {displayRarity === 'Legendary' && (
-              <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-lg">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMGwzIDdsNyAwLTUuNSA0IDIgNi41LTYuNS00LjUtNi41IDQuNSAyLTYuNS01LjUtNCA3IDB6IiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMSkiLz48L3N2Zz4=')] opacity-20"></div>
-              </div>
-            )}
+            <div className="absolute -top-1 -right-1">
+              <Badge className={`${getPositionColor(character.position)} text-xs`}>
+                {character.position}
+              </Badge>
+            </div>
           </div>
-
-          {/* Position Badge */}
-          <Badge className={`${getPositionColor(character.position)} absolute top-1 right-1 text-xs px-1`}>
-            {character.position}
-          </Badge>
-
-          {/* Team Logo */}
-          <div className="absolute top-1 left-1 w-6 h-6 bg-white/10 rounded-full flex items-center justify-center">
-            <img 
-              src={character.teamLogo} 
-              alt="Team Logo"
-              className="w-4 h-4"
-            />
-          </div>
-
-          {/* Hover Preview */}
-          {isHovered && <StatPreview />}
-        </div>
-
-        {/* Character Info */}
-        <div className="space-y-2">
-          <h3 className="text-white font-bold text-sm truncate">{character.name}</h3>
           
-          <div className="flex items-center justify-center">
-            <div className="flex items-center gap-1">
-              <img src={getElementIcon(character.element)} alt={character.element} className="w-4 h-4" />
-              <span className={`text-xs ${getElementColor(character.element)}`}>
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-medium">{character.name}</h3>
+              <Badge className={`${getRarityColor(character.baseRarity)} text-xs`}>
+                {character.baseRarity}
+              </Badge>
+            </div>
+            
+            <div className="flex items-center gap-4 text-sm">
+              <span className={getElementColor(character.element)}>
                 {character.element}
               </span>
+              <span className="text-gray-400">
+                Lv. {character.baseLevel}
+              </span>
+              <span className="text-gray-400">
+                #{character.jerseyNumber}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-1">
+                <Users className="h-3 w-3 text-orange-400" />
+                <span className="text-xs text-gray-400">
+                  {character.teamPassives?.length || 0} passives
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Zap className="h-3 w-3 text-orange-400" />
+                <span className="text-xs text-gray-400">
+                  {character.hissatsu?.length || 0} techniques
+                </span>
+              </div>
             </div>
           </div>
         </div>

@@ -1,233 +1,264 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navigation from '../components/Navigation';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
 import { mockCharacters } from '../data/mock';
 import CharacterCard from '../components/CharacterCard';
 import CharacterModal from '../components/CharacterModal';
-import Navigation from '../components/Navigation';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Search, Grid, List } from 'lucide-react';
+import { Play, Users, Trophy, Target, Star, TrendingUp, Clock, Award } from 'lucide-react';
 
 const MainPage = () => {
-  const [characters] = useState(mockCharacters);
-  const [filteredCharacters, setFilteredCharacters] = useState(characters);
+  const navigate = useNavigate();
   const [selectedCharacter, setSelectedCharacter] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterPosition, setFilterPosition] = useState('all');
-  const [filterElement, setFilterElement] = useState('all');
-  const [sortBy, setSortBy] = useState('name');
-  const [viewMode, setViewMode] = useState('grid');
+  const [showCharacterModal, setShowCharacterModal] = useState(false);
 
-  const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
-  const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood', 'Void'];
+  const featuredCharacters = mockCharacters.slice(0, 4);
+  const recentActivity = [
+    { type: 'team', message: 'Team updated with new formation', time: '2 minutes ago' },
+    { type: 'character', message: 'New character unlocked: Axel Blaze', time: '1 hour ago' },
+    { type: 'match', message: 'Victory against Royal Academy', time: '3 hours ago' },
+    { type: 'level', message: 'Reached coach level 50', time: '1 day ago' },
+  ];
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    applyFilters(query, filterPosition, filterElement, sortBy);
-  };
-
-  const handlePositionFilter = (position) => {
-    setFilterPosition(position);
-    applyFilters(searchQuery, position, filterElement, sortBy);
-  };
-
-  const handleElementFilter = (element) => {
-    setFilterElement(element);
-    applyFilters(searchQuery, filterPosition, element, sortBy);
-  };
-
-  const handleSort = (sortType) => {
-    setSortBy(sortType);
-    applyFilters(searchQuery, filterPosition, filterElement, sortType);
-  };
-
-  const applyFilters = (query, position, element, sort) => {
-    let filtered = [...characters];
-
-    if (query) {
-      filtered = filtered.filter(char => 
-        char.name.toLowerCase().includes(query.toLowerCase()) ||
-        char.nickname.toLowerCase().includes(query.toLowerCase())
-      );
-    }
-
-    if (position !== 'all') {
-      filtered = filtered.filter(char => char.position === position);
-    }
-
-    if (element !== 'all') {
-      filtered = filtered.filter(char => char.element === element);
-    }
-
-    // Sort
-    switch (sort) {
-      case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'position':
-        filtered.sort((a, b) => a.position.localeCompare(b.position));
-        break;
-      case 'element':
-        filtered.sort((a, b) => a.element.localeCompare(b.element));
-        break;
-      default:
-        break;
-    }
-
-    setFilteredCharacters(filtered);
-  };
-
-  const openCharacterModal = (character) => {
+  const handleCharacterClick = (character) => {
     setSelectedCharacter(character);
+    setShowCharacterModal(true);
   };
 
-  const closeCharacterModal = () => {
-    setSelectedCharacter(null);
+  const getActivityIcon = (type) => {
+    switch (type) {
+      case 'team': return <Users className="h-4 w-4" />;
+      case 'character': return <Star className="h-4 w-4" />;
+      case 'match': return <Trophy className="h-4 w-4" />;
+      case 'level': return <TrendingUp className="h-4 w-4" />;
+      default: return <Clock className="h-4 w-4" />;
+    }
   };
 
-  const getPositionColor = (position) => {
-    switch (position) {
-      case 'FW': return 'bg-red-500';
-      case 'MF': return 'bg-orange-500';
-      case 'DF': return 'bg-sky-400';
-      case 'GK': return 'bg-white text-black';
-      default: return 'bg-gray-500';
+  const getActivityColor = (type) => {
+    switch (type) {
+      case 'team': return 'text-orange-400';
+      case 'character': return 'text-yellow-400';
+      case 'match': return 'text-green-400';
+      case 'level': return 'text-blue-400';
+      default: return 'text-gray-400';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900">
+    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
-            Inazuma Eleven Victory Road
-          </h1>
-          <p className="text-xl text-gray-300">
-            Character Gallery & Team Management
-          </p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="bg-black/30 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-cyan-400/20">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-cyan-400" />
-              <Input
-                placeholder="Search characters..."
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 bg-cyan-900/30 border-cyan-400/30 text-white placeholder-cyan-300"
-              />
-            </div>
-            
-            <Select value={filterPosition} onValueChange={handlePositionFilter}>
-              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
-                <SelectValue placeholder="Position" />
-              </SelectTrigger>
-              <SelectContent className="bg-cyan-900 border-cyan-400/30">
-                {positions.map(pos => (
-                  <SelectItem key={pos} value={pos} className="text-white hover:bg-cyan-800">
-                    {pos === 'all' ? 'All Positions' : pos}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filterElement} onValueChange={handleElementFilter}>
-              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
-                <SelectValue placeholder="Element" />
-              </SelectTrigger>
-              <SelectContent className="bg-cyan-900 border-cyan-400/30">
-                {elements.map(elem => (
-                  <SelectItem key={elem} value={elem} className="text-white hover:bg-cyan-800">
-                    {elem === 'all' ? 'All Elements' : elem}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={sortBy} onValueChange={handleSort}>
-              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
-                <SelectValue placeholder="Sort By" />
-              </SelectTrigger>
-              <SelectContent className="bg-cyan-900 border-cyan-400/30">
-                <SelectItem value="name" className="text-white hover:bg-cyan-800">Name</SelectItem>
-                <SelectItem value="position" className="text-white hover:bg-cyan-800">Position</SelectItem>
-                <SelectItem value="element" className="text-white hover:bg-cyan-800">Element</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <div className="flex gap-2">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700 border-cyan-400"
-              >
-                <Grid className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700 border-cyan-400"
-              >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <div className="mb-6">
+            <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              Inazuma Eleven
+            </h1>
+            <h2 className="text-3xl font-semibold text-orange-300 mb-2">
+              Victory Road
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Build your ultimate team, master powerful techniques, and lead your squad to victory in the most intense football battles!
+            </p>
           </div>
-
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="bg-cyan-700 text-white">
-              {filteredCharacters.length} characters
-            </Badge>
-            {searchQuery && (
-              <Badge variant="outline" className="text-cyan-400 border-cyan-400">
-                Search: {searchQuery}
-              </Badge>
-            )}
-            {filterPosition !== 'all' && (
-              <Badge variant="outline" className={`${getPositionColor(filterPosition)} border-none`}>
-                {filterPosition}
-              </Badge>
-            )}
-            {filterElement !== 'all' && (
-              <Badge variant="outline" className="text-teal-400 border-teal-400">
-                {filterElement}
-              </Badge>
-            )}
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
+              onClick={() => navigate('/team-builder')}
+            >
+              <Play className="mr-2 h-5 w-5" />
+              Start Building Team
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
+              onClick={() => navigate('/characters')}
+            >
+              <Users className="mr-2 h-5 w-5" />
+              View Characters
+            </Button>
           </div>
         </div>
 
-        {/* Character Grid */}
-        <div className={`grid ${viewMode === 'grid' 
-          ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8' 
-          : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-        } gap-4`}>
-          {filteredCharacters.map((character) => (
-            <CharacterCard
-              key={character.id}
-              character={character}
-              onClick={() => openCharacterModal(character)}
-              viewMode={viewMode}
-            />
-          ))}
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                  <Users className="h-6 w-6 text-orange-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{mockCharacters.length}</div>
+                  <div className="text-sm text-gray-300">Characters</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                  <Target className="h-6 w-6 text-orange-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">15</div>
+                  <div className="text-sm text-gray-300">Tactics</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                  <Trophy className="h-6 w-6 text-orange-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">8</div>
+                  <div className="text-sm text-gray-300">Victories</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                  <Award className="h-6 w-6 text-orange-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">50</div>
+                  <div className="text-sm text-gray-300">Coach Level</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Character Modal */}
-        {selectedCharacter && (
-          <CharacterModal
-            character={selectedCharacter}
-            isOpen={!!selectedCharacter}
-            onClose={closeCharacterModal}
-            allCharacters={characters}
-          />
-        )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Featured Characters */}
+          <div className="lg:col-span-2">
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5 text-orange-400" />
+                  Featured Characters
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {featuredCharacters.map((character) => (
+                    <CharacterCard
+                      key={character.id}
+                      character={character}
+                      onClick={() => handleCharacterClick(character)}
+                      viewMode="grid"
+                    />
+                  ))}
+                </div>
+                <div className="mt-6 text-center">
+                  <Button
+                    variant="outline"
+                    className="text-white border-orange-400/30 hover:bg-orange-700/30"
+                    onClick={() => navigate('/characters')}
+                  >
+                    View All Characters
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="lg:col-span-1">
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-orange-400" />
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-orange-600/20 ${getActivityColor(activity.type)}`}>
+                        {getActivityIcon(activity.type)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-white">
+                          {activity.message}
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {activity.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <Card className="mt-6 bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-orange-400" />
+                  Quick Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Button
+                    variant="outline"
+                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                    onClick={() => navigate('/team-builder')}
+                  >
+                    <Users className="mr-2 h-4 w-4" />
+                    Team Builder
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                    onClick={() => navigate('/characters')}
+                  >
+                    <Star className="mr-2 h-4 w-4" />
+                    Characters
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                  >
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Tournaments
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
+
+      {/* Character Modal */}
+      {selectedCharacter && (
+        <CharacterModal
+          character={selectedCharacter}
+          isOpen={showCharacterModal}
+          onClose={() => setShowCharacterModal(false)}
+          allCharacters={mockCharacters}
+        />
+      )}
     </div>
   );
 };
