@@ -20,8 +20,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     pendant: null,
     special: null
   });
-  const [selectedHissatsu, setSelectedHissatsu] = useState(character.hissatsu || []);
-  const [showEquipmentList, setShowEquipmentList] = useState(false);
+  const [selectedHissatsu, setSelectedHissatsu] = useState({
+    preset1: character.hissatsu?.slice(0, 3) || [],
+    preset2: character.hissatsu?.slice(3, 6) || []
+  });
+  const [activePreset, setActivePreset] = useState(1);
   const [showHissatsuList, setShowHissatsuList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
