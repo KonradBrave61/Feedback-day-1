@@ -76,14 +76,32 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     });
   };
 
-  const handleEquipmentSelect = (equipment) => {
-    setSelectedEquipment(prev => ({
-      ...prev,
-      [selectedCategory]: equipment
-    }));
-    setShowEquipmentList(false);
-    setSelectedCategory(null);
-    toast.success(`${equipment.name} equipped!`);
+  const handleHissatsuSelect = (hissatsu) => {
+    if (hissatsuSlotIndex !== null) {
+      const newHissatsu = [...selectedHissatsu];
+      newHissatsu[hissatsuSlotIndex] = hissatsu;
+      setSelectedHissatsu(newHissatsu);
+      setShowHissatsuList(false);
+      setHissatsuSlotIndex(null);
+    }
+  };
+
+  const handleRemoveHissatsu = (index) => {
+    const newHissatsu = [...selectedHissatsu];
+    newHissatsu.splice(index, 1);
+    setSelectedHissatsu(newHissatsu);
+  };
+
+  const handleAddHissatsu = () => {
+    if (selectedHissatsu.length < 4) {
+      setHissatsuSlotIndex(selectedHissatsu.length);
+      setShowHissatsuList(true);
+    }
+  };
+
+  const handleChangeHissatsu = (index) => {
+    setHissatsuSlotIndex(index);
+    setShowHissatsuList(true);
   };
 
   const addToTeam = () => {
