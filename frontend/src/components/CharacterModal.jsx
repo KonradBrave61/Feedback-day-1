@@ -281,7 +281,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Stats Panel */}
-          <Card className="bg-black/20 backdrop-blur-md border-white/10">
+          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4 text-center">PARAMETERS</h4>
               
@@ -309,7 +309,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Equipment Panel */}
-          <Card className="bg-black/20 backdrop-blur-md border-white/10">
+          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">EQUIPMENT</h4>
               
@@ -318,7 +318,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                   <div
                     key={category}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      item ? getRarityColor(item.rarity) : 'border-dashed border-white/30 bg-white/5'
+                      item ? getRarityColor(item.rarity) : 'border-dashed border-cyan-400/30 bg-cyan-900/20'
                     } hover:scale-105`}
                     onClick={() => {
                       setSelectedCategory(category);
@@ -335,8 +335,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                       </div>
                     ) : (
                       <div className="text-center">
-                        <Plus className="h-6 w-6 mx-auto mb-1 text-gray-400" />
-                        <div className="text-xs text-gray-400 capitalize">{category}</div>
+                        <Plus className="h-6 w-6 mx-auto mb-1 text-cyan-400" />
+                        <div className="text-xs text-cyan-400 capitalize">{category}</div>
                       </div>
                     )}
                   </div>
@@ -346,7 +346,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Team Passives */}
-          <Card className="bg-black/20 backdrop-blur-md border-white/10">
+          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">TEAM PASSIVES</h4>
               
