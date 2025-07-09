@@ -25,6 +25,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     preset2: character.hissatsu?.slice(3, 6) || []
   });
   const [activePreset, setActivePreset] = useState(1);
+  const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [showHissatsuList, setShowHissatsuList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
