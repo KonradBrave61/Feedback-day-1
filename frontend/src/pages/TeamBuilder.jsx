@@ -14,12 +14,15 @@ import { Users, Trophy, Target, Shield, Zap, UserCheck } from 'lucide-react';
 const TeamBuilder = () => {
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
   const [teamPlayers, setTeamPlayers] = useState({});
+  const [benchPlayers, setBenchPlayers] = useState({});
   const [selectedTactics, setSelectedTactics] = useState([]);
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [showTacticsSelector, setShowTacticsSelector] = useState(false);
   const [showCoachSelector, setShowCoachSelector] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null);
+  const [isBenchSelection, setIsBenchSelection] = useState(false);
+  const [selectedBenchSlot, setSelectedBenchSlot] = useState(null);
 
   const handleFormationChange = (formationId) => {
     const formation = mockFormations.find(f => f.id === parseInt(formationId));
