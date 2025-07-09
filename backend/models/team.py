@@ -40,24 +40,27 @@ class Team(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     user_id: Optional[str] = None
-    formation_id: str
-    players: List[TeamPlayer] = []
-    tactics: List[str] = []  # List of tactic IDs
-    coach_id: Optional[str] = None
+    formation: str
+    players: List[Dict[str, Any]] = []
+    bench_players: List[Dict[str, Any]] = []
+    tactics: List[Dict[str, Any]] = []
+    coach: Optional[Dict[str, Any]] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class TeamCreate(BaseModel):
     name: str
-    formation_id: str
-    players: List[TeamPlayer] = []
-    tactics: List[str] = []
-    coach_id: Optional[str] = None
+    formation: str
+    players: List[Dict[str, Any]] = []
+    bench_players: Optional[List[Dict[str, Any]]] = []
+    tactics: Optional[List[Dict[str, Any]]] = []
+    coach: Optional[Dict[str, Any]] = None
 
 class TeamUpdate(BaseModel):
     name: Optional[str] = None
-    formation_id: Optional[str] = None
-    players: Optional[List[TeamPlayer]] = None
-    tactics: Optional[List[str]] = None
-    coach_id: Optional[str] = None
+    formation: Optional[str] = None
+    players: Optional[List[Dict[str, Any]]] = None
+    bench_players: Optional[List[Dict[str, Any]]] = None
+    tactics: Optional[List[Dict[str, Any]]] = None
+    coach: Optional[Dict[str, Any]] = None
     updated_at: datetime = Field(default_factory=datetime.utcnow)
