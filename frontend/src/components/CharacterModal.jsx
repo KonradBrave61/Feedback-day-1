@@ -421,42 +421,83 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-lg font-bold">HISSATSU (TECHNIQUES)</h4>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowHissatsuList(true)}
-                  className="text-white border-orange-400/30 hover:bg-orange-700"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Change
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={activePreset === 1 ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setActivePreset(1)}
+                    className={activePreset === 1 
+                      ? "bg-orange-600 text-white" 
+                      : "text-white border-orange-400/30 hover:bg-orange-700"
+                    }
+                  >
+                    Preset 1
+                  </Button>
+                  <Button
+                    variant={activePreset === 2 ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setActivePreset(2)}
+                    className={activePreset === 2 
+                      ? "bg-orange-600 text-white" 
+                      : "text-white border-orange-400/30 hover:bg-orange-700"
+                    }
+                  >
+                    Preset 2
+                  </Button>
+                </div>
               </div>
               
-              <div className="space-y-3">
-                {selectedHissatsu.map((technique, index) => (
-                  <div
-                    key={index}
-                    className="p-3 bg-orange-600/20 rounded-lg border border-orange-500/30"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
-                      <div>
-                        <div className="font-medium">{technique.name}</div>
-                        <div className="text-sm text-gray-300">{technique.description}</div>
-                        <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400">
-                          {technique.type}
-                        </Badge>
-                      </div>
+              <div className="grid grid-cols-3 gap-3">
+                {[0, 1, 2].map(slotIndex => {
+                  const currentPreset = `preset${activePreset}`;
+                  const technique = selectedHissatsu[currentPreset][slotIndex];
+                  
+                  return (
+                    <div
+                      key={slotIndex}
+                      className={`relative p-3 rounded-lg border cursor-pointer transition-all hover:scale-105 ${
+                        technique 
+                          ? 'bg-orange-600/20 border-orange-500/30' 
+                          : 'bg-black/20 border-dashed border-orange-400/30 hover:border-orange-400/60'
+                      }`}
+                      onClick={() => handleHissatsuSlotClick(slotIndex)}
+                    >
+                      {technique ? (
+                        <div className="flex flex-col items-center gap-2">
+                          <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
+                          <div className="text-center">
+                            <div className="font-medium text-xs">{technique.name}</div>
+                            <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400 text-xs">
+                              {technique.type}
+                            </Badge>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="absolute -top-1 -right-1 w-5 h-5 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveHissatsu(slotIndex);
+                            }}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center py-4">
+                          <Plus className="h-6 w-6 mx-auto mb-1 text-orange-400" />
+                          <div className="text-xs text-orange-400">Add Technique</div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
-                
-                {selectedHissatsu.length === 0 && (
-                  <div className="text-center py-8 text-gray-400">
-                    <p>No hissatsu techniques selected</p>
-                    <p className="text-sm">Click "Change" to select techniques</p>
-                  </div>
-                )}
+                  );
+                })}
+              </div>
+              
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-400">
+                  Click on a slot to add/change technique. Click preset buttons to switch between presets.
+                </p>
               </div>
             </CardContent>
           </Card>
