@@ -14,18 +14,20 @@ import { AuthProvider } from "./contexts/AuthContext";
 function App() {
   return (
     <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/team-builder" element={<TeamBuilder />} />
-            <Route path="/characters" element={<CharactersPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-          <Toaster />
-        </BrowserRouter>
-      </AuthProvider>
+      <DndProvider backend={HTML5Backend}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/team-builder" element={<TeamBuilder />} />
+              <Route path="/characters" element={<CharactersPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+            <Toaster />
+          </BrowserRouter>
+        </AuthProvider>
+      </DndProvider>
     </div>
   );
 }
