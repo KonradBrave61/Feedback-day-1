@@ -97,13 +97,13 @@ const MainPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
             Inazuma Eleven Victory Road
           </h1>
           <p className="text-xl text-gray-300">
@@ -112,25 +112,25 @@ const MainPage = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-black/20 backdrop-blur-md rounded-2xl p-6 mb-8 border border-white/10">
+        <div className="bg-black/30 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-cyan-400/20">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-cyan-400" />
               <Input
                 placeholder="Search characters..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
+                className="pl-10 bg-cyan-900/30 border-cyan-400/30 text-white placeholder-cyan-300"
               />
             </div>
             
             <Select value={filterPosition} onValueChange={handlePositionFilter}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                 <SelectValue placeholder="Position" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-cyan-900 border-cyan-400/30">
                 {positions.map(pos => (
-                  <SelectItem key={pos} value={pos}>
+                  <SelectItem key={pos} value={pos} className="text-white hover:bg-cyan-800">
                     {pos === 'all' ? 'All Positions' : pos}
                   </SelectItem>
                 ))}
@@ -138,12 +138,12 @@ const MainPage = () => {
             </Select>
 
             <Select value={filterElement} onValueChange={handleElementFilter}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                 <SelectValue placeholder="Element" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-cyan-900 border-cyan-400/30">
                 {elements.map(elem => (
-                  <SelectItem key={elem} value={elem}>
+                  <SelectItem key={elem} value={elem} className="text-white hover:bg-cyan-800">
                     {elem === 'all' ? 'All Elements' : elem}
                   </SelectItem>
                 ))}
@@ -151,13 +151,13 @@ const MainPage = () => {
             </Select>
 
             <Select value={sortBy} onValueChange={handleSort}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                 <SelectValue placeholder="Sort By" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="name">Name</SelectItem>
-                <SelectItem value="position">Position</SelectItem>
-                <SelectItem value="element">Element</SelectItem>
+              <SelectContent className="bg-cyan-900 border-cyan-400/30">
+                <SelectItem value="name" className="text-white hover:bg-cyan-800">Name</SelectItem>
+                <SelectItem value="position" className="text-white hover:bg-cyan-800">Position</SelectItem>
+                <SelectItem value="element" className="text-white hover:bg-cyan-800">Element</SelectItem>
               </SelectContent>
             </Select>
 
@@ -166,7 +166,7 @@ const MainPage = () => {
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
-                className="flex-1"
+                className="flex-1 bg-cyan-600 hover:bg-cyan-700 border-cyan-400"
               >
                 <Grid className="h-4 w-4" />
               </Button>
@@ -174,7 +174,7 @@ const MainPage = () => {
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('list')}
-                className="flex-1"
+                className="flex-1 bg-cyan-600 hover:bg-cyan-700 border-cyan-400"
               >
                 <List className="h-4 w-4" />
               </Button>
@@ -182,11 +182,11 @@ const MainPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="text-white">
+            <Badge variant="secondary" className="bg-cyan-700 text-white">
               {filteredCharacters.length} characters
             </Badge>
             {searchQuery && (
-              <Badge variant="outline" className="text-blue-400 border-blue-400">
+              <Badge variant="outline" className="text-cyan-400 border-cyan-400">
                 Search: {searchQuery}
               </Badge>
             )}
@@ -196,7 +196,7 @@ const MainPage = () => {
               </Badge>
             )}
             {filterElement !== 'all' && (
-              <Badge variant="outline" className="text-green-400 border-green-400">
+              <Badge variant="outline" className="text-teal-400 border-teal-400">
                 {filterElement}
               </Badge>
             )}
