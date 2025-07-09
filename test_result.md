@@ -103,12 +103,12 @@
 #====================================================================================================
 
 ## user_problem_statement: 
-First change the colors to match the second pic (Inazuma Eleven Victory Road theme)
-Second repair the statystics cause rn the values sky rocket 
-For the level its gonna be 4 statystics per level , for rarity its gonna be 10 per rarity if the level is lowered calculate the difference and multiply by 4 or 5 depends if its a level or rarity and lower the stats if the level goes up do the same but add the value. The equipements gives the stats too so add them normally as the item show. 
-The user should be able to change the hissatsu just by picking from the list
-Look at pic number 1 and repair the searching of the players in the team builder
-Create a bench and add 5 slots on the team builder
+Character Detail Modal - change selecting hissatsu to the same as it is in the tactics 
+Instead of "add" create Preset, 1 preset have 3 tactics. Player have 2 presets overall that you can switch, 
+Radar Chart - Add icons to the chart for user to be able to read it Try to get the same icons as in the first image add the same icons next to text statistics for user to know which ones are on the radar 
+#D6542A This is the color that I want to be for this website try to make it more gradient and try to fit the colors for this website I just want to do the change to see what colors will be the best 
+Look at Second Image repair the searching in the team builder cause its folding 
+Look at the third image and give me some ideas how we can make me on the web app as tactic selector
 
 ## backend:
   - task: "Fix statistics calculation system"
