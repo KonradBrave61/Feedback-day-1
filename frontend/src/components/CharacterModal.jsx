@@ -159,6 +159,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     });
   };
 
+  const handleHissatsuConfirm = () => {
+    setShowHissatsuList(false);
+    setSelectedCategory(null);
+    toast.success('Hissatsu techniques updated!');
+  };
+
   const addToTeam = () => {
     toast.success(`${currentCharacter.name} (Lv.${userLevel}) added to team!`);
   };
