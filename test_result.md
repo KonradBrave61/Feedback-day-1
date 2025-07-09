@@ -101,3 +101,105 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: 
+First change the colors to match the second pic (Inazuma Eleven Victory Road theme)
+Second repair the statystics cause rn the values sky rocket 
+For the level its gonna be 4 statystics per level , for rarity its gonna be 10 per rarity if the level is lowered calculate the difference and multiply by 4 or 5 depends if its a level or rarity and lower the stats if the level goes up do the same but add the value. The equipements gives the stats too so add them normally as the item show. 
+The user should be able to change the hissatsu just by picking from the list
+Look at pic number 1 and repair the searching of the players in the team builder
+Create a bench and add 5 slots on the team builder
+
+## backend:
+  - task: "Fix statistics calculation system"
+    implemented: false
+    working: false
+    file: "/app/backend/routes/characters.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to implement proper stat calculation with level and rarity modifiers"
+
+## frontend:
+  - task: "Update color scheme to match Inazuma Eleven Victory Road theme"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/MainPage.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to update colors to bright blue/teal theme"
+
+  - task: "Fix statistics calculation in frontend"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/data/mock.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to implement proper stat calculation with 4 stats per level, 10 per rarity"
+
+  - task: "Add hissatsu selection functionality"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to allow users to select hissatsu from a list"
+
+  - task: "Fix player search in team builder"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/components/PlayerSearch.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to improve player search functionality based on pic 1"
+
+  - task: "Add bench with 5 slots to team builder"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/TeamBuilder.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to add bench functionality with 5 player slots"
+
+## metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+## test_plan:
+  current_focus:
+    - "Fix statistics calculation system"
+    - "Update color scheme to match Inazuma Eleven Victory Road theme"
+    - "Fix player search in team builder"
+    - "Add bench with 5 slots to team builder"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+## agent_communication:
+  - agent: "main"
+    message: "Starting implementation of Inazuma Eleven Victory Road theme updates and stat calculation fixes"
