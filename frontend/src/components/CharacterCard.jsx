@@ -60,8 +60,9 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
                 #{character.jerseyNumber}
               </span>
               <div className="flex items-center gap-1">
-                <Zap className="h-3 w-3 text-orange-400" />
-                <span className="text-orange-400">{character.hissatsu?.length || 0}</span>
+                <Badge className={`${getPositionColor(character.position)} text-xs`}>
+                  {character.position}
+                </Badge>
               </div>
             </div>
           </div>
