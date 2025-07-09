@@ -447,7 +447,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-3">
                 {[0, 1, 2].map(slotIndex => {
                   const currentPreset = `preset${activePreset}`;
                   const technique = selectedHissatsu[currentPreset][slotIndex];
@@ -455,7 +455,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                   return (
                     <div
                       key={slotIndex}
-                      className={`relative p-3 rounded-lg border cursor-pointer transition-all hover:scale-105 ${
+                      className={`relative p-4 rounded-lg border cursor-pointer transition-all hover:scale-105 ${
                         technique 
                           ? 'bg-orange-600/20 border-orange-500/30' 
                           : 'bg-black/20 border-dashed border-orange-400/30 hover:border-orange-400/60'
@@ -463,18 +463,19 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                       onClick={() => handleHissatsuSlotClick(slotIndex)}
                     >
                       {technique ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
-                          <div className="text-center">
-                            <div className="font-medium text-xs">{technique.name}</div>
-                            <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400 text-xs">
+                        <div className="flex items-center gap-3">
+                          <img src={technique.icon} alt={technique.name} className="w-10 h-10 flex-shrink-0" />
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{technique.name}</div>
+                            <div className="text-xs text-gray-300 mt-1">{technique.description}</div>
+                            <Badge variant="outline" className="mt-2 text-orange-400 border-orange-400 text-xs">
                               {technique.type}
                             </Badge>
                           </div>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="absolute -top-1 -right-1 w-5 h-5 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white"
+                            className="w-6 h-6 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white flex-shrink-0"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleRemoveHissatsu(slotIndex);
@@ -484,9 +485,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                           </Button>
                         </div>
                       ) : (
-                        <div className="text-center py-4">
-                          <Plus className="h-6 w-6 mx-auto mb-1 text-orange-400" />
-                          <div className="text-xs text-orange-400">Add Technique</div>
+                        <div className="flex items-center gap-3 py-2">
+                          <div className="w-10 h-10 bg-orange-400/20 rounded-lg flex items-center justify-center">
+                            <Plus className="h-5 w-5 text-orange-400" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm text-orange-400 font-medium">Add Technique</div>
+                            <div className="text-xs text-gray-400">Click to select a technique for slot {slotIndex + 1}</div>
+                          </div>
                         </div>
                       )}
                     </div>
