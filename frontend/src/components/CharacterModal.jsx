@@ -5,7 +5,7 @@ import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
-import { mockEquipment, calculateStats } from '../data/mock';
+import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 
 const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
@@ -20,8 +20,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     pendant: null,
     special: null
   });
+  const [selectedHissatsu, setSelectedHissatsu] = useState(character.hissatsu || []);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
+  const [showHissatsuList, setShowHissatsuList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [hissatsuSlotIndex, setHissatsuSlotIndex] = useState(null);
 
   const currentCharacter = allCharacters[currentCharacterIndex];
   const calculatedStats = calculateStats(currentCharacter, selectedEquipment, userLevel, userRarity);
