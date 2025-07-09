@@ -75,6 +75,24 @@ const TeamBuilder = () => {
     });
   };
 
+  const handleMovePlayer = (fromPosition, toPosition) => {
+    setTeamPlayers(prev => {
+      const newTeam = { ...prev };
+      const playerToMove = newTeam[fromPosition];
+      const playerAtDestination = newTeam[toPosition];
+      
+      // Swap players or move to empty position
+      if (playerAtDestination) {
+        newTeam[fromPosition] = playerAtDestination;
+      } else {
+        delete newTeam[fromPosition];
+      }
+      newTeam[toPosition] = playerToMove;
+      
+      return newTeam;
+    });
+  };
+
   const handleTacticsSelect = (tactics) => {
     setSelectedTactics(tactics);
   };
