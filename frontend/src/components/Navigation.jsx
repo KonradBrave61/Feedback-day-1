@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Home, Users, User, Settings, Trophy, Target } from 'lucide-react';
+import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle } from 'lucide-react';
 
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
     { path: '/team-builder', label: 'Team Builder', icon: Users },
     { path: '/characters', label: 'Characters', icon: User },
-    { path: '/settings', label: 'Settings', icon: Settings },
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setShowProfileMenu(false);
+  };
 
   return (
     <nav className="bg-gradient-to-r from-orange-900 via-red-800 to-orange-900 shadow-lg backdrop-blur-lg border-b border-orange-400/20">
@@ -69,14 +77,56 @@ const Navigation = () => {
           </div>
 
           {/* User Profile */}
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="text-right">
-              <div className="text-sm font-medium text-white">Coach</div>
-              <div className="text-xs text-orange-300">Level 50</div>
-            </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
-              <User className="h-5 w-5 text-white" />
-            </div>
+          <div className="hidden lg:flex items-center gap-3 relative">
+            {user ? (
+              <>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-white">{user.username}</div>
+                  <div className="text-xs text-orange-300">Coach Level {user.coachLevel || 1}</div>
+                </div>
+                <div 
+                  className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                >
+                  <UserCircle className="h-5 w-5 text-white" />
+                </div>
+                
+                {/* Profile Dropdown */}
+                {showProfileMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-48 bg-orange-900 border border-orange-400/30 rounded-lg shadow-lg z-50">
+                    <div className="p-2">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:bg-orange-700/30"
+                        onClick={() => {
+                          navigate('/profile');
+                          setShowProfileMenu(false);
+                        }}
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        Profile
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-red-400 hover:bg-red-700/30"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Button
+                onClick={() => navigate('/login')}
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
 
@@ -101,8 +151,39 @@ const Navigation = () => {
               </Button>
             );
           })}
+          
+          {/* Mobile Profile Button */}
+          {user ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white hover:bg-orange-700/30"
+              onClick={() => navigate('/profile')}
+            >
+              <User className="h-4 w-4 mr-2" />
+              Profile
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white hover:bg-orange-700/30"
+              onClick={() => navigate('/login')}
+            >
+              <User className="h-4 w-4 mr-2" />
+              Sign In
+            </Button>
+          )}
         </div>
       </div>
+      
+      {/* Click outside to close profile menu */}
+      {showProfileMenu && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowProfileMenu(false)}
+        />
+      )}
     </nav>
   );
 };

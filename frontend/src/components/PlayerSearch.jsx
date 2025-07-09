@@ -10,16 +10,25 @@ import CharacterCard from './CharacterCard';
 
 const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterPosition, setFilterPosition] = useState(position || 'all');
+  const [filterPosition, setFilterPosition] = useState('all'); // Changed from position to 'all'
   const [filterElement, setFilterElement] = useState('all');
+  const [sortBy, setSortBy] = useState('name');
   const [filteredPlayers, setFilteredPlayers] = useState(mockCharacters);
 
   const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
   const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood', 'Void'];
+  const sortOptions = [
+    { value: 'name', label: 'Name (A-Z)' },
+    { value: 'name_desc', label: 'Name (Z-A)' },
+    { value: 'level', label: 'Level (High-Low)' },
+    { value: 'level_asc', label: 'Level (Low-High)' },
+    { value: 'position', label: 'Position' },
+    { value: 'rarity', label: 'Rarity' }
+  ];
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, filterPosition, filterElement]);
+  }, [searchQuery, filterPosition, filterElement, sortBy]);
 
   const applyFilters = () => {
     let filtered = [...mockCharacters];
@@ -39,6 +48,27 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
       filtered = filtered.filter(player => player.element === filterElement);
     }
 
+    // Sort the filtered results
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'name_desc':
+          return b.name.localeCompare(a.name);
+        case 'level':
+          return b.baseLevel - a.baseLevel;
+        case 'level_asc':
+          return a.baseLevel - b.baseLevel;
+        case 'position':
+          return a.position.localeCompare(b.position);
+        case 'rarity':
+          const rarityOrder = ['Common', 'Rare', 'Epic', 'Legendary'];
+          return rarityOrder.indexOf(b.baseRarity) - rarityOrder.indexOf(a.baseRarity);
+        default:
+          return 0;
+      }
+    });
+
     setFilteredPlayers(filtered);
   };
 
@@ -48,7 +78,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
+      <DialogContent className="max-w-6xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Select Player {position && `for ${position} position`}
@@ -57,11 +87,11 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
 
         {/* Search and Filters */}
         <div className="flex flex-col gap-4 mb-4">
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
               <Input
-                placeholder="Search players..."
+                placeholder="Search players by name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 bg-orange-900/30 border-orange-400/30 text-white placeholder-orange-300"
@@ -70,32 +100,45 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
             
             <div className="flex gap-2">
               <Select value={filterPosition} onValueChange={setFilterPosition}>
-                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[120px]">
+                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[100px]">
                   <SelectValue placeholder="Position" />
                 </SelectTrigger>
                 <SelectContent className="bg-orange-900 border-orange-400/30">
                   {positions.map(pos => (
                     <SelectItem key={pos} value={pos} className="text-white hover:bg-orange-800">
-                      {pos === 'all' ? 'All Positions' : pos}
+                      {pos === 'all' ? 'All' : pos}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
               <Select value={filterElement} onValueChange={setFilterElement}>
-                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[120px]">
+                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[100px]">
                   <SelectValue placeholder="Element" />
                 </SelectTrigger>
                 <SelectContent className="bg-orange-900 border-orange-400/30">
                   {elements.map(elem => (
                     <SelectItem key={elem} value={elem} className="text-white hover:bg-orange-800">
-                      {elem === 'all' ? 'All Elements' : elem}
+                      {elem === 'all' ? 'All' : elem}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" onClick={onClose} className="text-white border-orange-400/30 hover:bg-orange-700">
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[140px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent className="bg-orange-900 border-orange-400/30">
+                  {sortOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value} className="text-white hover:bg-orange-800">
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Button variant="outline" onClick={onClose} className="text-white border-orange-400/30 hover:bg-orange-700 px-3">
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -110,7 +153,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
         </div>
 
         {/* Player Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-h-[400px] overflow-y-auto pr-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[400px] overflow-y-auto pr-2">
           {filteredPlayers.map((player) => (
             <div key={player.id} className="flex-shrink-0">
               <CharacterCard
