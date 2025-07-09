@@ -22,8 +22,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
     { value: 'name_desc', label: 'Name (Z-A)' },
     { value: 'level', label: 'Level (High-Low)' },
     { value: 'level_asc', label: 'Level (Low-High)' },
-    { value: 'position', label: 'Position' },
-    { value: 'rarity', label: 'Rarity' }
+    { value: 'position', label: 'Position' }
   ];
 
   useEffect(() => {
