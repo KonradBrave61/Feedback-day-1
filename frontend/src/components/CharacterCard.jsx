@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Users, Zap } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
   const getPositionColor = (position) => {
