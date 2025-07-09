@@ -36,7 +36,14 @@ const TeamBuilder = () => {
   };
 
   const handlePlayerSelect = (player) => {
-    if (selectedPosition) {
+    if (isBenchSelection) {
+      setBenchPlayers(prev => ({
+        ...prev,
+        [selectedBenchSlot]: player
+      }));
+      setIsBenchSelection(false);
+      setSelectedBenchSlot(null);
+    } else if (selectedPosition) {
       setTeamPlayers(prev => ({
         ...prev,
         [selectedPosition]: player
@@ -44,6 +51,20 @@ const TeamBuilder = () => {
     }
     setShowPlayerSearch(false);
     setSelectedPosition(null);
+  };
+
+  const handleAddBenchPlayer = (slotIndex) => {
+    setSelectedBenchSlot(slotIndex);
+    setIsBenchSelection(true);
+    setShowPlayerSearch(true);
+  };
+
+  const handleRemoveBenchPlayer = (slotIndex) => {
+    setBenchPlayers(prev => {
+      const newBench = { ...prev };
+      delete newBench[slotIndex];
+      return newBench;
+    });
   };
 
   const handleRemovePlayer = (positionId) => {
