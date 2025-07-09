@@ -365,28 +365,65 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Hissatsu Panel */}
-          <Card className="bg-black/20 backdrop-blur-md border-white/10">
+          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
             <CardContent className="p-4">
-              <h4 className="text-lg font-bold mb-4">HISSATSU (TECHNIQUES)</h4>
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-lg font-bold">HISSATSU (TECHNIQUES)</h4>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddHissatsu}
+                  disabled={selectedHissatsu.length >= 4}
+                  className="text-white border-cyan-400/30 hover:bg-cyan-700"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add
+                </Button>
+              </div>
               
               <div className="space-y-3">
-                {currentCharacter.hissatsu.map((technique, index) => (
+                {selectedHissatsu.map((technique, index) => (
                   <div
                     key={index}
-                    className="p-3 bg-purple-600/20 rounded-lg border border-purple-500/30"
+                    className="p-3 bg-cyan-600/20 rounded-lg border border-cyan-500/30 group relative"
                   >
                     <div className="flex items-center gap-3">
                       <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
                       <div>
                         <div className="font-medium">{technique.name}</div>
                         <div className="text-sm text-gray-300">{technique.description}</div>
-                        <Badge variant="outline" className="mt-1 text-purple-400 border-purple-400">
+                        <Badge variant="outline" className="mt-1 text-cyan-400 border-cyan-400">
                           {technique.type}
                         </Badge>
                       </div>
                     </div>
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleChangeHissatsu(index)}
+                        className="h-6 w-6 p-0 hover:bg-cyan-700"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveHissatsu(index)}
+                        className="h-6 w-6 p-0 hover:bg-red-700"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
+                
+                {selectedHissatsu.length === 0 && (
+                  <div className="text-center py-8 text-gray-400">
+                    <p>No hissatsu techniques selected</p>
+                    <p className="text-sm">Click "Add" to select techniques</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
