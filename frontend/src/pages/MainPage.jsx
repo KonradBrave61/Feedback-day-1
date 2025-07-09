@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -7,10 +8,11 @@ import { Badge } from '../components/ui/badge';
 import { mockCharacters } from '../data/mock';
 import CharacterCard from '../components/CharacterCard';
 import CharacterModal from '../components/CharacterModal';
-import { Play, Users, Trophy, Target, Star, TrendingUp, Clock, Award } from 'lucide-react';
+import { Play, Users, Trophy, Target, Star, TrendingUp, Clock, Award, LogIn } from 'lucide-react';
 
 const MainPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [showCharacterModal, setShowCharacterModal] = useState(false);
 
@@ -67,23 +69,47 @@ const MainPage = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
-              onClick={() => navigate('/team-builder')}
-            >
-              <Play className="mr-2 h-5 w-5" />
-              Start Building Team
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
-              onClick={() => navigate('/characters')}
-            >
-              <Users className="mr-2 h-5 w-5" />
-              View Characters
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
+                  onClick={() => navigate('/team-builder')}
+                >
+                  <Play className="mr-2 h-5 w-5" />
+                  Start Building Team
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
+                  onClick={() => navigate('/characters')}
+                >
+                  <Users className="mr-2 h-5 w-5" />
+                  View Characters
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
+                  onClick={() => navigate('/login')}
+                >
+                  <LogIn className="mr-2 h-5 w-5" />
+                  Sign In to Start
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
+                  onClick={() => navigate('/characters')}
+                >
+                  <Users className="mr-2 h-5 w-5" />
+                  Browse Characters
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -124,7 +150,7 @@ const MainPage = () => {
                   <Trophy className="h-6 w-6 text-orange-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white">8</div>
+                  <div className="text-2xl font-bold text-white">{user ? 8 : '?'}</div>
                   <div className="text-sm text-gray-300">Victories</div>
                 </div>
               </div>
@@ -138,7 +164,7 @@ const MainPage = () => {
                   <Award className="h-6 w-6 text-orange-400" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white">50</div>
+                  <div className="text-2xl font-bold text-white">{user ? user.coachLevel || 1 : '?'}</div>
                   <div className="text-sm text-gray-300">Coach Level</div>
                 </div>
               </div>
@@ -186,27 +212,44 @@ const MainPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-orange-400" />
-                  Recent Activity
+                  {user ? 'Recent Activity' : 'Getting Started'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {recentActivity.map((activity, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-orange-600/20 ${getActivityColor(activity.type)}`}>
-                        {getActivityIcon(activity.type)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-white">
-                          {activity.message}
+                {user ? (
+                  <div className="space-y-4">
+                    {recentActivity.map((activity, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-orange-600/20 ${getActivityColor(activity.type)}`}>
+                          {getActivityIcon(activity.type)}
                         </div>
-                        <div className="text-xs text-gray-400 mt-1">
-                          {activity.time}
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-white">
+                            {activity.message}
+                          </div>
+                          <div className="text-xs text-gray-400 mt-1">
+                            {activity.time}
+                          </div>
                         </div>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="text-center py-4">
+                      <LogIn className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                      <p className="text-white font-medium mb-2">Welcome to Inazuma Eleven!</p>
+                      <p className="text-sm text-gray-300 mb-4">Sign in to save teams, track progress, and unlock features.</p>
+                      <Button
+                        className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                        onClick={() => navigate('/login')}
+                      >
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In Now
+                      </Button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -223,7 +266,7 @@ const MainPage = () => {
                   <Button
                     variant="outline"
                     className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
-                    onClick={() => navigate('/team-builder')}
+                    onClick={() => user ? navigate('/team-builder') : navigate('/login')}
                   >
                     <Users className="mr-2 h-4 w-4" />
                     Team Builder
@@ -236,13 +279,16 @@ const MainPage = () => {
                     <Star className="mr-2 h-4 w-4" />
                     Characters
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
-                  >
-                    <Trophy className="mr-2 h-4 w-4" />
-                    Tournaments
-                  </Button>
+                  {user && (
+                    <Button
+                      variant="outline"
+                      className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                      onClick={() => navigate('/profile')}
+                    >
+                      <Award className="mr-2 h-4 w-4" />
+                      Profile
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
