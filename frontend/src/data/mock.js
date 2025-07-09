@@ -295,15 +295,24 @@ export const searchCharacters = (query) => {
 };
 
 // Helper function to calculate stats with equipment bonuses
-export const calculateStats = (character, equipment, userLevel = 99, userRarity = 'Legendary') => {
-  const baseStats = { ...character.baseStats };
-  const levelMultiplier = userLevel / character.baseLevel;
-  const rarityMultiplier = userRarity === 'Legendary' ? 1.3 : userRarity === 'Epic' ? 1.2 : userRarity === 'Rare' ? 1.1 : 1.0;
+export const calculateStats = (character, equipment, userLevel = 1, userRarity = 'Common') => {
+  const baseStats = JSON.parse(JSON.stringify(character.baseStats)); // Deep copy
   
-  // Apply level and rarity scaling
+  // Calculate level difference and apply 4 stats per level
+  const levelDifference = userLevel - character.baseLevel;
+  const levelModifier = levelDifference * 4;
+  
+  // Calculate rarity difference and apply 10 stats per rarity
+  const rarityValues = { 'Common': 0, 'Rare': 1, 'Epic': 2, 'Legendary': 3 };
+  const currentRarityValue = rarityValues[character.baseRarity] || 0;
+  const userRarityValue = rarityValues[userRarity] || 0;
+  const rarityDifference = userRarityValue - currentRarityValue;
+  const rarityModifier = rarityDifference * 10;
+  
+  // Apply level and rarity modifiers to all stats
   Object.keys(baseStats).forEach(stat => {
-    baseStats[stat].main = Math.floor(baseStats[stat].main * levelMultiplier * rarityMultiplier);
-    baseStats[stat].secondary = Math.floor(baseStats[stat].secondary * levelMultiplier * rarityMultiplier);
+    baseStats[stat].main = Math.max(1, baseStats[stat].main + levelModifier + rarityModifier);
+    baseStats[stat].secondary = Math.max(1, baseStats[stat].secondary + levelModifier + rarityModifier);
   });
   
   // Apply equipment bonuses
@@ -314,6 +323,7 @@ export const calculateStats = (character, equipment, userLevel = 99, userRarity 
         Object.keys(item.stats).forEach(stat => {
           if (baseStats[stat]) {
             baseStats[stat].main += item.stats[stat];
+            baseStats[stat].secondary += item.stats[stat];
           }
         });
       }
