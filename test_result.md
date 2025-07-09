@@ -125,6 +125,30 @@ Look at the third image and give me some ideas how we can make me on the web app
       - working: true
         agent: "testing"
         comment: "Backend server is running properly. All API endpoints are working correctly. Tested API root, status endpoints, character creation and retrieval, team formations, tactics, coaches, and equipment endpoints."
+  
+  - task: "Authentication API endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Tested all authentication endpoints. User registration, login, get current user, and update user profile are all working correctly. Authentication tokens are properly generated and validated."
+
+  - task: "User Teams API endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Tested all user teams endpoints. Creating teams, getting user teams, getting specific team, updating team, and deleting team are all working correctly. Authentication is properly enforced for protected routes."
 
 ## frontend:
   - task: "Update color scheme to #D6542A with gradients"
@@ -202,16 +226,13 @@ Look at the third image and give me some ideas how we can make me on the web app
 ## metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 0
+  test_sequence: 1
   run_ui: false
 
 ## test_plan:
   current_focus:
-    - "Color theme update to #D6542A"
-    - "Hissatsu selection like tactics selection"
-    - "Implement tactics preset system"
-    - "Add radar chart icons"
-    - "Fix player search layout/folding"
+    - "Authentication API endpoints"
+    - "User Teams API endpoints"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -221,3 +242,5 @@ Look at the third image and give me some ideas how we can make me on the web app
     message: "Completed all requested changes: 1) Updated color theme to #D6542A with gradients across all components 2) Changed hissatsu selection to work like tactics with modal and list format 3) Implemented preset system with 2 presets, 3 tactics each 4) Added radar chart icons for all stats 5) Fixed player search layout and responsive design 6) Updated team builder to use preset system"
   - agent: "testing"
     message: "Completed backend testing. The backend server is running properly and all API endpoints are working correctly. Tested API root, status endpoints, character creation and retrieval, team formations, tactics, coaches, and equipment endpoints. All tests passed successfully. The backend is ready to serve the frontend application."
+  - agent: "testing"
+    message: "Completed testing of authentication and user teams endpoints. All endpoints are working correctly. User registration, login, profile management, and team operations are functioning as expected. Authentication is properly enforced for protected routes. The API is secure and ready for use."
