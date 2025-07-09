@@ -76,6 +76,16 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     });
   };
 
+  const handleEquipmentSelect = (equipment) => {
+    setSelectedEquipment(prev => ({
+      ...prev,
+      [selectedCategory]: equipment
+    }));
+    setShowEquipmentList(false);
+    setSelectedCategory(null);
+    toast.success(`${equipment.name} equipped!`);
+  };
+
   const handleHissatsuSelect = (hissatsu) => {
     if (hissatsuSlotIndex !== null) {
       const newHissatsu = [...selectedHissatsu];
