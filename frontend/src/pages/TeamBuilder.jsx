@@ -89,12 +89,12 @@ const TeamBuilder = () => {
   const teamStats = getTeamStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900">
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
             Team Builder
           </h1>
           <p className="text-xl text-gray-300">
@@ -106,21 +106,21 @@ const TeamBuilder = () => {
           {/* Left Panel - Formation & Controls */}
           <div className="lg:col-span-1 space-y-4">
             {/* Formation Selection */}
-            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+            <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
+                  <Users className="h-5 w-5 text-cyan-400" />
                   Formation
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Select value={selectedFormation.id.toString()} onValueChange={handleFormationChange}>
-                  <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                  <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-cyan-900 border-cyan-400/30">
                     {mockFormations.map(formation => (
-                      <SelectItem key={formation.id} value={formation.id.toString()}>
+                      <SelectItem key={formation.id} value={formation.id.toString()} className="text-white hover:bg-cyan-800">
                         {formation.name}
                       </SelectItem>
                     ))}
@@ -130,10 +130,10 @@ const TeamBuilder = () => {
             </Card>
 
             {/* Tactics Selection */}
-            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+            <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5" />
+                  <Zap className="h-5 w-5 text-cyan-400" />
                   Tactics ({selectedTactics.length}/3)
                 </CardTitle>
               </CardHeader>
@@ -141,7 +141,7 @@ const TeamBuilder = () => {
                 <div className="space-y-2 mb-4">
                   {selectedTactics.length > 0 ? (
                     selectedTactics.map((tactic, index) => (
-                      <div key={index} className="p-2 bg-blue-600/20 rounded-lg border border-blue-500/30">
+                      <div key={index} className="p-2 bg-cyan-600/20 rounded-lg border border-cyan-500/30">
                         <div className="font-medium text-sm">{tactic.name}</div>
                         <div className="text-xs text-gray-300">{tactic.effect}</div>
                       </div>
@@ -152,7 +152,7 @@ const TeamBuilder = () => {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full text-white border-white/20"
+                  className="w-full text-white border-cyan-400/30 hover:bg-cyan-700"
                   onClick={() => setShowTacticsSelector(true)}
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -162,10 +162,10 @@ const TeamBuilder = () => {
             </Card>
 
             {/* Coach Selection */}
-            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+            <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <UserCheck className="h-5 w-5" />
+                  <UserCheck className="h-5 w-5 text-cyan-400" />
                   Coach
                 </CardTitle>
               </CardHeader>
@@ -188,7 +188,7 @@ const TeamBuilder = () => {
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {selectedCoach.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
+                        <Badge key={index} variant="outline" className="text-xs border-cyan-400/30">
                           {specialty}
                         </Badge>
                       ))}
@@ -199,7 +199,7 @@ const TeamBuilder = () => {
                 )}
                 <Button
                   variant="outline"
-                  className="w-full text-white border-white/20"
+                  className="w-full text-white border-cyan-400/30 hover:bg-cyan-700"
                   onClick={() => setShowCoachSelector(true)}
                 >
                   <UserCheck className="h-4 w-4 mr-2" />
@@ -210,10 +210,10 @@ const TeamBuilder = () => {
 
             {/* Team Stats */}
             {teamStats && (
-              <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+              <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5" />
+                    <Trophy className="h-5 w-5 text-cyan-400" />
                     Team Stats
                   </CardTitle>
                 </CardHeader>
@@ -221,18 +221,18 @@ const TeamBuilder = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Players:</span>
-                      <Badge variant="outline" className="text-white border-white/20">
+                      <Badge variant="outline" className="text-white border-cyan-400/30">
                         {teamStats.playerCount}/11
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Avg Level:</span>
-                      <Badge variant="outline" className="text-blue-400 border-blue-400">
+                      <Badge variant="outline" className="text-cyan-400 border-cyan-400">
                         {teamStats.avgLevel}
                       </Badge>
                     </div>
                     {selectedCoach && (
-                      <div className="text-xs text-green-400">
+                      <div className="text-xs text-teal-400">
                         Coach bonuses applied
                       </div>
                     )}
@@ -251,7 +251,7 @@ const TeamBuilder = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Intelligence:</span>
-                        <span className="text-blue-400">{teamStats.intelligence}</span>
+                        <span className="text-cyan-400">{teamStats.intelligence}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Pressure:</span>
@@ -259,7 +259,7 @@ const TeamBuilder = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Agility:</span>
-                        <span className="text-green-400">{teamStats.agility}</span>
+                        <span className="text-teal-400">{teamStats.agility}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Physical:</span>
@@ -274,10 +274,10 @@ const TeamBuilder = () => {
 
           {/* Right Panel - Formation Field */}
           <div className="lg:col-span-2">
-            <Card className="bg-black/20 backdrop-blur-md border-white/10 text-white">
+            <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
+                  <Target className="h-5 w-5 text-cyan-400" />
                   {selectedFormation.name}
                 </CardTitle>
               </CardHeader>
@@ -291,6 +291,52 @@ const TeamBuilder = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Bench Section */}
+        <div className="mt-8">
+          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20 text-white">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-cyan-400" />
+                Bench ({Object.keys(benchPlayers).length}/5)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-5 gap-4">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <div key={index} className="aspect-square">
+                    {benchPlayers[index] ? (
+                      <div className="relative group">
+                        <div className="w-full h-full bg-cyan-800/30 rounded-lg border border-cyan-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-cyan-700/30 transition-colors">
+                          <img
+                            src={benchPlayers[index].portrait}
+                            alt={benchPlayers[index].name}
+                            className="w-12 h-12 rounded-full mb-2"
+                          />
+                          <div className="text-xs text-center font-medium">{benchPlayers[index].name}</div>
+                          <div className="text-xs text-gray-400">{benchPlayers[index].position}</div>
+                        </div>
+                        <button
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => handleRemoveBenchPlayer(index)}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        className="w-full h-full bg-cyan-800/20 rounded-lg border-2 border-dashed border-cyan-400/30 flex items-center justify-center cursor-pointer hover:bg-cyan-700/20 transition-colors"
+                        onClick={() => handleAddBenchPlayer(index)}
+                      >
+                        <Plus className="h-8 w-8 text-cyan-400" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Modals */}
