@@ -102,21 +102,61 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     toast.success(`${equipment.name} equipped!`);
   };
 
-  const handleHissatsuToggle = (hissatsu) => {
+  const handleHissatsuToggle = (hissatsu, slotIndex) => {
+    const currentPreset = `preset${activePreset}`;
     setSelectedHissatsu(prev => {
-      const isSelected = prev.some(h => h.id === hissatsu.id);
-      if (isSelected) {
-        return prev.filter(h => h.id !== hissatsu.id);
-      } else if (prev.length < 4) {
-        return [...prev, hissatsu];
+      const newPresets = { ...prev };
+      const currentTechniques = [...newPresets[currentPreset]];
+      
+      // If slot is empty, add the technique
+      if (!currentTechniques[slotIndex]) {
+        currentTechniques[slotIndex] = hissatsu;
+      } else {
+        // If slot is occupied, remove the technique
+        currentTechniques[slotIndex] = null;
       }
-      return prev;
+      
+      // Filter out null values and ensure array length is 3
+      const filteredTechniques = currentTechniques.filter(t => t !== null);
+      while (filteredTechniques.length < 3) {
+        filteredTechniques.push(null);
+      }
+      
+      newPresets[currentPreset] = filteredTechniques;
+      return newPresets;
     });
   };
 
-  const handleHissatsuConfirm = () => {
+  const handleHissatsuSlotClick = (slotIndex) => {
+    setSelectedCategory(slotIndex);
+    setShowHissatsuList(true);
+  };
+
+  const handleHissatsuSelect = (hissatsu) => {
+    const currentPreset = `preset${activePreset}`;
+    const slotIndex = selectedCategory;
+    
+    setSelectedHissatsu(prev => {
+      const newPresets = { ...prev };
+      const currentTechniques = [...newPresets[currentPreset]];
+      currentTechniques[slotIndex] = hissatsu;
+      newPresets[currentPreset] = currentTechniques;
+      return newPresets;
+    });
+    
     setShowHissatsuList(false);
-    toast.success('Hissatsu techniques updated!');
+    setSelectedCategory(null);
+  };
+
+  const handleRemoveHissatsu = (slotIndex) => {
+    const currentPreset = `preset${activePreset}`;
+    setSelectedHissatsu(prev => {
+      const newPresets = { ...prev };
+      const currentTechniques = [...newPresets[currentPreset]];
+      currentTechniques[slotIndex] = null;
+      newPresets[currentPreset] = currentTechniques;
+      return newPresets;
+    });
   };
 
   const addToTeam = () => {
