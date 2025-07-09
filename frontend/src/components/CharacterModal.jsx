@@ -229,13 +229,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                 <p className="text-lg">{currentCharacter.nickname}</p>
               </div>
               <div className="text-right">
-                <Badge className={`${getPositionColor(currentCharacter.position)} text-lg px-3 py-1 mb-2`}>
-                  {currentCharacter.position}
-                </Badge>
-                <div className="text-2xl font-bold">#{currentCharacter.jerseyNumber}</div>
-                <div className="text-lg">Lv. {userLevel}</div>
-                <Badge className={`${getRarityColor(userRarity)} mt-1`}>
+                <Badge className={`${getRarityColor(userRarity)} text-lg px-3 py-1 mb-2`}>
                   {userRarity}
+                </Badge>
+                <Badge className={`${getPositionColor(currentCharacter.position)} text-lg px-3 py-1`}>
+                  {currentCharacter.position}
                 </Badge>
               </div>
             </div>
