@@ -53,11 +53,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
                 {character.position}
               </Badge>
             </div>
-            <div className="absolute top-1 left-1">
-              <Badge className={`${getRarityColor(character.baseRarity)} text-xs`}>
-                {character.baseRarity}
-              </Badge>
-            </div>
           </div>
           
           <div className="space-y-1">
