@@ -198,13 +198,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white border-white/20 overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900 text-white border-cyan-400/20 overflow-y-auto">
         <DialogHeader className="relative">
           {/* Navigation Arrows */}
           <Button
             variant="ghost"
             size="sm"
-            className="absolute left-0 top-0 text-white hover:bg-white/10"
+            className="absolute left-0 top-0 text-white hover:bg-cyan-700/30"
             onClick={() => navigateCharacter('prev')}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -213,14 +213,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-0 text-white hover:bg-white/10"
+            className="absolute right-0 top-0 text-white hover:bg-cyan-700/30"
             onClick={() => navigateCharacter('next')}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
 
           {/* Character Header */}
-          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-blue-500 to-purple-600'} rounded-lg p-4 mt-8`}>
+          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-cyan-500 to-teal-600'} rounded-lg p-4 mt-8`}>
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">{currentCharacter.title}</h2>
@@ -245,12 +245,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             <div>
               <label className="block text-sm font-medium mb-2">Level (1-99)</label>
               <Select value={userLevel.toString()} onValueChange={(value) => setUserLevel(parseInt(value))}>
-                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-cyan-900 border-cyan-400/30">
                   {Array.from({ length: 99 }, (_, i) => i + 1).map(level => (
-                    <SelectItem key={level} value={level.toString()}>
+                    <SelectItem key={level} value={level.toString()} className="text-white hover:bg-cyan-800">
                       Level {level}
                     </SelectItem>
                   ))}
@@ -260,21 +260,21 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             <div>
               <label className="block text-sm font-medium mb-2">Rarity</label>
               <Select value={userRarity} onValueChange={setUserRarity}>
-                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Common">Common</SelectItem>
-                  <SelectItem value="Rare">Rare</SelectItem>
-                  <SelectItem value="Epic">Epic</SelectItem>
-                  <SelectItem value="Legendary">Legendary</SelectItem>
+                <SelectContent className="bg-cyan-900 border-cyan-400/30">
+                  <SelectItem value="Common" className="text-white hover:bg-cyan-800">Common</SelectItem>
+                  <SelectItem value="Rare" className="text-white hover:bg-cyan-800">Rare</SelectItem>
+                  <SelectItem value="Epic" className="text-white hover:bg-cyan-800">Epic</SelectItem>
+                  <SelectItem value="Legendary" className="text-white hover:bg-cyan-800">Legendary</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           {/* Description */}
-          <div className="bg-sky-100 text-sky-800 p-3 rounded-lg mt-4 border-l-4 border-sky-500">
+          <div className="bg-cyan-100 text-cyan-800 p-3 rounded-lg mt-4 border-l-4 border-cyan-500">
             <p className="italic">{currentCharacter.description}</p>
           </div>
         </DialogHeader>
