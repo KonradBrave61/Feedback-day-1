@@ -6,6 +6,8 @@ import pandas as pd
 import io
 import unittest
 import uuid
+import random
+import string
 from datetime import datetime
 
 # Get the backend URL from the frontend .env file
@@ -21,8 +23,246 @@ if BACKEND_URL.endswith('/'):
 
 # Add the /api prefix
 API_URL = f"{BACKEND_URL}/api"
+ROOT_URL = BACKEND_URL
 
 print(f"Testing API at: {API_URL}")
+print(f"Testing Root at: {ROOT_URL}")
+
+def generate_random_string(length=8):
+    """Generate a random string of fixed length"""
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(length))
+
+class AuthAndTeamsAPITest(unittest.TestCase):
+    """Test suite for Authentication and User Teams API"""
+    
+    def setUp(self):
+        """Set up test data"""
+        # Generate unique username and email for testing
+        random_suffix = generate_random_string()
+        self.test_username = f"testuser_{random_suffix}"
+        self.test_email = f"test_{random_suffix}@example.com"
+        self.test_password = "Password123!"
+        
+        # User registration data
+        self.user_data = {
+            "username": self.test_username,
+            "email": self.test_email,
+            "password": self.test_password,
+            "coach_level": 5,
+            "favorite_position": "FW",
+            "favorite_element": "Fire"
+        }
+        
+        # Team creation data
+        self.team_data = {
+            "name": f"Test Team {random_suffix}",
+            "formation": "1",  # Using default formation ID
+            "players": [],
+            "bench_players": [],
+            "tactics": [],
+            "coach": None
+        }
+        
+        # Store auth token
+        self.auth_token = None
+        self.user_id = None
+        self.team_id = None
+    
+    def test_01_api_root(self):
+        """Test API root endpoint"""
+        response = requests.get(ROOT_URL)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        print("✅ API root endpoint working")
+    
+    def test_02_register_user(self):
+        """Test user registration"""
+        response = requests.post(f"{API_URL}/auth/register", json=self.user_data)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("access_token", data)
+        self.assertIn("token_type", data)
+        self.assertIn("user", data)
+        self.assertEqual(data["user"]["username"], self.test_username)
+        self.assertEqual(data["user"]["email"], self.test_email)
+        
+        # Store token for subsequent tests
+        self.auth_token = data["access_token"]
+        self.user_id = data["user"]["id"]
+        print(f"✅ User registration successful with ID: {self.user_id}")
+    
+    def test_03_register_duplicate_email(self):
+        """Test registering with an existing email"""
+        # Skip if no user was registered
+        if not hasattr(self, 'test_email'):
+            self.skipTest("No user registered yet")
+        
+        # Try to register with the same email
+        response = requests.post(f"{API_URL}/auth/register", json=self.user_data)
+        self.assertEqual(response.status_code, 400)
+        data = response.json()
+        self.assertIn("detail", data)
+        print("✅ Duplicate email registration properly rejected")
+    
+    def test_04_login_user(self):
+        """Test user login"""
+        login_data = {
+            "email": self.test_email,
+            "password": self.test_password
+        }
+        response = requests.post(f"{API_URL}/auth/login", json=login_data)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("access_token", data)
+        self.assertIn("token_type", data)
+        self.assertIn("user", data)
+        self.assertEqual(data["user"]["username"], self.test_username)
+        self.assertEqual(data["user"]["email"], self.test_email)
+        
+        # Update token
+        self.auth_token = data["access_token"]
+        print("✅ User login successful")
+    
+    def test_05_login_invalid_credentials(self):
+        """Test login with invalid credentials"""
+        login_data = {
+            "email": self.test_email,
+            "password": "WrongPassword123!"
+        }
+        response = requests.post(f"{API_URL}/auth/login", json=login_data)
+        self.assertEqual(response.status_code, 401)
+        data = response.json()
+        self.assertIn("detail", data)
+        print("✅ Invalid login credentials properly rejected")
+    
+    def test_06_get_current_user(self):
+        """Test getting current user info"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["username"], self.test_username)
+        self.assertEqual(data["email"], self.test_email)
+        print("✅ Get current user info successful")
+    
+    def test_07_update_user_profile(self):
+        """Test updating user profile"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        update_data = {
+            "coach_level": 10,
+            "favorite_position": "GK",
+            "favorite_element": "Wind"
+        }
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.put(f"{API_URL}/auth/me", json=update_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["coach_level"], 10)
+        self.assertEqual(data["favorite_position"], "GK")
+        self.assertEqual(data["favorite_element"], "Wind")
+        print("✅ Update user profile successful")
+    
+    def test_08_create_team(self):
+        """Test creating a team"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.post(f"{API_URL}/teams", json=self.team_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("id", data)
+        self.assertEqual(data["name"], self.team_data["name"])
+        self.assertEqual(data["formation"], self.team_data["formation"])
+        
+        # Store team ID for subsequent tests
+        self.team_id = data["id"]
+        print(f"✅ Team creation successful with ID: {self.team_id}")
+    
+    def test_09_get_user_teams(self):
+        """Test getting all teams for the current user"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/teams", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        if len(data) > 0:
+            self.assertEqual(data[0]["user_id"], self.user_id)
+        print(f"✅ Get user teams successful, found {len(data)} teams")
+    
+    def test_10_get_team_by_id(self):
+        """Test getting a specific team by ID"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["id"], self.team_id)
+        self.assertEqual(data["name"], self.team_data["name"])
+        print(f"✅ Get team by ID successful")
+    
+    def test_11_update_team(self):
+        """Test updating a team"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        update_data = {
+            "name": f"Updated Team {generate_random_string()}",
+            "formation": "2"  # Using another formation ID
+        }
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.put(f"{API_URL}/teams/{self.team_id}", json=update_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["id"], self.team_id)
+        self.assertEqual(data["name"], update_data["name"])
+        self.assertEqual(data["formation"], update_data["formation"])
+        print(f"✅ Update team successful")
+    
+    def test_12_delete_team(self):
+        """Test deleting a team"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.delete(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        print(f"✅ Delete team successful")
+    
+    def test_13_unauthorized_access(self):
+        """Test accessing protected endpoints without authentication"""
+        # Test accessing /api/auth/me without token
+        response = requests.get(f"{API_URL}/auth/me")
+        self.assertEqual(response.status_code, 403)
+        
+        # Test accessing /api/teams without token
+        response = requests.get(f"{API_URL}/teams")
+        self.assertEqual(response.status_code, 403)
+        
+        print("✅ Unauthorized access properly rejected")
 
 class InazumaElevenAPITest(unittest.TestCase):
     """Test suite for Inazuma Eleven Victory Road API"""
