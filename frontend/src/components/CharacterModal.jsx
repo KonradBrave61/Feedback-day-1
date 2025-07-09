@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, Activity, Gauge, Dumbbell } from 'lucide-react';
 import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 
@@ -24,7 +24,6 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [showHissatsuList, setShowHissatsuList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [hissatsuSlotIndex, setHissatsuSlotIndex] = useState(null);
 
   const currentCharacter = allCharacters[currentCharacterIndex];
   const calculatedStats = calculateStats(currentCharacter, selectedEquipment, userLevel, userRarity);
@@ -33,7 +32,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
       case 'MF': return 'bg-orange-500 text-white';
-      case 'DF': return 'bg-sky-400 text-white';
+      case 'DF': return 'bg-blue-500 text-white';
       case 'GK': return 'bg-white text-black';
       default: return 'bg-gray-500 text-white';
     }
@@ -43,7 +42,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     switch (position) {
       case 'FW': return 'text-red-400';
       case 'MF': return 'text-orange-400';
-      case 'DF': return 'text-sky-400';
+      case 'DF': return 'text-blue-400';
       case 'GK': return 'text-white';
       default: return 'text-gray-400';
     }
@@ -56,6 +55,19 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
       case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
       case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
       default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatIcon = (stat) => {
+    switch (stat) {
+      case 'kick': return <Zap className="h-4 w-4" />;
+      case 'control': return <Target className="h-4 w-4" />;
+      case 'technique': return <Users className="h-4 w-4" />;
+      case 'intelligence': return <Activity className="h-4 w-4" />;
+      case 'pressure': return <Shield className="h-4 w-4" />;
+      case 'agility': return <Gauge className="h-4 w-4" />;
+      case 'physical': return <Dumbbell className="h-4 w-4" />;
+      default: return null;
     }
   };
 
@@ -86,32 +98,21 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
     toast.success(`${equipment.name} equipped!`);
   };
 
-  const handleHissatsuSelect = (hissatsu) => {
-    if (hissatsuSlotIndex !== null) {
-      const newHissatsu = [...selectedHissatsu];
-      newHissatsu[hissatsuSlotIndex] = hissatsu;
-      setSelectedHissatsu(newHissatsu);
-      setShowHissatsuList(false);
-      setHissatsuSlotIndex(null);
-    }
+  const handleHissatsuToggle = (hissatsu) => {
+    setSelectedHissatsu(prev => {
+      const isSelected = prev.some(h => h.id === hissatsu.id);
+      if (isSelected) {
+        return prev.filter(h => h.id !== hissatsu.id);
+      } else if (prev.length < 4) {
+        return [...prev, hissatsu];
+      }
+      return prev;
+    });
   };
 
-  const handleRemoveHissatsu = (index) => {
-    const newHissatsu = [...selectedHissatsu];
-    newHissatsu.splice(index, 1);
-    setSelectedHissatsu(newHissatsu);
-  };
-
-  const handleAddHissatsu = () => {
-    if (selectedHissatsu.length < 4) {
-      setHissatsuSlotIndex(selectedHissatsu.length);
-      setShowHissatsuList(true);
-    }
-  };
-
-  const handleChangeHissatsu = (index) => {
-    setHissatsuSlotIndex(index);
-    setShowHissatsuList(true);
+  const handleHissatsuConfirm = () => {
+    setShowHissatsuList(false);
+    toast.success('Hissatsu techniques updated!');
   };
 
   const addToTeam = () => {
@@ -174,8 +175,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           {/* Stat area */}
           <path
             d={pathData}
-            fill={`rgba(59, 130, 246, 0.3)`}
-            stroke="rgb(59, 130, 246)"
+            fill={`rgba(213, 84, 42, 0.3)`}
+            stroke="rgb(213, 84, 42)"
             strokeWidth="2"
           />
           
@@ -186,7 +187,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
               cx={point.x}
               cy={point.y}
               r="3"
-              fill="rgb(59, 130, 246)"
+              fill="rgb(213, 84, 42)"
             />
           ))}
         </svg>
@@ -198,13 +199,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900 text-white border-cyan-400/20 overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20 overflow-y-auto">
         <DialogHeader className="relative">
           {/* Navigation Arrows */}
           <Button
             variant="ghost"
             size="sm"
-            className="absolute left-0 top-0 text-white hover:bg-cyan-700/30"
+            className="absolute left-0 top-0 text-white hover:bg-orange-700/30"
             onClick={() => navigateCharacter('prev')}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -213,14 +214,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-0 text-white hover:bg-cyan-700/30"
+            className="absolute right-0 top-0 text-white hover:bg-orange-700/30"
             onClick={() => navigateCharacter('next')}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
 
           {/* Character Header */}
-          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-cyan-500 to-teal-600'} rounded-lg p-4 mt-8`}>
+          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-orange-500 to-red-600'} rounded-lg p-4 mt-8`}>
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">{currentCharacter.title}</h2>
@@ -245,12 +246,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             <div>
               <label className="block text-sm font-medium mb-2">Level (1-99)</label>
               <Select value={userLevel.toString()} onValueChange={(value) => setUserLevel(parseInt(value))}>
-                <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
+                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-cyan-900 border-cyan-400/30">
+                <SelectContent className="bg-orange-900 border-orange-400/30">
                   {Array.from({ length: 99 }, (_, i) => i + 1).map(level => (
-                    <SelectItem key={level} value={level.toString()} className="text-white hover:bg-cyan-800">
+                    <SelectItem key={level} value={level.toString()} className="text-white hover:bg-orange-800">
                       Level {level}
                     </SelectItem>
                   ))}
@@ -260,28 +261,28 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
             <div>
               <label className="block text-sm font-medium mb-2">Rarity</label>
               <Select value={userRarity} onValueChange={setUserRarity}>
-                <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
+                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-cyan-900 border-cyan-400/30">
-                  <SelectItem value="Common" className="text-white hover:bg-cyan-800">Common</SelectItem>
-                  <SelectItem value="Rare" className="text-white hover:bg-cyan-800">Rare</SelectItem>
-                  <SelectItem value="Epic" className="text-white hover:bg-cyan-800">Epic</SelectItem>
-                  <SelectItem value="Legendary" className="text-white hover:bg-cyan-800">Legendary</SelectItem>
+                <SelectContent className="bg-orange-900 border-orange-400/30">
+                  <SelectItem value="Common" className="text-white hover:bg-orange-800">Common</SelectItem>
+                  <SelectItem value="Rare" className="text-white hover:bg-orange-800">Rare</SelectItem>
+                  <SelectItem value="Epic" className="text-white hover:bg-orange-800">Epic</SelectItem>
+                  <SelectItem value="Legendary" className="text-white hover:bg-orange-800">Legendary</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           {/* Description */}
-          <div className="bg-cyan-100 text-cyan-800 p-3 rounded-lg mt-4 border-l-4 border-cyan-500">
+          <div className="bg-orange-100 text-orange-800 p-3 rounded-lg mt-4 border-l-4 border-orange-500">
             <p className="italic">{currentCharacter.description}</p>
           </div>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Stats Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4 text-center">PARAMETERS</h4>
               
@@ -292,7 +293,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                 <div className="space-y-2">
                   {Object.entries(calculatedStats).map(([stat, values]) => (
                     <div key={stat} className="flex items-center justify-between">
-                      <span className="text-sm capitalize">{stat}</span>
+                      <div className="flex items-center gap-2">
+                        {getStatIcon(stat)}
+                        <span className="text-sm capitalize">{stat}</span>
+                      </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-lg font-bold ${getStatColor(currentCharacter.position)}`}>
                           {values.main}
@@ -309,7 +313,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Equipment Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">EQUIPMENT</h4>
               
@@ -318,7 +322,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                   <div
                     key={category}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      item ? getRarityColor(item.rarity) : 'border-dashed border-cyan-400/30 bg-cyan-900/20'
+                      item ? getRarityColor(item.rarity) : 'border-dashed border-orange-400/30 bg-orange-900/20'
                     } hover:scale-105`}
                     onClick={() => {
                       setSelectedCategory(category);
@@ -335,8 +339,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                       </div>
                     ) : (
                       <div className="text-center">
-                        <Plus className="h-6 w-6 mx-auto mb-1 text-cyan-400" />
-                        <div className="text-xs text-cyan-400 capitalize">{category}</div>
+                        <Plus className="h-6 w-6 mx-auto mb-1 text-orange-400" />
+                        <div className="text-xs text-orange-400 capitalize">{category}</div>
                       </div>
                     )}
                   </div>
@@ -346,7 +350,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Team Passives */}
-          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">TEAM PASSIVES</h4>
               
@@ -365,19 +369,18 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Card>
 
           {/* Hissatsu Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-cyan-400/20">
+          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-lg font-bold">HISSATSU (TECHNIQUES)</h4>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleAddHissatsu}
-                  disabled={selectedHissatsu.length >= 4}
-                  className="text-white border-cyan-400/30 hover:bg-cyan-700"
+                  onClick={() => setShowHissatsuList(true)}
+                  className="text-white border-orange-400/30 hover:bg-orange-700"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add
+                  Change
                 </Button>
               </div>
               
@@ -385,35 +388,17 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                 {selectedHissatsu.map((technique, index) => (
                   <div
                     key={index}
-                    className="p-3 bg-cyan-600/20 rounded-lg border border-cyan-500/30 group relative"
+                    className="p-3 bg-orange-600/20 rounded-lg border border-orange-500/30"
                   >
                     <div className="flex items-center gap-3">
                       <img src={technique.icon} alt={technique.name} className="w-8 h-8" />
                       <div>
                         <div className="font-medium">{technique.name}</div>
                         <div className="text-sm text-gray-300">{technique.description}</div>
-                        <Badge variant="outline" className="mt-1 text-cyan-400 border-cyan-400">
+                        <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400">
                           {technique.type}
                         </Badge>
                       </div>
-                    </div>
-                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleChangeHissatsu(index)}
-                        className="h-6 w-6 p-0 hover:bg-cyan-700"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveHissatsu(index)}
-                        className="h-6 w-6 p-0 hover:bg-red-700"
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
                     </div>
                   </div>
                 ))}
@@ -421,7 +406,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                 {selectedHissatsu.length === 0 && (
                   <div className="text-center py-8 text-gray-400">
                     <p>No hissatsu techniques selected</p>
-                    <p className="text-sm">Click "Add" to select techniques</p>
+                    <p className="text-sm">Click "Change" to select techniques</p>
                   </div>
                 )}
               </div>
@@ -433,7 +418,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
         <div className="flex justify-center mt-6">
           <Button
             onClick={addToTeam}
-            className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white px-8 py-3 text-lg"
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-3 text-lg"
           >
             <Plus className="h-5 w-5 mr-2" />
             Add to Team
@@ -443,7 +428,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
         {/* Equipment List Modal */}
         {showEquipmentList && selectedCategory && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-cyan-900 p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto border border-cyan-400/30">
+            <div className="bg-orange-900 p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto border border-orange-400/30">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">Select {selectedCategory}</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowEquipmentList(false)}>
@@ -462,7 +447,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
                       <div>
                         <div className="font-medium">{equipment.name}</div>
                         <div className="text-sm text-gray-200">{equipment.category}</div>
-                        <div className="text-xs text-cyan-400">
+                        <div className="text-xs text-orange-400">
                           {Object.entries(equipment.stats).map(([stat, value]) => 
                             `${stat}: +${value}`
                           ).join(', ')}
@@ -479,32 +464,53 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
         {/* Hissatsu Selection Modal */}
         {showHissatsuList && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-cyan-900 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto border border-cyan-400/30">
+            <div className="bg-orange-900 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto border border-orange-400/30">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Select Hissatsu Technique</h3>
+                <h3 className="text-lg font-bold">Select Hissatsu Techniques ({selectedHissatsu.length}/4)</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowHissatsuList(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {mockHissatsu.map((hissatsu) => (
-                  <div
-                    key={hissatsu.id}
-                    className="p-3 rounded-lg cursor-pointer hover:scale-105 transition-all bg-cyan-800/30 border border-cyan-400/30 hover:bg-cyan-700/30"
-                    onClick={() => handleHissatsuSelect(hissatsu)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <img src={hissatsu.icon} alt={hissatsu.name} className="w-8 h-8" />
-                      <div>
-                        <div className="font-medium">{hissatsu.name}</div>
-                        <div className="text-sm text-gray-200">{hissatsu.description}</div>
-                        <Badge variant="outline" className="mt-1 text-cyan-400 border-cyan-400">
-                          {hissatsu.type}
-                        </Badge>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {mockHissatsu.map((hissatsu) => {
+                  const isSelected = selectedHissatsu.some(h => h.id === hissatsu.id);
+                  return (
+                    <div
+                      key={hissatsu.id}
+                      className={`p-3 rounded-lg cursor-pointer transition-all ${
+                        isSelected 
+                          ? 'bg-orange-600/30 border-orange-500' 
+                          : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
+                      } border`}
+                      onClick={() => handleHissatsuToggle(hissatsu)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <img src={hissatsu.icon} alt={hissatsu.name} className="w-8 h-8" />
+                          <div>
+                            <div className="font-medium">{hissatsu.name}</div>
+                            <div className="text-sm text-gray-300">{hissatsu.description}</div>
+                            <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400">
+                              {hissatsu.type}
+                            </Badge>
+                          </div>
+                        </div>
+                        {isSelected && (
+                          <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
+              </div>
+              <div className="flex justify-end gap-3 mt-4">
+                <Button variant="outline" onClick={() => setShowHissatsuList(false)} className="text-white border-orange-400/30">
+                  Cancel
+                </Button>
+                <Button onClick={handleHissatsuConfirm} className="bg-green-600 hover:bg-green-700">
+                  <Check className="h-4 w-4 mr-2" />
+                  Confirm
+                </Button>
               </div>
             </div>
           </div>
