@@ -29,14 +29,43 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
   const PlayerSlot = ({ position, player }) => {
     const isOccupied = !!player;
 
+    const [{ isDragging }, drag] = useDrag({
+      type: 'PLAYER',
+      item: { player, fromPosition: position.id },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      canDrag: isOccupied,
+    });
+
+    const [{ isOver }, drop] = useDrop({
+      accept: 'PLAYER',
+      drop: (draggedItem) => {
+        if (draggedItem.fromPosition !== position.id) {
+          onMovePlayer(draggedItem.fromPosition, position.id);
+        }
+      },
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+      }),
+    });
+
     return (
       <div 
-        className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+        ref={drop}
+        className={`absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group ${
+          isOver ? 'z-10' : ''
+        }`}
         style={{ left: `${position.x}%`, top: `${position.y}%` }}
       >
         {isOccupied ? (
-          <div className="relative">
-            <Card className="w-16 h-20 bg-black/30 backdrop-blur-md border-orange-400/30 hover:border-orange-400/60 transition-all">
+          <div 
+            ref={drag}
+            className={`relative ${isDragging ? 'opacity-50' : ''}`}
+          >
+            <Card className={`w-16 h-20 bg-black/30 backdrop-blur-md border-orange-400/30 hover:border-orange-400/60 transition-all ${
+              isOver ? 'ring-2 ring-orange-400' : ''
+            }`}>
               <CardContent className="p-1">
                 <div className="relative">
                   <div className={`w-12 h-12 rounded-lg overflow-hidden ${getRarityColor(player.baseRarity)}`}>
@@ -71,7 +100,9 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
           </div>
         ) : (
           <div 
-            className="w-16 h-20 bg-black/20 backdrop-blur-md border-2 border-dashed border-orange-400/30 hover:border-orange-400/60 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-105"
+            className={`w-16 h-20 bg-black/20 backdrop-blur-md border-2 border-dashed border-orange-400/30 hover:border-orange-400/60 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-105 ${
+              isOver ? 'border-orange-400 bg-orange-400/20' : ''
+            }`}
             onClick={() => onAddPlayer(position.id)}
           >
             <Plus className="h-6 w-6 text-orange-400/60 mb-1" />
