@@ -12,8 +12,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
     allCharacters.findIndex(c => c.id === character.id)
   );
-  const [userLevel, setUserLevel] = useState(99);
-  const [userRarity, setUserRarity] = useState('Legendary');
+  const [userLevel, setUserLevel] = useState(character.baseLevel);
+  const [userRarity, setUserRarity] = useState(character.baseRarity);
   const [selectedEquipment, setSelectedEquipment] = useState({
     boots: null,
     bracelet: null,
