@@ -60,9 +60,6 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
           return a.baseLevel - b.baseLevel;
         case 'position':
           return a.position.localeCompare(b.position);
-        case 'rarity':
-          const rarityOrder = ['Common', 'Rare', 'Epic', 'Legendary'];
-          return rarityOrder.indexOf(b.baseRarity) - rarityOrder.indexOf(a.baseRarity);
         default:
           return 0;
       }
