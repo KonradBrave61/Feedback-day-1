@@ -38,11 +38,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
               alt={character.name}
               className="w-full aspect-square object-cover rounded-lg mb-2"
             />
-            <div className="absolute top-1 right-1">
-              <Badge className={`${getPositionColor(character.position)} text-xs`}>
-                {character.position}
-              </Badge>
-            </div>
           </div>
           
           <div className="space-y-1">
