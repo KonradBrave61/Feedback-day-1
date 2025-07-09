@@ -48,7 +48,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white border-white/20">
+      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-cyan-900 via-teal-800 to-blue-900 text-white border-cyan-400/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Select Player {position && `for ${position} position`}
@@ -58,22 +58,22 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
         {/* Search and Filters */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-cyan-400" />
             <Input
               placeholder="Search players..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/10 border-white/20 text-white placeholder-gray-400"
+              className="pl-10 bg-cyan-900/30 border-cyan-400/30 text-white placeholder-cyan-300"
             />
           </div>
           
           <Select value={filterPosition} onValueChange={setFilterPosition}>
-            <SelectTrigger className="bg-white/10 border-white/20 text-white">
+            <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
               <SelectValue placeholder="Position" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-cyan-900 border-cyan-400/30">
               {positions.map(pos => (
-                <SelectItem key={pos} value={pos}>
+                <SelectItem key={pos} value={pos} className="text-white hover:bg-cyan-800">
                   {pos === 'all' ? 'All Positions' : pos}
                 </SelectItem>
               ))}
@@ -81,19 +81,19 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
           </Select>
 
           <Select value={filterElement} onValueChange={setFilterElement}>
-            <SelectTrigger className="bg-white/10 border-white/20 text-white">
+            <SelectTrigger className="bg-cyan-900/30 border-cyan-400/30 text-white">
               <SelectValue placeholder="Element" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-cyan-900 border-cyan-400/30">
               {elements.map(elem => (
-                <SelectItem key={elem} value={elem}>
+                <SelectItem key={elem} value={elem} className="text-white hover:bg-cyan-800">
                   {elem === 'all' ? 'All Elements' : elem}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
 
-          <Button variant="outline" onClick={onClose} className="text-white border-white/20">
+          <Button variant="outline" onClick={onClose} className="text-white border-cyan-400/30 hover:bg-cyan-700">
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
@@ -101,7 +101,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
 
         {/* Results Info */}
         <div className="mb-4">
-          <Badge variant="secondary" className="text-white">
+          <Badge variant="secondary" className="bg-cyan-700 text-white">
             {filteredPlayers.length} players found
           </Badge>
         </div>
