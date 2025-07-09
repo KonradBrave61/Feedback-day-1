@@ -9,7 +9,7 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer })
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
       case 'MF': return 'bg-orange-500 text-white';
-      case 'DF': return 'bg-sky-400 text-white';
+      case 'DF': return 'bg-blue-500 text-white';
       case 'GK': return 'bg-white text-black';
       default: return 'bg-gray-500 text-white';
     }
@@ -35,10 +35,10 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer })
       >
         {isOccupied ? (
           <div className="relative">
-            <Card className="w-16 h-20 bg-black/30 backdrop-blur-md border-white/20 hover:border-white/40 transition-all">
+            <Card className="w-16 h-20 bg-black/30 backdrop-blur-md border-orange-400/30 hover:border-orange-400/60 transition-all">
               <CardContent className="p-1">
                 <div className="relative">
-                  <div className={`w-12 h-12 rounded-lg overflow-hidden ${getRarityColor(player.rarity)}`}>
+                  <div className={`w-12 h-12 rounded-lg overflow-hidden ${getRarityColor(player.baseRarity)}`}>
                     <img 
                       src={player.portrait} 
                       alt={player.name}
@@ -53,7 +53,7 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer })
                   {player.nickname}
                 </div>
                 <div className="text-xs text-gray-300 text-center">
-                  Lv.{player.level}
+                  Lv.{player.baseLevel}
                 </div>
               </CardContent>
             </Card>
@@ -70,10 +70,10 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer })
           </div>
         ) : (
           <div 
-            className="w-16 h-20 bg-black/20 backdrop-blur-md border-2 border-dashed border-white/30 hover:border-white/50 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-105"
+            className="w-16 h-20 bg-black/20 backdrop-blur-md border-2 border-dashed border-orange-400/30 hover:border-orange-400/60 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-105"
             onClick={() => onAddPlayer(position.id)}
           >
-            <Plus className="h-6 w-6 text-white/60 mb-1" />
+            <Plus className="h-6 w-6 text-orange-400/60 mb-1" />
             <Badge className={`${getPositionColor(position.position)} text-xs`}>
               {position.position}
             </Badge>

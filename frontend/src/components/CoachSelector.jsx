@@ -20,7 +20,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white border-white/20">
+      <DialogContent className="max-w-3xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Select Coach</DialogTitle>
           <p className="text-gray-300">Choose a coach to boost your team's performance</p>
@@ -73,7 +73,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                   className={`cursor-pointer transition-all ${
                     isSelected 
                       ? 'bg-green-600/30 border-green-500' 
-                      : 'bg-black/20 border-white/20 hover:bg-black/30'
+                      : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
                   }`}
                   onClick={() => handleCoachToggle(coach)}
                 >
@@ -90,7 +90,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                         <p className="text-xs text-gray-400 mt-1">{coach.bonuses.description}</p>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {coach.specialties.map((specialty, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                            <Badge key={index} variant="outline" className="text-xs border-orange-400/30">
                               {specialty}
                             </Badge>
                           ))}
@@ -114,7 +114,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={onClose} className="text-white border-white/20">
+          <Button variant="outline" onClick={onClose} className="text-white border-orange-400/30">
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
