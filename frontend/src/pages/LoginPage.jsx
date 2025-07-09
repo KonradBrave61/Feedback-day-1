@@ -60,6 +60,17 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 flex items-center justify-center p-4">
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => navigate('/')}
+        className="absolute top-4 left-4 text-white hover:bg-orange-700/30"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to Home
+      </Button>
+      
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
