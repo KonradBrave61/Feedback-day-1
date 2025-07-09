@@ -25,16 +25,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
     }
   };
 
-  const getRarityColor = (rarity) => {
-    switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-br from-yellow-400 to-orange-500';
-      case 'Epic': return 'bg-gradient-to-br from-purple-500 to-pink-500';
-      case 'Rare': return 'bg-gradient-to-br from-blue-500 to-cyan-500';
-      case 'Common': return 'bg-gradient-to-br from-gray-400 to-gray-600';
-      default: return 'bg-gray-500';
-    }
-  };
-
   if (viewMode === 'grid') {
     return (
       <Card 
