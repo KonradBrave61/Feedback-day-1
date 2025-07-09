@@ -103,9 +103,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-medium">{character.name}</h3>
-              <Badge className={`${getRarityColor(character.baseRarity)} text-xs`}>
-                {character.baseRarity}
-              </Badge>
             </div>
             
             <div className="flex items-center gap-4 text-sm">
