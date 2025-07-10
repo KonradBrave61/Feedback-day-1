@@ -91,7 +91,7 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
 
   return (
     <Card 
-      className="cursor-pointer hover:bg-orange-700/20 transition-colors bg-black/30 backdrop-blur-lg border-orange-400/20 text-white"
+      className={`cursor-pointer hover:opacity-80 transition-colors ${getRarityBackgroundColor(character.baseRarity)} backdrop-blur-lg text-white`}
       onClick={onClick}
     >
       <CardContent className="p-4">
@@ -107,6 +107,9 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-medium">{character.name}</h3>
+              <span className={getRarityColor(character.baseRarity)}>
+                {character.baseRarity}
+              </span>
             </div>
             
             <div className="flex items-center gap-4 text-sm">
