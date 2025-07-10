@@ -84,9 +84,9 @@ const CharactersPage = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search */}
-              <div className="relative md:col-span-2">
+              <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
                 <Input
                   placeholder="Search characters..."
@@ -119,20 +119,6 @@ const CharactersPage = () => {
                   {elements.map(elem => (
                     <SelectItem key={elem} value={elem} className="text-white hover:bg-orange-800">
                       {elem === 'all' ? 'All Elements' : elem}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Rarity Filter */}
-              <Select value={filterRarity} onValueChange={setFilterRarity}>
-                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
-                  <SelectValue placeholder="Rarity" />
-                </SelectTrigger>
-                <SelectContent className="bg-orange-900 border-orange-400/30">
-                  {rarities.map(rarity => (
-                    <SelectItem key={rarity} value={rarity} className="text-white hover:bg-orange-800">
-                      {rarity === 'all' ? 'All Rarities' : rarity}
                     </SelectItem>
                   ))}
                 </SelectContent>
