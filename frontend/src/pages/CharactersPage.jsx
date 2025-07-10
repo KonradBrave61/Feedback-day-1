@@ -57,7 +57,6 @@ const CharactersPage = () => {
     setSearchQuery('');
     setFilterPosition('all');
     setFilterElement('all');
-    setFilterRarity('all');
     setSortBy('name');
   };
 
