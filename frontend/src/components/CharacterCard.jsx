@@ -66,7 +66,7 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
 
   return (
     <Card 
-      className={`cursor-pointer hover:opacity-80 transition-colors ${getRarityBackgroundColor(character.baseRarity)} backdrop-blur-lg text-white`}
+      className={`cursor-pointer hover:opacity-80 transition-colors ${getElementBackgroundColor(character.element)} backdrop-blur-lg text-white`}
       onClick={onClick}
     >
       <CardContent className="p-4">
@@ -82,20 +82,11 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-medium">{character.name}</h3>
-              <span className={getRarityColor(character.baseRarity)}>
-                {character.baseRarity}
-              </span>
             </div>
             
             <div className="flex items-center gap-4 text-sm">
               <span className={getElementColor(character.element)}>
                 {character.element}
-              </span>
-              <span className="text-gray-400">
-                Lv. {character.baseLevel}
-              </span>
-              <span className="text-gray-400">
-                #{character.jerseyNumber}
               </span>
             </div>
             
