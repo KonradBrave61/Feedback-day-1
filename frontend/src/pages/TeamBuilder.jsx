@@ -20,6 +20,7 @@ const TeamBuilder = () => {
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [showTacticsSelector, setShowTacticsSelector] = useState(false);
+  const [showTacticVisualization, setShowTacticVisualization] = useState(false);
   const [showCoachSelector, setShowCoachSelector] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [isBenchSelection, setIsBenchSelection] = useState(false);
