@@ -196,6 +196,14 @@ const TeamBuilder = () => {
                 </div>
                 <Button
                   variant="outline"
+                  className="w-full text-white border-orange-400/30 hover:bg-orange-700 mb-2"
+                  onClick={() => setShowTacticVisualization(true)}
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  Tactical Visualization
+                </Button>
+                <Button
+                  variant="outline"
                   className="w-full text-white border-orange-400/30 hover:bg-orange-700"
                   onClick={() => setShowTacticsSelector(true)}
                 >
