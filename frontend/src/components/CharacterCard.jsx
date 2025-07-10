@@ -25,6 +25,26 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
     }
   };
 
+  const getRarityBackgroundColor = (rarity) => {
+    switch (rarity) {
+      case 'Legendary': return 'bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border-yellow-400/30';
+      case 'Epic': return 'bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30';
+      case 'Rare': return 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-400/30';
+      case 'Common': return 'bg-gradient-to-br from-gray-400/20 to-gray-600/20 border-gray-400/30';
+      default: return 'bg-black/30 border-orange-400/20';
+    }
+  };
+
+  const getRarityColor = (rarity) => {
+    switch (rarity) {
+      case 'Legendary': return 'text-yellow-400';
+      case 'Epic': return 'text-purple-400';
+      case 'Rare': return 'text-blue-400';
+      case 'Common': return 'text-gray-400';
+      default: return 'text-gray-400';
+    }
+  };
+
   if (viewMode === 'grid') {
     return (
       <Card 
