@@ -410,6 +410,15 @@ const TeamBuilder = () => {
           />
         )}
 
+        {showTacticVisualization && (
+          <TacticVisualizationModal
+            isOpen={showTacticVisualization}
+            onClose={() => setShowTacticVisualization(false)}
+            onTacticSelect={handleTacticsSelect}
+            selectedTactics={selectedTactics}
+          />
+        )}
+
         {showCoachSelector && (
           <CoachSelector
             isOpen={showCoachSelector}
