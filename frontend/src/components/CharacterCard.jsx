@@ -53,7 +53,10 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
           
           <div className="space-y-1">
             <h3 className="font-medium text-sm truncate">{character.name}</h3>
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between text-xs">
+              <span className={getElementColor(character.element)}>
+                {character.element}
+              </span>
               <Badge className={`${getPositionColor(character.position)} text-xs`}>
                 {character.position}
               </Badge>
