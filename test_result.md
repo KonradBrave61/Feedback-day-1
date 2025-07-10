@@ -223,6 +223,18 @@ Look at the third image and give me some ideas how we can make me on the web app
         agent: "main"
         comment: "Updated team builder to use new preset system, changed button text to 'Manage Presets'"
 
+  - task: "Implement rarity-based background colors for character cards"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterCard.jsx, /app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated character cards to use element-based background colors for search cards, simplified display to show only name and position badge. Updated character modal to use rarity-based background colors that change when rarity is selected (Legendary=yellow-orange, Epic=purple-pink, Rare=blue-cyan, Common=gray)."
+
 ## metadata:
   created_by: "main_agent"
   version: "1.0"
