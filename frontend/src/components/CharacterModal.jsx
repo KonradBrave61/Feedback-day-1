@@ -271,15 +271,15 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
           </Button>
 
           {/* Character Header */}
-          <div className={`${userRarity === 'Legendary' ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-gradient-to-r from-orange-500 to-red-600'} rounded-lg p-4 mt-8`}>
+          <div className={`${getRarityColor(userRarity).replace('text-', 'bg-gradient-to-r from-').replace('-400', '-400/80 to-').replace('-500', '-500/80')} rounded-lg p-4 mt-8`}>
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold">{currentCharacter.title}</h2>
-                <h3 className="text-xl">{currentCharacter.name}</h3>
-                <p className="text-lg">{currentCharacter.nickname}</p>
+                <h2 className="text-2xl font-bold text-white">{currentCharacter.title}</h2>
+                <h3 className="text-xl text-white">{currentCharacter.name}</h3>
+                <p className="text-lg text-white">{currentCharacter.nickname}</p>
               </div>
               <div className="text-right">
-                <Badge className={`${getRarityColor(userRarity)} text-lg px-3 py-1 mb-2`}>
+                <Badge className={`${getRarityColor(userRarity)} text-lg px-3 py-1 mb-2 bg-white/20`}>
                   {userRarity}
                 </Badge>
                 <Badge className={`${getPositionColor(currentCharacter.position)} text-lg px-3 py-1`}>
