@@ -120,31 +120,50 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
         <div className="flex gap-6 h-[80vh]">
           {/* Left Panel - Tactics List */}
           <div className="w-80 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg p-4 overflow-y-auto">
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-white mb-2">Select Tactics ({selectedTacticsList.length}/3)</h3>
+              <div className="text-sm text-gray-300">Click to preview, double-click to select/deselect</div>
+            </div>
             <div className="space-y-2">
-              {mockTactics.map((tactic) => (
-                <div
-                  key={tactic.id}
-                  className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                    selectedTactic.id === tactic.id
-                      ? 'bg-blue-600/40 border-blue-400 shadow-lg shadow-blue-500/20'
-                      : 'bg-slate-700/30 border-slate-600/50 hover:bg-slate-600/40 hover:border-slate-500'
-                  }`}
-                  onClick={() => handleTacticSelect(tactic)}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${selectedTactic.id === tactic.id ? 'bg-blue-500' : 'bg-slate-600'}`}>
-                      {getTacticIcon(tactic.name)}
+              {mockTactics.map((tactic) => {
+                const isSelected = selectedTacticsList.some(t => t.id === tactic.id);
+                const isPreviewing = selectedTactic.id === tactic.id;
+                
+                return (
+                  <div
+                    key={tactic.id}
+                    className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                      isPreviewing
+                        ? 'bg-blue-600/40 border-blue-400 shadow-lg shadow-blue-500/20'
+                        : isSelected
+                        ? 'bg-green-600/40 border-green-400 shadow-lg shadow-green-500/20'
+                        : 'bg-slate-700/30 border-slate-600/50 hover:bg-slate-600/40 hover:border-slate-500'
+                    }`}
+                    onClick={() => handleTacticSelect(tactic)}
+                    onDoubleClick={() => handleTacticToggle(tactic)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        isPreviewing ? 'bg-blue-500' : isSelected ? 'bg-green-500' : 'bg-slate-600'
+                      }`}>
+                        {getTacticIcon(tactic.name)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-white">{tactic.name}</div>
+                        <div className="text-xs text-gray-300">{tactic.effect}</div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        {isPreviewing && (
+                          <div className="w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+                        )}
+                        {isSelected && (
+                          <Check className="h-5 w-5 text-green-400" />
+                        )}
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <div className="font-semibold text-white">{tactic.name}</div>
-                      <div className="text-xs text-gray-300">{tactic.effect}</div>
-                    </div>
-                    {selectedTactic.id === tactic.id && (
-                      <Check className="h-5 w-5 text-green-400" />
-                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
