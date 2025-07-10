@@ -58,7 +58,17 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
       case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500';
       case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
       case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
-      default: return 'bg-gray-500';
+      default: return 'bg-gradient-to-r from-orange-500 to-red-600';
+    }
+  };
+
+  const getRarityTextColor = (rarity) => {
+    switch (rarity) {
+      case 'Legendary': return 'text-yellow-400';
+      case 'Epic': return 'text-purple-400';
+      case 'Rare': return 'text-blue-400';
+      case 'Common': return 'text-gray-400';
+      default: return 'text-gray-400';
     }
   };
 
