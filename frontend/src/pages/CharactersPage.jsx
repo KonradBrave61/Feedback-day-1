@@ -32,23 +32,17 @@ const CharactersPage = () => {
                            character.nickname.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesPosition = filterPosition === 'all' || character.position === filterPosition;
       const matchesElement = filterElement === 'all' || character.element === filterElement;
-      const matchesRarity = filterRarity === 'all' || character.baseRarity === filterRarity;
       
-      return matchesSearch && matchesPosition && matchesElement && matchesRarity;
+      return matchesSearch && matchesPosition && matchesElement;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case 'name':
           return a.name.localeCompare(b.name);
-        case 'level':
-          return b.baseLevel - a.baseLevel;
         case 'position':
           return a.position.localeCompare(b.position);
         case 'element':
           return a.element.localeCompare(b.element);
-        case 'rarity':
-          const rarityOrder = ['Common', 'Rare', 'Epic', 'Legendary'];
-          return rarityOrder.indexOf(b.baseRarity) - rarityOrder.indexOf(a.baseRarity);
         default:
           return 0;
       }
