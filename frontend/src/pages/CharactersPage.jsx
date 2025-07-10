@@ -144,7 +144,7 @@ const CharactersPage = () => {
                 <Badge variant="secondary" className="bg-orange-700 text-white">
                   {filteredCharacters.length} characters found
                 </Badge>
-                {(searchQuery || filterPosition !== 'all' || filterElement !== 'all' || filterRarity !== 'all') && (
+                {(searchQuery || filterPosition !== 'all' || filterElement !== 'all') && (
                   <Button
                     variant="outline"
                     size="sm"
