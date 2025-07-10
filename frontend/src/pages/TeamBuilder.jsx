@@ -4,6 +4,7 @@ import Navigation from '../components/Navigation';
 import FormationField from '../components/FormationField';
 import PlayerSearch from '../components/PlayerSearch';
 import TacticsSelector from '../components/TacticsSelector';
+import TacticVisualizationModal from '../components/TacticVisualizationModal';
 import CoachSelector from '../components/CoachSelector';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
