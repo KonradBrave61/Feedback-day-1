@@ -314,9 +314,10 @@ const TeamBuilder = () => {
             )}
           </div>
 
-          {/* Right Panel - Formation Field */}
+          {/* Right Panel - Formation Field and Bench */}
           <div className="lg:col-span-2">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            {/* Formation Field */}
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white mb-4">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-orange-400" />
@@ -333,53 +334,51 @@ const TeamBuilder = () => {
                 />
               </CardContent>
             </Card>
-          </div>
-        </div>
 
-        {/* Bench Section */}
-        <div className="mt-8">
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-orange-400" />
-                Bench ({Object.keys(benchPlayers).length}/5)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-5 gap-4">
-                {Array.from({ length: 5 }, (_, index) => (
-                  <div key={index} className="aspect-square">
-                    {benchPlayers[index] ? (
-                      <div className="relative group">
-                        <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
-                          <img
-                            src={benchPlayers[index].portrait}
-                            alt={benchPlayers[index].name}
-                            className="w-12 h-12 rounded-full mb-2"
-                          />
-                          <div className="text-xs text-center font-medium">{benchPlayers[index].name}</div>
-                          <div className="text-xs text-gray-400">{benchPlayers[index].position}</div>
+            {/* Bench Section - Integrated under field */}
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-orange-400" />
+                  Bench ({Object.keys(benchPlayers).length}/5)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-5 gap-3">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <div key={index} className="aspect-square">
+                      {benchPlayers[index] ? (
+                        <div className="relative group">
+                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
+                            <img
+                              src={benchPlayers[index].portrait}
+                              alt={benchPlayers[index].name}
+                              className="w-10 h-10 rounded-full mb-1"
+                            />
+                            <div className="text-xs text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
+                            <div className="text-xs text-gray-400">{benchPlayers[index].position}</div>
+                          </div>
+                          <button
+                            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleRemoveBenchPlayer(index)}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
                         </div>
-                        <button
-                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => handleRemoveBenchPlayer(index)}
+                      ) : (
+                        <div
+                          className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
+                          onClick={() => handleAddBenchPlayer(index)}
                         >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
-                        onClick={() => handleAddBenchPlayer(index)}
-                      >
-                        <Plus className="h-8 w-8 text-orange-400" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                          <Plus className="h-6 w-6 text-orange-400" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Modals */}
