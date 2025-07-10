@@ -197,7 +197,36 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
 
           {/* Right Panel - Tactic Details */}
           <div className="w-80 space-y-4">
-            {/* Selected Tactic Info */}
+            {/* Selected Tactics Summary */}
+            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+              <CardContent className="p-4">
+                <div className="text-lg font-bold mb-3 text-green-400">Selected Tactics ({selectedTacticsList.length}/3)</div>
+                {selectedTacticsList.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedTacticsList.map((tactic, index) => (
+                      <div key={tactic.id} className="flex items-center justify-between p-2 bg-green-600/20 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </div>
+                          <span className="text-sm font-medium">{tactic.name}</span>
+                        </div>
+                        <button
+                          onClick={() => handleTacticToggle(tactic)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-gray-400 text-sm">No tactics selected</div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Currently Previewing Tactic */}
             <Card className="bg-slate-800/50 border-slate-600/50 text-white">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-3">
@@ -211,6 +240,17 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
                 </div>
                 <div className="text-sm text-gray-300 mb-4">
                   {selectedTactic.description}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Tactic Duration */}
+            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+              <CardContent className="p-4">
+                <div className="text-lg font-bold mb-2 text-yellow-400">Duration</div>
+                <div className="text-2xl font-bold text-white">{getTacticDuration(selectedTactic.name)}</div>
+                <div className="text-sm text-gray-400 mt-2">
+                  How long this tactic remains active on the field
                 </div>
               </CardContent>
             </Card>
@@ -248,10 +288,15 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
             <div className="space-y-2">
               <Button
                 onClick={handleConfirmSelection}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={selectedTacticsList.length === 0}
+                className={`w-full text-white ${
+                  selectedTacticsList.length > 0 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-gray-600 cursor-not-allowed'
+                }`}
               >
                 <Check className="h-4 w-4 mr-2" />
-                Select This Tactic
+                Confirm Selection ({selectedTacticsList.length}/3)
               </Button>
               <Button
                 variant="outline"
