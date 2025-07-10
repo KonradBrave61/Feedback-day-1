@@ -87,10 +87,13 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
               <h3 className="font-medium">{character.name}</h3>
             </div>
             
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center justify-between text-sm">
               <span className={getElementColor(character.element)}>
                 {character.element}
               </span>
+              <Badge className={`${getPositionColor(character.position)} text-xs`}>
+                {character.position}
+              </Badge>
             </div>
             
             <div className="flex items-center gap-2 mt-2">
@@ -99,11 +102,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
                 <span className="text-xs text-gray-400">
                   {character.teamPassives?.length || 0} passives
                 </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Badge className={`${getPositionColor(character.position)} text-xs`}>
-                  {character.position}
-                </Badge>
               </div>
             </div>
           </div>
