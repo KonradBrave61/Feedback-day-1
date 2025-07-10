@@ -8,7 +8,23 @@ import { Check, X, Shield, Sword, Zap, Target, Crown, Crosshair, Flame, Mountain
 
 const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTactics = [] }) => {
   const [selectedTactic, setSelectedTactic] = useState(mockTactics[0]);
+  const [selectedTacticsList, setSelectedTacticsList] = useState(selectedTactics.slice(0, 3));
   const [previewMode, setPreviewMode] = useState(false);
+
+  const getTacticDuration = (tacticName) => {
+    switch (tacticName.toLowerCase()) {
+      case 'flame fortress': return '45 seconds';
+      case 'mount fuji': return '60 seconds';
+      case 'sideline spears': return '30 seconds';
+      case 'waxing moon': return '40 seconds';
+      case 'diamond defense': return '50 seconds';
+      case 'bond protocol': return '35 seconds';
+      case 'bull horns': return '25 seconds';
+      case 'claymore': return '20 seconds';
+      case 'three-pronged attack': return '55 seconds';
+      default: return '30 seconds';
+    }
+  };
 
   const getTacticIcon = (tacticName) => {
     switch (tacticName.toLowerCase()) {
