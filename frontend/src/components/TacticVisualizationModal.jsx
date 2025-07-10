@@ -91,8 +91,20 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
     setSelectedTactic(tactic);
   };
 
+  const handleTacticToggle = (tactic) => {
+    setSelectedTacticsList(prev => {
+      const isSelected = prev.some(t => t.id === tactic.id);
+      if (isSelected) {
+        return prev.filter(t => t.id !== tactic.id);
+      } else if (prev.length < 3) {
+        return [...prev, tactic];
+      }
+      return prev;
+    });
+  };
+
   const handleConfirmSelection = () => {
-    onTacticSelect([selectedTactic]);
+    onTacticSelect(selectedTacticsList);
     onClose();
   };
 
