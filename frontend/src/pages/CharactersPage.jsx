@@ -16,18 +16,14 @@ const CharactersPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPosition, setFilterPosition] = useState('all');
   const [filterElement, setFilterElement] = useState('all');
-  const [filterRarity, setFilterRarity] = useState('all');
   const [sortBy, setSortBy] = useState('name');
 
   const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
   const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood', 'Void'];
-  const rarities = ['all', 'Common', 'Rare', 'Epic', 'Legendary'];
   const sortOptions = [
     { value: 'name', label: 'Name' },
-    { value: 'level', label: 'Level' },
     { value: 'position', label: 'Position' },
-    { value: 'element', label: 'Element' },
-    { value: 'rarity', label: 'Rarity' }
+    { value: 'element', label: 'Element' }
   ];
 
   const filteredCharacters = mockCharacters
