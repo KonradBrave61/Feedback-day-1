@@ -39,7 +39,7 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
   if (viewMode === 'grid') {
     return (
       <Card 
-        className={`cursor-pointer hover:scale-105 transition-all duration-200 ${getRarityBackgroundColor(character.baseRarity)} backdrop-blur-lg text-white`}
+        className={`cursor-pointer hover:scale-105 transition-all duration-200 ${getElementBackgroundColor(character.element)} backdrop-blur-lg text-white`}
         onClick={onClick}
       >
         <CardContent className="p-2">
@@ -53,23 +53,7 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
           
           <div className="space-y-1">
             <h3 className="font-medium text-sm truncate">{character.name}</h3>
-            <div className="flex items-center justify-between text-xs">
-              <span className={getElementColor(character.element)}>
-                {character.element}
-              </span>
-              <span className="text-gray-400">
-                Lv. {character.baseLevel}
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-400">
-                #{character.jerseyNumber}
-              </span>
-              <span className={getRarityColor(character.baseRarity)}>
-                {character.baseRarity}
-              </span>
-            </div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-end">
               <Badge className={`${getPositionColor(character.position)} text-xs`}>
                 {character.position}
               </Badge>
