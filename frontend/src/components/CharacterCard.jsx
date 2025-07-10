@@ -27,12 +27,12 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
 
   const getElementBackgroundColor = (element) => {
     switch (element) {
-      case 'Fire': return 'bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-400/30';
-      case 'Earth': return 'bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border-orange-400/30';
-      case 'Wind': return 'bg-gradient-to-br from-cyan-400/20 to-blue-500/20 border-cyan-400/30';
-      case 'Wood': return 'bg-gradient-to-br from-green-400/20 to-emerald-500/20 border-green-400/30';
-      case 'Void': return 'bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border-purple-400/30';
-      default: return 'bg-black/30 border-orange-400/20';
+      case 'Fire': return 'bg-gradient-to-br from-pink-500/30 to-rose-600/30 border-pink-400/40';
+      case 'Earth': return 'bg-gradient-to-br from-amber-500/30 to-yellow-600/30 border-amber-400/40';
+      case 'Wind': return 'bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-sky-400/40';
+      case 'Wood': return 'bg-gradient-to-br from-emerald-500/30 to-green-600/30 border-emerald-400/40';
+      case 'Void': return 'bg-gradient-to-br from-violet-500/30 to-purple-600/30 border-violet-400/40';
+      default: return 'bg-gradient-to-br from-slate-500/30 to-gray-600/30 border-slate-400/40';
     }
   };
 
