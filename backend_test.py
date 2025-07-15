@@ -269,6 +269,369 @@ class AuthAndTeamsAPITest(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         
         print("✅ Unauthorized access properly rejected")
+    
+    def test_14_enhanced_user_registration_fields(self):
+        """Test that enhanced user registration includes new fields"""
+        # Skip if no user was registered
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check enhanced fields are present
+        self.assertIn("favorite_formation", data)
+        self.assertIn("profile_picture", data)
+        self.assertIn("bio", data)
+        self.assertIn("total_teams", data)
+        self.assertIn("total_likes_received", data)
+        self.assertIn("followers", data)
+        self.assertIn("following", data)
+        
+        # Check values match what we registered with
+        self.assertEqual(data["favorite_formation"], self.user_data["favorite_formation"])
+        self.assertEqual(data["profile_picture"], self.user_data["profile_picture"])
+        self.assertEqual(data["bio"], self.user_data["bio"])
+        
+        print("✅ Enhanced user registration fields working")
+    
+    def test_15_enhanced_team_creation_fields(self):
+        """Test that enhanced team creation includes new fields"""
+        # Skip if no team was created
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check enhanced fields are present
+        self.assertIn("description", data)
+        self.assertIn("is_public", data)
+        self.assertIn("tags", data)
+        self.assertIn("likes", data)
+        self.assertIn("liked_by", data)
+        self.assertIn("comments", data)
+        self.assertIn("views", data)
+        self.assertIn("rating", data)
+        self.assertIn("username", data)
+        self.assertIn("user_avatar", data)
+        
+        # Check values match what we created with
+        self.assertEqual(data["description"], self.team_data["description"])
+        self.assertEqual(data["is_public"], self.team_data["is_public"])
+        self.assertEqual(data["tags"], self.team_data["tags"])
+        self.assertEqual(data["username"], self.test_username)
+        
+        print("✅ Enhanced team creation fields working")
+    
+    def test_16_community_teams_endpoint(self):
+        """Test GET /api/community/teams endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Test basic community teams endpoint
+        response = requests.get(f"{API_URL}/community/teams", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        
+        # Test with search parameter
+        response = requests.get(f"{API_URL}/community/teams?search=Test", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        
+        # Test with formation filter
+        response = requests.get(f"{API_URL}/community/teams?formation=4-3-3", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        
+        # Test with sort_by parameter
+        response = requests.get(f"{API_URL}/community/teams?sort_by=likes", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        
+        # Test with limit and offset
+        response = requests.get(f"{API_URL}/community/teams?limit=5&offset=0", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        self.assertLessEqual(len(data), 5)
+        
+        print("✅ Community teams endpoint with filtering working")
+    
+    def test_17_team_like_functionality(self):
+        """Test POST /api/teams/{team_id}/like endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # First like the team
+        response = requests.post(f"{API_URL}/teams/{self.team_id}/like", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("liked", data)
+        self.assertTrue(data["liked"])
+        
+        # Check that team likes count increased
+        team_response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        team_data = team_response.json()
+        self.assertEqual(team_data["likes"], 1)
+        self.assertIn(self.user_id, team_data["liked_by"])
+        
+        # Unlike the team
+        response = requests.post(f"{API_URL}/teams/{self.team_id}/like", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("liked", data)
+        self.assertFalse(data["liked"])
+        
+        # Check that team likes count decreased
+        team_response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        team_data = team_response.json()
+        self.assertEqual(team_data["likes"], 0)
+        self.assertNotIn(self.user_id, team_data["liked_by"])
+        
+        print("✅ Team like/unlike functionality working")
+    
+    def test_18_team_comment_functionality(self):
+        """Test POST /api/teams/{team_id}/comment endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        comment_data = {
+            "content": "This is a test comment on the team!"
+        }
+        
+        # Add a comment to the team
+        response = requests.post(f"{API_URL}/teams/{self.team_id}/comment", json=comment_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("comment", data)
+        
+        comment = data["comment"]
+        self.assertEqual(comment["user_id"], self.user_id)
+        self.assertEqual(comment["username"], self.test_username)
+        self.assertEqual(comment["content"], comment_data["content"])
+        
+        # Check that team has the comment
+        team_response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        team_data = team_response.json()
+        self.assertEqual(len(team_data["comments"]), 1)
+        self.assertEqual(team_data["comments"][0]["content"], comment_data["content"])
+        
+        print("✅ Team comment functionality working")
+    
+    def test_19_community_featured_endpoint(self):
+        """Test GET /api/community/featured endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/community/featured", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("teams_of_week", data)
+        self.assertIn("popular_formations", data)
+        
+        # Check teams_of_week is a list
+        self.assertIsInstance(data["teams_of_week"], list)
+        
+        # Check popular_formations is a list
+        self.assertIsInstance(data["popular_formations"], list)
+        
+        # If there are popular formations, check structure
+        if data["popular_formations"]:
+            formation = data["popular_formations"][0]
+            self.assertIn("formation", formation)
+            self.assertIn("count", formation)
+        
+        print("✅ Community featured endpoint working")
+    
+    def test_20_community_stats_endpoint(self):
+        """Test GET /api/community/stats endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/community/stats", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("total_users", data)
+        self.assertIn("total_teams", data)
+        self.assertIn("total_public_teams", data)
+        self.assertIn("total_likes", data)
+        self.assertIn("total_views", data)
+        
+        # Check that values are numbers
+        self.assertIsInstance(data["total_users"], int)
+        self.assertIsInstance(data["total_teams"], int)
+        self.assertIsInstance(data["total_public_teams"], int)
+        self.assertIsInstance(data["total_likes"], int)
+        self.assertIsInstance(data["total_views"], int)
+        
+        # Check that we have at least 1 user and 1 team (from our tests)
+        self.assertGreaterEqual(data["total_users"], 1)
+        self.assertGreaterEqual(data["total_teams"], 1)
+        
+        print("✅ Community stats endpoint working")
+    
+    def test_21_follow_unfollow_functionality(self):
+        """Test follow/unfollow functionality"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        # Create a second user to follow
+        random_suffix2 = generate_random_string()
+        user2_data = {
+            "username": f"testuser2_{random_suffix2}",
+            "email": f"test2_{random_suffix2}@example.com",
+            "password": "Password123!",
+            "coach_level": 3,
+            "favorite_position": "GK",
+            "favorite_element": "Earth"
+        }
+        
+        # Register second user
+        response = requests.post(f"{API_URL}/auth/register", json=user2_data)
+        self.assertEqual(response.status_code, 200)
+        user2_data_response = response.json()
+        user2_id = user2_data_response["user"]["id"]
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Follow the second user
+        follow_data = {"user_id": user2_id}
+        response = requests.post(f"{API_URL}/community/follow", json=follow_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("following", data)
+        self.assertTrue(data["following"])
+        
+        # Check that current user is now following user2
+        current_user_response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        current_user_data = current_user_response.json()
+        self.assertIn(user2_id, current_user_data["following"])
+        
+        # Unfollow the second user
+        response = requests.post(f"{API_URL}/community/follow", json=follow_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("following", data)
+        self.assertFalse(data["following"])
+        
+        # Check that current user is no longer following user2
+        current_user_response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        current_user_data = current_user_response.json()
+        self.assertNotIn(user2_id, current_user_data["following"])
+        
+        print("✅ Follow/unfollow functionality working")
+    
+    def test_22_user_profile_and_teams_endpoints(self):
+        """Test community user profile and teams endpoints"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Test get user profile
+        response = requests.get(f"{API_URL}/community/users/{self.user_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check public profile structure
+        self.assertIn("id", data)
+        self.assertIn("username", data)
+        self.assertIn("coach_level", data)
+        self.assertIn("favorite_formation", data)
+        self.assertIn("profile_picture", data)
+        self.assertIn("bio", data)
+        self.assertIn("total_teams", data)
+        self.assertIn("total_likes_received", data)
+        self.assertIn("created_at", data)
+        
+        # Check that sensitive data is not exposed
+        self.assertNotIn("email", data)
+        self.assertNotIn("hashed_password", data)
+        
+        # Test get user's public teams
+        response = requests.get(f"{API_URL}/community/users/{self.user_id}/teams", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIsInstance(data, list)
+        
+        print("✅ User profile and teams endpoints working")
+    
+    def test_23_community_leaderboard_endpoint(self):
+        """Test GET /api/community/leaderboard endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/community/leaderboard", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("top_by_likes", data)
+        self.assertIn("top_by_teams", data)
+        self.assertIn("most_followed", data)
+        
+        # Check that all are lists
+        self.assertIsInstance(data["top_by_likes"], list)
+        self.assertIsInstance(data["top_by_teams"], list)
+        self.assertIsInstance(data["most_followed"], list)
+        
+        print("✅ Community leaderboard endpoint working")
+    
+    def test_24_team_view_endpoint(self):
+        """Test GET /api/teams/{team_id}/view endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Get initial view count
+        team_response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        initial_views = team_response.json()["views"]
+        
+        # View the team
+        response = requests.get(f"{API_URL}/teams/{self.team_id}/view", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check that view count increased
+        self.assertEqual(data["views"], initial_views + 1)
+        
+        print("✅ Team view endpoint working")
 
 class InazumaElevenAPITest(unittest.TestCase):
     """Test suite for Inazuma Eleven Victory Road API"""
