@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { mockCharacters, mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import Navigation from '../components/Navigation';
 import FormationField from '../components/FormationField';
