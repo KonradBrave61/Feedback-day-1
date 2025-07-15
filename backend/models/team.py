@@ -108,6 +108,3 @@ class LikeRequest(BaseModel):
 class CommentRequest(BaseModel):
     team_id: str
     content: str
-
-class FollowRequest(BaseModel):
-    user_id: str
