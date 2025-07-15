@@ -347,17 +347,18 @@ const TeamBuilder = () => {
 
           {/* Right Panel - Bench */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px]">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-orange-400" />
-                  Bench ({Object.keys(benchPlayers).length}/5)
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px] w-20">
+              <CardHeader className="p-3 pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <Users className="h-4 w-4 text-orange-400" />
+                  <span className="hidden">Bench</span>
+                  <span className="text-xs">({Object.keys(benchPlayers).length}/5)</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="h-full">
-                <div className="space-y-4 h-full flex flex-col justify-start">
+              <CardContent className="h-full p-2">
+                <div className="space-y-3 h-full flex flex-col justify-start">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="w-16 h-16 mx-auto">
+                    <div key={index} className="w-16 h-16">
                       {benchPlayers[index] ? (
                         <div className="relative group h-full w-full">
                           <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
