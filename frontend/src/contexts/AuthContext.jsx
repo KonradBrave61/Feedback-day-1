@@ -328,22 +328,180 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loadCommunityStats = async () => {
+  const loadFollowers = async (userId = null) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/stats`, {
+      const endpoint = userId 
+        ? `/api/community/users/${userId}/followers` 
+        : `/api/community/followers`;
+      
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error('Community stats load failed');
+        throw new Error('Followers load failed');
       }
 
       const data = await response.json();
-      return { success: true, stats: data };
+      return { success: true, followers: data.followers };
     } catch (error) {
-      console.error('Community stats load error:', error);
+      console.error('Followers load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loadFollowing = async (userId = null) => {
+    try {
+      const endpoint = userId 
+        ? `/api/community/users/${userId}/following` 
+        : `/api/community/following`;
+      
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Following load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, following: data.following };
+    } catch (error) {
+      console.error('Following load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loadSaveSlots = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Save slots load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, saveSlots: data.save_slots };
+    } catch (error) {
+      console.error('Save slots load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const createSaveSlot = async (slotData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(slotData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Save slot creation failed');
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error('Save slot creation error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const clearSaveSlot = async (slotNumber) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots/${slotNumber}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Save slot clearing failed');
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error('Save slot clearing error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const rateTeam = async (teamId, ratingData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/rate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(ratingData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Team rating failed');
+      }
+
+      const data = await response.json();
+      return { success: true, rating: data.rating };
+    } catch (error) {
+      console.error('Team rating error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loadTeamDetails = async (teamId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/details`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Team details load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, ...data };
+    } catch (error) {
+      console.error('Team details load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const saveTeamToSlot = async (teamId, slotData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/save-to-slot`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(slotData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Team save to slot failed');
+      }
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error('Team save to slot error:', error);
       return { success: false, error: error.message };
     }
   };
