@@ -138,5 +138,4 @@ class LikeRequest(BaseModel):
     team_id: str
 
 class CommentRequest(BaseModel):
-    team_id: str
     content: str
