@@ -408,6 +408,44 @@ async def get_save_slots(current_user: User = Depends(get_current_user)):
     
     return {"save_slots": save_slots}
 
+@router.get("/teams/{team_id}/details")
+async def get_team_details(
+    team_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get detailed team information including comments and ratings"""
+    db = await get_database()
+    
+    team = await db.teams.find_one({"id": team_id, "is_public": True})
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Team not found"
+        )
+    
+    # Increment view count if not owner
+    if team["user_id"] != current_user.id:
+        await db.teams.update_one(
+            {"id": team_id},
+            {"$inc": {"views": 1}}
+        )
+    
+    # Get updated team with incremented views
+    updated_team = await db.teams.find_one({"id": team_id})
+    
+    # Check if current user has liked this team
+    is_liked = current_user.id in updated_team.get("liked_by", [])
+    
+    # Check if current user is following team owner
+    is_following = updated_team["user_id"] in current_user.following
+    
+    return {
+        "team": Team(**updated_team),
+        "is_liked": is_liked,
+        "is_following": is_following,
+        "can_rate": updated_team["user_id"] != current_user.id
+    }
+
 @router.post("/teams/{team_id}/save-to-slot")
 async def save_team_to_slot(
     team_id: str,
