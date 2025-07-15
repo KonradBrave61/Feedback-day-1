@@ -484,6 +484,14 @@ const TeamBuilder = () => {
             selectedCoach={selectedCoach}
           />
         )}
+
+        {showSaveTeamModal && (
+          <SaveTeamModal
+            isOpen={showSaveTeamModal}
+            onClose={() => setShowSaveTeamModal(false)}
+            onSave={handleSaveTeam}
+          />
+        )}
       </div>
     </div>
   );
