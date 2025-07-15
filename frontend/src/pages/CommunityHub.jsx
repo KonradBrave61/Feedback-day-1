@@ -176,20 +176,94 @@ const CommunityHub = () => {
     setPopularFormations(mockPopularFormations);
   };
 
-  const handleLikeTeam = (teamId) => {
-    setCommunityTeams(prev => prev.map(team => 
-      team.id === teamId 
-        ? { ...team, likes: team.likes + 1 }
-        : team
-    ));
+  const handleLikeTeam = async (teamId) => {
+    try {
+      setActionLoading(prev => ({ ...prev, [`like_${teamId}`]: true }));
+      const result = await likeTeam(teamId);
+      if (result.success) {
+        setCommunityTeams(prev => prev.map(team => 
+          team.id === teamId 
+            ? { 
+                ...team, 
+                likes: result.liked ? team.likes + 1 : team.likes - 1,
+                liked_by: result.liked 
+                  ? [...(team.liked_by || []), user.id]
+                  : (team.liked_by || []).filter(id => id !== user.id)
+              }
+            : team
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to like team:', error);
+    } finally {
+      setActionLoading(prev => ({ ...prev, [`like_${teamId}`]: false }));
+    }
   };
 
-  const handleFollowUser = (teamId) => {
-    setCommunityTeams(prev => prev.map(team => 
-      team.id === teamId 
-        ? { ...team, isFollowing: !team.isFollowing }
-        : team
-    ));
+  const handleFollowUser = async (userId) => {
+    try {
+      setActionLoading(prev => ({ ...prev, [`follow_${userId}`]: true }));
+      const result = await followUser(userId);
+      if (result.success) {
+        setCommunityTeams(prev => prev.map(team => 
+          team.user_id === userId 
+            ? { ...team, is_following: result.following }
+            : team
+        ));
+        // Refresh social data
+        loadSocialData();
+      }
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+    } finally {
+      setActionLoading(prev => ({ ...prev, [`follow_${userId}`]: false }));
+    }
+  };
+
+  const handleComment = async (teamId) => {
+    try {
+      setActionLoading(prev => ({ ...prev, [`comment_${teamId}`]: true }));
+      const result = await commentOnTeam(teamId, comment);
+      if (result.success) {
+        setCommunityTeams(prev => prev.map(team => 
+          team.id === teamId 
+            ? { 
+                ...team, 
+                comments: [...(team.comments || []), result.comment]
+              }
+            : team
+        ));
+        setComment('');
+        setShowCommentModal(false);
+      }
+    } catch (error) {
+      console.error('Failed to comment on team:', error);
+    } finally {
+      setActionLoading(prev => ({ ...prev, [`comment_${teamId}`]: false }));
+    }
+  };
+
+  const handleRate = async (teamId) => {
+    try {
+      setActionLoading(prev => ({ ...prev, [`rate_${teamId}`]: true }));
+      const result = await rateTeam(teamId, ratings);
+      if (result.success) {
+        setCommunityTeams(prev => prev.map(team => 
+          team.id === teamId 
+            ? { 
+                ...team, 
+                rating: result.rating.average_rating,
+                detailed_rating: result.rating
+              }
+            : team
+        ));
+        setShowRatingModal(false);
+      }
+    } catch (error) {
+      console.error('Failed to rate team:', error);
+    } finally {
+      setActionLoading(prev => ({ ...prev, [`rate_${teamId}`]: false }));
+    }
   };
 
   const filteredTeams = communityTeams.filter(team => {
