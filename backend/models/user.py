@@ -22,7 +22,7 @@ class UserUpdate(BaseModel):
     coach_level: Optional[int] = None
     favorite_position: Optional[str] = None
     favorite_element: Optional[str] = None
-    favorite_formation: Optional[str] = None
+    favourite_team: Optional[str] = None
     profile_picture: Optional[str] = None
     bio: Optional[str] = None
 
