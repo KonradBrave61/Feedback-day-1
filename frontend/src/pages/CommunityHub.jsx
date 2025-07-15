@@ -661,7 +661,7 @@ const CommunityHub = () => {
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-300 mb-2">
-                        <span>by {team.author}</span>
+                        <span>by {team.username}</span>
                         <Badge className={`${getFormationColor(team.formation)} text-white`}>
                           {team.formation}
                         </Badge>
