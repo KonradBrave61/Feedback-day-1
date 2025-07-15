@@ -348,17 +348,16 @@ const TeamBuilder = () => {
           {/* Right Panel - Bench */}
           <div className="lg:col-span-1">
             <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px] w-20">
-              <CardHeader className="p-3 pb-2">
-                <CardTitle className="flex items-center gap-2 text-sm">
-                  <Users className="h-4 w-4 text-orange-400" />
-                  <span className="hidden">Bench</span>
+              <CardHeader className="p-2 pb-1">
+                <CardTitle className="flex items-center gap-1 text-xs">
+                  <Users className="h-3 w-3 text-orange-400" />
                   <span className="text-xs">({Object.keys(benchPlayers).length}/5)</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="h-full p-2">
-                <div className="h-full flex flex-col justify-between py-4">
+              <CardContent className="h-[calc(100%-2.5rem)] p-2">
+                <div className="h-full flex flex-col justify-between">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="w-16 h-20">
+                    <div key={index} className="w-16 h-[calc(20%-0.5rem)]">
                       {benchPlayers[index] ? (
                         <div className="relative group h-full w-full">
                           <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
@@ -382,7 +381,7 @@ const TeamBuilder = () => {
                           className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
                           onClick={() => handleAddBenchPlayer(index)}
                         >
-                          <Plus className="h-5 w-5 text-orange-400" />
+                          <Plus className="h-4 w-4 text-orange-400" />
                         </div>
                       )}
                     </div>
