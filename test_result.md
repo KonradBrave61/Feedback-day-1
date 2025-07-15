@@ -181,7 +181,7 @@ Second in the team builder the pitch with the squad to vertical and move bench f
     status_history:
       - working: true
         agent: "main"
-        comment: "Restructured TeamBuilder layout from 3-column to 4-column grid. Moved bench to right side as vertical column instead of horizontal grid below pitch. Changed grid layout to: Left panel (controls) | Formation field (2 columns) | Bench (right side). Updated bench styling to display as vertical stack with compact square slots (64x64px), appropriately sized player avatars (w-8 h-8), and centered alignment. Made bench height match pitch height (600px) for perfect alignment."
+        comment: "Restructured TeamBuilder layout from 3-column to 4-column grid. Moved bench to right side as vertical column instead of horizontal grid below pitch. Changed grid layout to: Left panel (controls) | Formation field (2 columns) | Bench (right side). Updated bench styling to display as vertical stack with compact square slots (64x64px), narrow width (80px), left-aligned slots, reduced padding, and appropriately sized player avatars (w-8 h-8). Made bench height match pitch height (600px) for perfect alignment. Final bench design is compact and professional."
 
 ## metadata:
   created_by: "main_agent"
