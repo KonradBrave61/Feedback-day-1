@@ -8,6 +8,8 @@ import TeamBuilder from "./pages/TeamBuilder";
 import CharactersPage from "./pages/CharactersPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import Dashboard from "./pages/Dashboard";
+import CommunityHub from "./pages/CommunityHub";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
 
