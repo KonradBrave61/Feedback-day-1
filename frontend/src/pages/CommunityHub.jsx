@@ -539,6 +539,108 @@ const CommunityHub = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="social" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Followers */}
+              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-orange-400" />
+                    Your Followers ({followers.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {followers.length === 0 ? (
+                      <div className="text-center py-8">
+                        <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-400">No followers yet</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Create public teams to attract followers!
+                        </p>
+                      </div>
+                    ) : (
+                      followers.map((follower) => (
+                        <div key={follower.id} className="flex items-center justify-between p-3 bg-orange-900/20 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-10 h-10">
+                              <AvatarImage src={follower.profile_picture} alt={follower.username} />
+                              <AvatarFallback className="bg-orange-600 text-white">
+                                {follower.username.slice(0, 2).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-medium">{follower.username}</h4>
+                              <p className="text-sm text-gray-400">Level {follower.coach_level}</p>
+                            </div>
+                          </div>
+                          <div className="text-right text-sm text-gray-400">
+                            <div>{follower.total_teams} teams</div>
+                            <div>{follower.total_likes_received} likes</div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Following */}
+              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <UserPlus className="h-5 w-5 text-orange-400" />
+                    You're Following ({following.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {following.length === 0 ? (
+                      <div className="text-center py-8">
+                        <UserPlus className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-400">Not following anyone yet</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Explore teams to find coaches to follow!
+                        </p>
+                      </div>
+                    ) : (
+                      following.map((followedUser) => (
+                        <div key={followedUser.id} className="flex items-center justify-between p-3 bg-orange-900/20 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-10 h-10">
+                              <AvatarImage src={followedUser.profile_picture} alt={followedUser.username} />
+                              <AvatarFallback className="bg-orange-600 text-white">
+                                {followedUser.username.slice(0, 2).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-medium">{followedUser.username}</h4>
+                              <p className="text-sm text-gray-400">Level {followedUser.coach_level}</p>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-gray-400 border-gray-400/50 hover:bg-gray-700"
+                            onClick={() => handleFollowUser(followedUser.id)}
+                            disabled={actionLoading[`follow_${followedUser.id}`]}
+                          >
+                            {actionLoading[`follow_${followedUser.id}`] ? (
+                              <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1" />
+                            ) : (
+                              <UserMinus className="h-3 w-3 mr-1" />
+                            )}
+                            Unfollow
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
           <TabsContent value="featured" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Teams of the Week */}
