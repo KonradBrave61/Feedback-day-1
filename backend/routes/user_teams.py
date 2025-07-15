@@ -322,3 +322,140 @@ async def get_featured_teams(current_user: User = Depends(get_current_user)):
         "teams_of_week": teams_of_week,
         "popular_formations": popular_formations
     }
+
+@router.post("/teams/{team_id}/rate")
+async def rate_team(
+    team_id: str,
+    rating_data: TeamRatingSubmission,
+    current_user: User = Depends(get_current_user)
+):
+    """Rate a team with detailed categories"""
+    db = await get_database()
+    
+    team = await db.teams.find_one({"id": team_id, "is_public": True})
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Team not found"
+        )
+    
+    # Check if user is rating their own team
+    if team["user_id"] == current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot rate your own team"
+        )
+    
+    # Calculate new averages
+    current_rating = team.get("detailed_rating", {})
+    current_total = current_rating.get("total_ratings", 0)
+    
+    new_total = current_total + 1
+    new_averages = {
+        "tension_usage": (current_rating.get("tension_usage", 0) * current_total + rating_data.tension_usage) / new_total,
+        "difficulty": (current_rating.get("difficulty", 0) * current_total + rating_data.difficulty) / new_total,
+        "fun": (current_rating.get("fun", 0) * current_total + rating_data.fun) / new_total,
+        "creativity": (current_rating.get("creativity", 0) * current_total + rating_data.creativity) / new_total,
+        "effectiveness": (current_rating.get("effectiveness", 0) * current_total + rating_data.effectiveness) / new_total,
+        "balance": (current_rating.get("balance", 0) * current_total + rating_data.balance) / new_total,
+        "total_ratings": new_total
+    }
+    
+    new_averages["average_rating"] = sum([
+        new_averages["tension_usage"],
+        new_averages["difficulty"],
+        new_averages["fun"],
+        new_averages["creativity"],
+        new_averages["effectiveness"],
+        new_averages["balance"]
+    ]) / 6
+    
+    # Update team with new rating
+    await db.teams.update_one(
+        {"id": team_id},
+        {
+            "$set": {
+                "detailed_rating": new_averages,
+                "rating": new_averages["average_rating"]
+            }
+        }
+    )
+    
+    return {"message": "Team rated successfully", "rating": new_averages}
+
+@router.get("/save-slots")
+async def get_save_slots(current_user: User = Depends(get_current_user)):
+    """Get user's team save slots"""
+    db = await get_database()
+    
+    # Get all teams for the user to check occupied slots
+    teams_cursor = db.teams.find({"user_id": current_user.id})
+    teams = []
+    async for team in teams_cursor:
+        teams.append(team)
+    
+    # Create save slots (assuming 5 slots for now)
+    save_slots = []
+    for i in range(1, 6):
+        occupied_team = next((team for team in teams if team.get("save_slot") == i), None)
+        save_slots.append({
+            "slot_number": i,
+            "slot_name": f"Slot {i}",
+            "is_occupied": occupied_team is not None,
+            "team_id": occupied_team["id"] if occupied_team else None,
+            "team_name": occupied_team["name"] if occupied_team else None
+        })
+    
+    return {"save_slots": save_slots}
+
+@router.post("/teams/{team_id}/save-to-slot")
+async def save_team_to_slot(
+    team_id: str,
+    slot_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Save a team to a specific slot"""
+    db = await get_database()
+    
+    # Verify team belongs to user
+    team = await db.teams.find_one({"id": team_id, "user_id": current_user.id})
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Team not found"
+        )
+    
+    slot_number = slot_data.get("slot_number")
+    slot_name = slot_data.get("slot_name", f"Slot {slot_number}")
+    
+    # Check if slot is occupied and handle overwrite
+    existing_team = await db.teams.find_one({
+        "user_id": current_user.id,
+        "save_slot": slot_number
+    })
+    
+    if existing_team and not slot_data.get("overwrite", False):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Slot is occupied. Set overwrite to true to replace."
+        )
+    
+    # Clear the slot from any existing team
+    await db.teams.update_many(
+        {"user_id": current_user.id, "save_slot": slot_number},
+        {"$unset": {"save_slot": "", "save_slot_name": ""}}
+    )
+    
+    # Assign the team to the slot
+    await db.teams.update_one(
+        {"id": team_id},
+        {
+            "$set": {
+                "save_slot": slot_number,
+                "save_slot_name": slot_name,
+                "updated_at": datetime.utcnow()
+            }
+        }
+    )
+    
+    return {"message": "Team saved to slot successfully"}
