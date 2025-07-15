@@ -3,8 +3,8 @@ from typing import List, Optional
 import pandas as pd
 import io
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from ..models.character import Character, CharacterCreate, CharacterUpdate, Stats, Stat, Hissatsu, TeamPassive
-from ..database import get_database
+from models.character import Character, CharacterCreate, CharacterUpdate, Stats, Stat, Hissatsu, TeamPassive
+from database import get_database
 
 router = APIRouter(prefix="/characters", tags=["characters"])
 
