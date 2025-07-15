@@ -207,6 +207,16 @@ const ProfilePage = () => {
                       </Badge>
                     )}
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Favorite Element</label>
+                    {editing ? (
+                      <select
+                        name="favoriteElement"
+                        value={formData.favoriteElement}
+                        onChange={handleChange}
+                        className="w-full p-2 rounded bg-orange-900/30 border border-orange-400/30 text-white"
+                      >
                         <option value="Fire">Fire</option>
                         <option value="Earth">Earth</option>
                         <option value="Wind">Wind</option>
