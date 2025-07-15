@@ -103,12 +103,8 @@
 #====================================================================================================
 
 ## user_problem_statement: 
-Character Detail Modal - change selecting hissatsu to the same as it is in the tactics 
-Instead of "add" create Preset, 1 preset have 3 tactics. Player have 2 presets overall that you can switch, 
-Radar Chart - Add icons to the chart for user to be able to read it Try to get the same icons as in the first image add the same icons next to text statistics for user to know which ones are on the radar 
-#D6542A This is the color that I want to be for this website try to make it more gradient and try to fit the colors for this website I just want to do the change to see what colors will be the best 
-Look at Second Image repair the searching in the team builder cause its folding 
-Look at the third image and give me some ideas how we can make me on the web app as tactic selector
+First load the code 
+Second in the team builder the pitch with the squad to vertical and move bench from below the pitch to being on right side
 
 ## backend:
   - task: "Color theme update to #D6542A"
