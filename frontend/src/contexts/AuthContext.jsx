@@ -16,9 +16,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if user is logged in on app start
+    const storedToken = localStorage.getItem('authToken');
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (storedToken && storedUser) {
+      setUser({ ...JSON.parse(storedUser), token: storedToken });
     }
     setLoading(false);
   }, []);
@@ -37,34 +38,38 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Login failed');
       }
 
-      const userData = await response.json();
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      return { success: true, user: userData };
+      const data = await response.json();
+      const userWithToken = { ...data.user, token: data.access_token };
+      setUser(userWithToken);
+      localStorage.setItem('authToken', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      return { success: true, user: userWithToken };
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: error.message };
     }
   };
 
-  const register = async (username, email, password) => {
+  const register = async (userData) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
         throw new Error('Registration failed');
       }
 
-      const userData = await response.json();
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      return { success: true, user: userData };
+      const data = await response.json();
+      const userWithToken = { ...data.user, token: data.access_token };
+      setUser(userWithToken);
+      localStorage.setItem('authToken', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      return { success: true, user: userWithToken };
     } catch (error) {
       console.error('Registration error:', error);
       return { success: false, error: error.message };
@@ -73,12 +78,13 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   };
 
   const updateProfile = async (profileData) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${user.id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -92,9 +98,10 @@ export const AuthProvider = ({ children }) => {
       }
 
       const updatedUser = await response.json();
-      setUser(updatedUser);
+      const userWithToken = { ...updatedUser, token: user.token };
+      setUser(userWithToken);
       localStorage.setItem('user', JSON.stringify(updatedUser));
-      return { success: true, user: updatedUser };
+      return { success: true, user: userWithToken };
     } catch (error) {
       console.error('Profile update error:', error);
       return { success: false, error: error.message };
@@ -109,10 +116,7 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,
         },
-        body: JSON.stringify({
-          ...teamData,
-          userId: user.id,
-        }),
+        body: JSON.stringify(teamData),
       });
 
       if (!response.ok) {
@@ -127,9 +131,52 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateTeam = async (teamId, teamData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(teamData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Team update failed');
+      }
+
+      const updatedTeam = await response.json();
+      return { success: true, team: updatedTeam };
+    } catch (error) {
+      console.error('Team update error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const deleteTeam = async (teamId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Team deletion failed');
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Team deletion error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const loadTeams = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams?userId=${user.id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
         headers: {
           'Authorization': `Bearer ${user.token}`,
         },
@@ -147,6 +194,140 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loadCommunityTeams = async (filters = {}) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters.search) params.append('search', filters.search);
+      if (filters.formation) params.append('formation', filters.formation);
+      if (filters.sort_by) params.append('sort_by', filters.sort_by);
+      if (filters.limit) params.append('limit', filters.limit);
+      if (filters.offset) params.append('offset', filters.offset);
+
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/teams?${params}`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Community teams load failed');
+      }
+
+      const teams = await response.json();
+      return { success: true, teams };
+    } catch (error) {
+      console.error('Community teams load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const likeTeam = async (teamId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/like`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Like action failed');
+      }
+
+      const result = await response.json();
+      return { success: true, liked: result.liked };
+    } catch (error) {
+      console.error('Like action error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const commentOnTeam = async (teamId, content) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ content }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Comment action failed');
+      }
+
+      const result = await response.json();
+      return { success: true, comment: result.comment };
+    } catch (error) {
+      console.error('Comment action error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const followUser = async (userId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/follow`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ user_id: userId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Follow action failed');
+      }
+
+      const result = await response.json();
+      return { success: true, following: result.following };
+    } catch (error) {
+      console.error('Follow action error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loadFeaturedContent = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/featured`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Featured content load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, ...data };
+    } catch (error) {
+      console.error('Featured content load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const loadCommunityStats = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/stats`, {
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Community stats load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, stats: data };
+    } catch (error) {
+      console.error('Community stats load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -155,7 +336,15 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     saveTeam,
+    updateTeam,
+    deleteTeam,
     loadTeams,
+    loadCommunityTeams,
+    likeTeam,
+    commentOnTeam,
+    followUser,
+    loadFeaturedContent,
+    loadCommunityStats,
   };
 
   return (
