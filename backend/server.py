@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from routes import auth
+from routes import auth, user_teams, community
 
 app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
 
@@ -15,6 +15,8 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
+app.include_router(user_teams.router, prefix="/api", tags=["user_teams"])
+app.include_router(community.router, prefix="/api/community", tags=["community"])
 
 @app.get("/")
 async def root():
