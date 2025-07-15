@@ -1,9 +1,16 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-import asyncio
+from contextlib import asynccontextmanager
 from database import init_database
 
-app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await init_database()
+    yield
+    # Shutdown (if needed)
+
+app = FastAPI(title="Inazuma Eleven API", version="1.0.0", lifespan=lifespan)
 
 # CORS middleware
 app.add_middleware(
@@ -13,10 +20,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("startup")
-async def startup_event():
-    await init_database()
 
 # Include routers
 from routes import auth, user_teams, community
