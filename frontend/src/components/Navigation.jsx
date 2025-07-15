@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare } from 'lucide-react';
+import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe } from 'lucide-react';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -17,6 +17,8 @@ const Navigation = () => {
     { path: '/team-builder', label: 'Team Builder', icon: Users },
     { path: '/characters', label: 'Characters', icon: User },
     { path: '/community', label: 'Community Hub', icon: MessageSquare },
+    { path: '/community-teams', label: 'Community Teams', icon: Globe },
+    { path: '/followers', label: 'Social Network', icon: UserPlus },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -84,7 +86,7 @@ const Navigation = () => {
               <>
                 <div className="text-right">
                   <div className="text-sm font-medium text-white">{user.username}</div>
-                  <div className="text-xs text-orange-300">Coach Level {user.coachLevel || 1}</div>
+                  <div className="text-xs text-orange-300">Coach Level {user.coach_level || 1}</div>
                 </div>
                 <div 
                   className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
@@ -107,6 +109,17 @@ const Navigation = () => {
                       >
                         <LayoutDashboard className="h-4 w-4 mr-2" />
                         Dashboard
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:bg-orange-700/30"
+                        onClick={() => {
+                          navigate('/profile');
+                          setShowProfileMenu(false);
+                        }}
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        Profile
                       </Button>
                       <Button
                         variant="ghost"
