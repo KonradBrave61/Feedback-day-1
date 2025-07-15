@@ -106,46 +106,40 @@ const CommunityHub = () => {
         id: 1,
         name: "Lightning Strike",
         formation: "4-4-2 Diamond",
-        author: "ProPlayer99",
-        authorAvatar: "/api/placeholder/40/40",
+        username: "ProPlayer99",
+        user_id: "user1",
+        user_avatar: "/api/placeholder/40/40",
         likes: 245,
-        comments: 38,
+        comments: [
+          { id: 1, username: "Coach123", content: "Great attacking setup!", created_at: "2024-07-12T10:30:00Z" },
+          { id: 2, username: "TacticMaster", content: "Love the midfield control", created_at: "2024-07-12T14:15:00Z" }
+        ],
         views: 1250,
         rating: 4.8,
-        createdDate: "2024-07-10",
+        created_at: "2024-07-10T12:00:00Z",
         description: "Aggressive attacking formation with strong midfield control",
-        tags: ["Attacking", "Midfield", "Fast-paced"],
-        isFollowing: false
+        tags: ["attacking", "midfield", "fast-paced"],
+        is_following: false,
+        liked_by: []
       },
       {
         id: 2,
         name: "Defensive Wall",
         formation: "4-3-3",
-        author: "TacticalMaster",
-        authorAvatar: "/api/placeholder/40/40",
+        username: "TacticalMaster",
+        user_id: "user2",
+        user_avatar: "/api/placeholder/40/40",
         likes: 189,
-        comments: 24,
+        comments: [
+          { id: 3, username: "DefenseExpert", content: "Solid defensive strategy", created_at: "2024-07-11T09:20:00Z" }
+        ],
         views: 890,
         rating: 4.6,
-        createdDate: "2024-07-08",
+        created_at: "2024-07-08T15:30:00Z",
         description: "Solid defensive setup with quick counter-attacks",
-        tags: ["Defensive", "Counter-attack", "Solid"],
-        isFollowing: true
-      },
-      {
-        id: 3,
-        name: "Chaos Control",
-        formation: "3-5-2",
-        author: "StrategyGenius",
-        authorAvatar: "/api/placeholder/40/40",
-        likes: 412,
-        comments: 67,
-        views: 2100,
-        rating: 4.9,
-        createdDate: "2024-07-05",
-        description: "Unpredictable tactical approach with versatile players",
-        tags: ["Versatile", "Unpredictable", "Advanced"],
-        isFollowing: false
+        tags: ["defensive", "counter-attack", "solid"],
+        is_following: true,
+        liked_by: []
       }
     ];
 
@@ -154,7 +148,7 @@ const CommunityHub = () => {
         id: 4,
         name: "Weekly Champion",
         formation: "4-4-2 Diamond",
-        author: "ChampionBuilder",
+        username: "ChampionBuilder",
         likes: 567,
         rating: 4.9,
         badge: "Team of the Week"
@@ -163,7 +157,7 @@ const CommunityHub = () => {
         id: 5,
         name: "Rising Star",
         formation: "4-3-3",
-        author: "NewTactician",
+        username: "NewTactician",
         likes: 234,
         rating: 4.7,
         badge: "Rising Star"
@@ -180,7 +174,7 @@ const CommunityHub = () => {
     setCommunityTeams(mockCommunityTeams);
     setFeaturedTeams(mockFeaturedTeams);
     setPopularFormations(mockPopularFormations);
-  }, []);
+  };
 
   const handleLikeTeam = (teamId) => {
     setCommunityTeams(prev => prev.map(team => 
