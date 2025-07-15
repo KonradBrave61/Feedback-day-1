@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Users, Trophy, Target, Shield, Zap, UserCheck, Plus, X, Save } from 'lucide-react';
 
 const TeamBuilder = () => {
+  const { saveTeam } = useAuth();
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
