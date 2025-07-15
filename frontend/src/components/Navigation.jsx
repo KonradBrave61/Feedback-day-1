@@ -101,12 +101,12 @@ const Navigation = () => {
                         variant="ghost"
                         className="w-full justify-start text-white hover:bg-orange-700/30"
                         onClick={() => {
-                          navigate('/profile');
+                          navigate('/dashboard');
                           setShowProfileMenu(false);
                         }}
                       >
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
+                        <LayoutDashboard className="h-4 w-4 mr-2" />
+                        Dashboard
                       </Button>
                       <Button
                         variant="ghost"
