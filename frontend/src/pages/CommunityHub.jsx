@@ -57,8 +57,50 @@ const CommunityHub = () => {
   const [comment, setComment] = useState('');
   const [actionLoading, setActionLoading] = useState({});
 
-  // Mock data
   useEffect(() => {
+    loadTeams();
+    loadSocialData();
+  }, []);
+
+  const loadTeams = async () => {
+    try {
+      setLoading(true);
+      const result = await loadCommunityTeams({
+        limit: 20,
+        offset: 0
+      });
+      if (result.success) {
+        setCommunityTeams(result.teams);
+      }
+    } catch (error) {
+      console.error('Failed to load teams:', error);
+      // Fallback to mock data
+      loadMockData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadSocialData = async () => {
+    try {
+      const [followersResult, followingResult] = await Promise.all([
+        loadFollowers(),
+        loadFollowing()
+      ]);
+      
+      if (followersResult.success) {
+        setFollowers(followersResult.followers);
+      }
+      
+      if (followingResult.success) {
+        setFollowing(followingResult.following);
+      }
+    } catch (error) {
+      console.error('Failed to load social data:', error);
+    }
+  };
+
+  const loadMockData = () => {
     const mockCommunityTeams = [
       {
         id: 1,
