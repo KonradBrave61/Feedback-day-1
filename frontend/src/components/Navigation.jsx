@@ -17,8 +17,6 @@ const Navigation = () => {
     { path: '/team-builder', label: 'Team Builder', icon: Users },
     { path: '/characters', label: 'Characters', icon: User },
     { path: '/community', label: 'Community Hub', icon: MessageSquare },
-    { path: '/community-teams', label: 'Community Teams', icon: Globe },
-    { path: '/followers', label: 'Social Network', icon: UserPlus },
   ];
 
   const isActive = (path) => location.pathname === path;
