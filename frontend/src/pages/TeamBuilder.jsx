@@ -105,30 +105,42 @@ const TeamBuilder = () => {
     setSelectedCoach(coach);
   };
 
-  const handleSaveTeam = (teamData) => {
-    const savedTeam = {
-      id: Date.now(), // Simple ID generation
-      name: teamData.name,
-      description: teamData.description,
-      isPublic: teamData.isPublic,
-      formation: selectedFormation,
-      teamPlayers: teamPlayers,
-      benchPlayers: benchPlayers,
-      selectedTactics: selectedTactics,
-      selectedCoach: selectedCoach,
-      createdDate: new Date().toISOString(),
-      likes: 0,
-      stats: teamStats
-    };
-    
-    // Here you would normally save to backend/database
-    // For now, we'll save to localStorage
-    const existingTeams = JSON.parse(localStorage.getItem('userTeams') || '[]');
-    existingTeams.push(savedTeam);
-    localStorage.setItem('userTeams', JSON.stringify(existingTeams));
-    
-    setShowSaveTeamModal(false);
-    // Could show success toast here
+  const handleSaveTeam = async (teamData) => {
+    try {
+      const teamPayload = {
+        name: teamData.name,
+        description: teamData.description,
+        is_public: teamData.is_public,
+        tags: teamData.tags,
+        formation: selectedFormation.name,
+        players: Object.entries(teamPlayers).map(([positionId, player]) => ({
+          character_id: player.id,
+          position_id: positionId,
+          user_level: player.baseLevel,
+          user_rarity: player.rarity
+        })),
+        bench_players: Object.entries(benchPlayers).map(([slotIndex, player]) => ({
+          character_id: player.id,
+          slot_index: parseInt(slotIndex),
+          user_level: player.baseLevel,
+          user_rarity: player.rarity
+        })),
+        tactics: selectedTactics,
+        coach: selectedCoach
+      };
+
+      const result = await saveTeam(teamPayload);
+      if (result.success) {
+        setShowSaveTeamModal(false);
+        // You could show a success toast here
+        return result;
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.error('Error saving team:', error);
+      throw error;
+    }
   };
 
   const getTeamStats = () => {
