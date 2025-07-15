@@ -40,7 +40,8 @@ const ProfilePage = () => {
       email: user.email || '',
       coachLevel: user.coachLevel || 1,
       favoritePosition: user.favoritePosition || 'MF',
-      favoriteElement: user.favoriteElement || 'Fire'
+      favoriteElement: user.favoriteElement || 'Fire',
+      favouriteTeam: user.favourite_team || ''
     });
 
     // Load user teams
