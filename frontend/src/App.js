@@ -21,8 +21,10 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<MainPage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/team-builder" element={<TeamBuilder />} />
               <Route path="/characters" element={<CharactersPage />} />
+              <Route path="/community" element={<CommunityHub />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
