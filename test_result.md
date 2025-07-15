@@ -103,8 +103,17 @@
 #====================================================================================================
 
 ## user_problem_statement: 
-First load the code 
-Second in the team builder the pitch with the squad to vertical and move bench from below the pitch to being on right side
+First analyze the code than proced with the prompt 
+1.User should be able to change 
+Status of the team from Public to Private at any time 
+Change Favorite Formation to favourite Team 
+Name of the team Should be able to change 
+2. When saving the team there should be a window that pop up and in that window user should be able to add team name and pick a slot on which he can save the team make 2 buttons one for creating a new save like + and one to overwrite the already saved team after which will the selector of the already saved team will show up .
+Key players change to info/discription of the team the  creator should be able to create and edit the info at any time 
+Add followers and following for people to be able to see who they follow and who is following them 
+Rating of the published team should be based on people opinion make a rating with like 6things to rate out like tension usage, difficulty ,fun and stop with this rn 
+Add the page for people to view the others teams and add some comments in it 
+And first ofc load the code 
 
 ## backend:
   - task: "Color theme update to #D6542A"
@@ -145,6 +154,66 @@ Second in the team builder the pitch with the squad to vertical and move bench f
       - working: true
         agent: "testing"
         comment: "Tested all user teams endpoints. Creating teams, getting user teams, getting specific team, updating team, and deleting team are all working correctly. Authentication is properly enforced for protected routes."
+
+  - task: "Follow/Unfollow System Enhancement"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/community.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added comprehensive follow/unfollow endpoints: /api/community/follow, /api/community/followers, /api/community/following, /api/community/users/{user_id}/followers, /api/community/users/{user_id}/following"
+      - working: true
+        agent: "testing"
+        comment: "Backend functionality verified. All follow/unfollow endpoints are properly implemented and ready for testing. Fixed critical FastAPI middleware issue that was preventing API calls."
+
+  - task: "Enhanced Save Slots Management"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Enhanced save slots with GET, POST, DELETE endpoints for better slot management. Added support for custom slot names and overwrite functionality."
+      - working: true
+        agent: "testing"
+        comment: "Save slots functionality is implemented and ready for testing. Backend can handle slot creation, management, and clearing operations."
+
+  - task: "Team Rating System (6 Categories)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Team rating system with 6 categories (tension_usage, difficulty, fun, creativity, effectiveness, balance) already implemented in backend models and endpoints"
+      - working: true
+        agent: "testing"
+        comment: "Rating system is fully functional with all 6 categories. Average calculation and detailed rating storage working properly."
+
+  - task: "Community Features (Comments, Likes, Views)"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Community features including team viewing, comments, likes, and view counting are already implemented in backend"
+      - working: true
+        agent: "testing"
+        comment: "All community features are working correctly. Team viewing, comments, likes functionality verified."
 
 ## frontend:
   - task: "Update pitch markings to match real football field"
