@@ -350,6 +350,20 @@ const TeamBuilder = () => {
                 </CardContent>
               </Card>
             )}
+
+            {/* Save Team Button */}
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardContent className="p-4">
+                <Button
+                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                  onClick={() => setShowSaveTeamModal(true)}
+                  disabled={Object.keys(teamPlayers).length === 0}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Team
+                </Button>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Middle Panel - Formation Field */}
