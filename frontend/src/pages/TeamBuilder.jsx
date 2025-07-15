@@ -357,23 +357,22 @@ const TeamBuilder = () => {
               <CardContent className="h-full">
                 <div className="space-y-4 h-full flex flex-col justify-start">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="flex-1 min-h-[80px]">
+                    <div key={index} className="w-16 h-16 mx-auto">
                       {benchPlayers[index] ? (
-                        <div className="relative group h-full">
-                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
+                        <div className="relative group h-full w-full">
+                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
                             <img
                               src={benchPlayers[index].portrait}
                               alt={benchPlayers[index].name}
                               className="w-8 h-8 rounded-full mb-1"
                             />
-                            <div className="text-xs text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
-                            <div className="text-xs text-gray-400 mt-1">{benchPlayers[index].position}</div>
+                            <div className="text-xs text-center font-medium truncate w-full leading-tight">{benchPlayers[index].name}</div>
                           </div>
                           <button
-                            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => handleRemoveBenchPlayer(index)}
                           >
-                            <X className="h-3 w-3" />
+                            <X className="h-2 w-2" />
                           </button>
                         </div>
                       ) : (
@@ -381,7 +380,7 @@ const TeamBuilder = () => {
                           className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
                           onClick={() => handleAddBenchPlayer(index)}
                         >
-                          <Plus className="h-6 w-6 text-orange-400" />
+                          <Plus className="h-5 w-5 text-orange-400" />
                         </div>
                       )}
                     </div>
