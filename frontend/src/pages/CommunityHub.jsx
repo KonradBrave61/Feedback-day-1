@@ -268,7 +268,7 @@ const CommunityHub = () => {
 
   const filteredTeams = communityTeams.filter(team => {
     const matchesSearch = team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         team.author.toLowerCase().includes(searchTerm.toLowerCase());
+                         team.username.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFormation = filterFormation === 'all' || team.formation === filterFormation;
     const matchesRating = filterRating === 'all' || 
                          (filterRating === 'high' && team.rating >= 4.5) ||
@@ -277,6 +277,34 @@ const CommunityHub = () => {
     
     return matchesSearch && matchesFormation && matchesRating;
   });
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getRatingColor = (rating) => {
+    if (rating >= 4) return 'text-green-400';
+    if (rating >= 3) return 'text-yellow-400';
+    if (rating >= 2) return 'text-orange-400';
+    return 'text-red-400';
+  };
+
+  const isFollowing = (userId) => {
+    return following.some(user => user.id === userId);
+  };
+
+  const ratingCategories = [
+    { key: 'tension_usage', label: 'Tension Usage', description: 'How well the team uses tension mechanics' },
+    { key: 'difficulty', label: 'Difficulty', description: 'How challenging the team is to play against' },
+    { key: 'fun', label: 'Fun Factor', description: 'How enjoyable the team is to play' },
+    { key: 'creativity', label: 'Creativity', description: 'How creative and unique the team composition is' },
+    { key: 'effectiveness', label: 'Effectiveness', description: 'How effective the team is in matches' },
+    { key: 'balance', label: 'Balance', description: 'How well balanced the team composition is' }
+  ];
 
   const getFormationColor = (formation) => {
     switch (formation) {
