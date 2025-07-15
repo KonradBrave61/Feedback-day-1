@@ -147,89 +147,29 @@ Second in the team builder the pitch with the squad to vertical and move bench f
         comment: "Tested all user teams endpoints. Creating teams, getting user teams, getting specific team, updating team, and deleting team are all working correctly. Authentication is properly enforced for protected routes."
 
 ## frontend:
-  - task: "Update color scheme to #D6542A with gradients"
+  - task: "Make team builder pitch vertical"
     implemented: true
     working: true
-    file: "/app/frontend/src/components/"
+    file: "/app/frontend/src/components/FormationField.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Updated color scheme to #D6542A theme across MainPage, TeamBuilder, PlayerSearch, CharacterModal, Navigation, and all components"
+        comment: "Changed FormationField height from h-96 to h-[600px] to make the pitch more vertical and football-like"
 
-  - task: "Hissatsu selection like tactics selection"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/CharacterModal.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Changed hissatsu selection to work like tactics selection with modal, list format, and toggle functionality"
-
-  - task: "Implement tactics preset system"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/TacticsSelector.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Implemented preset system with 2 presets, 3 tactics each, ability to switch between presets, edit presets individually"
-
-  - task: "Add radar chart icons"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/CharacterModal.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Added lucide-react icons for each stat (kick, control, technique, intelligence, pressure, agility, physical) next to radar chart stats"
-
-  - task: "Fix player search layout/folding"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/PlayerSearch.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Fixed search layout with better responsive design, improved grid layout, and better filter organization"
-
-  - task: "Update team builder with preset system"
+  - task: "Move bench from below pitch to right side"
     implemented: true
     working: true
     file: "/app/frontend/src/pages/TeamBuilder.jsx"
     stuck_count: 0
-    priority: "medium"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Updated team builder to use new preset system, changed button text to 'Manage Presets'"
-
-  - task: "Implement rarity-based background colors for character cards"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/CharacterCard.jsx, /app/frontend/src/components/CharacterModal.jsx"
-    stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Updated character cards to use element-based background colors for search cards, simplified display to show only name and position badge. Updated character modal to use rarity-based background colors that change when rarity is selected (Legendary=yellow-orange, Epic=purple-pink, Rare=blue-cyan, Common=gray)."
+        comment: "Restructured TeamBuilder layout from 3-column to 4-column grid. Moved bench to right side as vertical column instead of horizontal grid below pitch. Changed grid layout to: Left panel (controls) | Formation field (2 columns) | Bench (right side). Updated bench styling to display as vertical stack with smaller player avatars."
 
 ## metadata:
   created_by: "main_agent"
