@@ -4,10 +4,14 @@ from database import init_database
 
 app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
 
-# CORS middleware
+# CORS middleware - fix for middleware configuration issue
+origins = [
+    "*",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
