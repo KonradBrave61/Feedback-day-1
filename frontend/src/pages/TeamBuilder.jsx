@@ -347,7 +347,7 @@ const TeamBuilder = () => {
 
           {/* Right Panel - Bench */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px] w-20">
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px] w-20 mt-16">
               <CardHeader className="p-2 pb-1">
                 <CardTitle className="flex items-center gap-1 text-xs">
                   <Users className="h-3 w-3 text-orange-400" />
