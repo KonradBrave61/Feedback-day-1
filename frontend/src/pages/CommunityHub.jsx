@@ -33,12 +33,29 @@ import {
 
 const CommunityHub = () => {
   const navigate = useNavigate();
+  const { user, loadCommunityTeams, likeTeam, commentOnTeam, followUser, rateTeam, loadFollowers, loadFollowing } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterFormation, setFilterFormation] = useState('all');
   const [filterRating, setFilterRating] = useState('all');
   const [communityTeams, setCommunityTeams] = useState([]);
   const [featuredTeams, setFeaturedTeams] = useState([]);
   const [popularFormations, setPopularFormations] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showCommentModal, setShowCommentModal] = useState(false);
+  const [ratings, setRatings] = useState({
+    tension_usage: 3,
+    difficulty: 3,
+    fun: 3,
+    creativity: 3,
+    effectiveness: 3,
+    balance: 3
+  });
+  const [comment, setComment] = useState('');
+  const [actionLoading, setActionLoading] = useState({});
 
   // Mock data
   useEffect(() => {
