@@ -356,9 +356,9 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="h-full p-2">
-                <div className="space-y-3 h-full flex flex-col justify-start">
+                <div className="h-full flex flex-col justify-between py-4">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="w-16 h-16">
+                    <div key={index} className="w-16 h-20">
                       {benchPlayers[index] ? (
                         <div className="relative group h-full w-full">
                           <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
@@ -368,6 +368,7 @@ const TeamBuilder = () => {
                               className="w-8 h-8 rounded-full mb-1"
                             />
                             <div className="text-xs text-center font-medium truncate w-full leading-tight">{benchPlayers[index].name}</div>
+                            <div className="text-xs text-gray-400 text-center">{benchPlayers[index].position}</div>
                           </div>
                           <button
                             className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
