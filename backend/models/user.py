@@ -54,7 +54,7 @@ class UserPublic(BaseModel):
     id: str
     username: str
     coach_level: int
-    favorite_formation: str
+    favourite_team: str
     profile_picture: Optional[str] = None
     bio: Optional[str] = None
     total_teams: int = 0
