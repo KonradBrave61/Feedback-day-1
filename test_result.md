@@ -142,6 +142,9 @@ And first ofc load the code
       - working: true
         agent: "testing"
         comment: "Tested all authentication endpoints. User registration, login, get current user, and update user profile are all working correctly. Authentication tokens are properly generated and validated."
+      - working: true
+        agent: "testing"
+        comment: "Re-tested after fixing FastAPI middleware issue. All authentication endpoints working perfectly. User registration with enhanced fields (favorite_team, profile_picture, bio, followers, following), login, profile updates, and token validation all functional."
 
   - task: "User Teams API endpoints"
     implemented: true
