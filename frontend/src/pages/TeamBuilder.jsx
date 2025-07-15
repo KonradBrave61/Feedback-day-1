@@ -370,10 +370,10 @@ const TeamBuilder = () => {
                             <div className="text-xs text-gray-400 mt-1">{benchPlayers[index].position}</div>
                           </div>
                           <button
-                            className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => handleRemoveBenchPlayer(index)}
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-3 w-3" />
                           </button>
                         </div>
                       ) : (
