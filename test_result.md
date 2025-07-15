@@ -147,6 +147,18 @@ Second in the team builder the pitch with the squad to vertical and move bench f
         comment: "Tested all user teams endpoints. Creating teams, getting user teams, getting specific team, updating team, and deleting team are all working correctly. Authentication is properly enforced for protected routes."
 
 ## frontend:
+  - task: "Update pitch markings to match real football field"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FormationField.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated field markings to match real football pitch specifications: Added proper penalty areas (18-yard boxes), goal areas (6-yard boxes), center circle with center spot, penalty spots, penalty arcs (D-shaped areas), corner arcs in all four corners, outer boundary, and goal lines. The pitch now looks authentic and professional."
+
   - task: "Make team builder pitch vertical"
     implemented: true
     working: true
