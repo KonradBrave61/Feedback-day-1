@@ -48,8 +48,8 @@ async def create_team(
             "total_ratings": 0,
             "average_rating": 0.0
         },
-        "save_slot": team_data.save_slot if hasattr(team_data, 'save_slot') else None,
-        "save_slot_name": team_data.save_slot_name if hasattr(team_data, 'save_slot_name') else None,
+        "save_slot": team_data.save_slot,
+        "save_slot_name": team_data.save_slot_name,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
     }
