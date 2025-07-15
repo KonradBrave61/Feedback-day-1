@@ -90,6 +90,9 @@ class Team(BaseModel):
     comments: List[TeamComment] = []
     views: int = 0
     rating: float = 0.0
+    detailed_rating: TeamRating = Field(default_factory=TeamRating)
+    save_slot: Optional[int] = None
+    save_slot_name: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
