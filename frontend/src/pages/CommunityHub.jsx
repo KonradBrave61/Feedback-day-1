@@ -331,9 +331,12 @@ const CommunityHub = () => {
         </div>
 
         <Tabs defaultValue="browse" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-black/30 border-orange-400/20">
+          <TabsList className="grid w-full grid-cols-4 bg-black/30 border-orange-400/20">
             <TabsTrigger value="browse" className="text-white data-[state=active]:bg-orange-600">
               Browse Teams
+            </TabsTrigger>
+            <TabsTrigger value="social" className="text-white data-[state=active]:bg-orange-600">
+              Social
             </TabsTrigger>
             <TabsTrigger value="featured" className="text-white data-[state=active]:bg-orange-600">
               Featured
