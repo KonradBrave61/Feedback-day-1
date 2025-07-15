@@ -105,6 +105,32 @@ const TeamBuilder = () => {
     setSelectedCoach(coach);
   };
 
+  const handleSaveTeam = (teamData) => {
+    const savedTeam = {
+      id: Date.now(), // Simple ID generation
+      name: teamData.name,
+      description: teamData.description,
+      isPublic: teamData.isPublic,
+      formation: selectedFormation,
+      teamPlayers: teamPlayers,
+      benchPlayers: benchPlayers,
+      selectedTactics: selectedTactics,
+      selectedCoach: selectedCoach,
+      createdDate: new Date().toISOString(),
+      likes: 0,
+      stats: teamStats
+    };
+    
+    // Here you would normally save to backend/database
+    // For now, we'll save to localStorage
+    const existingTeams = JSON.parse(localStorage.getItem('userTeams') || '[]');
+    existingTeams.push(savedTeam);
+    localStorage.setItem('userTeams', JSON.stringify(existingTeams));
+    
+    setShowSaveTeamModal(false);
+    // Could show success toast here
+  };
+
   const getTeamStats = () => {
     const players = Object.values(teamPlayers);
     if (players.length === 0) return null;
