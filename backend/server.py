@@ -1,17 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
 from database import init_database
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    await init_database()
-    yield
-    # Shutdown
-    pass
-
-app = FastAPI(title="Inazuma Eleven API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
 
 # Add CORS middleware
 app.add_middleware(
@@ -21,6 +12,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    await init_database()
 
 @app.get("/")
 async def root():
