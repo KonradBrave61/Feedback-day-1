@@ -125,6 +125,96 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
         "most_followed": most_followed
     }
 
+@router.get("/followers")
+async def get_followers(current_user: User = Depends(get_current_user)):
+    """Get current user's followers"""
+    db = await get_database()
+    
+    user_doc = await db.users.find_one({"id": current_user.id})
+    follower_ids = user_doc.get("followers", [])
+    
+    if not follower_ids:
+        return {"followers": []}
+    
+    followers_cursor = db.users.find({"id": {"$in": follower_ids}})
+    followers = []
+    async for follower in followers_cursor:
+        followers.append(UserPublic(**follower))
+    
+    return {"followers": followers}
+
+@router.get("/following")
+async def get_following(current_user: User = Depends(get_current_user)):
+    """Get current user's following"""
+    db = await get_database()
+    
+    user_doc = await db.users.find_one({"id": current_user.id})
+    following_ids = user_doc.get("following", [])
+    
+    if not following_ids:
+        return {"following": []}
+    
+    following_cursor = db.users.find({"id": {"$in": following_ids}})
+    following = []
+    async for followed_user in following_cursor:
+        following.append(UserPublic(**followed_user))
+    
+    return {"following": following}
+
+@router.get("/users/{user_id}/followers")
+async def get_user_followers(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get followers of a specific user"""
+    db = await get_database()
+    
+    user_doc = await db.users.find_one({"id": user_id})
+    if not user_doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    follower_ids = user_doc.get("followers", [])
+    
+    if not follower_ids:
+        return {"followers": []}
+    
+    followers_cursor = db.users.find({"id": {"$in": follower_ids}})
+    followers = []
+    async for follower in followers_cursor:
+        followers.append(UserPublic(**follower))
+    
+    return {"followers": followers}
+
+@router.get("/users/{user_id}/following")
+async def get_user_following(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get following of a specific user"""
+    db = await get_database()
+    
+    user_doc = await db.users.find_one({"id": user_id})
+    if not user_doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    following_ids = user_doc.get("following", [])
+    
+    if not following_ids:
+        return {"following": []}
+    
+    following_cursor = db.users.find({"id": {"$in": following_ids}})
+    following = []
+    async for followed_user in following_cursor:
+        following.append(UserPublic(**followed_user))
+    
+    return {"following": following}
+
 @router.get("/stats")
 async def get_community_stats(current_user: User = Depends(get_current_user)):
     """Get community statistics"""
