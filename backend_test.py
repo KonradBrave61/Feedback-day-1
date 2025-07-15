@@ -632,6 +632,217 @@ class AuthAndTeamsAPITest(unittest.TestCase):
         self.assertEqual(data["views"], initial_views + 1)
         
         print("✅ Team view endpoint working")
+    
+    def test_25_save_slots_endpoint(self):
+        """Test GET /api/save-slots endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/save-slots", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("save_slots", data)
+        self.assertIsInstance(data["save_slots"], list)
+        
+        # Check that we have 5 slots
+        self.assertEqual(len(data["save_slots"]), 5)
+        
+        # Check slot structure
+        for slot in data["save_slots"]:
+            self.assertIn("slot_number", slot)
+            self.assertIn("slot_name", slot)
+            self.assertIn("is_occupied", slot)
+            self.assertIn("team_id", slot)
+            self.assertIn("team_name", slot)
+        
+        print("✅ Save slots endpoint working")
+    
+    def test_26_team_rating_endpoint(self):
+        """Test POST /api/teams/{team_id}/rate endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        # Create a second user to rate the team (can't rate own team)
+        random_suffix2 = generate_random_string()
+        user2_data = {
+            "username": f"rater_{random_suffix2}",
+            "email": f"rater_{random_suffix2}@example.com",
+            "password": "Password123!",
+            "coach_level": 3,
+            "favorite_position": "GK",
+            "favorite_element": "Earth"
+        }
+        
+        # Register second user
+        response = requests.post(f"{API_URL}/auth/register", json=user2_data)
+        self.assertEqual(response.status_code, 200)
+        user2_response = response.json()
+        user2_token = user2_response["access_token"]
+        
+        headers = {"Authorization": f"Bearer {user2_token}"}
+        
+        # Rate the team
+        rating_data = {
+            "team_id": self.team_id,
+            "tension_usage": 4.5,
+            "difficulty": 3.8,
+            "fun": 4.2,
+            "creativity": 4.0,
+            "effectiveness": 3.9,
+            "balance": 4.1
+        }
+        
+        response = requests.post(f"{API_URL}/teams/{self.team_id}/rate", json=rating_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("message", data)
+        self.assertIn("rating", data)
+        
+        rating = data["rating"]
+        self.assertIn("tension_usage", rating)
+        self.assertIn("difficulty", rating)
+        self.assertIn("fun", rating)
+        self.assertIn("creativity", rating)
+        self.assertIn("effectiveness", rating)
+        self.assertIn("balance", rating)
+        self.assertIn("total_ratings", rating)
+        self.assertIn("average_rating", rating)
+        
+        # Check that total_ratings is 1
+        self.assertEqual(rating["total_ratings"], 1)
+        
+        print("✅ Team rating endpoint working")
+    
+    def test_27_team_details_endpoint(self):
+        """Test GET /api/teams/{team_id}/details endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        response = requests.get(f"{API_URL}/teams/{self.team_id}/details", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response structure
+        self.assertIn("team", data)
+        self.assertIn("is_liked", data)
+        self.assertIn("is_following", data)
+        self.assertIn("can_rate", data)
+        
+        # Check team structure
+        team = data["team"]
+        self.assertIn("id", team)
+        self.assertIn("name", team)
+        self.assertIn("formation", team)
+        self.assertIn("likes", team)
+        self.assertIn("views", team)
+        self.assertIn("rating", team)
+        
+        # Check boolean fields
+        self.assertIsInstance(data["is_liked"], bool)
+        self.assertIsInstance(data["is_following"], bool)
+        self.assertIsInstance(data["can_rate"], bool)
+        
+        # Owner can't rate their own team
+        self.assertFalse(data["can_rate"])
+        
+        print("✅ Team details endpoint working")
+    
+    def test_28_save_team_to_slot_endpoint(self):
+        """Test POST /api/teams/{team_id}/save-to-slot endpoint"""
+        # Skip if no token or team ID
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Save team to slot 1
+        slot_data = {
+            "slot_number": 1,
+            "slot_name": "My First Team",
+            "overwrite": True
+        }
+        
+        response = requests.post(f"{API_URL}/teams/{self.team_id}/save-to-slot", json=slot_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        
+        # Check response
+        self.assertIn("message", data)
+        self.assertEqual(data["message"], "Team saved to slot successfully")
+        
+        # Verify the team is now in the slot by checking save-slots endpoint
+        slots_response = requests.get(f"{API_URL}/save-slots", headers=headers)
+        slots_data = slots_response.json()
+        
+        slot_1 = next((slot for slot in slots_data["save_slots"] if slot["slot_number"] == 1), None)
+        self.assertIsNotNone(slot_1)
+        self.assertTrue(slot_1["is_occupied"])
+        self.assertEqual(slot_1["team_id"], self.team_id)
+        
+        print("✅ Save team to slot endpoint working")
+    
+    def test_29_community_follow_endpoint(self):
+        """Test POST /api/community/follow endpoint"""
+        # Skip if no token
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        # Create a second user to follow
+        random_suffix2 = generate_random_string()
+        user2_data = {
+            "username": f"followme_{random_suffix2}",
+            "email": f"followme_{random_suffix2}@example.com",
+            "password": "Password123!",
+            "coach_level": 3,
+            "favorite_position": "GK",
+            "favorite_element": "Earth"
+        }
+        
+        # Register second user
+        response = requests.post(f"{API_URL}/auth/register", json=user2_data)
+        self.assertEqual(response.status_code, 200)
+        user2_data_response = response.json()
+        user2_id = user2_data_response["user"]["id"]
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Follow the second user
+        follow_data = {"user_id": user2_id}
+        response = requests.post(f"{API_URL}/community/follow", json=follow_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("following", data)
+        self.assertTrue(data["following"])
+        
+        # Check that current user is now following user2
+        current_user_response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        current_user_data = current_user_response.json()
+        self.assertIn(user2_id, current_user_data["following"])
+        
+        # Unfollow the second user
+        response = requests.post(f"{API_URL}/community/follow", json=follow_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("message", data)
+        self.assertIn("following", data)
+        self.assertFalse(data["following"])
+        
+        # Check that current user is no longer following user2
+        current_user_response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        current_user_data = current_user_response.json()
+        self.assertNotIn(user2_id, current_user_data["following"])
+        
+        print("✅ Community follow/unfollow endpoint working")
 
 class InazumaElevenAPITest(unittest.TestCase):
     """Test suite for Inazuma Eleven Victory Road API"""
