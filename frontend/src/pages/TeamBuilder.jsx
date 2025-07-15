@@ -360,13 +360,13 @@ const TeamBuilder = () => {
                     <div key={index} className="flex-1 min-h-[80px]">
                       {benchPlayers[index] ? (
                         <div className="relative group h-full">
-                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
+                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
                             <img
                               src={benchPlayers[index].portrait}
                               alt={benchPlayers[index].name}
-                              className="w-12 h-12 rounded-full mb-2"
+                              className="w-8 h-8 rounded-full mb-1"
                             />
-                            <div className="text-sm text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
+                            <div className="text-xs text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
                             <div className="text-xs text-gray-400 mt-1">{benchPlayers[index].position}</div>
                           </div>
                           <button
