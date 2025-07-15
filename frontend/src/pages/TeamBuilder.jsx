@@ -324,10 +324,9 @@ const TeamBuilder = () => {
             )}
           </div>
 
-          {/* Right Panel - Formation Field and Bench */}
+          {/* Middle Panel - Formation Field */}
           <div className="lg:col-span-2">
-            {/* Formation Field */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white mb-4">
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-orange-400" />
@@ -344,8 +343,10 @@ const TeamBuilder = () => {
                 />
               </CardContent>
             </Card>
+          </div>
 
-            {/* Bench Section - Integrated under field */}
+          {/* Right Panel - Bench */}
+          <div className="lg:col-span-1">
             <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -354,7 +355,7 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-5 gap-3">
+                <div className="space-y-3">
                   {Array.from({ length: 5 }, (_, index) => (
                     <div key={index} className="aspect-square">
                       {benchPlayers[index] ? (
@@ -363,7 +364,7 @@ const TeamBuilder = () => {
                             <img
                               src={benchPlayers[index].portrait}
                               alt={benchPlayers[index].name}
-                              className="w-10 h-10 rounded-full mb-1"
+                              className="w-8 h-8 rounded-full mb-1"
                             />
                             <div className="text-xs text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
                             <div className="text-xs text-gray-400">{benchPlayers[index].position}</div>
