@@ -18,7 +18,8 @@ const ProfilePage = () => {
     email: '',
     coachLevel: 1,
     favoritePosition: 'MF',
-    favoriteElement: 'Fire'
+    favoriteElement: 'Fire',
+    favouriteTeam: ''
   });
   const [teams, setTeams] = useState([]);
   const [stats, setStats] = useState({
