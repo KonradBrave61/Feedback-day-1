@@ -397,32 +397,41 @@ const CommunityHub = () => {
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">{team.name}</CardTitle>
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="text-sm text-yellow-400">{team.rating}</span>
+                        <Star className={`h-4 w-4 ${getRatingColor(team.rating)} fill-current`} />
+                        <span className={`text-sm ${getRatingColor(team.rating)}`}>{team.rating.toFixed(1)}</span>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-2 text-sm text-gray-300">
                       <Avatar className="w-6 h-6">
-                        <AvatarImage src={team.authorAvatar} alt={team.author} />
+                        <AvatarImage src={team.user_avatar} alt={team.username} />
                         <AvatarFallback className="bg-orange-600 text-white text-xs">
-                          {team.author.slice(0, 2).toUpperCase()}
+                          {team.username.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <span>by {team.author}</span>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className={`ml-auto h-6 px-2 text-xs ${
-                          team.isFollowing 
-                            ? 'bg-orange-600 text-white border-orange-600' 
-                            : 'text-white border-orange-400/50 hover:bg-orange-700'
-                        }`}
-                        onClick={() => handleFollowUser(team.id)}
-                      >
-                        <UserPlus className="h-3 w-3 mr-1" />
-                        {team.isFollowing ? 'Following' : 'Follow'}
-                      </Button>
+                      <span>by {team.username}</span>
+                      {team.user_id !== user?.id && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={`ml-auto h-6 px-2 text-xs ${
+                            isFollowing(team.user_id) 
+                              ? 'bg-gray-600 text-white border-gray-600' 
+                              : 'text-white border-orange-400/50 hover:bg-orange-700'
+                          }`}
+                          onClick={() => handleFollowUser(team.user_id)}
+                          disabled={actionLoading[`follow_${team.user_id}`]}
+                        >
+                          {actionLoading[`follow_${team.user_id}`] ? (
+                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
+                          ) : (
+                            <>
+                              {isFollowing(team.user_id) ? <UserMinus className="h-3 w-3 mr-1" /> : <UserPlus className="h-3 w-3 mr-1" />}
+                              {isFollowing(team.user_id) ? 'Unfollow' : 'Follow'}
+                            </>
+                          )}
+                        </Button>
+                      )}
                     </div>
                   </CardHeader>
                   
@@ -437,7 +446,7 @@ const CommunityHub = () => {
                     <p className="text-sm text-gray-300 line-clamp-2">{team.description}</p>
                     
                     <div className="flex flex-wrap gap-1">
-                      {team.tags.map((tag, index) => (
+                      {team.tags?.map((tag, index) => (
                         <Badge key={index} variant="outline" className="text-xs border-orange-400/50">
                           {tag}
                         </Badge>
@@ -452,12 +461,12 @@ const CommunityHub = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <MessageCircle className="h-3 w-3" />
-                          <span>{team.comments}</span>
+                          <span>{team.comments?.length || 0}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        <span>{new Date(team.createdDate).toLocaleDateString()}</span>
+                        <span>{formatDate(team.created_at)}</span>
                       </div>
                     </div>
                     
@@ -465,22 +474,65 @@ const CommunityHub = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
-                        onClick={() => navigate(`/team-details/${team.id}`)}
+                        className={`flex-1 ${
+                          team.liked_by?.includes(user?.id)
+                            ? 'bg-red-600/20 border-red-500 text-red-400'
+                            : 'text-white border-orange-400/50 hover:bg-orange-700'
+                        }`}
+                        onClick={() => handleLikeTeam(team.id)}
+                        disabled={actionLoading[`like_${team.id}`]}
                       >
-                        <Eye className="h-3 w-3 mr-1" />
-                        View Details
+                        {actionLoading[`like_${team.id}`] ? (
+                          <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1" />
+                        ) : (
+                          <Heart className={`h-3 w-3 mr-1 ${team.liked_by?.includes(user?.id) ? 'fill-current' : ''}`} />
+                        )}
+                        {team.likes}
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-400 border-red-400/50 hover:bg-red-700"
-                        onClick={() => handleLikeTeam(team.id)}
+                        className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
+                        onClick={() => {
+                          setSelectedTeam(team);
+                          setShowCommentModal(true);
+                        }}
                       >
-                        <Heart className="h-3 w-3 mr-1" />
-                        {team.likes}
+                        <MessageCircle className="h-3 w-3 mr-1" />
+                        Comment
                       </Button>
+                      {team.user_id !== user?.id && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
+                          onClick={() => {
+                            setSelectedTeam(team);
+                            setShowRatingModal(true);
+                          }}
+                        >
+                          <Star className="h-3 w-3 mr-1" />
+                          Rate
+                        </Button>
+                      )}
                     </div>
+                    
+                    {/* Recent Comments */}
+                    {team.comments && team.comments.length > 0 && (
+                      <div className="border-t border-orange-400/20 pt-3">
+                        <div className="space-y-2 max-h-32 overflow-y-auto">
+                          {team.comments.slice(-3).map((comment, index) => (
+                            <div key={index} className="text-sm">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium text-orange-400">{comment.username}</span>
+                                <span className="text-gray-500 text-xs">{formatDate(comment.created_at)}</span>
+                              </div>
+                              <p className="text-gray-300 mt-1">{comment.content}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ))}
