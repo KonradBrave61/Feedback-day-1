@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
-from ..models.equipment import EquipmentItem, EquipmentCreate
-from ..database import get_database
+from models.equipment import EquipmentItem, EquipmentCreate
+from database import get_database
 
 router = APIRouter(prefix="/equipment", tags=["equipment"])
 
