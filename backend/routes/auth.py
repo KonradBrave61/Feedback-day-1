@@ -6,8 +6,8 @@ import bcrypt
 import uuid
 from typing import Optional
 
-from ..models.user import UserCreate, UserLogin, User, UserInDB, Token, UserUpdate
-from ..database import get_database
+from models.user import UserCreate, UserLogin, User, UserInDB, Token, UserUpdate
+from database import get_database
 
 router = APIRouter()
 security = HTTPBearer()
