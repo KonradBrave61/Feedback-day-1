@@ -347,33 +347,33 @@ const TeamBuilder = () => {
 
           {/* Right Panel - Bench */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-orange-400" />
                   Bench ({Object.keys(benchPlayers).length}/5)
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
+              <CardContent className="h-full">
+                <div className="space-y-4 h-full flex flex-col justify-start">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="aspect-square">
+                    <div key={index} className="flex-1 min-h-[80px]">
                       {benchPlayers[index] ? (
-                        <div className="relative group">
-                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-2 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
+                        <div className="relative group h-full">
+                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
                             <img
                               src={benchPlayers[index].portrait}
                               alt={benchPlayers[index].name}
-                              className="w-8 h-8 rounded-full mb-1"
+                              className="w-12 h-12 rounded-full mb-2"
                             />
-                            <div className="text-xs text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
-                            <div className="text-xs text-gray-400">{benchPlayers[index].position}</div>
+                            <div className="text-sm text-center font-medium truncate w-full">{benchPlayers[index].name}</div>
+                            <div className="text-xs text-gray-400 mt-1">{benchPlayers[index].position}</div>
                           </div>
                           <button
-                            className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                             onClick={() => handleRemoveBenchPlayer(index)}
                           >
-                            <X className="h-3 w-3" />
+                            <X className="h-4 w-4" />
                           </button>
                         </div>
                       ) : (
@@ -381,7 +381,7 @@ const TeamBuilder = () => {
                           className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
                           onClick={() => handleAddBenchPlayer(index)}
                         >
-                          <Plus className="h-6 w-6 text-orange-400" />
+                          <Plus className="h-8 w-8 text-orange-400" />
                         </div>
                       )}
                     </div>
