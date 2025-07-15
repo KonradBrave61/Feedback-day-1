@@ -400,13 +400,71 @@ async def get_save_slots(current_user: User = Depends(get_current_user)):
         occupied_team = next((team for team in teams if team.get("save_slot") == i), None)
         save_slots.append({
             "slot_number": i,
-            "slot_name": f"Slot {i}",
+            "slot_name": occupied_team.get("save_slot_name", f"Slot {i}") if occupied_team else f"Slot {i}",
             "is_occupied": occupied_team is not None,
             "team_id": occupied_team["id"] if occupied_team else None,
-            "team_name": occupied_team["name"] if occupied_team else None
+            "team_name": occupied_team["name"] if occupied_team else None,
+            "created_at": occupied_team.get("created_at") if occupied_team else None,
+            "updated_at": occupied_team.get("updated_at") if occupied_team else None
         })
     
     return {"save_slots": save_slots}
+
+@router.post("/save-slots")
+async def create_save_slot(
+    slot_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Create a new save slot or update existing one"""
+    db = await get_database()
+    
+    slot_number = slot_data.get("slot_number")
+    slot_name = slot_data.get("slot_name", f"Slot {slot_number}")
+    
+    if not slot_number or slot_number < 1 or slot_number > 10:  # Allow up to 10 slots
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid slot number (1-10)"
+        )
+    
+    # Check if slot is occupied
+    existing_team = await db.teams.find_one({
+        "user_id": current_user.id,
+        "save_slot": slot_number
+    })
+    
+    if existing_team:
+        # Update existing slot name
+        await db.teams.update_one(
+            {"id": existing_team["id"]},
+            {"$set": {"save_slot_name": slot_name}}
+        )
+        return {"message": "Save slot updated", "slot_number": slot_number}
+    else:
+        # Create empty slot record (we'll handle this in frontend)
+        return {"message": "Save slot available", "slot_number": slot_number}
+
+@router.delete("/save-slots/{slot_number}")
+async def clear_save_slot(
+    slot_number: int,
+    current_user: User = Depends(get_current_user)
+):
+    """Clear a save slot"""
+    db = await get_database()
+    
+    # Clear the slot from team
+    result = await db.teams.update_one(
+        {"user_id": current_user.id, "save_slot": slot_number},
+        {"$unset": {"save_slot": "", "save_slot_name": ""}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No team found in this slot"
+        )
+    
+    return {"message": "Save slot cleared"}
 
 @router.get("/teams/{team_id}/details")
 async def get_team_details(
