@@ -381,7 +381,7 @@ const TeamBuilder = () => {
                           className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
                           onClick={() => handleAddBenchPlayer(index)}
                         >
-                          <Plus className="h-8 w-8 text-orange-400" />
+                          <Plus className="h-6 w-6 text-orange-400" />
                         </div>
                       )}
                     </div>
