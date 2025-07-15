@@ -13,8 +13,10 @@ const Navigation = () => {
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/team-builder', label: 'Team Builder', icon: Users },
     { path: '/characters', label: 'Characters', icon: User },
+    { path: '/community', label: 'Community Hub', icon: MessageSquare },
   ];
 
   const isActive = (path) => location.pathname === path;
