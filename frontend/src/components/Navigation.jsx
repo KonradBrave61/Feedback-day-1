@@ -160,10 +160,10 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               className="text-white hover:bg-orange-700/30"
-              onClick={() => navigate('/profile')}
+              onClick={() => navigate('/dashboard')}
             >
-              <User className="h-4 w-4 mr-2" />
-              Profile
+              <LayoutDashboard className="h-4 w-4 mr-2" />
+              Dashboard
             </Button>
           ) : (
             <Button
