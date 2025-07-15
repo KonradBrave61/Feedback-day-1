@@ -3,10 +3,10 @@ from typing import List, Optional
 from datetime import datetime
 import uuid
 
-from ..models.user import User
-from ..models.team import Team, TeamCreate, TeamUpdate, TeamComment, LikeRequest, CommentRequest
-from ..routes.auth import get_current_user
-from ..database import get_database
+from models.user import User
+from models.team import Team, TeamCreate, TeamUpdate, TeamComment, LikeRequest, CommentRequest
+from routes.auth import get_current_user
+from database import get_database
 
 router = APIRouter()
 
