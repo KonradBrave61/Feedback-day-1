@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
-from ..models.team import Team, TeamCreate, TeamUpdate, Formation, Tactic, Coach
-from ..database import get_database
+from models.team import Team, TeamCreate, TeamUpdate, Formation, Tactic, Coach
+from database import get_database
 
 router = APIRouter(prefix="/teams", tags=["teams"])
 
