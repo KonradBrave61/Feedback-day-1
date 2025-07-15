@@ -36,6 +36,33 @@ class TeamPlayer(BaseModel):
     user_rarity: str = "Legendary"
     equipment: Dict[str, Any] = {}  # category -> equipment
 
+class TeamRating(BaseModel):
+    tension_usage: float = 0.0
+    difficulty: float = 0.0
+    fun: float = 0.0
+    creativity: float = 0.0
+    effectiveness: float = 0.0
+    balance: float = 0.0
+    total_ratings: int = 0
+    average_rating: float = 0.0
+
+class TeamSaveSlot(BaseModel):
+    slot_number: int
+    slot_name: str
+    is_occupied: bool = False
+    team_id: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class TeamRatingSubmission(BaseModel):
+    team_id: str
+    tension_usage: float
+    difficulty: float
+    fun: float
+    creativity: float
+    effectiveness: float
+    balance: float
+
 class TeamComment(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
