@@ -9,7 +9,7 @@ class UserBase(BaseModel):
     coach_level: int = 1
     favorite_position: str = "MF"
     favorite_element: str = "Fire"
-    favorite_formation: str = "4-4-2 Diamond"
+    favourite_team: str = "Default Team"
     profile_picture: Optional[str] = None  # Base64 encoded image
     bio: Optional[str] = None
 
