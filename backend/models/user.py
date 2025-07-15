@@ -60,3 +60,6 @@ class UserPublic(BaseModel):
     total_teams: int = 0
     total_likes_received: int = 0
     created_at: datetime
+
+class FollowRequest(BaseModel):
+    user_id: str
