@@ -754,6 +754,152 @@ const CommunityHub = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Rating Modal */}
+        {showRatingModal && selectedTeam && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 p-1 rounded-lg max-w-md w-full mx-4">
+              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Star className="h-5 w-5 text-orange-400" />
+                      Rate Team: {selectedTeam.name}
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowRatingModal(false)}
+                      className="text-white hover:bg-orange-700/30"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {ratingCategories.map((category) => (
+                      <div key={category.key}>
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <Label className="text-white font-medium">{category.label}</Label>
+                            <p className="text-xs text-gray-400">{category.description}</p>
+                          </div>
+                          <Badge variant="outline" className="text-orange-400 border-orange-400">
+                            {ratings[category.key]}/5
+                          </Badge>
+                        </div>
+                        <Slider
+                          value={[ratings[category.key]]}
+                          onValueChange={(value) => setRatings(prev => ({ ...prev, [category.key]: value[0] }))}
+                          max={5}
+                          min={1}
+                          step={1}
+                          className="w-full"
+                        />
+                      </div>
+                    ))}
+                    
+                    <div className="flex gap-2 pt-4">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowRatingModal(false)}
+                        className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => handleRate(selectedTeam.id)}
+                        disabled={actionLoading[`rate_${selectedTeam.id}`]}
+                        className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                      >
+                        {actionLoading[`rate_${selectedTeam.id}`] ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                            Rating...
+                          </>
+                        ) : (
+                          <>
+                            <Star className="h-4 w-4 mr-2" />
+                            Submit Rating
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
+
+        {/* Comment Modal */}
+        {showCommentModal && selectedTeam && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 p-1 rounded-lg max-w-md w-full mx-4">
+              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <MessageCircle className="h-5 w-5 text-orange-400" />
+                      Comment on: {selectedTeam.name}
+                    </CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowCommentModal(false)}
+                      className="text-white hover:bg-orange-700/30"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="comment" className="text-white">Your Comment</Label>
+                      <Textarea
+                        id="comment"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="Share your thoughts about this team..."
+                        className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400 resize-none"
+                        rows={4}
+                      />
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowCommentModal(false)}
+                        className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={() => handleComment(selectedTeam.id)}
+                        disabled={actionLoading[`comment_${selectedTeam.id}`] || !comment.trim()}
+                        className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                      >
+                        {actionLoading[`comment_${selectedTeam.id}`] ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                            Commenting...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Post Comment
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
