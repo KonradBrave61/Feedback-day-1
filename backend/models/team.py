@@ -106,6 +106,8 @@ class TeamCreate(BaseModel):
     description: Optional[str] = None
     is_public: bool = True
     tags: Optional[List[str]] = []
+    save_slot: Optional[int] = None
+    save_slot_name: Optional[str] = None
 
 class TeamUpdate(BaseModel):
     name: Optional[str] = None
