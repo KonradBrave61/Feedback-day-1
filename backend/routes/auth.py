@@ -95,6 +95,13 @@ async def register(user_data: UserCreate):
         "coach_level": user_data.coach_level,
         "favorite_position": user_data.favorite_position,
         "favorite_element": user_data.favorite_element,
+        "favorite_formation": user_data.favorite_formation,
+        "profile_picture": user_data.profile_picture,
+        "bio": user_data.bio,
+        "total_teams": 0,
+        "total_likes_received": 0,
+        "followers": [],
+        "following": [],
         "hashed_password": hashed_password,
         "created_at": datetime.utcnow(),
         "updated_at": datetime.utcnow()
