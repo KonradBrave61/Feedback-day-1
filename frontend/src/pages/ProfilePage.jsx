@@ -190,14 +190,21 @@ const ProfilePage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Favorite Element</label>
+                    <label className="block text-sm font-medium mb-2">Favourite Team</label>
                     {editing ? (
-                      <select
-                        name="favoriteElement"
-                        value={formData.favoriteElement}
+                      <Input
+                        name="favouriteTeam"
+                        value={formData.favouriteTeam}
                         onChange={handleChange}
-                        className="w-full p-2 rounded bg-orange-900/30 border border-orange-400/30 text-white"
-                      >
+                        className="bg-orange-900/30 border-orange-400/30 text-white"
+                        placeholder="Enter your favourite team name"
+                      />
+                    ) : (
+                      <Badge className="bg-purple-600 text-white">
+                        {user.favourite_team || 'Not set'}
+                      </Badge>
+                    )}
+                  </div>
                         <option value="Fire">Fire</option>
                         <option value="Earth">Earth</option>
                         <option value="Wind">Wind</option>
