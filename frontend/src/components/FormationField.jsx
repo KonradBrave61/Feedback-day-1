@@ -122,19 +122,51 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
       
       {/* Field Lines */}
       <div className="absolute inset-0">
+        {/* Outer boundary */}
+        <div className="absolute inset-2 border-2 border-white/40 rounded-sm"></div>
+        
         {/* Center Line */}
-        <div className="absolute top-0 left-1/2 w-px h-full bg-white/30 transform -translate-x-1/2"></div>
+        <div className="absolute top-0 left-1/2 w-0.5 h-full bg-white/40 transform -translate-x-1/2"></div>
         
         {/* Center Circle */}
-        <div className="absolute top-1/2 left-1/2 w-24 h-24 border border-white/30 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute top-1/2 left-1/2 w-32 h-32 border-2 border-white/40 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
         
-        {/* Goal Areas */}
-        <div className="absolute bottom-0 left-1/2 w-32 h-12 border border-white/30 transform -translate-x-1/2"></div>
-        <div className="absolute top-0 left-1/2 w-32 h-12 border border-white/30 transform -translate-x-1/2"></div>
+        {/* Center spot */}
+        <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white/60 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
         
-        {/* Penalty Areas */}
-        <div className="absolute bottom-0 left-1/2 w-48 h-20 border border-white/30 transform -translate-x-1/2"></div>
-        <div className="absolute top-0 left-1/2 w-48 h-20 border border-white/30 transform -translate-x-1/2"></div>
+        {/* Top Goal Area (6-yard box) */}
+        <div className="absolute top-2 left-1/2 w-20 h-8 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+        
+        {/* Top Penalty Area (18-yard box) */}
+        <div className="absolute top-2 left-1/2 w-44 h-20 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+        
+        {/* Top penalty spot */}
+        <div className="absolute top-16 left-1/2 w-1.5 h-1.5 bg-white/60 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+        
+        {/* Top penalty arc */}
+        <div className="absolute top-8 left-1/2 w-20 h-20 border-2 border-white/40 border-t-0 border-l-0 border-r-0 rounded-b-full transform -translate-x-1/2"></div>
+        
+        {/* Bottom Goal Area (6-yard box) */}
+        <div className="absolute bottom-2 left-1/2 w-20 h-8 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
+        
+        {/* Bottom Penalty Area (18-yard box) */}
+        <div className="absolute bottom-2 left-1/2 w-44 h-20 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
+        
+        {/* Bottom penalty spot */}
+        <div className="absolute bottom-16 left-1/2 w-1.5 h-1.5 bg-white/60 rounded-full transform -translate-x-1/2 translate-y-1/2"></div>
+        
+        {/* Bottom penalty arc */}
+        <div className="absolute bottom-8 left-1/2 w-20 h-20 border-2 border-white/40 border-b-0 border-l-0 border-r-0 rounded-t-full transform -translate-x-1/2"></div>
+        
+        {/* Corner arcs */}
+        <div className="absolute top-2 left-2 w-4 h-4 border-2 border-white/40 border-t-0 border-l-0 rounded-br-full"></div>
+        <div className="absolute top-2 right-2 w-4 h-4 border-2 border-white/40 border-t-0 border-r-0 rounded-bl-full"></div>
+        <div className="absolute bottom-2 left-2 w-4 h-4 border-2 border-white/40 border-b-0 border-l-0 rounded-tr-full"></div>
+        <div className="absolute bottom-2 right-2 w-4 h-4 border-2 border-white/40 border-b-0 border-r-0 rounded-tl-full"></div>
+        
+        {/* Goals */}
+        <div className="absolute top-0 left-1/2 w-12 h-2 bg-white/60 transform -translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-1/2 w-12 h-2 bg-white/60 transform -translate-x-1/2"></div>
       </div>
 
       {/* Player Positions */}
