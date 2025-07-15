@@ -6,7 +6,7 @@ import bcrypt
 import uuid
 from typing import Optional
 
-from models.user import UserCreate, UserLogin, User, UserInDB, Token, UserUpdate
+from models.user import UserCreate, UserLogin, User, UserInDB, Token, UserUpdate, FollowRequest
 from database import get_database
 
 router = APIRouter()
