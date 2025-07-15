@@ -57,14 +57,17 @@ class AuthAndTeamsAPITest(unittest.TestCase):
             "bio": "Passionate football coach and strategist"
         }
         
-        # Team creation data
+        # Team creation data with enhanced fields
         self.team_data = {
             "name": f"Test Team {random_suffix}",
-            "formation": "1",  # Using default formation ID
+            "formation": "4-3-3",
             "players": [],
             "bench_players": [],
             "tactics": [],
-            "coach": None
+            "coach": None,
+            "description": "A test team created for API testing with enhanced community features",
+            "is_public": True,
+            "tags": ["test", "api", "community"]
         }
         
         # Store auth token
