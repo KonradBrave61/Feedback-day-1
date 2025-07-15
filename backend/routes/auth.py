@@ -95,7 +95,7 @@ async def register(user_data: UserCreate):
         "coach_level": user_data.coach_level,
         "favorite_position": user_data.favorite_position,
         "favorite_element": user_data.favorite_element,
-        "favorite_formation": user_data.favorite_formation,
+        "favourite_team": user_data.favourite_team,
         "profile_picture": user_data.profile_picture,
         "bio": user_data.bio,
         "total_teams": 0,
