@@ -1,15 +1,15 @@
 from fastapi import FastAPI
-from routes import characters, teams, equipment, auth, user_teams, community
+# from routes import characters, teams, equipment, auth, user_teams, community
 
 app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
 
 # Include routers
-app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
-app.include_router(user_teams.router, prefix="/api", tags=["user_teams"])
-app.include_router(community.router, prefix="/api/community", tags=["community"])
-app.include_router(characters.router, prefix="/api", tags=["characters"])
-app.include_router(teams.router, prefix="/api", tags=["teams"])
-app.include_router(equipment.router, prefix="/api", tags=["equipment"])
+# app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
+# app.include_router(user_teams.router, prefix="/api", tags=["user_teams"])
+# app.include_router(community.router, prefix="/api/community", tags=["community"])
+# app.include_router(characters.router, prefix="/api", tags=["characters"])
+# app.include_router(teams.router, prefix="/api", tags=["teams"])
+# app.include_router(equipment.router, prefix="/api", tags=["equipment"])
 
 @app.get("/")
 async def root():
