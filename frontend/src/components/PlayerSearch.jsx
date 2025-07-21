@@ -69,6 +69,13 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
     }
   };
 
+  const clearFilters = () => {
+    setSearchQuery('');
+    setFilterPosition('all');
+    setFilterElement('all');
+    setSortBy('name');
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
