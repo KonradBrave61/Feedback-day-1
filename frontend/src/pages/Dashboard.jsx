@@ -7,6 +7,7 @@ import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Textarea } from '../components/ui/textarea';
 import { 
   Users, 
   Trophy, 
@@ -19,7 +20,9 @@ import {
   TrendingUp,
   Lock,
   Unlock,
-  Globe
+  Globe,
+  Save,
+  X
 } from 'lucide-react';
 
 const Dashboard = () => {
