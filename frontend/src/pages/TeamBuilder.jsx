@@ -601,6 +601,7 @@ const TeamBuilder = () => {
             onClose={() => {
               setShowCharacterModal(false);
               setSelectedCharacterForModal(null);
+              setEditingPlayer(null);
             }}
             allCharacters={mockCharacters}
             onAddToTeam={handleCharacterModalConfirm}
