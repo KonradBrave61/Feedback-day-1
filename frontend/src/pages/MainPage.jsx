@@ -264,16 +264,14 @@ const MainPage = () => {
               <CardContent>
                 <div className="space-y-3">
                   <Button
-                    variant="outline"
-                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                    className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
                     onClick={() => user ? navigate('/team-builder') : navigate('/login')}
                   >
                     <Users className="mr-2 h-4 w-4" />
                     Team Builder
                   </Button>
                   <Button
-                    variant="outline"
-                    className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                    className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
                     onClick={() => navigate('/characters')}
                   >
                     <Star className="mr-2 h-4 w-4" />
@@ -281,8 +279,7 @@ const MainPage = () => {
                   </Button>
                   {user && (
                     <Button
-                      variant="outline"
-                      className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                      className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
                       onClick={() => navigate('/profile')}
                     >
                       <Award className="mr-2 h-4 w-4" />
