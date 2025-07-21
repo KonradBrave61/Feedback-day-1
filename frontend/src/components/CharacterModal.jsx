@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, 
 import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 
-const CharacterModal = ({ character, isOpen, onClose, allCharacters }) => {
+const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
     allCharacters.findIndex(c => c.id === character.id)
   );
