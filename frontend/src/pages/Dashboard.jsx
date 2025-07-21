@@ -107,6 +107,26 @@ const Dashboard = () => {
     }
   };
 
+  const handleEditDescription = (teamId, currentDescription) => {
+    setEditingTeamId(teamId);
+    setEditingDescription(currentDescription);
+  };
+
+  const handleSaveDescription = (teamId) => {
+    setUserTeams(prev => prev.map(team => 
+      team.id === teamId 
+        ? { ...team, description: editingDescription }
+        : team
+    ));
+    setEditingTeamId(null);
+    setEditingDescription('');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTeamId(null);
+    setEditingDescription('');
+  };
+
   const getFormationColor = (formation) => {
     switch (formation) {
       case '4-4-2 Diamond': return 'bg-orange-500';
