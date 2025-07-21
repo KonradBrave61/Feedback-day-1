@@ -69,7 +69,10 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
   };
 
   const handlePlayerSelect = (player) => {
-    onPlayerSelect(player);
+    // Open character modal instead of direct selection
+    if (onPlayerSelect) {
+      onPlayerSelect(player);
+    }
   };
 
   return (
