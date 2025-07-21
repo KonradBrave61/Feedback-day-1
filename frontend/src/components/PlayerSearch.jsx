@@ -158,15 +158,27 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
         {/* Player Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 max-h-[400px] overflow-y-auto pr-2">
-          {filteredPlayers.map((player) => (
-            <div key={player.id} className="flex-shrink-0">
-              <CharacterCard
-                character={player}
-                onClick={() => handlePlayerSelect(player)}
-                viewMode="grid"
-              />
-            </div>
-          ))}
+          {filteredPlayers.map((player) => {
+            const isAlreadySelected = selectedPlayerIds.includes(player.id);
+            return (
+              <div key={player.id} className="flex-shrink-0">
+                <div className={`${isAlreadySelected ? 'opacity-40 cursor-not-allowed' : ''}`}>
+                  <CharacterCard
+                    character={player}
+                    onClick={() => !isAlreadySelected && handlePlayerSelect(player)}
+                    viewMode="grid"
+                  />
+                  {isAlreadySelected && (
+                    <div className="absolute inset-0 bg-red-500/20 flex items-center justify-center rounded-lg">
+                      <span className="text-red-400 font-bold text-xs bg-red-900/70 px-2 py-1 rounded">
+                        SELECTED
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* No Results */}
