@@ -138,7 +138,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" onClick={onClose} className="text-white border-orange-400/30 hover:bg-orange-700 px-3">
+              <Button variant="outline" onClick={clearFilters} className="text-white border-orange-400/30 hover:bg-orange-700 px-3" title="Clear Filters">
                 <X className="h-4 w-4" />
               </Button>
             </div>
