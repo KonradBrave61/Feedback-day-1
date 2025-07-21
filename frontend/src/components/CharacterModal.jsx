@@ -618,7 +618,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                 })}
               </div>
               <div className="flex justify-end gap-3 mt-4">
-                <Button variant="outline" onClick={() => setShowHissatsuList(false)} className="text-white border-orange-400/30">
+                <Button 
+                  onClick={() => setShowHissatsuList(false)} 
+                  className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                >
                   Cancel
                 </Button>
               </div>
