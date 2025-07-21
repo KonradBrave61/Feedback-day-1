@@ -9,22 +9,24 @@ import { Check, X, Save, RotateCcw } from 'lucide-react';
 
 const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = [] }) => {
   const [currentPreset, setCurrentPreset] = useState(1);
-  const [presets, setPresets] = useState({
+  const [presets, setPresets] = useState(() => ({
     1: { name: 'Preset 1', tactics: [] },
     2: { name: 'Preset 2', tactics: [] }
-  });
+  }));
   const [editingPreset, setEditingPreset] = useState(null);
   const [currentSelection, setCurrentSelection] = useState([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize presets only once when component mounts or selectedTactics changes significantly
   useEffect(() => {
-    if (selectedTactics.length > 0 && presets[1].tactics.length === 0 && presets[2].tactics.length === 0) {
+    if (selectedTactics.length > 0 && !isInitialized) {
       setPresets(prev => ({
         ...prev,
         1: { name: 'Preset 1', tactics: selectedTactics.slice(0, 3) }
       }));
+      setIsInitialized(true);
     }
-  }, [selectedTactics]);
+  }, [selectedTactics, isInitialized]);
 
   const handleTacticToggle = (tactic) => {
     setCurrentSelection(prev => {
@@ -68,7 +70,15 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
   };
 
   const handleConfirm = () => {
+    // Apply the current preset tactics but don't close the modal
     onTacticSelect(presets[currentPreset].tactics);
+    onClose();
+  };
+
+  const handleClose = () => {
+    // Reset editing state when closing
+    setEditingPreset(null);
+    setCurrentSelection([]);
     onClose();
   };
 
@@ -92,7 +102,7 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
@@ -181,7 +191,7 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
             {/* Action Buttons */}
             <div className="flex justify-end gap-3">
               <Button 
-                onClick={onClose} 
+                onClick={handleClose} 
                 className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
               >
                 <X className="h-4 w-4 mr-2" />
