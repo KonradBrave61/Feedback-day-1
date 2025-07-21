@@ -332,24 +332,21 @@ const ProfilePage = () => {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
-                  variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                  className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
                   onClick={() => navigate('/team-builder')}
                 >
                   <Users className="mr-2 h-4 w-4" />
                   Team Builder
                 </Button>
                 <Button
-                  variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700/30 justify-start"
+                  className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
                   onClick={() => navigate('/characters')}
                 >
                   <Star className="mr-2 h-4 w-4" />
                   View Characters
                 </Button>
                 <Button
-                  variant="outline"
-                  className="w-full text-red-400 border-red-400/30 hover:bg-red-700/30 justify-start"
+                  className="w-full bg-red-600/40 hover:bg-red-600/60 text-white border border-red-500/50 justify-start"
                   onClick={handleLogout}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
