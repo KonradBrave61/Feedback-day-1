@@ -108,7 +108,7 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
             {/* Preset Management */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {Object.entries(presets).map(([id, preset]) => (
-                <Card key={id} className={`cursor-pointer transition-all ${
+                <Card key={id} className={`transition-all ${
                   currentPreset === parseInt(id) 
                     ? 'bg-orange-600/30 border-orange-500' 
                     : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
@@ -131,7 +131,7 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
                           onClick={() => handlePresetSwitch(parseInt(id))}
                           className="text-green-400 hover:bg-green-700/30"
                         >
-                          {currentPreset === parseInt(id) ? 'Active' : 'Switch'}
+                          {currentPreset === parseInt(id) ? 'Active' : 'Apply'}
                         </Button>
                       </div>
                     </div>
@@ -155,58 +155,76 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
               ))}
             </div>
 
-            {/* Current Active Preset Details */}
-            <Card className="bg-black/20 border-orange-400/30 mb-4">
-              <CardContent className="p-4">
-                <h3 className="font-semibold mb-3">Active Preset: {presets[currentPreset].name}</h3>
-                <div className="space-y-2">
-                  {presets[currentPreset].tactics.map((tactic, index) => (
-                    <div key={index} className="flex items-center gap-3 p-2 bg-orange-600/20 rounded-lg">
-                      <div className="text-xl">{getTacticIcon(tactic.name)}</div>
-                      <div className="flex-1">
-                        <div className="font-medium">{tactic.name}</div>
-                        <div className="text-sm text-gray-300">{tactic.description}</div>
-                      </div>
-                      <Badge variant="outline" className="text-green-400 border-green-400">
-                        {tactic.effect}
-                      </Badge>
-                    </div>
-                  ))}
-                  {presets[currentPreset].tactics.length === 0 && (
-                    <div className="text-center py-4 text-gray-400">
-                      <p>No tactics in this preset</p>
-                      <p className="text-sm">Click "Edit" to add tactics</p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {/* Current Active Tactics */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Currently Active: {presets[currentPreset].name}</h3>
+              <div className="grid grid-cols-3 gap-4">
+                {getCurrentTactics().map((tactic, index) => (
+                  <Card key={index} className="bg-green-600/20 border-green-500">
+                    <CardContent className="p-3 text-center">
+                      <div className="text-2xl mb-2">{getTacticIcon(tactic.name)}</div>
+                      <div className="font-medium text-white">{tactic.name}</div>
+                      <div className="text-xs text-gray-300 mt-1">{tactic.effect}</div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {Array.from({ length: 3 - getCurrentTactics().length }, (_, index) => (
+                  <Card key={`empty-${index}`} className="bg-black/20 border-orange-400/30">
+                    <CardContent className="p-3 text-center">
+                      <div className="text-gray-500 text-sm">Empty Slot</div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-3">
+              <Button 
+                onClick={onClose} 
+                className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Close
+              </Button>
+              <Button 
+                onClick={handleConfirm}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <Check className="h-4 w-4 mr-2" />
+                Apply Current Preset
+              </Button>
+            </div>
           </>
         ) : (
           <>
-            {/* Preset Editing Mode */}
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">Selected Tactics ({currentSelection.length}/3)</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {[0, 1, 2].map(index => (
-                  <div key={index} className="h-16 bg-black/20 rounded-lg border border-orange-400/30 flex items-center justify-center">
-                    {currentSelection[index] ? (
-                      <div className="text-center">
-                        <div className="text-2xl mb-1">{getTacticIcon(currentSelection[index].name)}</div>
-                        <div className="text-xs font-medium">{currentSelection[index].name}</div>
-                      </div>
-                    ) : (
+            {/* Editing Mode */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Selected Tactics ({currentSelection.length}/3)</h3>
+              <div className="grid grid-cols-3 gap-4">
+                {currentSelection.map((tactic, index) => (
+                  <Card key={index} className="bg-green-600/20 border-green-500">
+                    <CardContent className="p-3 text-center">
+                      <div className="text-2xl mb-2">{getTacticIcon(tactic.name)}</div>
+                      <div className="font-medium text-white">{tactic.name}</div>
+                      <div className="text-xs text-gray-300 mt-1">{tactic.effect}</div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {Array.from({ length: 3 - currentSelection.length }, (_, index) => (
+                  <Card key={`empty-${index}`} className="bg-black/20 border-orange-400/30">
+                    <CardContent className="p-3 text-center">
                       <div className="text-gray-500 text-sm">Empty Slot</div>
-                    )}
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             </div>
 
             {/* Available Tactics */}
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">Available Tactics</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Available Tactics</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
                 {mockTactics.map((tactic) => {
                   const isSelected = currentSelection.some(t => t.id === tactic.id);
                   return (
@@ -214,67 +232,44 @@ const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = []
                       key={tactic.id}
                       className={`cursor-pointer transition-all ${
                         isSelected 
-                          ? 'bg-orange-600/30 border-orange-500' 
+                          ? 'bg-green-600/30 border-green-500' 
                           : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
                       }`}
                       onClick={() => handleTacticToggle(tactic)}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3">
-                            <div className="text-2xl">{getTacticIcon(tactic.name)}</div>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-white">{tactic.name}</h4>
-                              <p className="text-sm text-gray-300 mt-1">{tactic.description}</p>
-                              <Badge variant="outline" className="mt-2 text-green-400 border-green-400">
-                                {tactic.effect}
-                              </Badge>
-                            </div>
-                          </div>
-                          {isSelected && (
-                            <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
-                          )}
-                        </div>
+                      <CardContent className="p-3 text-center">
+                        <div className="text-2xl mb-2">{getTacticIcon(tactic.name)}</div>
+                        <div className="font-medium text-white">{tactic.name}</div>
+                        <div className="text-xs text-gray-300 mt-1">{tactic.effect}</div>
+                        {isSelected && (
+                          <Check className="h-4 w-4 text-green-400 mx-auto mt-2" />
+                        )}
                       </CardContent>
                     </Card>
                   );
                 })}
               </div>
             </div>
+
+            {/* Edit Mode Action Buttons */}
+            <div className="flex justify-end gap-3">
+              <Button 
+                onClick={handleCancelEdit} 
+                className="bg-gray-600/40 hover:bg-gray-600/60 text-white"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleSavePreset}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Save Preset
+              </Button>
+            </div>
           </>
         )}
-
-        {/* Action Buttons */}
-        <div className="flex justify-end gap-3">
-          <Button 
-            variant="outline" 
-            onClick={editingPreset ? handleCancelEdit : onClose}
-            className="text-white border-orange-400/30"
-          >
-            <X className="h-4 w-4 mr-2" />
-            {editingPreset ? 'Cancel' : 'Close'}
-          </Button>
-          
-          {editingPreset ? (
-            <Button 
-              onClick={handleSavePreset}
-              className="bg-green-600 hover:bg-green-700"
-              disabled={currentSelection.length === 0}
-            >
-              <Save className="h-4 w-4 mr-2" />
-              Save Preset
-            </Button>
-          ) : (
-            <Button 
-              onClick={handleConfirm}
-              className="bg-orange-600 hover:bg-orange-700"
-              disabled={presets[currentPreset].tactics.length === 0}
-            >
-              <Check className="h-4 w-4 mr-2" />
-              Apply Preset
-            </Button>
-          )}
-        </div>
       </DialogContent>
     </Dialog>
   );

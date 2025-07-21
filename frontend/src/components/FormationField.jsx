@@ -3,9 +3,9 @@ import { useDrag, useDrop } from 'react-dnd';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Settings } from 'lucide-react';
 
-const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, onMovePlayer }) => {
+const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, onMovePlayer, onEditPlayer }) => {
   const getPositionColor = (position) => {
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
@@ -68,14 +68,17 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
             }`}>
               <CardContent className="p-1">
                 <div className="relative">
-                  <div className={`w-12 h-12 rounded-lg overflow-hidden ${getRarityColor(player.baseRarity)}`}>
+                  <div 
+                    className={`w-12 h-12 rounded-lg overflow-hidden ${getRarityColor(player.baseRarity)} cursor-pointer`}
+                    onClick={() => onEditPlayer && onEditPlayer(player)}
+                  >
                     <img 
                       src={player.portrait} 
                       alt={player.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <Badge className={`${getPositionColor(player.position)} absolute -top-1 -right-1 text-xs px-1`}>
+                  <Badge className={`${getPositionColor(player.position)} absolute -bottom-1 -right-1 text-xs px-1`}>
                     {player.position}
                   </Badge>
                 </div>
@@ -88,11 +91,24 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
               </CardContent>
             </Card>
             
+            {/* Edit Player Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute -top-1 left-12 w-6 h-6 rounded-full p-0 bg-blue-600/80 hover:bg-blue-500 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditPlayer && onEditPlayer(player);
+              }}
+            >
+              <Settings className="h-3 w-3" />
+            </Button>
+            
             {/* Remove Player Button */}
             <Button
               variant="destructive"
               size="sm"
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute -top-1 -right-1 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
               onClick={() => onRemovePlayer(position.id)}
             >
               <X className="h-3 w-3" />

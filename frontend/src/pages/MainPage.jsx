@@ -81,8 +81,7 @@ const MainPage = () => {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
+                  className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white px-8 py-4 text-lg"
                   onClick={() => navigate('/characters')}
                 >
                   <Users className="mr-2 h-5 w-5" />
@@ -101,8 +100,7 @@ const MainPage = () => {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="text-white border-orange-400/30 hover:bg-orange-700/30 px-8 py-4 text-lg"
+                  className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white px-8 py-4 text-lg"
                   onClick={() => navigate('/characters')}
                 >
                   <Users className="mr-2 h-5 w-5" />
@@ -195,8 +193,7 @@ const MainPage = () => {
                 </div>
                 <div className="mt-6 text-center">
                   <Button
-                    variant="outline"
-                    className="text-white border-orange-400/30 hover:bg-orange-700/30"
+                    className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white"
                     onClick={() => navigate('/characters')}
                   >
                     View All Characters
@@ -298,7 +295,10 @@ const MainPage = () => {
         <CharacterModal
           character={selectedCharacter}
           isOpen={showCharacterModal}
-          onClose={() => setShowCharacterModal(false)}
+          onClose={() => {
+            setShowCharacterModal(false);
+            setSelectedCharacter(null);
+          }}
           allCharacters={mockCharacters}
         />
       )}
