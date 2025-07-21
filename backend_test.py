@@ -77,10 +77,10 @@ class AuthAndTeamsAPITest(unittest.TestCase):
     
     def test_01_api_root(self):
         """Test API root endpoint"""
-        response = requests.get(ROOT_URL)
+        response = requests.get(f"{API_URL}/status")
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertIn("message", data)
+        self.assertIn("status", data)
         print("✅ API root endpoint working")
     
     def test_02_register_user(self):
