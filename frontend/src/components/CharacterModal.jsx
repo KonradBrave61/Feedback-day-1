@@ -176,7 +176,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   };
 
   const addToTeam = () => {
-    toast.success(`${currentCharacter.name} (Lv.${userLevel}) added to team!`);
+    if (onAddToTeam) {
+      onAddToTeam(currentCharacter, userLevel, userRarity, selectedEquipment, selectedHissatsu);
+      onClose();
+    } else {
+      toast.success(`${currentCharacter.name} (Lv.${userLevel}) added to team!`);
+    }
   };
 
   const StatRadarChart = ({ stats }) => {
