@@ -29,6 +29,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user, updateUserProfile } = useAuth();
   const [userTeams, setUserTeams] = useState([]);
+  const [editingTeamId, setEditingTeamId] = useState(null);
+  const [editingDescription, setEditingDescription] = useState('');
   const [userStats, setUserStats] = useState({
     username: "Player123",
     joinDate: "2024-01-15",
