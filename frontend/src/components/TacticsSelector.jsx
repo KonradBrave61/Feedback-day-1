@@ -71,7 +71,7 @@ const TacticsSelector = ({
   };
 
   const handlePresetSwitch = (presetId) => {
-    setCurrentPreset(presetId);
+    onPresetsUpdate?.(presets, presetId);
     onTacticSelect(presets[presetId].tactics);
   };
 
