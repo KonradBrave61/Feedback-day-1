@@ -80,7 +80,15 @@ const TeamBuilder = () => {
     
     // Instead of direct selection, open character modal
     setSelectedCharacterForModal(player);
+    setEditingPlayer(null); // This is for new player selection
     setShowPlayerSearch(false);
+    setShowCharacterModal(true);
+  };
+
+  const handleEditPlayer = (player) => {
+    // Set the player for editing
+    setSelectedCharacterForModal(player);
+    setEditingPlayer(player);
     setShowCharacterModal(true);
   };
 
