@@ -52,10 +52,6 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
           return a.name.localeCompare(b.name);
         case 'name_desc':
           return b.name.localeCompare(a.name);
-        case 'level':
-          return b.baseLevel - a.baseLevel;
-        case 'level_asc':
-          return a.baseLevel - b.baseLevel;
         case 'position':
           return a.position.localeCompare(b.position);
         default:
