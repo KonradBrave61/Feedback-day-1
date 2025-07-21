@@ -530,6 +530,19 @@ const TeamBuilder = () => {
             onSave={handleSaveTeam}
           />
         )}
+
+        {showCharacterModal && selectedCharacterForModal && (
+          <CharacterModal
+            character={selectedCharacterForModal}
+            isOpen={showCharacterModal}
+            onClose={() => {
+              setShowCharacterModal(false);
+              setSelectedCharacterForModal(null);
+            }}
+            allCharacters={mockCharacters}
+            onAddToTeam={handleCharacterModalConfirm}
+          />
+        )}
       </div>
     </div>
   );
