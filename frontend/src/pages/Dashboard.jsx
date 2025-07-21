@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { 
   Users, 
   Trophy, 
@@ -14,17 +16,21 @@ import {
   Eye,
   Plus,
   Target,
-  TrendingUp
+  TrendingUp,
+  Lock,
+  Unlock,
+  Globe
 } from 'lucide-react';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user, updateUserProfile } = useAuth();
   const [userTeams, setUserTeams] = useState([]);
   const [userStats, setUserStats] = useState({
     username: "Player123",
     joinDate: "2024-01-15",
     totalTeams: 12,
-    favoriteFormation: "4-4-2 Diamond",
+    favouriteTeam: "Lightning Strike",
     avatar: "/api/placeholder/64/64"
   });
 
@@ -39,7 +45,7 @@ const Dashboard = () => {
         createdDate: "2024-07-10",
         isPublic: true,
         likes: 45,
-        description: "Aggressive attacking formation with strong midfield control"
+        description: "Aggressive attacking formation with strong midfield control and fast counter-attacks"
       },
       {
         id: 2,
@@ -49,7 +55,7 @@ const Dashboard = () => {
         createdDate: "2024-07-08",
         isPublic: false,
         likes: 23,
-        description: "Solid defensive setup with quick counter-attacks"
+        description: "Solid defensive setup with quick counter-attacks and strong midfield presence"
       },
       {
         id: 3,
@@ -59,7 +65,7 @@ const Dashboard = () => {
         createdDate: "2024-07-05",
         isPublic: true,
         likes: 67,
-        description: "Unpredictable tactical approach with versatile players"
+        description: "Unpredictable tactical approach with versatile players and dynamic positioning"
       }
     ];
     setUserTeams(mockTeams);
@@ -75,6 +81,25 @@ const Dashboard = () => {
 
   const handleViewTeam = (teamId) => {
     navigate(`/team-details/${teamId}`);
+  };
+
+  const handleToggleTeamPrivacy = (teamId) => {
+    setUserTeams(prev => prev.map(team => 
+      team.id === teamId 
+        ? { ...team, isPublic: !team.isPublic }
+        : team
+    ));
+  };
+
+  const handleFavouriteTeamChange = (teamName) => {
+    setUserStats(prev => ({
+      ...prev,
+      favouriteTeam: teamName
+    }));
+    // Also update user profile if updateUserProfile is available
+    if (updateUserProfile) {
+      updateUserProfile({ favourite_team: teamName });
+    }
   };
 
   const getFormationColor = (formation) => {
@@ -130,11 +155,23 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Favorite Formation:</span>
-                  <Badge className={`${getFormationColor(userStats.favoriteFormation)} text-white`}>
-                    {userStats.favoriteFormation}
-                  </Badge>
+                <div className="space-y-2">
+                  <span className="text-gray-300">Favourite Team:</span>
+                  <Select value={userStats.favouriteTeam} onValueChange={handleFavouriteTeamChange}>
+                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-orange-900 border-orange-400/30">
+                      {userTeams.map((team) => (
+                        <SelectItem key={team.id} value={team.name} className="text-white hover:bg-orange-800">
+                          {team.name}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="Default Team" className="text-white hover:bg-orange-800">
+                        Default Team
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div className="pt-4 border-t border-orange-400/20">
@@ -203,12 +240,33 @@ const Dashboard = () => {
                         <CardHeader className="pb-3">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-lg text-white">{team.name}</CardTitle>
-                            <Badge 
-                              variant={team.isPublic ? "default" : "secondary"}
-                              className={team.isPublic ? "bg-green-600" : "bg-gray-600"}
-                            >
-                              {team.isPublic ? "Public" : "Private"}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge 
+                                variant={team.isPublic ? "default" : "secondary"}
+                                className={team.isPublic ? "bg-green-600" : "bg-gray-600"}
+                              >
+                                {team.isPublic ? (
+                                  <>
+                                    <Globe className="h-3 w-3 mr-1" />
+                                    Public
+                                  </>
+                                ) : (
+                                  <>
+                                    <Lock className="h-3 w-3 mr-1" />
+                                    Private
+                                  </>
+                                )}
+                              </Badge>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-orange-700/30"
+                                onClick={() => handleToggleTeamPrivacy(team.id)}
+                                title={`Make ${team.isPublic ? 'Private' : 'Public'}`}
+                              >
+                                {team.isPublic ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+                              </Button>
+                            </div>
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-3">
@@ -220,19 +278,10 @@ const Dashboard = () => {
                           </div>
                           
                           <div>
-                            <p className="text-sm text-gray-300 mb-2">Key Players:</p>
-                            <div className="flex flex-wrap gap-1">
-                              {team.keyPlayers.slice(0, 3).map((player, index) => (
-                                <Badge key={index} variant="outline" className="text-xs border-orange-400/50">
-                                  {player}
-                                </Badge>
-                              ))}
-                              {team.keyPlayers.length > 3 && (
-                                <Badge variant="outline" className="text-xs border-orange-400/50">
-                                  +{team.keyPlayers.length - 3} more
-                                </Badge>
-                              )}
-                            </div>
+                            <p className="text-sm text-gray-300 mb-2">Description:</p>
+                            <p className="text-xs text-gray-200 leading-relaxed">
+                              {team.description}
+                            </p>
                           </div>
                           
                           <div className="text-xs text-gray-400 flex items-center gap-2">
@@ -247,8 +296,7 @@ const Dashboard = () => {
                           <div className="flex gap-2 pt-2">
                             <Button 
                               size="sm" 
-                              variant="outline" 
-                              className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
+                              className="flex-1 bg-orange-800/60 border-orange-400/50 hover:bg-orange-700 text-white"
                               onClick={() => handleViewTeam(team.id)}
                             >
                               <Eye className="h-3 w-3 mr-1" />
@@ -256,8 +304,7 @@ const Dashboard = () => {
                             </Button>
                             <Button 
                               size="sm" 
-                              variant="outline" 
-                              className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
+                              className="flex-1 bg-orange-800/60 border-orange-400/50 hover:bg-orange-700 text-white"
                               onClick={() => handleEditTeam(team.id)}
                             >
                               <Edit3 className="h-3 w-3 mr-1" />
@@ -265,8 +312,7 @@ const Dashboard = () => {
                             </Button>
                             <Button 
                               size="sm" 
-                              variant="outline" 
-                              className="text-red-400 border-red-400/50 hover:bg-red-700"
+                              className="bg-red-800/60 border-red-400/50 hover:bg-red-700 text-white"
                               onClick={() => handleDeleteTeam(team.id)}
                             >
                               <Trash2 className="h-3 w-3" />
