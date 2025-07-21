@@ -10,11 +10,21 @@ import { Check, X, Save, RotateCcw } from 'lucide-react';
 const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = [] }) => {
   const [currentPreset, setCurrentPreset] = useState(1);
   const [presets, setPresets] = useState({
-    1: { name: 'Preset 1', tactics: selectedTactics.slice(0, 3) },
+    1: { name: 'Preset 1', tactics: [] },
     2: { name: 'Preset 2', tactics: [] }
   });
   const [editingPreset, setEditingPreset] = useState(null);
   const [currentSelection, setCurrentSelection] = useState([]);
+
+  // Initialize presets only once when component mounts or selectedTactics changes significantly
+  useEffect(() => {
+    if (selectedTactics.length > 0 && presets[1].tactics.length === 0 && presets[2].tactics.length === 0) {
+      setPresets(prev => ({
+        ...prev,
+        1: { name: 'Preset 1', tactics: selectedTactics.slice(0, 3) }
+      }));
+    }
+  }, [selectedTactics]);
 
   const handleTacticToggle = (tactic) => {
     setCurrentSelection(prev => {
