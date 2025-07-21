@@ -8,6 +8,7 @@ import TacticsSelector from '../components/TacticsSelector';
 import TacticVisualizationModal from '../components/TacticVisualizationModal';
 import CoachSelector from '../components/CoachSelector';
 import SaveTeamModal from '../components/EnhancedSaveTeamModal';
+import CharacterModal from '../components/CharacterModal';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
