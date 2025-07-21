@@ -61,7 +61,22 @@ const TeamBuilder = () => {
     setShowPlayerSearch(true);
   };
 
+  // Check if a player is already selected in team or bench
+  const isPlayerAlreadySelected = (playerId) => {
+    // Check team players
+    const teamPlayerIds = Object.values(teamPlayers).map(p => p.id);
+    // Check bench players
+    const benchPlayerIds = Object.values(benchPlayers).map(p => p.id);
+    return teamPlayerIds.includes(playerId) || benchPlayerIds.includes(playerId);
+  };
+
   const handlePlayerSelect = (player) => {
+    // Check if player is already selected
+    if (isPlayerAlreadySelected(player.id)) {
+      alert('This player is already in your team or on the bench!');
+      return;
+    }
+    
     // Instead of direct selection, open character modal
     setSelectedCharacterForModal(player);
     setShowPlayerSearch(false);
@@ -188,9 +203,22 @@ const TeamBuilder = () => {
     if (players.length === 0) return null;
 
     const totalStats = players.reduce((acc, player) => {
+      // Add base stats
       Object.keys(player.baseStats).forEach(stat => {
         acc[stat] = (acc[stat] || 0) + player.baseStats[stat].main;
       });
+      
+      // Add equipment bonuses if player has userEquipment
+      if (player.userEquipment) {
+        Object.values(player.userEquipment).forEach(equipment => {
+          if (equipment && equipment.statBoosts) {
+            Object.keys(equipment.statBoosts).forEach(stat => {
+              acc[stat] = (acc[stat] || 0) + equipment.statBoosts[stat];
+            });
+          }
+        });
+      }
+      
       return acc;
     }, {});
 
@@ -275,16 +303,14 @@ const TeamBuilder = () => {
                   )}
                 </div>
                 <Button
-                  variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700 mb-2"
+                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white mb-2"
                   onClick={() => setShowTacticVisualization(true)}
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Tactical Visualization
                 </Button>
                 <Button
-                  variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700"
+                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
                   onClick={() => setShowTacticsSelector(true)}
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -320,7 +346,7 @@ const TeamBuilder = () => {
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {selectedCoach.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="outline" className="text-xs border-orange-400/30">
+                        <Badge key={index} variant="outline" className="text-xs border-orange-400/30 bg-orange-800/30 text-orange-200">
                           {specialty}
                         </Badge>
                       ))}
@@ -330,8 +356,7 @@ const TeamBuilder = () => {
                   <div className="text-gray-400 text-sm mb-4">No coach selected</div>
                 )}
                 <Button
-                  variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700"
+                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
                   onClick={() => setShowCoachSelector(true)}
                 >
                   <UserCheck className="h-4 w-4 mr-2" />
@@ -353,13 +378,13 @@ const TeamBuilder = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Players:</span>
-                      <Badge variant="outline" className="text-white border-orange-400/30">
+                      <Badge variant="outline" className="text-white border-orange-400/30 bg-orange-800/30">
                         {teamStats.playerCount}/11
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Avg Level:</span>
-                      <Badge variant="outline" className="text-orange-400 border-orange-400">
+                      <Badge variant="outline" className="text-orange-400 border-orange-400 bg-orange-800/30">
                         {teamStats.avgLevel}
                       </Badge>
                     </div>
@@ -493,6 +518,7 @@ const TeamBuilder = () => {
             onClose={() => setShowPlayerSearch(false)}
             onPlayerSelect={handlePlayerSelect}
             position={selectedPosition}
+            selectedPlayerIds={[...Object.values(teamPlayers).map(p => p.id), ...Object.values(benchPlayers).map(p => p.id)]}
           />
         )}
 
