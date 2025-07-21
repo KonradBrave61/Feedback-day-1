@@ -114,7 +114,10 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={onClose} className="text-white border-orange-400/30">
+          <Button 
+            onClick={onClose} 
+            className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+          >
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
