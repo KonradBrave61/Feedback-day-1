@@ -282,7 +282,7 @@ class AuthAndTeamsAPITest(unittest.TestCase):
         data = response.json()
         
         # Check enhanced fields are present
-        self.assertIn("favorite_formation", data)
+        self.assertIn("favourite_team", data)
         self.assertIn("profile_picture", data)
         self.assertIn("bio", data)
         self.assertIn("total_teams", data)
@@ -291,7 +291,7 @@ class AuthAndTeamsAPITest(unittest.TestCase):
         self.assertIn("following", data)
         
         # Check values match what we registered with
-        self.assertEqual(data["favorite_formation"], self.user_data["favorite_formation"])
+        self.assertEqual(data["favourite_team"], self.user_data["favourite_team"])
         self.assertEqual(data["profile_picture"], self.user_data["profile_picture"])
         self.assertEqual(data["bio"], self.user_data["bio"])
         
