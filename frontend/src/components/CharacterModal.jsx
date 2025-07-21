@@ -47,7 +47,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
       case 'FW': return 'text-red-400';
       case 'MF': return 'text-orange-400';
       case 'DF': return 'text-blue-400';
-      case 'GK': return 'text-white';
+      case 'GK': return 'text-green-400';
       default: return 'text-gray-400';
     }
   };
