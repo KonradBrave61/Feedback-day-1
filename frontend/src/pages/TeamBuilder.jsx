@@ -102,23 +102,50 @@ const TeamBuilder = () => {
       userHissatsu: hissatsu
     };
 
-    if (isBenchSelection) {
-      setBenchPlayers(prev => ({
-        ...prev,
-        [selectedBenchSlot]: enhancedPlayer
-      }));
-      setIsBenchSelection(false);
-      setSelectedBenchSlot(null);
-    } else if (selectedPosition) {
-      setTeamPlayers(prev => ({
-        ...prev,
-        [selectedPosition]: enhancedPlayer
-      }));
+    if (editingPlayer) {
+      // Update existing player
+      if (isBenchSelection) {
+        setBenchPlayers(prev => {
+          const newBench = { ...prev };
+          // Find which bench slot has this player
+          const benchSlot = Object.keys(prev).find(slot => prev[slot].id === editingPlayer.id);
+          if (benchSlot) {
+            newBench[benchSlot] = enhancedPlayer;
+          }
+          return newBench;
+        });
+      } else {
+        setTeamPlayers(prev => {
+          const newTeam = { ...prev };
+          // Find which position has this player
+          const position = Object.keys(prev).find(pos => prev[pos].id === editingPlayer.id);
+          if (position) {
+            newTeam[position] = enhancedPlayer;
+          }
+          return newTeam;
+        });
+      }
+    } else {
+      // Add new player
+      if (isBenchSelection) {
+        setBenchPlayers(prev => ({
+          ...prev,
+          [selectedBenchSlot]: enhancedPlayer
+        }));
+        setIsBenchSelection(false);
+        setSelectedBenchSlot(null);
+      } else if (selectedPosition) {
+        setTeamPlayers(prev => ({
+          ...prev,
+          [selectedPosition]: enhancedPlayer
+        }));
+      }
     }
     
     setShowCharacterModal(false);
     setSelectedCharacterForModal(null);
     setSelectedPosition(null);
+    setEditingPlayer(null);
   };
 
   const handleAddBenchPlayer = (slotIndex) => {
