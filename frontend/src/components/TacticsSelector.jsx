@@ -7,26 +7,31 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { mockTactics } from '../data/mock';
 import { Check, X, Save, RotateCcw } from 'lucide-react';
 
-const TacticsSelector = ({ isOpen, onClose, onTacticSelect, selectedTactics = [] }) => {
-  const [currentPreset, setCurrentPreset] = useState(1);
-  const [presets, setPresets] = useState(() => ({
+const TacticsSelector = ({ 
+  isOpen, 
+  onClose, 
+  onTacticSelect, 
+  selectedTactics = [], 
+  presets = {
     1: { name: 'Preset 1', tactics: [] },
     2: { name: 'Preset 2', tactics: [] }
-  }));
+  },
+  currentPreset = 1,
+  onPresetsUpdate
+}) => {
   const [editingPreset, setEditingPreset] = useState(null);
   const [currentSelection, setCurrentSelection] = useState([]);
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize presets only once when component mounts or selectedTactics changes significantly
+  // Initialize presets with selected tactics if they're empty
   useEffect(() => {
-    if (selectedTactics.length > 0 && !isInitialized) {
-      setPresets(prev => ({
-        ...prev,
+    if (selectedTactics.length > 0 && presets[1].tactics.length === 0 && presets[2].tactics.length === 0) {
+      const updatedPresets = {
+        ...presets,
         1: { name: 'Preset 1', tactics: selectedTactics.slice(0, 3) }
-      }));
-      setIsInitialized(true);
+      };
+      onPresetsUpdate?.(updatedPresets, currentPreset);
     }
-  }, [selectedTactics, isInitialized]);
+  }, [selectedTactics, presets, currentPreset, onPresetsUpdate]);
 
   const handleTacticToggle = (tactic) => {
     setCurrentSelection(prev => {
