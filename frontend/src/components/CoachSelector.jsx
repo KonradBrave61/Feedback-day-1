@@ -49,7 +49,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                         </Badge>
                       ))}
                     </div>
-                    <div className="mt-2 text-xs text-yellow-400">
+                    <div className="mt-4 text-xs text-yellow-400">
                       Stat Bonuses: {Object.entries(currentSelection.bonuses.teamStats).map(([stat, value]) => 
                         `${stat}: +${value}`
                       ).join(', ')}
