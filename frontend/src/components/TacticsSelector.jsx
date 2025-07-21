@@ -52,13 +52,14 @@ const TacticsSelector = ({
 
   const handleSavePreset = () => {
     if (editingPreset) {
-      setPresets(prev => ({
-        ...prev,
+      const updatedPresets = {
+        ...presets,
         [editingPreset]: {
-          ...prev[editingPreset],
+          ...presets[editingPreset],
           tactics: [...currentSelection]
         }
-      }));
+      };
+      onPresetsUpdate?.(updatedPresets, currentPreset);
       setEditingPreset(null);
       setCurrentSelection([]);
     }
