@@ -52,7 +52,7 @@ class AuthAndTeamsAPITest(unittest.TestCase):
             "coach_level": 5,
             "favorite_position": "FW",
             "favorite_element": "Fire",
-            "favorite_formation": "4-3-3",
+            "favourite_team": "Raimon",
             "profile_picture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
             "bio": "Passionate football coach and strategist"
         }
