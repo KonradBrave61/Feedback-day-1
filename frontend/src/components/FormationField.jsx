@@ -11,7 +11,7 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
       case 'FW': return 'bg-red-500 text-white';
       case 'MF': return 'bg-orange-500 text-white';
       case 'DF': return 'bg-blue-500 text-white';
-      case 'GK': return 'bg-white text-black';
+      case 'GK': return 'bg-green-600 text-white';
       default: return 'bg-gray-500 text-white';
     }
   };
