@@ -303,10 +303,53 @@ const Dashboard = () => {
                           </div>
                           
                           <div>
-                            <p className="text-sm text-gray-300 mb-2">Description:</p>
-                            <p className="text-xs text-gray-200 leading-relaxed">
-                              {team.description}
-                            </p>
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-sm text-gray-300">Description:</p>
+                              {editingTeamId !== team.id && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleEditDescription(team.id, team.description)}
+                                  className="h-6 text-xs text-orange-400 hover:bg-orange-700/30"
+                                >
+                                  <Edit3 className="h-3 w-3 mr-1" />
+                                  Edit
+                                </Button>
+                              )}
+                            </div>
+                            {editingTeamId === team.id ? (
+                              <div className="space-y-2">
+                                <Textarea
+                                  value={editingDescription}
+                                  onChange={(e) => setEditingDescription(e.target.value)}
+                                  className="text-xs bg-orange-900/30 border-orange-400/30 text-white resize-none"
+                                  rows={3}
+                                  placeholder="Enter team description..."
+                                />
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handleSaveDescription(team.id)}
+                                    className="bg-green-600 hover:bg-green-700 text-white h-6 text-xs px-2"
+                                  >
+                                    <Save className="h-3 w-3 mr-1" />
+                                    Save
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    onClick={handleCancelEdit}
+                                    className="bg-gray-600 hover:bg-gray-700 text-white h-6 text-xs px-2"
+                                  >
+                                    <X className="h-3 w-3 mr-1" />
+                                    Cancel
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-200 leading-relaxed">
+                                {team.description || 'No description available. Click Edit to add one.'}
+                              </p>
+                            )}
                           </div>
                           
                           <div className="text-xs text-gray-400 flex items-center gap-2">
