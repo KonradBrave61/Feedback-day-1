@@ -303,7 +303,7 @@ const TeamBuilder = () => {
               </CardHeader>
               <CardContent>
                 {selectedCoach ? (
-                  <div className="space-y-3">
+                  <div className="space-y-3 mb-4">
                     <div className="flex items-center gap-3">
                       <img
                         src={selectedCoach.portrait}
