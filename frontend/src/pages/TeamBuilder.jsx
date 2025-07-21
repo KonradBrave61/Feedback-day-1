@@ -62,20 +62,38 @@ const TeamBuilder = () => {
   };
 
   const handlePlayerSelect = (player) => {
+    // Instead of direct selection, open character modal
+    setSelectedCharacterForModal(player);
+    setShowPlayerSearch(false);
+    setShowCharacterModal(true);
+  };
+
+  const handleCharacterModalConfirm = (character, userLevel, userRarity, equipment, hissatsu) => {
+    // Create enhanced player object with user customizations
+    const enhancedPlayer = {
+      ...character,
+      userLevel: userLevel,
+      userRarity: userRarity,
+      userEquipment: equipment,
+      userHissatsu: hissatsu
+    };
+
     if (isBenchSelection) {
       setBenchPlayers(prev => ({
         ...prev,
-        [selectedBenchSlot]: player
+        [selectedBenchSlot]: enhancedPlayer
       }));
       setIsBenchSelection(false);
       setSelectedBenchSlot(null);
     } else if (selectedPosition) {
       setTeamPlayers(prev => ({
         ...prev,
-        [selectedPosition]: player
+        [selectedPosition]: enhancedPlayer
       }));
     }
-    setShowPlayerSearch(false);
+    
+    setShowCharacterModal(false);
+    setSelectedCharacterForModal(null);
     setSelectedPosition(null);
   };
 
