@@ -32,8 +32,25 @@ const TeamBuilder = () => {
 
   const handleFormationChange = (formationId) => {
     const formation = mockFormations.find(f => f.id === parseInt(formationId));
+    const oldFormation = selectedFormation;
     setSelectedFormation(formation);
-    setTeamPlayers({}); // Clear team when formation changes
+    
+    // Preserve players that can still fit in the new formation
+    if (oldFormation && formation) {
+      setTeamPlayers(prev => {
+        const newTeamPlayers = {};
+        const newFormationPositionIds = formation.positions.map(p => p.id);
+        
+        // Keep players whose positions exist in the new formation
+        Object.entries(prev).forEach(([positionId, player]) => {
+          if (newFormationPositionIds.includes(positionId)) {
+            newTeamPlayers[positionId] = player;
+          }
+        });
+        
+        return newTeamPlayers;
+      });
+    }
   };
 
   const handleAddPlayer = (positionId) => {
