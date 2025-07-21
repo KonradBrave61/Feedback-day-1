@@ -8,7 +8,7 @@ import { Search, X } from 'lucide-react';
 import { mockCharacters } from '../data/mock';
 import CharacterCard from './CharacterCard';
 
-const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
+const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [] }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPosition, setFilterPosition] = useState('all'); // Changed from position to 'all'
   const [filterElement, setFilterElement] = useState('all');
