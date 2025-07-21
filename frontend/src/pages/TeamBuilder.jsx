@@ -28,7 +28,8 @@ const TeamBuilder = () => {
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [isBenchSelection, setIsBenchSelection] = useState(false);
   const [selectedBenchSlot, setSelectedBenchSlot] = useState(null);
-  const [showSaveTeamModal, setShowSaveTeamModal] = useState(false);
+  const [showCharacterModal, setShowCharacterModal] = useState(false);
+  const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
 
   const handleFormationChange = (formationId) => {
     const formation = mockFormations.find(f => f.id === parseInt(formationId));
