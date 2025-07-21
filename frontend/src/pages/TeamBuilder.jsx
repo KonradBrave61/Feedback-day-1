@@ -575,6 +575,9 @@ const TeamBuilder = () => {
             onClose={() => setShowTacticsSelector(false)}
             onTacticSelect={handleTacticsSelect}
             selectedTactics={selectedTactics}
+            presets={tacticsPresets}
+            currentPreset={currentTacticsPreset}
+            onPresetsUpdate={handleTacticsPresetUpdate}
           />
         )}
 
