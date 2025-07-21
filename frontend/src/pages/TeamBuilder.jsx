@@ -21,6 +21,11 @@ const TeamBuilder = () => {
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
   const [selectedTactics, setSelectedTactics] = useState([]);
+  const [tacticsPresets, setTacticsPresets] = useState({
+    1: { name: 'Preset 1', tactics: [] },
+    2: { name: 'Preset 2', tactics: [] }
+  });
+  const [currentTacticsPreset, setCurrentTacticsPreset] = useState(1);
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [showTacticsSelector, setShowTacticsSelector] = useState(false);
