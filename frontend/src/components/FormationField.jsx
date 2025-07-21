@@ -125,8 +125,8 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
         {/* Outer boundary */}
         <div className="absolute inset-2 border-2 border-white/40 rounded-sm"></div>
         
-        {/* Center Line */}
-        <div className="absolute top-0 left-1/2 w-0.5 h-full bg-white/40 transform -translate-x-1/2"></div>
+        {/* Center Line - Horizontal */}
+        <div className="absolute left-0 top-1/2 w-full h-0.5 bg-white/40 transform -translate-y-1/2"></div>
         
         {/* Center Circle */}
         <div className="absolute top-1/2 left-1/2 w-32 h-32 border-2 border-white/40 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
