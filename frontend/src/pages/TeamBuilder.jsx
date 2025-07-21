@@ -197,6 +197,11 @@ const TeamBuilder = () => {
     setSelectedTactics(tactics);
   };
 
+  const handleTacticsPresetUpdate = (presets, currentPreset) => {
+    setTacticsPresets(presets);
+    setCurrentTacticsPreset(currentPreset);
+  };
+
   const handleCoachSelect = (coach) => {
     setSelectedCoach(coach);
   };
