@@ -90,7 +90,7 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                         <p className="text-xs text-gray-400 mt-1">{coach.bonuses.description}</p>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {coach.specialties.map((specialty, index) => (
-                            <Badge key={index} variant="outline" className="text-xs border-orange-400/30">
+                            <Badge key={index} variant="outline" className="text-xs border-orange-400/30 bg-orange-800/30 text-orange-200">
                               {specialty}
                             </Badge>
                           ))}
