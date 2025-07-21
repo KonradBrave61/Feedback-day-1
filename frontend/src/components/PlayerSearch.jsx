@@ -20,8 +20,6 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position }) => {
   const sortOptions = [
     { value: 'name', label: 'Name (A-Z)' },
     { value: 'name_desc', label: 'Name (Z-A)' },
-    { value: 'level', label: 'Level (High-Low)' },
-    { value: 'level_asc', label: 'Level (Low-High)' },
     { value: 'position', label: 'Position' }
   ];
 
