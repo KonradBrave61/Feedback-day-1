@@ -26,6 +26,7 @@ class UserUpdate(BaseModel):
     favourite_team: Optional[str] = None
     profile_picture: Optional[str] = None
     bio: Optional[str] = None
+    kizuna_stars: Optional[int] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
