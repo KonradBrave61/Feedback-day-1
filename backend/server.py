@@ -27,13 +27,14 @@ async def status():
 
 # Include routers
 try:
-    from routes import auth, user_teams, community, teams, characters, equipment
+    from routes import auth, user_teams, community, teams, characters, equipment, constellations
     app.include_router(auth.router, prefix="/api/auth", tags=["authentication"])
     app.include_router(user_teams.router, prefix="/api", tags=["user_teams"])
     app.include_router(community.router, prefix="/api/community", tags=["community"])
     app.include_router(teams.router, prefix="/api", tags=["teams"])
     app.include_router(characters.router, prefix="/api", tags=["characters"])
     app.include_router(equipment.router, prefix="/api", tags=["equipment"])
+    app.include_router(constellations.router, prefix="/api", tags=["constellations"])
 except Exception as e:
     print(f"Error importing routes: {e}")
 
