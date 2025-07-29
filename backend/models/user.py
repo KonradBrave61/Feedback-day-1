@@ -12,6 +12,7 @@ class UserBase(BaseModel):
     favourite_team: str = "Default Team"
     profile_picture: Optional[str] = None  # Base64 encoded image
     bio: Optional[str] = None
+    kizuna_stars: int = 50  # Starting Kizuna Stars for gacha pulls
 
 class UserCreate(UserBase):
     password: str
