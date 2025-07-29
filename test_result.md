@@ -103,17 +103,10 @@
 #====================================================================================================
 
 ## user_problem_statement: 
-First analyze the code than proced with the prompt 
-1.User should be able to change 
-Status of the team from Public to Private at any time 
-Change Favorite Formation to favourite Team 
-Name of the team Should be able to change 
-2. When saving the team there should be a window that pop up and in that window user should be able to add team name and pick a slot on which he can save the team make 2 buttons one for creating a new save like + and one to overwrite the already saved team after which will the selector of the already saved team will show up .
-Key players change to info/discription of the team the  creator should be able to create and edit the info at any time 
-Add followers and following for people to be able to see who they follow and who is following them 
-Rating of the published team should be based on people opinion make a rating with like 6things to rate out like tension usage, difficulty ,fun and stop with this rn 
-Add the page for people to view the others teams and add some comments in it 
-And first ofc load the code 
+Load the code 
+Look at the image and this is gonna be a new category (sub-page) on the website what you can see it will have some constellation type like thing and this will be a drop poll that the users can look at and see what players can be dropped from a specific constelation look image 2 I want also to include the % for characters in the sth like  a symbol that you click on it and it shows you the drop chances for the rarity 
+and it will also include the bonus from the platform that the user can select ,add 3 Nintendo PS PC 
+user can select 1,2 or 3. Create all 3 visible on the images constelations and try to visuallize mostly just the constellation maybe the second image could be a good inspiration of how the whole thing could look ? keep in mind that the user need to be able to move the camera to the other constellation that will be somewhere near the previous ones 
 
 ## backend:
   - task: "Color theme update to #D6542A"
