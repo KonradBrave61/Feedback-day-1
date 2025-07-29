@@ -239,6 +239,54 @@ And first ofc load the code
         agent: "testing"
         comment: "Community features fully tested and working perfectly. Successfully tested: 1) Team like/unlike functionality with proper count tracking 2) Team commenting system with user attribution 3) View counting with automatic increment 4) Community teams endpoint with filtering and search 5) Community stats endpoint with aggregated data 6) Featured teams and popular formations 7) Team details endpoint with interaction status. All community features verified through comprehensive testing."
 
+  - task: "Constellation API Endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/constellations.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Constellation API endpoints fully tested and working perfectly. Successfully tested: 1) GET /api/constellations/ returns all 3 sample constellations (Lightning, Flame, Wind) with proper orb positions and connections 2) GET /api/constellations/{id} returns specific constellation details with orbs, character pools, and drop rates 3) GET /api/constellations/{id}/characters returns character pools organized by rarity (legendary, epic, rare, normal) 4) GET /api/constellations/{id}/drop-rates returns base and final drop rates with platform bonus calculations 5) Platform bonuses properly increase legendary rates (0.2% per bonus) 6) Error handling for non-existent constellations returns proper 404 responses. All constellation endpoints verified through comprehensive testing."
+
+  - task: "Gacha Pull System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/constellations.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Gacha pull system fully tested and working perfectly. Successfully tested: 1) POST /api/constellations/pull with proper authentication and Kizuna Stars deduction (5 stars per pull) 2) Single and multiple pulls return proper character data with rarity information 3) Platform bonuses affect drop rates correctly (Nintendo, PlayStation, PC bonuses each add 0.2% to legendary rate) 4) Proper error handling for insufficient Kizuna Stars (returns 400 with detailed message) 5) Unauthorized pulls properly rejected with 403 status 6) Pull results include character details, rarity, stars spent/remaining, and platform bonuses applied 7) Gacha pull records saved to database with user_id, constellation_id, character_id, and rarity. All gacha functionality verified through comprehensive testing."
+
+  - task: "User Kizuna Stars System"
+    implemented: true
+    working: true
+    file: "/app/backend/models/user.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "User Kizuna Stars system fully tested and working perfectly. Successfully tested: 1) New users start with 50 Kizuna Stars as specified in user model 2) Gacha pulls properly deduct 5 stars per pull from user balance 3) User balance updates correctly after pulls and persists in database 4) Insufficient stars validation prevents pulls when user doesn't have enough stars 5) User profile endpoint returns current Kizuna Stars balance 6) Stars deduction is atomic and consistent across multiple pulls. All Kizuna Stars functionality verified through comprehensive testing."
+
+  - task: "Sample Constellation Data Initialization"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/constellations.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Sample constellation data initialization fully tested and working perfectly. Successfully tested: 1) Three sample constellations (Lightning, Flame, Wind) automatically created on first API call 2) Each constellation has proper orb positions (x, y coordinates 0-100), glow intensities, and connections between orbs 3) Character pools populated from existing characters in database, organized by element and rarity 4) Proper legendary/epic/rare/normal distribution with at least 1 legendary per constellation 5) Base drop rates sum to 100% (0.5% legendary, 4.5% epic, 25% rare, 70% normal) 6) Background colors and orb colors properly set for visual theming 7) Constellation initialization only occurs when database is empty, preventing duplicates. All sample data initialization verified through comprehensive testing."
+
 ## frontend:
   - task: "Update pitch markings to match real football field"
     implemented: true
