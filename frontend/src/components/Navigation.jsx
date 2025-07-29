@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe } from 'lucide-react';
+import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars } from 'lucide-react';
 
 const Navigation = () => {
   const navigate = useNavigate();
