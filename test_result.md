@@ -332,8 +332,10 @@ And first ofc load the code
 
 ## test_plan:
   current_focus:
-    - "Authentication API endpoints"
-    - "User Teams API endpoints"
+    - "Constellation API Endpoints"
+    - "Gacha Pull System"
+    - "User Kizuna Stars System"
+    - "Sample Constellation Data Initialization"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
