@@ -6,6 +6,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import MainPage from "./pages/MainPage";
 import TeamBuilder from "./pages/TeamBuilder";
 import CharactersPage from "./pages/CharactersPage";
+import ConstellationsPage from "./pages/ConstellationsPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import Dashboard from "./pages/Dashboard";
