@@ -16,6 +16,7 @@ const Navigation = () => {
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/team-builder', label: 'Team Builder', icon: Users },
     { path: '/characters', label: 'Characters', icon: User },
+    { path: '/constellations', label: 'Constellations', icon: Stars },
     { path: '/community', label: 'Community Hub', icon: MessageSquare },
   ];
 
