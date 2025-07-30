@@ -156,6 +156,44 @@ const ConstellationsPage = () => {
     animate();
   };
 
+  // New function to handle canvas clicks
+  const handleCanvasClick = (event) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !constellations[currentConstellationIndex]) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+
+    const constellation = constellations[currentConstellationIndex];
+    
+    // Check if click is within any orb
+    constellation.orbs.forEach((orb, index) => {
+      const orbX = orb.x * 6;
+      const orbY = orb.y * 4;
+      const orbRadius = 20; // Click detection radius
+      
+      const distance = Math.sqrt((x - orbX) ** 2 + (y - orbY) ** 2);
+      
+      if (distance <= orbRadius) {
+        // Get characters for this orb from character pool
+        const currentPool = characterPools[constellation.id] || { legendary: [], epic: [], rare: [], normal: [] };
+        const allCharacters = [
+          ...currentPool.legendary,
+          ...currentPool.epic,
+          ...currentPool.rare,
+          ...currentPool.normal
+        ];
+        
+        // For now, show a few random characters (you can customize this logic)
+        const orbCharacters = allCharacters.slice(index * 3, (index * 3) + 3);
+        setSelectedOrbCharacters(orbCharacters);
+      }
+    });
+  };
+
   const handlePlatformBonusToggle = (platform) => {
     const newBonuses = { ...platformBonuses, [platform]: !platformBonuses[platform] };
     setPlatformBonuses(newBonuses);
