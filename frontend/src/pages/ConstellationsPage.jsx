@@ -176,7 +176,7 @@ const ConstellationsPage = () => {
     constellation.orbs.forEach((orb, index) => {
       const orbX = orb.x * 6;
       const orbY = orb.y * 4;
-      const orbRadius = 25; // Increased click detection radius
+      const orbRadius = 35; // Increased click detection radius even more
       
       const distance = Math.sqrt((x - orbX) ** 2 + (y - orbY) ** 2);
       
