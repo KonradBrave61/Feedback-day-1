@@ -17,6 +17,7 @@ const ConstellationsPage = () => {
   const [currentConstellationIndex, setCurrentConstellationIndex] = useState(0);
   const [characterPools, setCharacterPools] = useState({});
   const [dropRates, setDropRates] = useState({});
+  const [selectedOrbCharacters, setSelectedOrbCharacters] = useState([]); // New state for clicked orb
   const [platformBonuses, setPlatformBonuses] = useState({
     nintendo: false,
     playstation: false,
