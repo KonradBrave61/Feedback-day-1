@@ -103,7 +103,7 @@ const Navigation = () => {
               <>
                 <div className="text-right">
                   <div className="text-sm font-medium text-white">{user.username}</div>
-                  <div className="text-xs text-orange-300">Coach Level {user.coach_level || 1}</div>
+                  <div className="text-xs text-orange-300">Techniques {user.coach_level || 1}</div>
                 </div>
                 <div 
                   className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
