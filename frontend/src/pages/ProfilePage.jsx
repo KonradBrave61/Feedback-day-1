@@ -221,7 +221,6 @@ const ProfilePage = () => {
                         <option value="Earth">Earth</option>
                         <option value="Wind">Wind</option>
                         <option value="Wood">Wood</option>
-                        <option value="Void">Void</option>
                       </select>
                     ) : (
                       <Badge className="bg-red-600 text-white">
