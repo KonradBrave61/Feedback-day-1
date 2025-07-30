@@ -7,6 +7,10 @@ import MainPage from "./pages/MainPage";
 import TeamBuilder from "./pages/TeamBuilder";
 import CharactersPage from "./pages/CharactersPage";
 import ConstellationsPage from "./pages/ConstellationsPage";
+import ItemsPage from "./pages/ItemsPage";
+import TechniquesPage from "./pages/TechniquesPage";
+import HelperPage from "./pages/HelperPage";
+import SupportPage from "./pages/SupportPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import Dashboard from "./pages/Dashboard";
@@ -26,6 +30,10 @@ function App() {
               <Route path="/team-builder" element={<TeamBuilder />} />
               <Route path="/characters" element={<CharactersPage />} />
               <Route path="/constellations" element={<ConstellationsPage />} />
+              <Route path="/items" element={<ItemsPage />} />
+              <Route path="/techniques" element={<TechniquesPage />} />
+              <Route path="/helper" element={<HelperPage />} />
+              <Route path="/support" element={<SupportPage />} />
               <Route path="/community" element={<CommunityHub />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
