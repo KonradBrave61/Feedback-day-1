@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars } from 'lucide-react';
+import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars, Menu, X, Package, Zap, HelpCircle, Headphones } from 'lucide-react';
 
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
@@ -18,6 +19,10 @@ const Navigation = () => {
     { path: '/characters', label: 'Characters', icon: User },
     { path: '/constellations', label: 'Constellations', icon: Stars },
     { path: '/community', label: 'Community Hub', icon: MessageSquare },
+    { path: '/items', label: 'Items', icon: Package },
+    { path: '/techniques', label: 'Techniques', icon: Zap },
+    { path: '/helper', label: 'Helper', icon: HelpCircle },
+    { path: '/support', label: 'Support', icon: Headphones },
   ];
 
   const isActive = (path) => location.pathname === path;
