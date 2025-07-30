@@ -485,136 +485,222 @@ const ConstellationsPage = () => {
             </Card>
           </div>
 
-          {/* Character Pool & Drop Rates */}
+          {/* Character Pool & Drop Rates OR Orb Character Details */}
           <div className="space-y-6">
-            {/* Drop Rates */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Info className="h-5 w-5 text-orange-400" />
-                  Drop Rates
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-red-600/20 border border-red-400/30">
-                    <span className="text-red-400 font-medium">Legendary</span>
-                    <span className="text-white font-bold">{formatDropRate(currentRates.legendary)}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-purple-600/20 border border-purple-400/30">
-                    <span className="text-purple-400 font-medium">Epic</span>
-                    <span className="text-white font-bold">{formatDropRate(currentRates.epic)}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-blue-600/20 border border-blue-400/30">
-                    <span className="text-blue-400 font-medium">Rare</span>
-                    <span className="text-white font-bold">{formatDropRate(currentRates.rare)}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 rounded-lg bg-gray-600/20 border border-gray-400/30">
-                    <span className="text-gray-400 font-medium">Normal</span>
-                    <span className="text-white font-bold">{formatDropRate(currentRates.normal)}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Character Pool */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Stars className="h-5 w-5 text-orange-400" />
-                  Character Pool
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Legendary */}
-                  {currentPool.legendary.length > 0 && (
-                    <div>
-                      <h4 className="text-red-400 font-medium mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-red-500 rounded-full"></span>
-                        Legendary ({currentPool.legendary.length})
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {currentPool.legendary.map((character) => (
-                          <div
-                            key={character.id}
-                            className={`p-2 rounded-lg border ${getRarityColor('legendary')} text-white text-xs text-center`}
-                          >
-                            <div className="font-medium truncate">{character.name}</div>
-                            <div className="text-xs opacity-80">{character.position} • {character.element}</div>
+            {selectedOrbCharacters.length > 0 ? (
+              // Show selected orb characters
+              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Stars className="h-5 w-5 text-orange-400" />
+                    Orb Characters
+                  </CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedOrbCharacters([])}
+                    className="border-orange-400/30 text-white hover:bg-orange-700/30 w-fit"
+                  >
+                    ← Back to Pool
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {selectedOrbCharacters.map((character) => (
+                      <div
+                        key={character.id}
+                        className="relative bg-gradient-to-br from-orange-900/30 to-red-900/30 border border-orange-400/20 rounded-lg p-4"
+                      >
+                        {/* Character Profile Picture in Circle */}
+                        <div className="flex items-center gap-4">
+                          <div className="relative">
+                            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                              {character.profile_picture ? (
+                                <img 
+                                  src={character.profile_picture} 
+                                  alt={character.name}
+                                  className="w-14 h-14 rounded-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-white font-bold text-lg">
+                                  {character.name.charAt(0)}
+                                </span>
+                              )}
+                            </div>
+                            
+                            {/* Position in left low corner */}
+                            <div className="absolute -bottom-1 -left-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                              {character.position}
+                            </div>
+                            
+                            {/* Element in right low corner */}
+                            <div className="absolute -bottom-1 -right-1 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded">
+                              {character.element?.charAt(0).toUpperCase() || 'N'}
+                            </div>
                           </div>
-                        ))}
+                          
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-white mb-1">{character.name}</h3>
+                            <div className="flex items-center gap-2 text-sm text-gray-300">
+                              <span className="bg-blue-600/20 px-2 py-1 rounded text-blue-300">
+                                {character.position}
+                              </span>
+                              <span className="bg-yellow-600/20 px-2 py-1 rounded text-yellow-300">
+                                {character.element}
+                              </span>
+                            </div>
+                            <div className="mt-2 text-sm text-gray-400">
+                              <span className={`px-2 py-1 rounded text-xs ${getRarityColor(character.rarity)}`}>
+                                {character.rarity?.toUpperCase() || 'NORMAL'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {selectedOrbCharacters.length === 0 && (
+                      <div className="text-center py-8 text-gray-400">
+                        <Stars className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <p>No characters found for this orb</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                {/* Drop Rates */}
+                <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Info className="h-5 w-5 text-orange-400" />
+                      Drop Rates
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-red-600/20 border border-red-400/30">
+                        <span className="text-red-400 font-medium">Legendary</span>
+                        <span className="text-white font-bold">{formatDropRate(currentRates.legendary)}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-purple-600/20 border border-purple-400/30">
+                        <span className="text-purple-400 font-medium">Epic</span>
+                        <span className="text-white font-bold">{formatDropRate(currentRates.epic)}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-blue-600/20 border border-blue-400/30">
+                        <span className="text-blue-400 font-medium">Rare</span>
+                        <span className="text-white font-bold">{formatDropRate(currentRates.rare)}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-gray-600/20 border border-gray-400/30">
+                        <span className="text-gray-400 font-medium">Normal</span>
+                        <span className="text-white font-bold">{formatDropRate(currentRates.normal)}</span>
                       </div>
                     </div>
-                  )}
+                  </CardContent>
+                </Card>
 
-                  {/* Epic */}
-                  {currentPool.epic.length > 0 && (
-                    <div>
-                      <h4 className="text-purple-400 font-medium mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
-                        Epic ({currentPool.epic.length})
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {currentPool.epic.slice(0, 4).map((character) => (
-                          <div
-                            key={character.id}
-                            className={`p-2 rounded-lg border ${getRarityColor('epic')} text-white text-xs text-center`}
-                          >
-                            <div className="font-medium truncate">{character.name}</div>
-                            <div className="text-xs opacity-80">{character.position} • {character.element}</div>
+                {/* Character Pool */}
+                <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Stars className="h-5 w-5 text-orange-400" />
+                      Character Pool
+                      <span className="text-xs text-gray-400 ml-2">(Click orbs to inspect)</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Legendary */}
+                      {currentPool.legendary.length > 0 && (
+                        <div>
+                          <h4 className="text-red-400 font-medium mb-2 flex items-center gap-2">
+                            <span className="w-3 h-3 bg-red-500 rounded-full"></span>
+                            Legendary ({currentPool.legendary.length})
+                          </h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            {currentPool.legendary.map((character) => (
+                              <div
+                                key={character.id}
+                                className={`p-2 rounded-lg border ${getRarityColor('legendary')} text-white text-xs text-center`}
+                              >
+                                <div className="font-medium truncate">{character.name}</div>
+                                <div className="text-xs opacity-80">{character.position} • {character.element}</div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
-                      {currentPool.epic.length > 4 && (
-                        <p className="text-xs text-gray-400 text-center mt-2">
-                          +{currentPool.epic.length - 4} more...
-                        </p>
+                        </div>
+                      )}
+
+                      {/* Epic */}
+                      {currentPool.epic.length > 0 && (
+                        <div>
+                          <h4 className="text-purple-400 font-medium mb-2 flex items-center gap-2">
+                            <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
+                            Epic ({currentPool.epic.length})
+                          </h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            {currentPool.epic.slice(0, 4).map((character) => (
+                              <div
+                                key={character.id}
+                                className={`p-2 rounded-lg border ${getRarityColor('epic')} text-white text-xs text-center`}
+                              >
+                                <div className="font-medium truncate">{character.name}</div>
+                                <div className="text-xs opacity-80">{character.position} • {character.element}</div>
+                              </div>
+                            ))}
+                          </div>
+                          {currentPool.epic.length > 4 && (
+                            <p className="text-xs text-gray-400 text-center mt-2">
+                              +{currentPool.epic.length - 4} more...
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Rare */}
+                      {currentPool.rare.length > 0 && (
+                        <div>
+                          <h4 className="text-blue-400 font-medium mb-2 flex items-center gap-2">
+                            <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
+                            Rare ({currentPool.rare.length})
+                          </h4>
+                          <div className="grid grid-cols-2 gap-2">
+                            {currentPool.rare.slice(0, 6).map((character) => (
+                              <div
+                                key={character.id}
+                                className={`p-2 rounded-lg border ${getRarityColor('rare')} text-white text-xs text-center`}
+                              >
+                                <div className="font-medium truncate">{character.name}</div>
+                                <div className="text-xs opacity-80">{character.position} • {character.element}</div>
+                              </div>
+                            ))}
+                          </div>
+                          {currentPool.rare.length > 6 && (
+                            <p className="text-xs text-gray-400 text-center mt-2">
+                              +{currentPool.rare.length - 6} more...
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Normal */}
+                      {currentPool.normal.length > 0 && (
+                        <div>
+                          <h4 className="text-gray-400 font-medium mb-2 flex items-center gap-2">
+                            <span className="w-3 h-3 bg-gray-500 rounded-full"></span>
+                            Normal ({currentPool.normal.length})
+                          </h4>
+                          <p className="text-xs text-gray-400">
+                            {currentPool.normal.length} characters available
+                          </p>
+                        </div>
                       )}
                     </div>
-                  )}
-
-                  {/* Rare */}
-                  {currentPool.rare.length > 0 && (
-                    <div>
-                      <h4 className="text-blue-400 font-medium mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
-                        Rare ({currentPool.rare.length})
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {currentPool.rare.slice(0, 6).map((character) => (
-                          <div
-                            key={character.id}
-                            className={`p-2 rounded-lg border ${getRarityColor('rare')} text-white text-xs text-center`}
-                          >
-                            <div className="font-medium truncate">{character.name}</div>
-                            <div className="text-xs opacity-80">{character.position} • {character.element}</div>
-                          </div>
-                        ))}
-                      </div>
-                      {currentPool.rare.length > 6 && (
-                        <p className="text-xs text-gray-400 text-center mt-2">
-                          +{currentPool.rare.length - 6} more...
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Normal */}
-                  {currentPool.normal.length > 0 && (
-                    <div>
-                      <h4 className="text-gray-400 font-medium mb-2 flex items-center gap-2">
-                        <span className="w-3 h-3 bg-gray-500 rounded-full"></span>
-                        Normal ({currentPool.normal.length})
-                      </h4>
-                      <p className="text-xs text-gray-400">
-                        {currentPool.normal.length} characters available
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </div>
         </div>
       </div>
