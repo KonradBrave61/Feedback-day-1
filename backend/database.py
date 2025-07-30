@@ -154,3 +154,60 @@ async def populate_default_equipment():
         {"id": "16", "name": "Team Badge", "rarity": "Common", "category": "Special", "icon": "/api/placeholder/40/40", "stats": {"physical": 5, "agility": 3}}
     ]
     await db.equipment.insert_many(equipment)
+
+async def populate_default_characters():
+    """Populate default characters"""
+    characters = [
+        {
+            "id": "1",
+            "name": "Mark Evans",
+            "position": "GK",
+            "level": 1,
+            "stats": {
+                "kick": 50,
+                "control": 45,
+                "technique": 40,
+                "physical": 55,
+                "agility": 50,
+                "intelligence": 60,
+                "pressure": 45
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Common"
+        },
+        {
+            "id": "2", 
+            "name": "Axel Blaze",
+            "position": "FW",
+            "level": 1,
+            "stats": {
+                "kick": 70,
+                "control": 55,
+                "technique": 65,
+                "physical": 50,
+                "agility": 60,
+                "intelligence": 45,
+                "pressure": 40
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Rare"
+        },
+        {
+            "id": "3",
+            "name": "Jude Sharp",
+            "position": "MF", 
+            "level": 1,
+            "stats": {
+                "kick": 45,
+                "control": 65,
+                "technique": 70,
+                "physical": 40,
+                "agility": 55,
+                "intelligence": 75,
+                "pressure": 50
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Epic"
+        }
+    ]
+    await db.characters.insert_many(characters)
