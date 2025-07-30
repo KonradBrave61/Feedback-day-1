@@ -162,50 +162,49 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden mt-4 flex flex-wrap gap-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Button
-                key={item.path}
-                variant={isActive(item.path) ? "default" : "ghost"}
-                size="sm"
-                className={`flex items-center gap-2 ${
-                  isActive(item.path) 
-                    ? 'bg-orange-600 text-white hover:bg-orange-700' 
-                    : 'text-white hover:bg-orange-700/30'
-                }`}
-                onClick={() => navigate(item.path)}
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
-              </Button>
-            );
-          })}
-          
-          {/* Mobile Profile Button */}
-          {user ? (
+        {/* Hamburger Menu Dropdown */}
+        {showHamburgerMenu && (
+          <div className="absolute top-full left-0 right-0 bg-orange-900 border-b border-orange-400/20 shadow-lg z-50">
+            <div className="container mx-auto px-4 py-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Button
+                      key={item.path}
+                      variant={isActive(item.path) ? "default" : "ghost"}
+                      className={`flex items-center gap-2 justify-start ${
+                        isActive(item.path) 
+                          ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                          : 'text-white hover:bg-orange-700/30'
+                      }`}
+                      onClick={() => {
+                        navigate(item.path);
+                        setShowHamburgerMenu(false);
+                      }}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Navigation - Simplified */}
+        <div className="md:hidden mt-4">
+          <div className="text-center">
             <Button
               variant="ghost"
               size="sm"
-              className="text-white hover:bg-orange-700/30"
-              onClick={() => navigate('/dashboard')}
+              className="text-orange-300 hover:bg-orange-700/30"
+              onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
             >
-              <LayoutDashboard className="h-4 w-4 mr-2" />
-              Dashboard
+              {showHamburgerMenu ? 'Close Menu' : 'Open Menu'}
             </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-orange-700/30"
-              onClick={() => navigate('/login')}
-            >
-              <User className="h-4 w-4 mr-2" />
-              Sign In
-            </Button>
-          )}
+          </div>
         </div>
       </div>
       
