@@ -163,11 +163,14 @@ async def populate_default_equipment():
 async def populate_default_characters():
     """Populate default characters"""
     characters = [
+        # Fire Element Characters
         {
             "id": "1",
             "name": "Mark Evans",
             "position": "GK",
             "level": 1,
+            "element": "Fire",
+            "base_rarity": "Common",
             "stats": {
                 "kick": 50,
                 "control": 45,
@@ -185,6 +188,8 @@ async def populate_default_characters():
             "name": "Axel Blaze",
             "position": "FW",
             "level": 1,
+            "element": "Fire",
+            "base_rarity": "Legendary",
             "stats": {
                 "kick": 70,
                 "control": 55,
@@ -195,13 +200,15 @@ async def populate_default_characters():
                 "pressure": 40
             },
             "avatar": "/api/placeholder/150/150",
-            "rarity": "Rare"
+            "rarity": "Legendary"
         },
         {
             "id": "3",
             "name": "Jude Sharp",
             "position": "MF", 
             "level": 1,
+            "element": "Fire",
+            "base_rarity": "Epic",
             "stats": {
                 "kick": 45,
                 "control": 65,
@@ -213,6 +220,239 @@ async def populate_default_characters():
             },
             "avatar": "/api/placeholder/150/150",
             "rarity": "Epic"
+        },
+        # Earth Element Characters
+        {
+            "id": "4",
+            "name": "Nathan Swift",
+            "position": "DF",
+            "level": 1,
+            "element": "Earth",
+            "base_rarity": "Rare",
+            "stats": {
+                "kick": 40,
+                "control": 50,
+                "technique": 35,
+                "physical": 65,
+                "agility": 55,
+                "intelligence": 50,
+                "pressure": 60
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Rare"
+        },
+        {
+            "id": "5",
+            "name": "Jack Wallside",
+            "position": "DF",
+            "level": 1,
+            "element": "Earth",
+            "base_rarity": "Epic",
+            "stats": {
+                "kick": 35,
+                "control": 45,
+                "technique": 30,
+                "physical": 70,
+                "agility": 40,
+                "intelligence": 55,
+                "pressure": 65
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Epic"
+        },
+        # Wind Element Characters
+        {
+            "id": "6",
+            "name": "Byron Love",
+            "position": "MF",
+            "level": 1,
+            "element": "Wind",
+            "base_rarity": "Legendary",
+            "stats": {
+                "kick": 60,
+                "control": 70,
+                "technique": 75,
+                "physical": 45,
+                "agility": 65,
+                "intelligence": 70,
+                "pressure": 55
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Legendary"
+        },
+        {
+            "id": "7",
+            "name": "Kevin Dragonfly",
+            "position": "FW",
+            "level": 1,
+            "element": "Wind",
+            "base_rarity": "Rare",
+            "stats": {
+                "kick": 65,
+                "control": 60,
+                "technique": 55,
+                "physical": 45,
+                "agility": 70,
+                "intelligence": 50,
+                "pressure": 40
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Rare"
+        },
+        # Wood Element Characters
+        {
+            "id": "8",
+            "name": "Austin Hobbes",
+            "position": "MF",
+            "level": 1,
+            "element": "Wood",
+            "base_rarity": "Epic",
+            "stats": {
+                "kick": 55,
+                "control": 65,
+                "technique": 60,
+                "physical": 50,
+                "agility": 55,
+                "intelligence": 65,
+                "pressure": 45
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Epic"
+        },
+        {
+            "id": "9",
+            "name": "Tod Ironside",
+            "position": "DF",
+            "level": 1,
+            "element": "Wood",
+            "base_rarity": "Legendary",
+            "stats": {
+                "kick": 40,
+                "control": 55,
+                "technique": 45,
+                "physical": 75,
+                "agility": 45,
+                "intelligence": 60,
+                "pressure": 70
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Legendary"
+        },
+        # Lightning Element Characters
+        {
+            "id": "10",
+            "name": "Riccardo Di Rigo",
+            "position": "GK",
+            "level": 1,
+            "element": "Lightning",
+            "base_rarity": "Legendary",
+            "stats": {
+                "kick": 45,
+                "control": 50,
+                "technique": 55,
+                "physical": 60,
+                "agility": 65,
+                "intelligence": 70,
+                "pressure": 55
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Legendary"
+        },
+        {
+            "id": "11",
+            "name": "Ray Dark",
+            "position": "FW",
+            "level": 1,
+            "element": "Lightning",
+            "base_rarity": "Epic",
+            "stats": {
+                "kick": 70,
+                "control": 60,
+                "technique": 65,
+                "physical": 55,
+                "agility": 60,
+                "intelligence": 65,
+                "pressure": 50
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Epic"
+        },
+        # Additional characters for pool diversity
+        {
+            "id": "12",
+            "name": "Shishido Sakichi",
+            "position": "MF",
+            "level": 1,
+            "element": "Fire",
+            "base_rarity": "Rare",
+            "stats": {
+                "kick": 55,
+                "control": 60,
+                "technique": 50,
+                "physical": 50,
+                "agility": 55,
+                "intelligence": 55,
+                "pressure": 45
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Rare"
+        },
+        {
+            "id": "13",
+            "name": "Aturo Teurumi",
+            "position": "DF",
+            "level": 1,
+            "element": "Earth",
+            "base_rarity": "Common",
+            "stats": {
+                "kick": 35,
+                "control": 40,
+                "technique": 30,
+                "physical": 60,
+                "agility": 45,
+                "intelligence": 45,
+                "pressure": 55
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Common"
+        },
+        {
+            "id": "14",
+            "name": "Shawn Froste",
+            "position": "FW",
+            "level": 1,
+            "element": "Wind",
+            "base_rarity": "Epic",
+            "stats": {
+                "kick": 65,
+                "control": 55,
+                "technique": 60,
+                "physical": 45,
+                "agility": 70,
+                "intelligence": 50,
+                "pressure": 40
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Epic"
+        },
+        {
+            "id": "15",
+            "name": "Silvia Woods",
+            "position": "MF",
+            "level": 1,
+            "element": "Wood",
+            "base_rarity": "Rare",
+            "stats": {
+                "kick": 50,
+                "control": 60,
+                "technique": 55,
+                "physical": 45,
+                "agility": 55,
+                "intelligence": 60,
+                "pressure": 40
+            },
+            "avatar": "/api/placeholder/150/150",
+            "rarity": "Rare"
         }
     ]
     await db.characters.insert_many(characters)
