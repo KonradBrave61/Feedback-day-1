@@ -195,11 +195,28 @@ const ConstellationsPage = () => {
           ...currentPool.normal
         ];
         
-        // For each orb, show different characters
-        const startIndex = index * 2;
-        const orbCharacters = allCharacters.slice(startIndex, startIndex + 3);
+        // Better character distribution - ensure each orb gets characters
+        let orbCharacters = [];
+        if (allCharacters.length > 0) {
+          // Distribute characters more evenly across orbs
+          const charactersPerOrb = Math.max(1, Math.floor(allCharacters.length / constellation.orbs.length));
+          const startIndex = (index * charactersPerOrb) % allCharacters.length;
+          
+          // Get characters for this orb, wrap around if needed
+          for (let i = 0; i < Math.min(3, charactersPerOrb); i++) {
+            const charIndex = (startIndex + i) % allCharacters.length;
+            if (allCharacters[charIndex] && !orbCharacters.includes(allCharacters[charIndex])) {
+              orbCharacters.push(allCharacters[charIndex]);
+            }
+          }
+          
+          // Ensure we always have at least one character if any are available
+          if (orbCharacters.length === 0 && allCharacters.length > 0) {
+            orbCharacters.push(allCharacters[index % allCharacters.length]);
+          }
+        }
         
-        console.log('Setting orb characters:', orbCharacters);
+        console.log('Setting orb characters:', orbCharacters.length > 0 ? orbCharacters : 'No characters available');
         setSelectedOrbCharacters(orbCharacters);
       }
     });
