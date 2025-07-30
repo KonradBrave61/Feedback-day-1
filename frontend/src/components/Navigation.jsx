@@ -215,6 +215,14 @@ const Navigation = () => {
           onClick={() => setShowProfileMenu(false)}
         />
       )}
+      
+      {/* Click outside to close hamburger menu */}
+      {showHamburgerMenu && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowHamburgerMenu(false)}
+        />
+      )}
     </nav>
   );
 };
