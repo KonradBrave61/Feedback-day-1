@@ -65,27 +65,7 @@ const Navigation = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation Items (hidden on mobile) */}
-            <div className="hidden md:flex items-center gap-2">
-              {navItems.slice(0, 6).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Button
-                    key={item.path}
-                    variant={isActive(item.path) ? "default" : "ghost"}
-                    className={`flex items-center gap-2 ${
-                      isActive(item.path) 
-                        ? 'bg-orange-600 text-white hover:bg-orange-700' 
-                        : 'text-white hover:bg-orange-700/30'
-                    }`}
-                    onClick={() => navigate(item.path)}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </Button>
-                );
-              })}
-            </div>
+            {/* Desktop Navigation Items - REMOVED since everything is in hamburger menu */}
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
