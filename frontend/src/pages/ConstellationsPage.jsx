@@ -378,8 +378,9 @@ const ConstellationsPage = () => {
                 <div className="relative mb-6 bg-black/50 rounded-lg overflow-hidden">
                   <canvas
                     ref={canvasRef}
-                    className="w-full h-auto"
+                    className="w-full h-auto cursor-pointer"
                     style={{ aspectRatio: '3/2' }}
+                    onClick={handleCanvasClick}
                   />
                 </div>
 
