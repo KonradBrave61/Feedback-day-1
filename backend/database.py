@@ -167,292 +167,256 @@ async def populate_default_characters():
         {
             "id": "1",
             "name": "Mark Evans",
+            "nickname": "Mark",
+            "title": "Legendary Keeper",
+            "base_level": 1,
             "position": "GK",
-            "level": 1,
             "element": "Fire",
             "base_rarity": "Common",
-            "stats": {
-                "kick": 50,
-                "control": 45,
-                "technique": 40,
-                "physical": 55,
-                "agility": 50,
-                "intelligence": 60,
-                "pressure": 45
+            "jersey_number": 1,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 50, "secondary": 45},
+                "control": {"main": 45, "secondary": 40},
+                "technique": {"main": 40, "secondary": 35},
+                "physical": {"main": 55, "secondary": 50},
+                "agility": {"main": 50, "secondary": 45},
+                "intelligence": {"main": 60, "secondary": 55},
+                "pressure": {"main": 45, "secondary": 40}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Common"
+            "description": "A passionate goalkeeper with incredible reflexes and team leadership skills.",
+            "hissatsu": [],
+            "team_passives": []
         },
         {
             "id": "2", 
             "name": "Axel Blaze",
+            "nickname": "Axel",
+            "title": "Flame Striker",
+            "base_level": 1,
             "position": "FW",
-            "level": 1,
             "element": "Fire",
             "base_rarity": "Legendary",
-            "stats": {
-                "kick": 70,
-                "control": 55,
-                "technique": 65,
-                "physical": 50,
-                "agility": 60,
-                "intelligence": 45,
-                "pressure": 40
+            "jersey_number": 10,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 70, "secondary": 65},
+                "control": {"main": 55, "secondary": 50},
+                "technique": {"main": 65, "secondary": 60},
+                "physical": {"main": 50, "secondary": 45},
+                "agility": {"main": 60, "secondary": 55},
+                "intelligence": {"main": 45, "secondary": 40},
+                "pressure": {"main": 40, "secondary": 35}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Legendary"
+            "description": "A skilled striker with incredible shooting power and fire-based techniques.",
+            "hissatsu": [],
+            "team_passives": []
         },
         {
             "id": "3",
             "name": "Jude Sharp",
-            "position": "MF", 
-            "level": 1,
+            "nickname": "Jude",
+            "title": "Tactical Genius",
+            "base_level": 1,
+            "position": "MF",
             "element": "Fire",
             "base_rarity": "Epic",
-            "stats": {
-                "kick": 45,
-                "control": 65,
-                "technique": 70,
-                "physical": 40,
-                "agility": 55,
-                "intelligence": 75,
-                "pressure": 50
+            "jersey_number": 7,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 45, "secondary": 40},
+                "control": {"main": 65, "secondary": 60},
+                "technique": {"main": 70, "secondary": 65},
+                "physical": {"main": 40, "secondary": 35},
+                "agility": {"main": 55, "secondary": 50},
+                "intelligence": {"main": 75, "secondary": 70},
+                "pressure": {"main": 50, "secondary": 45}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Epic"
+            "description": "A strategic midfielder with excellent technique and tactical awareness.",
+            "hissatsu": [],
+            "team_passives": []
         },
         # Earth Element Characters
         {
             "id": "4",
             "name": "Nathan Swift",
+            "nickname": "Nathan",
+            "title": "Speed Demon",
+            "base_level": 1,
             "position": "DF",
-            "level": 1,
             "element": "Earth",
             "base_rarity": "Rare",
-            "stats": {
-                "kick": 40,
-                "control": 50,
-                "technique": 35,
-                "physical": 65,
-                "agility": 55,
-                "intelligence": 50,
-                "pressure": 60
+            "jersey_number": 2,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 40, "secondary": 35},
+                "control": {"main": 50, "secondary": 45},
+                "technique": {"main": 35, "secondary": 30},
+                "physical": {"main": 65, "secondary": 60},
+                "agility": {"main": 55, "secondary": 50},
+                "intelligence": {"main": 50, "secondary": 45},
+                "pressure": {"main": 60, "secondary": 55}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Rare"
+            "description": "A fast defender with excellent positioning and physical strength.",
+            "hissatsu": [],
+            "team_passives": []
         },
         {
             "id": "5",
             "name": "Jack Wallside",
+            "nickname": "Jack",
+            "title": "Iron Wall",
+            "base_level": 1,
             "position": "DF",
-            "level": 1,
             "element": "Earth",
             "base_rarity": "Epic",
-            "stats": {
-                "kick": 35,
-                "control": 45,
-                "technique": 30,
-                "physical": 70,
-                "agility": 40,
-                "intelligence": 55,
-                "pressure": 65
+            "jersey_number": 3,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 35, "secondary": 30},
+                "control": {"main": 45, "secondary": 40},
+                "technique": {"main": 30, "secondary": 25},
+                "physical": {"main": 70, "secondary": 65},
+                "agility": {"main": 40, "secondary": 35},
+                "intelligence": {"main": 55, "secondary": 50},
+                "pressure": {"main": 65, "secondary": 60}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Epic"
+            "description": "A rock-solid defender with incredible defensive instincts.",
+            "hissatsu": [],
+            "team_passives": []
         },
         # Wind Element Characters
         {
             "id": "6",
             "name": "Byron Love",
+            "nickname": "Byron",
+            "title": "Wind Master",
+            "base_level": 1,
             "position": "MF",
-            "level": 1,
             "element": "Wind",
             "base_rarity": "Legendary",
-            "stats": {
-                "kick": 60,
-                "control": 70,
-                "technique": 75,
-                "physical": 45,
-                "agility": 65,
-                "intelligence": 70,
-                "pressure": 55
+            "jersey_number": 8,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 60, "secondary": 55},
+                "control": {"main": 70, "secondary": 65},
+                "technique": {"main": 75, "secondary": 70},
+                "physical": {"main": 45, "secondary": 40},
+                "agility": {"main": 65, "secondary": 60},
+                "intelligence": {"main": 70, "secondary": 65},
+                "pressure": {"main": 55, "secondary": 50}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Legendary"
+            "description": "A skilled midfielder with perfect ball control and wind techniques.",
+            "hissatsu": [],
+            "team_passives": []
         },
         {
             "id": "7",
             "name": "Kevin Dragonfly",
+            "nickname": "Kevin",
+            "title": "Dragon Striker",
+            "base_level": 1,
             "position": "FW",
-            "level": 1,
             "element": "Wind",
             "base_rarity": "Rare",
-            "stats": {
-                "kick": 65,
-                "control": 60,
-                "technique": 55,
-                "physical": 45,
-                "agility": 70,
-                "intelligence": 50,
-                "pressure": 40
+            "jersey_number": 9,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 65, "secondary": 60},
+                "control": {"main": 60, "secondary": 55},
+                "technique": {"main": 55, "secondary": 50},
+                "physical": {"main": 45, "secondary": 40},
+                "agility": {"main": 70, "secondary": 65},
+                "intelligence": {"main": 50, "secondary": 45},
+                "pressure": {"main": 40, "secondary": 35}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Rare"
+            "description": "An agile striker with incredible speed and aerial ability.",
+            "hissatsu": [],
+            "team_passives": []
         },
         # Wood Element Characters
         {
             "id": "8",
             "name": "Austin Hobbes",
+            "nickname": "Austin",
+            "title": "Forest Guardian",
+            "base_level": 1,
             "position": "MF",
-            "level": 1,
             "element": "Wood",
             "base_rarity": "Epic",
-            "stats": {
-                "kick": 55,
-                "control": 65,
-                "technique": 60,
-                "physical": 50,
-                "agility": 55,
-                "intelligence": 65,
-                "pressure": 45
+            "jersey_number": 6,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 55, "secondary": 50},
+                "control": {"main": 65, "secondary": 60},
+                "technique": {"main": 60, "secondary": 55},
+                "physical": {"main": 50, "secondary": 45},
+                "agility": {"main": 55, "secondary": 50},
+                "intelligence": {"main": 65, "secondary": 60},
+                "pressure": {"main": 45, "secondary": 40}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Epic"
+            "description": "A balanced midfielder with excellent passing and wood-based techniques.",
+            "hissatsu": [],
+            "team_passives": []
         },
         {
             "id": "9",
             "name": "Tod Ironside",
+            "nickname": "Tod",
+            "title": "Iron Defender",
+            "base_level": 1,
             "position": "DF",
-            "level": 1,
             "element": "Wood",
             "base_rarity": "Legendary",
-            "stats": {
-                "kick": 40,
-                "control": 55,
-                "technique": 45,
-                "physical": 75,
-                "agility": 45,
-                "intelligence": 60,
-                "pressure": 70
+            "jersey_number": 4,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 40, "secondary": 35},
+                "control": {"main": 55, "secondary": 50},
+                "technique": {"main": 45, "secondary": 40},
+                "physical": {"main": 75, "secondary": 70},
+                "agility": {"main": 45, "secondary": 40},
+                "intelligence": {"main": 60, "secondary": 55},
+                "pressure": {"main": 70, "secondary": 65}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Legendary"
+            "description": "A legendary defender with unbreakable defense and wood techniques.",
+            "hissatsu": [],
+            "team_passives": []
         },
         # Lightning Element Characters
         {
             "id": "10",
             "name": "Riccardo Di Rigo",
+            "nickname": "Riccardo",
+            "title": "Lightning Keeper",
+            "base_level": 1,
             "position": "GK",
-            "level": 1,
             "element": "Lightning",
             "base_rarity": "Legendary",
-            "stats": {
-                "kick": 45,
-                "control": 50,
-                "technique": 55,
-                "physical": 60,
-                "agility": 65,
-                "intelligence": 70,
-                "pressure": 55
+            "jersey_number": 12,
+            "portrait": "/api/placeholder/150/150",
+            "team_logo": "/api/placeholder/50/50",
+            "base_stats": {
+                "kick": {"main": 45, "secondary": 40},
+                "control": {"main": 50, "secondary": 45},
+                "technique": {"main": 55, "secondary": 50},
+                "physical": {"main": 60, "secondary": 55},
+                "agility": {"main": 65, "secondary": 60},
+                "intelligence": {"main": 70, "secondary": 65},
+                "pressure": {"main": 55, "secondary": 50}
             },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Legendary"
-        },
-        {
-            "id": "11",
-            "name": "Ray Dark",
-            "position": "FW",
-            "level": 1,
-            "element": "Lightning",
-            "base_rarity": "Epic",
-            "stats": {
-                "kick": 70,
-                "control": 60,
-                "technique": 65,
-                "physical": 55,
-                "agility": 60,
-                "intelligence": 65,
-                "pressure": 50
-            },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Epic"
-        },
-        # Additional characters for pool diversity
-        {
-            "id": "12",
-            "name": "Shishido Sakichi",
-            "position": "MF",
-            "level": 1,
-            "element": "Fire",
-            "base_rarity": "Rare",
-            "stats": {
-                "kick": 55,
-                "control": 60,
-                "technique": 50,
-                "physical": 50,
-                "agility": 55,
-                "intelligence": 55,
-                "pressure": 45
-            },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Rare"
-        },
-        {
-            "id": "13",
-            "name": "Aturo Teurumi",
-            "position": "DF",
-            "level": 1,
-            "element": "Earth",
-            "base_rarity": "Common",
-            "stats": {
-                "kick": 35,
-                "control": 40,
-                "technique": 30,
-                "physical": 60,
-                "agility": 45,
-                "intelligence": 45,
-                "pressure": 55
-            },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Common"
-        },
-        {
-            "id": "14",
-            "name": "Shawn Froste",
-            "position": "FW",
-            "level": 1,
-            "element": "Wind",
-            "base_rarity": "Epic",
-            "stats": {
-                "kick": 65,
-                "control": 55,
-                "technique": 60,
-                "physical": 45,
-                "agility": 70,
-                "intelligence": 50,
-                "pressure": 40
-            },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Epic"
-        },
-        {
-            "id": "15",
-            "name": "Silvia Woods",
-            "position": "MF",
-            "level": 1,
-            "element": "Wood",
-            "base_rarity": "Rare",
-            "stats": {
-                "kick": 50,
-                "control": 60,
-                "technique": 55,
-                "physical": 45,
-                "agility": 55,
-                "intelligence": 60,
-                "pressure": 40
-            },
-            "avatar": "/api/placeholder/150/150",
-            "rarity": "Rare"
+            "description": "A skilled goalkeeper with lightning-fast reflexes and electric techniques.",
+            "hissatsu": [],
+            "team_passives": []
         }
     ]
     await db.characters.insert_many(characters)
