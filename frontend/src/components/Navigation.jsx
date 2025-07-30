@@ -164,16 +164,16 @@ const Navigation = () => {
 
         {/* Hamburger Menu Dropdown */}
         {showHamburgerMenu && (
-          <div className="absolute top-full left-0 right-0 bg-orange-900 border-b border-orange-400/20 shadow-lg z-50">
-            <div className="container mx-auto px-4 py-4">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          <div className="absolute top-full left-0 w-64 bg-orange-900 border border-orange-400/20 shadow-lg z-50 rounded-lg">
+            <div className="px-4 py-4">
+              <div className="flex flex-col space-y-1">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <Button
                       key={item.path}
                       variant={isActive(item.path) ? "default" : "ghost"}
-                      className={`flex items-center gap-2 justify-start ${
+                      className={`flex items-center gap-3 justify-start w-full ${
                         isActive(item.path) 
                           ? 'bg-orange-600 text-white hover:bg-orange-700' 
                           : 'text-white hover:bg-orange-700/30'
