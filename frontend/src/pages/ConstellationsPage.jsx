@@ -170,67 +170,71 @@ const ConstellationsPage = () => {
     console.log('Canvas click:', { x, y, canvasWidth: canvas.width, canvasHeight: canvas.height });
 
     const constellation = constellations[currentConstellationIndex];
+    const orbRadius = 100; // Click detection radius
     
-    // Check if click is within any orb
-    let clickedOrb = false;
+    // Find the closest orb to the click
+    let closestOrb = null;
+    let closestDistance = Infinity;
+    
     constellation.orbs.forEach((orb, index) => {
       const orbX = orb.x * 6;
       const orbY = orb.y * 4;
-      const orbRadius = 100; // Very large click detection radius for easier access
-      
       const distance = Math.sqrt((x - orbX) ** 2 + (y - orbY) ** 2);
       
       console.log(`Orb ${index}: position (${orbX}, ${orbY}), distance: ${distance}, radius: ${orbRadius}`);
       
-      if (distance <= orbRadius && !clickedOrb) {
-        clickedOrb = true;
-        console.log(`Orb ${index} clicked!`);
-        
-        // Get characters for this orb from character pool
-        const currentPool = characterPools[constellation.id] || { legendary: [], epic: [], rare: [], normal: [] };
-        const allCharacters = [
-          ...currentPool.legendary,
-          ...currentPool.epic,
-          ...currentPool.rare,
-          ...currentPool.normal
-        ];
-        
-        // Better character distribution - ensure ALL orbs get characters
-        let orbCharacters = [];
-        if (allCharacters.length > 0) {
-          // Simple round-robin distribution to ensure all orbs get characters
-          const baseCharactersPerOrb = Math.floor(allCharacters.length / constellation.orbs.length);
-          const extraCharacters = allCharacters.length % constellation.orbs.length;
-          
-          // Calculate how many characters this orb should get
-          const charactersForThisOrb = baseCharactersPerOrb + (index < extraCharacters ? 1 : 0);
-          
-          // Calculate starting index for this orb
-          let startIndex = 0;
-          for (let i = 0; i < index; i++) {
-            startIndex += baseCharactersPerOrb + (i < extraCharacters ? 1 : 0);
-          }
-          
-          // Get characters for this orb
-          for (let i = 0; i < Math.min(charactersForThisOrb, 3); i++) {
-            if (startIndex + i < allCharacters.length) {
-              orbCharacters.push(allCharacters[startIndex + i]);
-            }
-          }
-          
-          // If we still don't have characters, just assign some (fallback)
-          if (orbCharacters.length === 0) {
-            const fallbackIndex = index % allCharacters.length;
-            orbCharacters.push(allCharacters[fallbackIndex]);
-          }
-        }
-        
-        console.log(`Orb ${index} characters (${orbCharacters.length}):`, orbCharacters.map(c => c.name).join(', '));
-        setSelectedOrbCharacters(orbCharacters);
+      if (distance <= orbRadius && distance < closestDistance) {
+        closestDistance = distance;
+        closestOrb = { orb, index, distance };
       }
     });
     
-    if (!clickedOrb) {
+    if (closestOrb) {
+      const index = closestOrb.index;
+      console.log(`Closest orb ${index} clicked! Distance: ${closestOrb.distance}`);
+      
+      // Get characters for this orb from character pool
+      const currentPool = characterPools[constellation.id] || { legendary: [], epic: [], rare: [], normal: [] };
+      const allCharacters = [
+        ...currentPool.legendary,
+        ...currentPool.epic,
+        ...currentPool.rare,
+        ...currentPool.normal
+      ];
+      
+      // Better character distribution - ensure ALL orbs get characters
+      let orbCharacters = [];
+      if (allCharacters.length > 0) {
+        // Simple round-robin distribution to ensure all orbs get characters
+        const baseCharactersPerOrb = Math.floor(allCharacters.length / constellation.orbs.length);
+        const extraCharacters = allCharacters.length % constellation.orbs.length;
+        
+        // Calculate how many characters this orb should get
+        const charactersForThisOrb = baseCharactersPerOrb + (index < extraCharacters ? 1 : 0);
+        
+        // Calculate starting index for this orb
+        let startIndex = 0;
+        for (let i = 0; i < index; i++) {
+          startIndex += baseCharactersPerOrb + (i < extraCharacters ? 1 : 0);
+        }
+        
+        // Get characters for this orb
+        for (let i = 0; i < Math.min(charactersForThisOrb, 3); i++) {
+          if (startIndex + i < allCharacters.length) {
+            orbCharacters.push(allCharacters[startIndex + i]);
+          }
+        }
+        
+        // If we still don't have characters, just assign some (fallback)
+        if (orbCharacters.length === 0) {
+          const fallbackIndex = index % allCharacters.length;
+          orbCharacters.push(allCharacters[fallbackIndex]);
+        }
+      }
+      
+      console.log(`Orb ${index} characters (${orbCharacters.length}):`, orbCharacters.map(c => c.name).join(', '));
+      setSelectedOrbCharacters(orbCharacters);
+    } else {
       console.log('No orb clicked');
     }
   };
