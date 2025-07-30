@@ -149,7 +149,7 @@ const MainPage = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{user ? 8 : '?'}</div>
-                  <div className="text-sm text-gray-300">Victories</div>
+                  <div className="text-sm text-gray-300">Items</div>
                 </div>
               </div>
             </CardContent>
