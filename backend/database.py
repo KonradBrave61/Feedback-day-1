@@ -31,6 +31,11 @@ async def init_database():
     equipment_count = await db.equipment.count_documents({})
     if equipment_count == 0:
         await populate_default_equipment()
+    
+    # Add character initialization
+    characters_count = await db.characters.count_documents({})
+    if characters_count == 0:
+        await populate_default_characters()
 
 async def populate_default_formations():
     """Populate default formations"""
