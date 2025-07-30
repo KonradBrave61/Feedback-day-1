@@ -37,23 +37,36 @@ const Navigation = () => {
     <nav className="bg-gradient-to-r from-orange-900 via-red-800 to-orange-900 shadow-lg backdrop-blur-lg border-b border-orange-400/20">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div 
-            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => navigate('/')}
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
-              <Trophy className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">Inazuma Eleven</h1>
-              <p className="text-sm text-orange-300">Victory Road</p>
+          {/* Hamburger Menu + Logo */}
+          <div className="flex items-center gap-4">
+            {/* Hamburger Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white hover:bg-orange-700/30 p-2"
+              onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
+            >
+              {showHamburgerMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+            
+            {/* Logo */}
+            <div 
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate('/')}
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
+                <Trophy className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white">Inazuma Eleven</h1>
+                <p className="text-sm text-orange-300">Victory Road</p>
+              </div>
             </div>
           </div>
 
-          {/* Navigation Items */}
+          {/* Desktop Navigation Items (hidden on mobile) */}
           <div className="hidden md:flex items-center gap-2">
-            {navItems.map((item) => {
+            {navItems.slice(0, 6).map((item) => {
               const Icon = item.icon;
               return (
                 <Button
