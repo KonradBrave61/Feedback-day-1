@@ -30,7 +30,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
       case 'Earth': return 'bg-gradient-to-br from-amber-500/30 to-yellow-600/30 border-amber-400/40';
       case 'Wind': return 'bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-sky-400/40';
       case 'Wood': return 'bg-gradient-to-br from-emerald-500/30 to-green-600/30 border-emerald-400/40';
-      case 'Void': return 'bg-gradient-to-br from-violet-500/30 to-purple-600/30 border-violet-400/40';
       default: return 'bg-gradient-to-br from-slate-500/30 to-gray-600/30 border-slate-400/40';
     }
   };
