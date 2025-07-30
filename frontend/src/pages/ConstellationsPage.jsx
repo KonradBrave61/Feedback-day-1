@@ -167,17 +167,25 @@ const ConstellationsPage = () => {
     const x = (event.clientX - rect.left) * scaleX;
     const y = (event.clientY - rect.top) * scaleY;
 
+    console.log('Canvas click:', { x, y, canvasWidth: canvas.width, canvasHeight: canvas.height });
+
     const constellation = constellations[currentConstellationIndex];
     
     // Check if click is within any orb
+    let clickedOrb = false;
     constellation.orbs.forEach((orb, index) => {
       const orbX = orb.x * 6;
       const orbY = orb.y * 4;
-      const orbRadius = 20; // Click detection radius
+      const orbRadius = 25; // Increased click detection radius
       
       const distance = Math.sqrt((x - orbX) ** 2 + (y - orbY) ** 2);
       
-      if (distance <= orbRadius) {
+      console.log(`Orb ${index}: position (${orbX}, ${orbY}), distance: ${distance}, radius: ${orbRadius}`);
+      
+      if (distance <= orbRadius && !clickedOrb) {
+        clickedOrb = true;
+        console.log(`Orb ${index} clicked!`);
+        
         // Get characters for this orb from character pool
         const currentPool = characterPools[constellation.id] || { legendary: [], epic: [], rare: [], normal: [] };
         const allCharacters = [
@@ -187,11 +195,18 @@ const ConstellationsPage = () => {
           ...currentPool.normal
         ];
         
-        // For now, show a few random characters (you can customize this logic)
-        const orbCharacters = allCharacters.slice(index * 3, (index * 3) + 3);
+        // For each orb, show different characters
+        const startIndex = index * 2;
+        const orbCharacters = allCharacters.slice(startIndex, startIndex + 3);
+        
+        console.log('Setting orb characters:', orbCharacters);
         setSelectedOrbCharacters(orbCharacters);
       }
     });
+    
+    if (!clickedOrb) {
+      console.log('No orb clicked');
+    }
   };
 
   const handlePlatformBonusToggle = (platform) => {
