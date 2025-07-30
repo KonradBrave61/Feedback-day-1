@@ -16,7 +16,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
   const [filteredPlayers, setFilteredPlayers] = useState(mockCharacters);
 
   const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
-  const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood', 'Void'];
+  const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood'];
   const sortOptions = [
     { value: 'name', label: 'Name (A-Z)' },
     { value: 'name_desc', label: 'Name (Z-A)' },
