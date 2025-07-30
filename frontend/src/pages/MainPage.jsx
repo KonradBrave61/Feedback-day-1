@@ -163,7 +163,7 @@ const MainPage = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{user ? user.coachLevel || 1 : '?'}</div>
-                  <div className="text-sm text-gray-300">Coach Level</div>
+                  <div className="text-sm text-gray-300">Techniques</div>
                 </div>
               </div>
             </CardContent>
