@@ -195,28 +195,37 @@ const ConstellationsPage = () => {
           ...currentPool.normal
         ];
         
-        // Better character distribution - ensure each orb gets characters
+        // Better character distribution - ensure ALL orbs get characters
         let orbCharacters = [];
         if (allCharacters.length > 0) {
-          // Distribute characters more evenly across orbs
-          const charactersPerOrb = Math.max(1, Math.floor(allCharacters.length / constellation.orbs.length));
-          const startIndex = (index * charactersPerOrb) % allCharacters.length;
+          // Simple round-robin distribution to ensure all orbs get characters
+          const baseCharactersPerOrb = Math.floor(allCharacters.length / constellation.orbs.length);
+          const extraCharacters = allCharacters.length % constellation.orbs.length;
           
-          // Get characters for this orb, wrap around if needed
-          for (let i = 0; i < Math.min(3, charactersPerOrb); i++) {
-            const charIndex = (startIndex + i) % allCharacters.length;
-            if (allCharacters[charIndex] && !orbCharacters.includes(allCharacters[charIndex])) {
-              orbCharacters.push(allCharacters[charIndex]);
+          // Calculate how many characters this orb should get
+          const charactersForThisOrb = baseCharactersPerOrb + (index < extraCharacters ? 1 : 0);
+          
+          // Calculate starting index for this orb
+          let startIndex = 0;
+          for (let i = 0; i < index; i++) {
+            startIndex += baseCharactersPerOrb + (i < extraCharacters ? 1 : 0);
+          }
+          
+          // Get characters for this orb
+          for (let i = 0; i < Math.min(charactersForThisOrb, 3); i++) {
+            if (startIndex + i < allCharacters.length) {
+              orbCharacters.push(allCharacters[startIndex + i]);
             }
           }
           
-          // Ensure we always have at least one character if any are available
-          if (orbCharacters.length === 0 && allCharacters.length > 0) {
-            orbCharacters.push(allCharacters[index % allCharacters.length]);
+          // If we still don't have characters, just assign some (fallback)
+          if (orbCharacters.length === 0) {
+            const fallbackIndex = index % allCharacters.length;
+            orbCharacters.push(allCharacters[fallbackIndex]);
           }
         }
         
-        console.log('Setting orb characters:', orbCharacters.length > 0 ? orbCharacters : 'No characters available');
+        console.log(`Orb ${index} characters (${orbCharacters.length}):`, orbCharacters.map(c => c.name).join(', '));
         setSelectedOrbCharacters(orbCharacters);
       }
     });
