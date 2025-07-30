@@ -20,7 +20,6 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
       case 'Earth': return 'text-orange-400';
       case 'Wind': return 'text-cyan-400';
       case 'Wood': return 'text-green-400';
-      case 'Void': return 'text-purple-400';
       default: return 'text-gray-400';
     }
   };
