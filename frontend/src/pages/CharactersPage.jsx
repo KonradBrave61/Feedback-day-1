@@ -19,7 +19,7 @@ const CharactersPage = () => {
   const [sortBy, setSortBy] = useState('name');
 
   const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
-  const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood', 'Void'];
+  const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood'];
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'position', label: 'Position' },
