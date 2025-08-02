@@ -63,6 +63,20 @@ sample_techniques = [
         "stat_bonuses": {"technique": 15, "intelligence": 10},
         "animation_description": "Dark void portal opens, absorbing the ball into nothingness"
     },
+    {
+        "name": "Divine Wood Avatar",
+        "description": "Ancient tree spirit grants unbreakable defensive power",
+        "technique_type": "avatar",
+        "category": "Block",
+        "element": "wood",
+        "power": 195,
+        "rarity": "Epic",
+        "min_level": 22,
+        "learning_cost": 850,
+        "stat_requirements": {"physical": 95, "intelligence": 75},
+        "stat_bonuses": {"physical": 9, "intelligence": 6},
+        "animation_description": "Colossal ancient tree materializes, its roots blocking all paths"
+    },
 
     # TOTEM TECHNIQUES
     {
@@ -122,6 +136,64 @@ sample_techniques = [
         "stat_requirements": {"technique": 95, "intelligence": 85},
         "stat_bonuses": {"technique": 8, "intelligence": 6},
         "animation_description": "Phoenix totem spreads its flaming wings, incinerating the incoming ball"
+    },
+    {
+        "name": "Shadow Panther Totem",
+        "description": "Swift shadow panther guides lightning-fast dribbles through defenders",
+        "technique_type": "totem",
+        "category": "Dribble",
+        "element": "void",
+        "power": 180,
+        "rarity": "Rare",
+        "min_level": 16,
+        "learning_cost": 550,
+        "stat_requirements": {"agility": 85, "control": 75},
+        "stat_bonuses": {"agility": 7, "control": 5},
+        "animation_description": "Shadow panther totem creates dark afterimages while dribbling"
+    },
+    {
+        "name": "Thunder Eagle Totem",
+        "description": "Majestic thunder eagle soars to deliver aerial shots with precision",
+        "technique_type": "totem",
+        "category": "Shot",
+        "element": "wind",
+        "power": 172,
+        "shot_type": "long",
+        "rarity": "Rare",
+        "min_level": 14,
+        "learning_cost": 480,
+        "stat_requirements": {"kick": 80, "technique": 65},
+        "stat_bonuses": {"kick": 6, "technique": 4},
+        "animation_description": "Thunder eagle totem carries the ball through stormy skies"
+    },
+    {
+        "name": "Crimson Tiger Totem",
+        "description": "Fierce crimson tiger unleashes burning claws for defensive blocks",
+        "technique_type": "totem",
+        "category": "Block",
+        "element": "fire",
+        "power": 168,
+        "rarity": "Common",
+        "min_level": 11,
+        "learning_cost": 420,
+        "stat_requirements": {"physical": 75, "pressure": 65},
+        "stat_bonuses": {"physical": 5, "pressure": 4},
+        "animation_description": "Crimson tiger totem pounces with flaming claws to block attacks"
+    },
+    {
+        "name": "Ocean Turtle Totem",
+        "description": "Ancient ocean turtle creates water barriers for goalkeeping",
+        "technique_type": "totem",
+        "category": "Save",
+        "element": "void",  # Using void for water-like absorption
+        "power": 155,
+        "rarity": "Common",
+        "min_level": 8,
+        "learning_cost": 350,
+        "allowed_positions": ["GK"],
+        "stat_requirements": {"technique": 60, "intelligence": 50},
+        "stat_bonuses": {"technique": 4, "intelligence": 3},
+        "animation_description": "Ocean turtle totem creates swirling water barriers around the goal"
     },
 
     # MIX-MAX TECHNIQUES  
@@ -184,6 +256,109 @@ sample_techniques = [
         "stat_bonuses": {"technique": 18, "intelligence": 12, "control": 8},
         "animation_description": "Creates a void portal that incinerates the ball before it can enter the goal"
     },
+    {
+        "name": "Storm-Earth Fusion",
+        "description": "Combines wind's fury with earth's power for devastating long-range shots",
+        "technique_type": "mix-max",
+        "category": "Shot",
+        "element": "wind",  # Primary element
+        "power": 230,
+        "shot_type": "long",
+        "rarity": "Epic",
+        "min_level": 26,
+        "learning_cost": 950,
+        "stat_requirements": {"kick": 115, "technique": 100, "intelligence": 85},
+        "stat_bonuses": {"kick": 9, "technique": 7, "intelligence": 4},
+        "animation_description": "Ball is surrounded by a tornado of rocks and debris as it flies toward the goal"
+    },
+    {
+        "name": "Nature's Void Weave",
+        "description": "Mystic technique weaving wood's life force with void's mystery for unbreakable blocks",
+        "technique_type": "mix-max",
+        "category": "Block",
+        "element": "wood",  # Primary element
+        "power": 190,
+        "rarity": "Epic",
+        "min_level": 24,
+        "learning_cost": 800,
+        "stat_requirements": {"physical": 105, "technique": 90, "intelligence": 80},
+        "stat_bonuses": {"physical": 8, "technique": 6, "intelligence": 5},
+        "animation_description": "Vines emerge from void portals to create an impenetrable natural barrier"
+    },
+
+    # ADDITIONAL CREATIVE TECHNIQUES
+    {
+        "name": "Meteor Strike",
+        "description": "Channel the power of falling meteors for catastrophic shots",
+        "technique_type": "avatar",
+        "category": "Shot",
+        "element": "earth",
+        "power": 240,
+        "shot_type": "normal",
+        "rarity": "Legendary",
+        "min_level": 28,
+        "learning_cost": 1050,
+        "stat_requirements": {"kick": 125, "physical": 100, "technique": 95},
+        "stat_bonuses": {"kick": 12, "physical": 8},
+        "animation_description": "Flaming meteors rain down as the ball transforms into a burning comet"
+    },
+    {
+        "name": "Gentle Breeze",
+        "description": "Soft wind technique for beginners learning dribbling fundamentals",
+        "technique_type": "totem",
+        "category": "Dribble",
+        "element": "wind",
+        "power": 55,
+        "rarity": "Common",
+        "min_level": 1,
+        "learning_cost": 50,
+        "stat_requirements": {"agility": 20, "control": 15},
+        "stat_bonuses": {"agility": 2, "control": 1},
+        "animation_description": "Light breeze carries the player forward with enhanced speed"
+    },
+    {
+        "name": "Volcanic Eruption",
+        "description": "Explosive fire technique that creates molten blocks from the ground",
+        "technique_type": "mix-max",
+        "category": "Block",
+        "element": "fire",
+        "power": 215,
+        "rarity": "Epic",
+        "min_level": 26,
+        "learning_cost": 875,
+        "stat_requirements": {"physical": 110, "technique": 95, "kick": 80},
+        "stat_bonuses": {"physical": 9, "technique": 7, "kick": 4},
+        "animation_description": "Ground erupts in molten lava, creating walls of magma to block attacks"
+    },
+    {
+        "name": "Whispering Woods",
+        "description": "Mystical wood technique that confuses opponents during saves",
+        "technique_type": "avatar",
+        "category": "Save",
+        "element": "wood",
+        "power": 185,
+        "rarity": "Rare",
+        "min_level": 19,
+        "learning_cost": 650,
+        "allowed_positions": ["GK"],
+        "stat_requirements": {"technique": 90, "intelligence": 80, "control": 70},
+        "stat_bonuses": {"technique": 7, "intelligence": 6, "control": 4},
+        "animation_description": "Enchanted forest appears around the goal, branches reaching to catch the ball"
+    },
+    {
+        "name": "Starfall Dribble",
+        "description": "Void technique creating starlight trails while dribbling past defenders",
+        "technique_type": "totem",
+        "category": "Dribble",
+        "element": "void",
+        "power": 160,
+        "rarity": "Rare",
+        "min_level": 17,
+        "learning_cost": 520,
+        "stat_requirements": {"agility": 80, "control": 70, "technique": 60},
+        "stat_bonuses": {"agility": 6, "control": 5, "technique": 3},
+        "animation_description": "Player leaves trails of starlight while weaving through defenders"
+    },
 
     # BASIC TECHNIQUES (Lower power, easier to learn)
     {
@@ -243,5 +418,36 @@ sample_techniques = [
         "stat_requirements": {"technique": 20},
         "stat_bonuses": {"technique": 2},
         "animation_description": "Wooden vines briefly extend from gloves to help catch the ball"
+    },
+
+    # INTERMEDIATE TECHNIQUES
+    {
+        "name": "Burning Spiral",
+        "description": "Intermediate fire technique creating spinning flame barriers",
+        "technique_type": "totem",
+        "category": "Block",
+        "element": "fire",
+        "power": 140,
+        "rarity": "Rare",
+        "min_level": 15,
+        "learning_cost": 450,
+        "stat_requirements": {"physical": 70, "technique": 60},
+        "stat_bonuses": {"physical": 5, "technique": 4},
+        "animation_description": "Spinning walls of flame create a protective barrier"
+    },
+    {
+        "name": "Void Mirage",
+        "description": "Deceptive void technique creating multiple illusions while shooting",
+        "technique_type": "avatar",
+        "category": "Shot",
+        "element": "void",
+        "power": 200,
+        "shot_type": "normal",
+        "rarity": "Epic",
+        "min_level": 23,
+        "learning_cost": 750,
+        "stat_requirements": {"kick": 100, "technique": 85, "intelligence": 80},
+        "stat_bonuses": {"kick": 8, "technique": 6, "intelligence": 5},
+        "animation_description": "Multiple void portals appear, making it impossible to track the real ball"
     }
 ]
