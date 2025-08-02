@@ -257,9 +257,9 @@ const TeamBuilder = () => {
       // Add equipment bonuses if player has userEquipment
       if (player.userEquipment) {
         Object.values(player.userEquipment).forEach(equipment => {
-          if (equipment && equipment.statBoosts) {
-            Object.keys(equipment.statBoosts).forEach(stat => {
-              acc[stat] = (acc[stat] || 0) + equipment.statBoosts[stat];
+          if (equipment && equipment.stats) {
+            Object.keys(equipment.stats).forEach(stat => {
+              acc[stat] = (acc[stat] || 0) + equipment.stats[stat];
             });
           }
         });
