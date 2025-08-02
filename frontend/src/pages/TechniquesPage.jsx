@@ -145,15 +145,22 @@ const TechniquesPage = () => {
   };
 
   const getPowerColor = (power) => {
-    if (power >= 200) return 'text-red-600 font-bold';
-    if (power >= 150) return 'text-orange-600 font-semibold';
-    if (power >= 100) return 'text-yellow-600 font-medium';
-    return 'text-gray-600';
+    if (power >= 200) return `font-bold`;
+    if (power >= 150) return `font-semibold`;
+    if (power >= 100) return `font-medium`;
+    return `font-normal`;
+  };
+
+  const getPowerTextColor = (power) => {
+    if (power >= 200) return logoColors.primaryOrange;
+    if (power >= 150) return logoColors.primaryYellow;
+    if (power >= 100) return logoColors.lightBlue;
+    return logoColors.gray;
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black">
+      <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
         <Navigation />
         <div className="pt-16">
           <div className="flex items-center justify-center h-96">
@@ -165,42 +172,58 @@ const TechniquesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-black">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       <div className="pt-16 p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-white mb-2">Technique Database</h1>
-            <p className="text-blue-200">Master the ancient arts of Inazuma Eleven</p>
+            <p style={{ color: logoColors.lightBlue }}>Master the ancient arts of Inazuma Eleven</p>
           </div>
 
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="rounded-lg p-4 backdrop-blur-sm" 
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.3),
+                   border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                 }}>
               <div className="flex items-center space-x-2">
-                <Book className="text-blue-400" size={20} />
+                <Book style={{ color: logoColors.primaryBlue }} size={20} />
                 <span className="text-white font-medium">Total Techniques</span>
               </div>
               <div className="text-2xl font-bold text-white mt-1">{stats.total_techniques}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="rounded-lg p-4 backdrop-blur-sm"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.3),
+                   border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                 }}>
               <div className="flex items-center space-x-2">
-                <Zap className="text-yellow-400" size={20} />
+                <Zap style={{ color: logoColors.primaryYellow }} size={20} />
                 <span className="text-white font-medium">Average Power</span>
               </div>
               <div className="text-2xl font-bold text-white mt-1">{Math.round(stats.avg_power)}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="rounded-lg p-4 backdrop-blur-sm"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.3),
+                   border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                 }}>
               <div className="flex items-center space-x-2">
-                <Award className="text-red-400" size={20} />
+                <Award style={{ color: logoColors.primaryOrange }} size={20} />
                 <span className="text-white font-medium">Max Power</span>
               </div>
               <div className="text-2xl font-bold text-white mt-1">{stats.max_power}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="rounded-lg p-4 backdrop-blur-sm"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.3),
+                   border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                 }}>
               <div className="flex items-center space-x-2">
-                <Star className="text-purple-400" size={20} />
+                <Star style={{ color: logoColors.secondaryBlue }} size={20} />
                 <span className="text-white font-medium">Elements</span>
               </div>
               <div className="text-2xl font-bold text-white mt-1">{stats.by_element?.length || 0}</div>
