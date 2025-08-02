@@ -627,7 +627,6 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                   className="w-full text-white hover:opacity-80"
                   style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                   onClick={handleApplyTeam}
-                  disabled={builtTeam.totalPlayers === 0}
                 >
                   <Trophy className="h-4 w-4 mr-2" />
                   Apply Team ({builtTeam.totalPlayers}/16)
@@ -638,7 +637,6 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                   className="w-full text-white border hover:opacity-80"
                   style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                   onClick={handleClearTeam}
-                  disabled={builtTeam.totalPlayers === 0}
                 >
                   Clear Team
                 </Button>
