@@ -273,18 +273,13 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-7xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Search className="h-5 w-5 text-orange-400" />
-              {teamBuildingMode ? (
-                <span>Quick Team Builder - {builtTeam.totalPlayers}/16 players selected</span>
-              ) : (
-                position ? `Add Player for ${position}` : 'Browse Players'
-              )}
-            </div>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
+          <DialogTitle className="flex items-center gap-2">
+            <Search className="h-5 w-5 text-orange-400" />
+            {teamBuildingMode ? (
+              <span>Quick Team Builder - {builtTeam.totalPlayers}/16 players selected</span>
+            ) : (
+              position ? `Add Player for ${position}` : 'Browse Players'
+            )}
           </DialogTitle>
           {teamBuildingMode && (
             <div className="text-sm text-gray-400 mt-2">
