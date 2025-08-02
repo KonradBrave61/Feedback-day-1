@@ -377,12 +377,13 @@ const TeamBuilder = () => {
   const teamStats = getTeamStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold text-white mb-4 bg-clip-text text-transparent" 
+              style={{ background: logoColors.yellowOrangeGradient, WebkitBackgroundClip: 'text' }}>
             Team Builder
           </h1>
           <p className="text-xl text-gray-300">
@@ -394,17 +395,21 @@ const TeamBuilder = () => {
           {/* Left Panel - Formation & Controls */}
           <div className="lg:col-span-1 space-y-4">
             {/* Quick Actions */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-400" />
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Quick Actions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   <Button
-                    className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                    className="w-full text-black font-bold hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient }}
                     onClick={() => {
                       setTeamBuildingMode(true);
                       setSelectedPosition(null);
@@ -416,7 +421,11 @@ const TeamBuilder = () => {
                     Quick Team Builder
                   </Button>
                   <Button
-                    className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                    className="w-full text-white border hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                     onClick={() => {
                       setTeamBuildingMode(false);
                       setSelectedPosition(null);
