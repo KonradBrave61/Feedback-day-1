@@ -38,6 +38,17 @@ const TeamBuilder = () => {
   const [showCharacterModal, setShowCharacterModal] = useState(false);
   const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
   const [editingPlayer, setEditingPlayer] = useState(null);
+  
+  // Add team building mode state
+  const [teamBuildingMode, setTeamBuildingMode] = useState(false);
+
+  // Handle team built from enhanced Browse Players
+  const handleTeamBuilt = (builtTeam) => {
+    // Apply the built team to the current team state
+    setTeamPlayers(builtTeam.players);
+    setBenchPlayers(builtTeam.bench);
+    setTeamBuildingMode(false);
+  };
 
   const handleFormationChange = (formationId) => {
     const formation = mockFormations.find(f => f.id === parseInt(formationId));
