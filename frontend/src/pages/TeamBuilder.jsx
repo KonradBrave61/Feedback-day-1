@@ -133,17 +133,38 @@ const TeamBuilder = () => {
     } else {
       // Add new player
       if (isBenchSelection) {
-        setBenchPlayers(prev => ({
-          ...prev,
-          [selectedBenchSlot]: enhancedPlayer
-        }));
+        if (selectedBenchSlot !== null) {
+          // Specific bench slot selected
+          setBenchPlayers(prev => ({
+            ...prev,
+            [selectedBenchSlot]: enhancedPlayer
+          }));
+        } else {
+          // Find first available bench slot
+          setBenchPlayers(prev => {
+            const newBench = { ...prev };
+            for (let i = 0; i < 5; i++) {
+              if (!newBench[i]) {
+                newBench[i] = enhancedPlayer;
+                break;
+              }
+            }
+            return newBench;
+          });
+        }
         setIsBenchSelection(false);
         setSelectedBenchSlot(null);
       } else if (selectedPosition) {
+        // Specific position selected
         setTeamPlayers(prev => ({
           ...prev,
           [selectedPosition]: enhancedPlayer
         }));
+      } else {
+        // No specific position - user needs to select during modal or find best fit
+        // For now, we'll alert user to select a specific position
+        alert('Please select a specific position on the field or use the position-specific add buttons.');
+        return;
       }
     }
     
