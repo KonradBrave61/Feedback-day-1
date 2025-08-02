@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { Plus, X, Settings } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onRemovePlayer, onMovePlayer, onEditPlayer, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench }) => {
   const getPositionColor = (position) => {
@@ -18,9 +19,9 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
 
   const getRarityColor = (rarity) => {
     switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-r from-yellow-400 to-orange-500';
-      case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500';
-      case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
+      case 'Legendary': return `bg-gradient-to-r from-yellow-400 to-orange-500`;
+      case 'Epic': return `bg-gradient-to-r from-purple-500 to-pink-500`;
+      case 'Rare': return `bg-gradient-to-r from-blue-500 to-[${logoColors.secondaryBlue}]`;
       case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
       default: return 'bg-gray-500';
     }
@@ -101,7 +102,11 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
             <Button
               variant="ghost"
               size="sm"
-              className="absolute -top-1 -left-1 w-6 h-6 rounded-full p-0 bg-blue-600/80 hover:bg-blue-500 text-white opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              className="absolute -top-1 -left-1 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              style={{ 
+                backgroundColor: logoColors.primaryBlueAlpha(0.8), 
+                color: logoColors.white 
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 onEditPlayer && onEditPlayer(player);

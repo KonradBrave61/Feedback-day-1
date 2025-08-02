@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Users } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
   const getPositionColor = (position) => {
@@ -18,8 +19,9 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
     switch (element) {
       case 'Fire': return 'text-red-400';
       case 'Earth': return 'text-orange-400';
-      case 'Wind': return 'text-cyan-400';
+      case 'Wind': return `text-[${logoColors.lightBlue}]`;
       case 'Wood': return 'text-green-400';
+      case 'Lightning': return `text-[${logoColors.primaryBlue}]`;
       default: return 'text-gray-400';
     }
   };
@@ -28,8 +30,9 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
     switch (element) {
       case 'Fire': return 'bg-gradient-to-br from-pink-500/30 to-rose-600/30 border-pink-400/40';
       case 'Earth': return 'bg-gradient-to-br from-amber-500/30 to-yellow-600/30 border-amber-400/40';
-      case 'Wind': return 'bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-sky-400/40';
+      case 'Wind': return `bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-[${logoColors.lightBlue}]/40`;
       case 'Wood': return 'bg-gradient-to-br from-emerald-500/30 to-green-600/30 border-emerald-400/40';
+      case 'Lightning': return `bg-gradient-to-br from-[${logoColors.primaryBlue}]/30 to-[${logoColors.secondaryBlue}]/30 border-[${logoColors.primaryBlue}]/40`;
       default: return 'bg-gradient-to-br from-slate-500/30 to-gray-600/30 border-slate-400/40';
     }
   };

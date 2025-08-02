@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, Activity, Gauge, Dumbbell } from 'lucide-react';
 import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
+import { logoColors } from '../styles/colors';
 
 const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam, teamBuildingMode = false, pendingPosition = null, pendingIsBench = false }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
@@ -54,9 +55,9 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
   const getRarityColor = (rarity) => {
     switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-r from-yellow-400 to-orange-500';
-      case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500';
-      case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500';
+      case 'Legendary': return `bg-gradient-to-r from-yellow-400 to-orange-500`;
+      case 'Epic': return `bg-gradient-to-r from-purple-500 to-pink-500`;
+      case 'Rare': return `bg-gradient-to-r from-blue-500 to-[${logoColors.secondaryBlue}]`;
       case 'Common': return 'bg-gradient-to-r from-gray-400 to-gray-600';
       default: return 'bg-gradient-to-r from-orange-500 to-red-600';
     }
@@ -66,7 +67,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     switch (rarity) {
       case 'Legendary': return 'text-yellow-400';
       case 'Epic': return 'text-purple-400';
-      case 'Rare': return 'text-blue-400';
+      case 'Rare': return `text-[${logoColors.secondaryBlue}]`;
       case 'Common': return 'text-gray-400';
       default: return 'text-gray-400';
     }
@@ -274,8 +275,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           {/* Stat area with better opacity */}
           <path
             d={pathData}
-            fill={`rgba(213, 84, 42, 0.4)`}
-            stroke="rgb(213, 84, 42)"
+            fill={logoColors.primaryBlueAlpha(0.4)}
+            stroke={logoColors.primaryBlue}
             strokeWidth="2"
           />
           
@@ -286,7 +287,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               cx={point.x}
               cy={point.y}
               r="3"
-              fill="rgb(213, 84, 42)"
+              fill={logoColors.primaryBlue}
               stroke="white"
               strokeWidth="1"
             />
@@ -304,13 +305,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20 overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] text-white border-orange-400/20 overflow-y-auto"
+                     style={{ background: logoColors.backgroundGradient }}>
         <DialogHeader className="relative">
           {/* Navigation Arrows */}
           <Button
             variant="ghost"
             size="sm"
-            className="absolute left-0 top-0 text-white hover:bg-orange-700/30"
+            className="absolute left-0 top-0 text-white hover:bg-blue-700/30"
             onClick={() => navigateCharacter('prev')}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -319,7 +321,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           <Button
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-0 text-white hover:bg-orange-700/30"
+            className="absolute right-0 top-0 text-white hover:bg-blue-700/30"
             onClick={() => navigateCharacter('next')}
           >
             <ChevronRight className="h-4 w-4" />
@@ -349,12 +351,16 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
             <div>
               <label className="block text-sm font-medium mb-2">Level (1-99)</label>
               <Select value={userLevel.toString()} onValueChange={(value) => setUserLevel(parseInt(value))}>
-                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
+                <SelectTrigger className="text-white border"
+                               style={{ 
+                                 backgroundColor: logoColors.blackAlpha(0.3),
+                                 borderColor: logoColors.primaryBlueAlpha(0.3)
+                               }}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-orange-900 border-orange-400/30">
+                <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
                   {Array.from({ length: 99 }, (_, i) => i + 1).map(level => (
-                    <SelectItem key={level} value={level.toString()} className="text-white hover:bg-orange-800">
+                    <SelectItem key={level} value={level.toString()} className="text-white hover:bg-blue-800">
                       Level {level}
                     </SelectItem>
                   ))}
@@ -364,28 +370,40 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
             <div>
               <label className="block text-sm font-medium mb-2">Rarity</label>
               <Select value={userRarity} onValueChange={setUserRarity}>
-                <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
+                <SelectTrigger className="text-white border"
+                               style={{ 
+                                 backgroundColor: logoColors.blackAlpha(0.3),
+                                 borderColor: logoColors.primaryBlueAlpha(0.3)
+                               }}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-orange-900 border-orange-400/30">
-                  <SelectItem value="Common" className="text-white hover:bg-orange-800">Common</SelectItem>
-                  <SelectItem value="Rare" className="text-white hover:bg-orange-800">Rare</SelectItem>
-                  <SelectItem value="Epic" className="text-white hover:bg-orange-800">Epic</SelectItem>
-                  <SelectItem value="Legendary" className="text-white hover:bg-orange-800">Legendary</SelectItem>
+                <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
+                  <SelectItem value="Common" className="text-white hover:bg-blue-800">Common</SelectItem>
+                  <SelectItem value="Rare" className="text-white hover:bg-blue-800">Rare</SelectItem>
+                  <SelectItem value="Epic" className="text-white hover:bg-blue-800">Epic</SelectItem>
+                  <SelectItem value="Legendary" className="text-white hover:bg-blue-800">Legendary</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           {/* Description */}
-          <div className="bg-orange-100 text-orange-800 p-3 rounded-lg mt-4 border-l-4 border-orange-500">
+          <div className="p-3 rounded-lg mt-4 border-l-4 text-white"
+               style={{ 
+                 backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                 borderLeftColor: logoColors.primaryBlue
+               }}>
             <p className="italic">{currentCharacter.description}</p>
           </div>
         </DialogHeader>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Stats Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
+          <Card className="backdrop-blur-lg border text-white"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4 text-center">PARAMETERS</h4>
               
@@ -416,7 +434,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
 
           {/* Equipment Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
+          <Card className="backdrop-blur-lg border text-white"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">EQUIPMENT</h4>
               
@@ -425,8 +447,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   <div
                     key={category}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                      item ? getRarityColor(item.rarity) : 'border-dashed border-orange-400/30 bg-orange-900/20'
+                      item ? getRarityColor(item.rarity) : 'border-dashed bg-orange-900/20'
                     } hover:scale-105`}
+                    style={!item ? { 
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      backgroundColor: logoColors.blackAlpha(0.2)
+                    } : {}}
                     onClick={() => {
                       setSelectedCategory(category);
                       setShowEquipmentList(true);
@@ -442,8 +468,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                       </div>
                     ) : (
                       <div className="text-center">
-                        <Plus className="h-6 w-6 mx-auto mb-1 text-orange-400" />
-                        <div className="text-xs text-orange-400 capitalize">{category}</div>
+                        <Plus className="h-6 w-6 mx-auto mb-1" style={{ color: logoColors.primaryBlue }} />
+                        <div className="text-xs capitalize" style={{ color: logoColors.primaryBlue }}>{category}</div>
                       </div>
                     )}
                   </div>
@@ -453,7 +479,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
 
           {/* Team Passives */}
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
+          <Card className="backdrop-blur-lg border text-white"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
             <CardContent className="p-4">
               <h4 className="text-lg font-bold mb-4">TEAM PASSIVES</h4>
               
@@ -472,7 +502,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
 
           {/* Hissatsu Panel */}
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20">
+          <Card className="backdrop-blur-lg border text-white"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-lg font-bold">HISSATSU (TECHNIQUES)</h4>
@@ -482,9 +516,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                     size="sm"
                     onClick={() => setActivePreset(1)}
                     className={activePreset === 1 
-                      ? "bg-orange-600 text-white" 
-                      : "text-white border-orange-400/30 hover:bg-orange-700"
+                      ? "text-white" 
+                      : "text-white border hover:bg-blue-700"
                     }
+                    style={activePreset === 1 ? {
+                      background: logoColors.primaryBlue
+                    } : {
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                   >
                     Preset 1
                   </Button>
@@ -493,9 +532,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                     size="sm"
                     onClick={() => setActivePreset(2)}
                     className={activePreset === 2 
-                      ? "bg-orange-600 text-white" 
-                      : "text-white border-orange-400/30 hover:bg-orange-700"
+                      ? "text-white" 
+                      : "text-white border hover:bg-blue-700"
                     }
+                    style={activePreset === 2 ? {
+                      background: logoColors.primaryBlue
+                    } : {
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                   >
                     Preset 2
                   </Button>
@@ -512,9 +556,16 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                       key={slotIndex}
                       className={`relative p-4 rounded-lg border cursor-pointer transition-all hover:scale-105 ${
                         technique 
-                          ? 'bg-orange-600/20 border-orange-500/30' 
-                          : 'bg-black/20 border-dashed border-orange-400/30 hover:border-orange-400/60'
+                          ? 'border-orange-500/30' 
+                          : 'border-dashed hover:border-blue-400/60'
                       }`}
+                      style={technique ? {
+                        backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      } : {
+                        backgroundColor: logoColors.blackAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                       onClick={() => handleHissatsuSlotClick(slotIndex)}
                     >
                       {technique ? (
@@ -523,7 +574,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                           <div className="flex-1">
                             <div className="font-medium text-sm">{technique.name}</div>
                             <div className="text-xs text-gray-300 mt-1">{technique.description}</div>
-                            <Badge variant="outline" className="mt-2 text-orange-400 border-orange-400 text-xs">
+                            <Badge variant="outline" className={`mt-2 text-xs`}
+                                   style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
                               {technique.type}
                             </Badge>
                           </div>
@@ -541,11 +593,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                         </div>
                       ) : (
                         <div className="flex items-center gap-3 py-2">
-                          <div className="w-10 h-10 bg-orange-400/20 rounded-lg flex items-center justify-center">
-                            <Plus className="h-5 w-5 text-orange-400" />
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                               style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                            <Plus className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                           </div>
                           <div className="flex-1">
-                            <div className="text-sm text-orange-400 font-medium">Add Technique</div>
+                            <div className="text-sm font-medium" style={{ color: logoColors.primaryBlue }}>Add Technique</div>
                             <div className="text-xs text-gray-400">Click to select a technique for slot {slotIndex + 1}</div>
                           </div>
                         </div>
@@ -569,7 +622,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           <div className="mt-6 flex justify-center">
             <Button
               onClick={addToTeam}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 text-lg font-semibold"
+              className="text-white px-8 py-3 text-lg font-semibold hover:opacity-80"
+              style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
             >
               <Plus className="h-5 w-5 mr-2" />
               {teamBuildingMode ? (
@@ -586,7 +640,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
         {/* Equipment List Modal */}
         {showEquipmentList && selectedCategory && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-orange-900 p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto border border-orange-400/30">
+            <div className="p-6 rounded-lg max-w-md w-full mx-4 max-h-96 overflow-y-auto border text-white"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.9),
+                   borderColor: logoColors.primaryBlueAlpha(0.3)
+                 }}>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">Select {selectedCategory}</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowEquipmentList(false)}>
@@ -605,7 +663,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                       <div>
                         <div className="font-medium">{equipment.name}</div>
                         <div className="text-sm text-gray-200">{equipment.category}</div>
-                        <div className="text-xs text-orange-400">
+                        <div className="text-xs" style={{ color: logoColors.primaryYellow }}>
                           {Object.entries(equipment.stats).map(([stat, value]) => 
                             `${stat}: +${value}`
                           ).join(', ')}
@@ -622,7 +680,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
         {/* Hissatsu Selection Modal */}
         {showHissatsuList && selectedCategory !== null && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-orange-900 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto border border-orange-400/30">
+            <div className="p-6 rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-y-auto border text-white"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.9),
+                   borderColor: logoColors.primaryBlueAlpha(0.3)
+                 }}>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">Select Technique for Slot {selectedCategory + 1}</h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowHissatsuList(false)}>
@@ -637,11 +699,18 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   return (
                     <div
                       key={hissatsu.id}
-                      className={`p-3 rounded-lg cursor-pointer transition-all ${
+                      className={`p-3 rounded-lg cursor-pointer transition-all border ${
                         isUsedInPreset
-                          ? 'bg-gray-600/30 border-gray-500 opacity-50 cursor-not-allowed' 
-                          : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
-                      } border`}
+                          ? 'opacity-50 cursor-not-allowed' 
+                          : 'hover:bg-blue-700/30'
+                      }`}
+                      style={isUsedInPreset ? {
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.2)
+                      } : {
+                        backgroundColor: logoColors.blackAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                       onClick={() => !isUsedInPreset && handleHissatsuSelect(hissatsu)}
                     >
                       <div className="flex items-center justify-between">
@@ -650,7 +719,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                           <div>
                             <div className="font-medium">{hissatsu.name}</div>
                             <div className="text-sm text-gray-300">{hissatsu.description}</div>
-                            <Badge variant="outline" className="mt-1 text-orange-400 border-orange-400">
+                            <Badge variant="outline" className="mt-1" 
+                                   style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
                               {hissatsu.type}
                             </Badge>
                           </div>
@@ -668,7 +738,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               <div className="flex justify-end gap-3 mt-4">
                 <Button 
                   onClick={() => setShowHissatsuList(false)} 
-                  className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                  className="text-white border hover:bg-blue-700/60"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                 >
                   Cancel
                 </Button>

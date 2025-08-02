@@ -5,6 +5,7 @@ import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { mockTactics } from '../data/mock';
 import { Check, X, Shield, Sword, Zap, Target, Crown, Crosshair, Flame, Mountain } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTactics = [] }) => {
   const [selectedTactic, setSelectedTactic] = useState(mockTactics[0]);
@@ -71,7 +72,11 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
       case 'diamond defense':
         return (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-400/60 to-blue-600/40 transform rotate-45 border-2 border-blue-500/80">
+            <div className="w-20 h-20 transform rotate-45 border-2"
+                 style={{ 
+                   background: `linear-gradient(to bottom right, ${logoColors.primaryBlueAlpha(0.6)}, ${logoColors.secondaryBlueAlpha(0.4)})`,
+                   borderColor: logoColors.primaryBlueAlpha(0.8)
+                 }}>
               <div className="text-center text-white font-bold text-xs transform -rotate-45 mt-6">DIAMOND</div>
             </div>
           </div>
@@ -79,7 +84,11 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
       default:
         return (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-24 h-24 bg-gradient-to-r from-orange-500/40 to-red-500/40 rounded-full border-2 border-orange-400/60 animate-pulse">
+            <div className="w-24 h-24 rounded-full border-2 animate-pulse"
+                 style={{ 
+                   background: `linear-gradient(to right, ${logoColors.primaryBlueAlpha(0.4)}, ${logoColors.primaryOrangeAlpha(0.4)})`,
+                   borderColor: logoColors.primaryBlueAlpha(0.6)
+                 }}>
               <div className="text-center text-white font-bold text-xs mt-8">EFFECT</div>
             </div>
           </div>
@@ -110,16 +119,22 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[95vh] bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white border-blue-400/20 overflow-hidden">
+      <DialogContent className="max-w-7xl max-h-[95vh] text-white border overflow-hidden"
+                     style={{ 
+                       background: logoColors.backgroundGradient,
+                       borderColor: logoColors.primaryBlueAlpha(0.2)
+                     }}>
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-bold text-center bg-clip-text text-transparent"
+                       style={{ background: logoColors.blueGradient, WebkitBackgroundClip: 'text' }}>
             Change Tactics
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex gap-6 h-[80vh]">
           {/* Left Panel - Tactics List */}
-          <div className="w-80 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-lg p-4 overflow-y-auto">
+          <div className="w-80 rounded-lg p-4 overflow-y-auto"
+               style={{ background: `linear-gradient(to bottom right, ${logoColors.blackAlpha(0.5)}, ${logoColors.blackAlpha(0.9)})` }}>
             <div className="mb-4">
               <h3 className="text-lg font-bold text-white mb-2">Select Tactics ({selectedTacticsList.length}/3)</h3>
               <div className="text-sm text-gray-300">Click to preview, double-click to select/deselect</div>
@@ -134,18 +149,35 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
                     key={tactic.id}
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                       isPreviewing
-                        ? 'bg-blue-600/40 border-blue-400 shadow-lg shadow-blue-500/20'
+                        ? 'shadow-lg' 
                         : isSelected
-                        ? 'bg-green-600/40 border-green-400 shadow-lg shadow-green-500/20'
-                        : 'bg-slate-700/30 border-slate-600/50 hover:bg-slate-600/40 hover:border-slate-500'
+                        ? 'shadow-lg'
+                        : 'hover:opacity-80'
                     }`}
+                    style={isPreviewing ? {
+                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                      borderColor: logoColors.primaryBlue,
+                      boxShadow: `0 10px 15px -3px ${logoColors.primaryBlueAlpha(0.2)}`
+                    } : isSelected ? {
+                      backgroundColor: logoColors.yellowAlpha(0.4),
+                      borderColor: logoColors.primaryYellow,
+                      boxShadow: `0 10px 15px -3px ${logoColors.yellowAlpha(0.2)}`
+                    } : {
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.5)
+                    }}
                     onClick={() => handleTacticSelect(tactic)}
                     onDoubleClick={() => handleTacticToggle(tactic)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${
-                        isPreviewing ? 'bg-blue-500' : isSelected ? 'bg-green-500' : 'bg-slate-600'
-                      }`}>
+                      <div className="p-2 rounded-lg"
+                           style={isPreviewing ? {
+                             backgroundColor: logoColors.primaryBlue
+                           } : isSelected ? {
+                             backgroundColor: logoColors.primaryYellow
+                           } : {
+                             backgroundColor: logoColors.blackAlpha(0.6)
+                           }}>
                         {getTacticIcon(tactic.name)}
                       </div>
                       <div className="flex-1">
@@ -154,10 +186,11 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         {isPreviewing && (
-                          <div className="w-4 h-4 bg-blue-400 rounded-full animate-pulse"></div>
+                          <div className="w-4 h-4 rounded-full animate-pulse"
+                               style={{ backgroundColor: logoColors.primaryBlue }}></div>
                         )}
                         {isSelected && (
-                          <Check className="h-5 w-5 text-green-400" />
+                          <Check className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                         )}
                       </div>
                     </div>
@@ -168,7 +201,8 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
           </div>
 
           {/* Center Panel - Field Visualization */}
-          <div className="flex-1 bg-gradient-to-br from-green-700/20 to-green-800/20 rounded-lg p-6 relative">
+          <div className="flex-1 rounded-lg p-6 relative"
+               style={{ background: `linear-gradient(to bottom right, ${logoColors.blackAlpha(0.2)}, ${logoColors.blackAlpha(0.4)})` }}>
             <div className="text-center mb-4">
               <div className="text-xl font-bold text-white">{selectedTactic.name}</div>
               <div className="text-sm text-gray-300">{selectedTactic.description}</div>
@@ -198,15 +232,23 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
           {/* Right Panel - Tactic Details */}
           <div className="w-80 space-y-4">
             {/* Selected Tactics Summary */}
-            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+            <Card className="text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.5)
+                  }}>
               <CardContent className="p-4">
-                <div className="text-lg font-bold mb-3 text-green-400">Selected Tactics ({selectedTacticsList.length}/3)</div>
+                <div className="text-lg font-bold mb-3" style={{ color: logoColors.primaryYellow }}>
+                  Selected Tactics ({selectedTacticsList.length}/3)
+                </div>
                 {selectedTacticsList.length > 0 ? (
                   <div className="space-y-2">
                     {selectedTacticsList.map((tactic, index) => (
-                      <div key={tactic.id} className="flex items-center justify-between p-2 bg-green-600/20 rounded-lg">
+                      <div key={tactic.id} className="flex items-center justify-between p-2 rounded-lg"
+                           style={{ backgroundColor: logoColors.yellowAlpha(0.2) }}>
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold">
+                          <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                               style={{ backgroundColor: logoColors.primaryYellow, color: logoColors.black }}>
                             {index + 1}
                           </div>
                           <span className="text-sm font-medium">{tactic.name}</span>
@@ -227,15 +269,19 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
             </Card>
 
             {/* Currently Previewing Tactic */}
-            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+            <Card className="text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.5)
+                  }}>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-3 bg-blue-600 rounded-lg">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: logoColors.primaryBlue }}>
                     {getTacticIcon(selectedTactic.name)}
                   </div>
                   <div>
                     <div className="font-bold text-lg">{selectedTactic.name}</div>
-                    <div className="text-blue-400 text-sm">{selectedTactic.effect}</div>
+                    <div className="text-sm" style={{ color: logoColors.lightBlue }}>{selectedTactic.effect}</div>
                   </div>
                 </div>
                 <div className="text-sm text-gray-300 mb-4">
@@ -245,9 +291,13 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
             </Card>
 
             {/* Tactic Duration */}
-            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+            <Card className="text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.5)
+                  }}>
               <CardContent className="p-4">
-                <div className="text-lg font-bold mb-2 text-yellow-400">Duration</div>
+                <div className="text-lg font-bold mb-2" style={{ color: logoColors.primaryYellow }}>Duration</div>
                 <div className="text-2xl font-bold text-white">{getTacticDuration(selectedTactic.name)}</div>
                 <div className="text-sm text-gray-400 mt-2">
                   How long this tactic remains active on the field
@@ -256,10 +306,14 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
             </Card>
 
             {/* Geoglyph Effect */}
-            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+            <Card className="text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.5)
+                  }}>
               <CardContent className="p-4">
-                <div className="text-lg font-bold mb-2 text-blue-400">Geoglyph Effect</div>
-                <div className="text-2xl font-bold text-green-400">{selectedTactic.effect}</div>
+                <div className="text-lg font-bold mb-2" style={{ color: logoColors.lightBlue }}>Geoglyph Effect</div>
+                <div className="text-2xl font-bold" style={{ color: logoColors.primaryYellow }}>{selectedTactic.effect}</div>
                 <div className="text-sm text-gray-400 mt-2">
                   {selectedTactic.name === 'Flame Fortress' && 'Conjure a wall of blazing flame in front of the goal, temporarily doubling the potency of your defence.'}
                   {selectedTactic.name === 'Mount Fuji' && 'Immovable mountain defense that increases physical resistance.'}
@@ -270,10 +324,14 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
             </Card>
 
             {/* Overall Effect */}
-            <Card className="bg-slate-800/50 border-slate-600/50 text-white">
+            <Card className="text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.5)
+                  }}>
               <CardContent className="p-4">
-                <div className="text-lg font-bold mb-2 text-blue-400">Overall Effect</div>
-                <div className="text-lg font-bold text-orange-400">
+                <div className="text-lg font-bold mb-2" style={{ color: logoColors.lightBlue }}>Overall Effect</div>
+                <div className="text-lg font-bold" style={{ color: logoColors.primaryOrange }}>
                   {selectedTactic.name === 'Flame Fortress' && 'KP increase by 10%'}
                   {selectedTactic.name === 'Mount Fuji' && 'Physical +15%'}
                   {selectedTactic.name === 'Sideline Spears' && 'KP +10%'}
@@ -291,9 +349,15 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
                 disabled={selectedTacticsList.length === 0}
                 className={`w-full text-white ${
                   selectedTacticsList.length > 0 
-                    ? 'bg-green-600 hover:bg-green-700' 
-                    : 'bg-gray-600 cursor-not-allowed'
+                    ? 'hover:opacity-80' 
+                    : 'cursor-not-allowed opacity-50'
                 }`}
+                style={selectedTacticsList.length > 0 ? {
+                  background: logoColors.yellowOrangeGradient,
+                  color: logoColors.black
+                } : {
+                  backgroundColor: logoColors.blackAlpha(0.6)
+                }}
               >
                 <Check className="h-4 w-4 mr-2" />
                 Confirm Selection ({selectedTacticsList.length}/3)
@@ -301,7 +365,11 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
               <Button
                 variant="outline"
                 onClick={onClose}
-                className="w-full text-white border-gray-600 hover:bg-gray-700"
+                className="w-full text-white border hover:opacity-80"
+                style={{ 
+                  borderColor: logoColors.primaryBlueAlpha(0.6),
+                  backgroundColor: logoColors.blackAlpha(0.2)
+                }}
               >
                 <X className="h-4 w-4 mr-2" />
                 Cancel
