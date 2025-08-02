@@ -73,7 +73,7 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-orange-700/30"
+                className="text-white hover:bg-blue-700/30"
               >
                 <Settings className="h-4 w-4" />
               </Button>
@@ -85,22 +85,26 @@ const Navigation = () => {
                 <>
                   <div className="text-right">
                     <div className="text-sm font-medium text-white">{user.username}</div>
-                    <div className="text-xs text-orange-300">Techniques {user.coach_level || 1}</div>
+                    <div className="text-xs" style={{ color: logoColors.lightBlue }}>Techniques {user.coach_level || 1}</div>
                   </div>
                   <div 
-                    className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                    className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                    style={{ background: logoColors.yellowOrangeGradient }}
                     onClick={() => setShowProfileMenu(!showProfileMenu)}
                   >
-                    <UserCircle className="h-5 w-5 text-white" />
+                    <UserCircle className="h-5 w-5 text-black" />
                   </div>
                   
                   {/* Profile Dropdown */}
                   {showProfileMenu && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-orange-900 border border-orange-400/30 rounded-lg shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-2 w-48 rounded-lg shadow-lg z-50" style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.9), 
+                      border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}` 
+                    }}>
                       <div className="p-2">
                         <Button
                           variant="ghost"
-                          className="w-full justify-start text-white hover:bg-orange-700/30"
+                          className="w-full justify-start text-white hover:bg-blue-700/30"
                           onClick={() => {
                             navigate('/dashboard');
                             setShowProfileMenu(false);
@@ -111,7 +115,7 @@ const Navigation = () => {
                         </Button>
                         <Button
                           variant="ghost"
-                          className="w-full justify-start text-white hover:bg-orange-700/30"
+                          className="w-full justify-start text-white hover:bg-blue-700/30"
                           onClick={() => {
                             navigate('/profile');
                             setShowProfileMenu(false);
