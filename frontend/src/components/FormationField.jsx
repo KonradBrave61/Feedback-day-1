@@ -31,7 +31,7 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
 
     const [{ isDragging }, drag] = useDrag({
       type: 'PLAYER',
-      item: { player, fromPosition: position.id },
+      item: { player, fromPosition: position.id, fromType: 'formation' },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -42,7 +42,13 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
       accept: 'PLAYER',
       drop: (draggedItem) => {
         if (draggedItem.fromPosition !== position.id) {
-          onMovePlayer(draggedItem.fromPosition, position.id);
+          if (draggedItem.fromType === 'bench') {
+            // Moving from bench to formation
+            onMoveFromBench(draggedItem.fromPosition, position.id);
+          } else {
+            // Moving within formation
+            onMovePlayer(draggedItem.fromPosition, position.id);
+          }
         }
       },
       collect: (monitor) => ({
