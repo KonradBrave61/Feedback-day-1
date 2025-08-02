@@ -144,10 +144,113 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
   };
 
   const handlePlayerSelect = (player) => {
-    // Open character modal instead of direct selection
-    if (onPlayerSelect) {
-      onPlayerSelect(player);
+    if (!teamBuildingMode) {
+      // Legacy mode - open character modal for configuration
+      if (onPlayerSelect) {
+        onPlayerSelect(player);
+      }
+      return;
     }
+
+    // Team building mode - check if player is already selected
+    if (isPlayerInTeam(player.id)) {
+      return; // Already selected, do nothing
+    }
+
+    // Auto-assign position
+    const assignedPosition = autoAssignPosition(player);
+    
+    if (assignedPosition) {
+      // Direct assignment to main team
+      setPendingPosition(assignedPosition);
+      setPendingIsBench(false);
+    } else {
+      // Try bench assignment
+      const emptyBenchSlot = Object.keys(builtTeam.bench).length;
+      if (emptyBenchSlot < 5) {
+        setPendingPosition(null);
+        setPendingIsBench(true);
+        setPendingBenchSlot(emptyBenchSlot);
+      } else {
+        alert('Team is full! (11 main players + 5 bench players)');
+        return;
+      }
+    }
+
+    // Open character modal for configuration
+    setSelectedCharacterForModal(player);
+    setShowCharacterModal(true);
+  };
+
+  const handleCharacterModalConfirm = (character, userLevel, userRarity, equipment, hissatsu) => {
+    const enhancedPlayer = {
+      ...character,
+      userLevel: userLevel,
+      userRarity: userRarity,
+      userEquipment: equipment,
+      userHissatsu: hissatsu
+    };
+
+    setBuiltTeam(prev => {
+      const newTeam = { ...prev };
+      
+      if (pendingIsBench) {
+        // Add to bench
+        const slot = pendingBenchSlot !== null ? pendingBenchSlot : Object.keys(newTeam.bench).length;
+        newTeam.bench[slot] = enhancedPlayer;
+      } else {
+        // Add to main team
+        newTeam.players[pendingPosition] = enhancedPlayer;
+      }
+      
+      newTeam.totalPlayers = Object.keys(newTeam.players).length + Object.keys(newTeam.bench).length;
+      return newTeam;
+    });
+
+    // Reset pending states
+    setShowCharacterModal(false);
+    setSelectedCharacterForModal(null);
+    setPendingPosition(null);
+    setPendingIsBench(false);
+    setPendingBenchSlot(null);
+  };
+
+  const handleRemovePlayer = (playerId) => {
+    setBuiltTeam(prev => {
+      const newTeam = { ...prev };
+      
+      // Remove from main team
+      Object.keys(newTeam.players).forEach(positionId => {
+        if (newTeam.players[positionId].id === playerId) {
+          delete newTeam.players[positionId];
+        }
+      });
+      
+      // Remove from bench
+      Object.keys(newTeam.bench).forEach(slot => {
+        if (newTeam.bench[slot].id === playerId) {
+          delete newTeam.bench[slot];
+        }
+      });
+      
+      newTeam.totalPlayers = Object.keys(newTeam.players).length + Object.keys(newTeam.bench).length;
+      return newTeam;
+    });
+  };
+
+  const handleApplyTeam = () => {
+    if (onTeamBuilt) {
+      onTeamBuilt(builtTeam);
+    }
+    onClose();
+  };
+
+  const handleClearTeam = () => {
+    setBuiltTeam({
+      players: {},
+      bench: {},
+      totalPlayers: 0
+    });
   };
 
   const clearFilters = () => {
