@@ -303,6 +303,42 @@ const TeamBuilder = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Panel - Formation & Controls */}
           <div className="lg:col-span-1 space-y-4">
+            {/* Quick Actions */}
+            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-orange-400" />
+                  Quick Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Button
+                    className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                    onClick={() => {
+                      setSelectedPosition(null); // No specific position
+                      setIsBenchSelection(false);
+                      setShowPlayerSearch(true);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Browse Players
+                  </Button>
+                  <Button
+                    className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                    onClick={() => {
+                      setSelectedPosition(null);
+                      setIsBenchSelection(true);
+                      setShowPlayerSearch(true);
+                    }}
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    Add to Bench
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Formation Selection */}
             <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
               <CardHeader>
