@@ -16,8 +16,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const [userRarity, setUserRarity] = useState(character.baseRarity);
   const [selectedEquipment, setSelectedEquipment] = useState({
     boots: null,
-    bracelet: null,
-    pendant: null,
+    bracelets: null,
+    pendants: null,
     special: null
   });
   const [selectedHissatsu, setSelectedHissatsu] = useState({
