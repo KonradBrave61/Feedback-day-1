@@ -678,34 +678,15 @@ const TeamBuilder = () => {
               <CardContent className="h-[calc(100%-2.5rem)] p-2">
                 <div className="h-full flex flex-col justify-between">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="w-16 h-[calc(20%-0.5rem)]">
-                      {benchPlayers[index] ? (
-                        <div className="relative group h-full w-full">
-                          <div className="w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors">
-                            <img
-                              src={benchPlayers[index].portrait}
-                              alt={benchPlayers[index].name}
-                              className="w-8 h-8 rounded-full mb-1"
-                            />
-                            <div className="text-xs text-center font-medium truncate w-full leading-tight">{benchPlayers[index].name}</div>
-                            <div className="text-xs text-gray-400 text-center">{benchPlayers[index].position}</div>
-                          </div>
-                          <button
-                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => handleRemoveBenchPlayer(index)}
-                          >
-                            <X className="h-2 w-2" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          className="w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors"
-                          onClick={() => handleAddBenchPlayer(index)}
-                        >
-                          <Plus className="h-4 w-4 text-orange-400" />
-                        </div>
-                      )}
-                    </div>
+                    <BenchSlot
+                      key={index}
+                      slotIndex={index}
+                      player={benchPlayers[index]}
+                      onAddBenchPlayer={handleAddBenchPlayer}
+                      onRemoveBenchPlayer={handleRemoveBenchPlayer}
+                      onMoveToBench={handleMoveToBench}
+                      onMoveFromBench={handleMoveFromBench}
+                    />
                   ))}
                 </div>
               </CardContent>
