@@ -3,12 +3,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Search, X } from 'lucide-react';
-import { mockCharacters } from '../data/mock';
+import { Search, X, Users, Check, Plus, Target, Trophy } from 'lucide-react';
+import { mockCharacters, mockFormations } from '../data/mock';
 import CharacterCard from './CharacterCard';
+import CharacterModal from './CharacterModal';
 
-const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [] }) => {
+const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPosition, setFilterPosition] = useState('all'); // Changed from position to 'all'
   const [filterElement, setFilterElement] = useState('all');
