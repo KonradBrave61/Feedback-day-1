@@ -295,6 +295,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
   };
 
   const handleApplyTeam = () => {
+    // Allow applying even empty teams for maximum flexibility
     if (onTeamBuilt) {
       onTeamBuilt(builtTeam);
     }
