@@ -233,15 +233,20 @@ const TechniquesPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Filters Panel */}
             <div className="lg:col-span-1">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 sticky top-20">
+              <div className="rounded-lg p-4 backdrop-blur-sm sticky top-20"
+                   style={{ 
+                     backgroundColor: logoColors.blackAlpha(0.3),
+                     border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                   }}>
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-white font-semibold flex items-center">
-                    <Filter size={18} className="mr-2" />
+                    <Filter size={18} className="mr-2" style={{ color: logoColors.primaryBlue }} />
                     Filters
                   </h3>
                   <button 
                     onClick={clearFilters}
-                    className="text-blue-400 hover:text-blue-300 text-sm"
+                    className="text-sm hover:opacity-80 transition-opacity"
+                    style={{ color: logoColors.lightBlue }}
                   >
                     Clear All
                   </button>
@@ -256,7 +261,12 @@ const TechniquesPage = () => {
                       placeholder="Search techniques..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                        '--tw-ring-color': logoColors.secondaryBlue
+                      }}
                     />
                   </div>
                 </div>
@@ -268,7 +278,12 @@ const TechniquesPage = () => {
                     <select
                       value={filters.technique_type}
                       onChange={(e) => handleFilterChange('technique_type', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                        '--tw-ring-color': logoColors.secondaryBlue
+                      }}
                     >
                       <option value="">All Types</option>
                       <option value="avatar">Avatar</option>
@@ -282,7 +297,12 @@ const TechniquesPage = () => {
                     <select
                       value={filters.category}
                       onChange={(e) => handleFilterChange('category', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                        '--tw-ring-color': logoColors.secondaryBlue
+                      }}
                     >
                       <option value="">All Categories</option>
                       <option value="Shot">Shot</option>
@@ -297,7 +317,12 @@ const TechniquesPage = () => {
                     <select
                       value={filters.element}
                       onChange={(e) => handleFilterChange('element', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                        '--tw-ring-color': logoColors.secondaryBlue
+                      }}
                     >
                       <option value="">All Elements</option>
                       <option value="fire">Fire</option>
@@ -313,7 +338,12 @@ const TechniquesPage = () => {
                     <select
                       value={filters.rarity}
                       onChange={(e) => handleFilterChange('rarity', e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
+                      style={{
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                        '--tw-ring-color': logoColors.secondaryBlue
+                      }}
                     >
                       <option value="">All Rarities</option>
                       <option value="Common">Common</option>
@@ -330,8 +360,13 @@ const TechniquesPage = () => {
                         type="number"
                         value={filters.min_power}
                         onChange={(e) => handleFilterChange('min_power', e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
                         placeholder="0"
+                        style={{
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                          '--tw-ring-color': logoColors.secondaryBlue
+                        }}
                       />
                     </div>
                     <div>
@@ -340,8 +375,13 @@ const TechniquesPage = () => {
                         type="number"
                         value={filters.max_power}
                         onChange={(e) => handleFilterChange('max_power', e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
                         placeholder="999"
+                        style={{
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
+                          '--tw-ring-color': logoColors.secondaryBlue
+                        }}
                       />
                     </div>
                   </div>
