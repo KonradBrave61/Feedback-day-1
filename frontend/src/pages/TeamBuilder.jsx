@@ -706,6 +706,7 @@ const TeamBuilder = () => {
             }}
             allCharacters={mockCharacters}
             onAddToTeam={handleCharacterModalConfirm}
+            teamBuildingMode={false}
           />
         )}
       </div>
