@@ -87,10 +87,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
   // Get visual feedback class for character cards
   const getCardVisualFeedback = (player) => {
-    const isSelected = isPlayerInTeam(player.id);
-    if (!isSelected) return '';
-    
-    return 'ring-2 ring-green-400 ring-opacity-70 shadow-lg shadow-green-400/50 relative';
+    // Removed green selection box as requested
+    return '';
   };
 
   // Get position info for a player in the built team
