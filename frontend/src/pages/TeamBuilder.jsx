@@ -50,6 +50,11 @@ const TeamBuilder = () => {
     setTeamBuildingMode(false);
   };
 
+  // Get currently selected player IDs for all interfaces
+  const getCurrentlySelectedPlayerIds = () => {
+    return [...Object.values(teamPlayers).map(p => p.id), ...Object.values(benchPlayers).map(p => p.id)];
+  };
+
   const handleFormationChange = (formationId) => {
     const formation = mockFormations.find(f => f.id === parseInt(formationId));
     const oldFormation = selectedFormation;
