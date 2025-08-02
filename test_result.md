@@ -325,10 +325,10 @@ user can select 1,2 or 3. Create all 3 visible on the images constelations and t
 
 ## test_plan:
   current_focus:
-    - "Constellation API Endpoints"
-    - "Gacha Pull System"
-    - "User Kizuna Stars System"
-    - "Sample Constellation Data Initialization"
+    - "Team Builder Backend Testing"
+    - "Equipment API Integration"
+    - "Character API Integration"
+    - "Team Stats with Equipment Bonuses"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
