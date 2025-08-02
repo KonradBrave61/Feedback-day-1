@@ -180,22 +180,22 @@ const Navigation = () => {
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowHamburgerMenu(false)} />
           
           {/* Sidebar Menu */}
-          <div className="absolute left-0 top-0 h-full w-80 bg-gradient-to-b from-orange-900 via-red-900 to-orange-900 shadow-2xl">
+          <div className="absolute left-0 top-0 h-full w-80 shadow-2xl" style={{ background: `linear-gradient(180deg, ${logoColors.backgroundGradient}, ${logoColors.blackAlpha(0.9)})` }}>
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-orange-400/20">
+            <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
-                  <Trophy className="h-5 w-5 text-white" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: logoColors.yellowOrangeGradient }}>
+                  <Trophy className="h-5 w-5 text-black" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white">Menu</h2>
-                  <p className="text-xs text-orange-300">Navigation</p>
+                  <p className="text-xs" style={{ color: logoColors.lightBlue }}>Navigation</p>
                 </div>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-orange-700/30 p-2"
+                className="text-white hover:bg-blue-700/30 p-2"
                 onClick={() => setShowHamburgerMenu(false)}
               >
                 <X className="h-5 w-5" />
@@ -213,9 +213,15 @@ const Navigation = () => {
                       variant={isActive(item.path) ? "default" : "ghost"}
                       className={`flex items-center gap-4 justify-start w-full h-14 text-left px-4 ${
                         isActive(item.path) 
-                          ? 'bg-orange-600 text-white hover:bg-orange-700 border-l-4 border-orange-400' 
-                          : 'text-white hover:bg-orange-700/30 hover:border-l-4 hover:border-orange-400/50'
+                          ? 'text-white hover:opacity-80 border-l-4' 
+                          : 'text-white hover:bg-blue-700/30 hover:border-l-4'
                       }`}
+                      style={isActive(item.path) ? {
+                        background: logoColors.blueGradient,
+                        borderLeftColor: logoColors.primaryYellow
+                      } : {
+                        borderLeftColor: `${logoColors.primaryBlueAlpha(0.5)}`
+                      }}
                       onClick={() => {
                         navigate(item.path);
                         setShowHamburgerMenu(false);
@@ -229,14 +235,14 @@ const Navigation = () => {
               </div>
               
               {/* Bottom Section */}
-              <div className="mt-auto p-4 border-t border-orange-400/20">
+              <div className="mt-auto p-4 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
                 {user ? (
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                      <UserCircle className="h-6 w-6 text-white" />
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2" style={{ background: logoColors.yellowOrangeGradient }}>
+                      <UserCircle className="h-6 w-6 text-black" />
                     </div>
                     <div className="text-sm font-medium text-white">{user.username}</div>
-                    <div className="text-xs text-orange-300">Techniques {user.coach_level || 1}</div>
+                    <div className="text-xs" style={{ color: logoColors.lightBlue }}>Techniques {user.coach_level || 1}</div>
                     <Button
                       variant="ghost"
                       size="sm"
