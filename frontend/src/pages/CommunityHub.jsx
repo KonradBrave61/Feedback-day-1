@@ -1,905 +1,358 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
+import TeamCard from '../components/TeamCard';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Textarea } from '../components/ui/textarea';
-import { Label } from '../components/ui/label';
-import { Slider } from '../components/ui/slider';
+import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { 
+  Search, 
+  TrendingUp, 
+  Clock, 
+  Star, 
   Users, 
   Trophy, 
-  Calendar, 
-  Heart, 
-  MessageCircle, 
-  UserPlus,
-  UserMinus,
-  Search,
-  Filter,
-  TrendingUp,
-  Star,
-  Target,
+  Heart,
+  MessageSquare,
   Eye,
-  Crown,
-  Send,
-  X
+  Filter,
+  Globe,
+  UserPlus,
+  Award
 } from 'lucide-react';
+import { logoColors, componentColors } from '../styles/colors';
 
 const CommunityHub = () => {
-  const navigate = useNavigate();
-  const { user, loadCommunityTeams, likeTeam, commentOnTeam, followUser, rateTeam, loadFollowers, loadFollowing } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterFormation, setFilterFormation] = useState('all');
-  const [filterRating, setFilterRating] = useState('all');
-  const [communityTeams, setCommunityTeams] = useState([]);
-  const [featuredTeams, setFeaturedTeams] = useState([]);
-  const [popularFormations, setPopularFormations] = useState([]);
-  const [followers, setFollowers] = useState([]);
-  const [following, setFollowing] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedTeam, setSelectedTeam] = useState(null);
-  const [showRatingModal, setShowRatingModal] = useState(false);
-  const [showCommentModal, setShowCommentModal] = useState(false);
-  const [ratings, setRatings] = useState({
-    tension_usage: 3,
-    difficulty: 3,
-    fun: 3,
-    creativity: 3,
-    effectiveness: 3,
-    balance: 3
+  const { user, loadCommunityTeams, loadCommunityStats } = useAuth();
+  const [teams, setTeams] = useState([]);
+  const [stats, setStats] = useState({
+    totalTeams: 0,
+    totalUsers: 0,
+    totalLikes: 0,
+    popularFormations: []
   });
-  const [comment, setComment] = useState('');
-  const [actionLoading, setActionLoading] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('recent');
+  const [filterBy, setFilterBy] = useState('all');
+
+  const sortOptions = [
+    { value: 'recent', label: 'Most Recent' },
+    { value: 'popular', label: 'Most Popular' },
+    { value: 'liked', label: 'Most Liked' },
+    { value: 'viewed', label: 'Most Viewed' },
+    { value: 'rated', label: 'Highest Rated' }
+  ];
+
+  const filterOptions = [
+    { value: 'all', label: 'All Teams' },
+    { value: 'public', label: 'Public Only' },
+    { value: 'featured', label: 'Featured Teams' },
+    { value: 'recent', label: 'Recent Teams' }
+  ];
 
   useEffect(() => {
-    loadTeams();
-    loadSocialData();
-  }, []);
+    fetchCommunityData();
+  }, [sortBy, filterBy, searchQuery]);
 
-  const loadTeams = async () => {
+  const fetchCommunityData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const result = await loadCommunityTeams({
-        limit: 20,
-        offset: 0
+      const teamsResult = await loadCommunityTeams({
+        search: searchQuery,
+        sort_by: sortBy,
+        filter_by: filterBy
       });
-      if (result.success) {
-        setCommunityTeams(result.teams);
+      
+      if (teamsResult.success) {
+        setTeams(teamsResult.teams);
+      }
+
+      const statsResult = await loadCommunityStats();
+      if (statsResult.success) {
+        setStats(statsResult.stats);
       }
     } catch (error) {
-      console.error('Failed to load teams:', error);
-      // Fallback to mock data
-      loadMockData();
+      console.error('Failed to load community data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadSocialData = async () => {
-    try {
-      const [followersResult, followingResult] = await Promise.all([
-        loadFollowers(),
-        loadFollowing()
-      ]);
-      
-      if (followersResult.success) {
-        setFollowers(followersResult.followers);
-      }
-      
-      if (followingResult.success) {
-        setFollowing(followingResult.following);
-      }
-    } catch (error) {
-      console.error('Failed to load social data:', error);
-    }
-  };
-
-  const loadMockData = () => {
-    const mockCommunityTeams = [
-      {
-        id: 1,
-        name: "Lightning Strike",
-        formation: "4-4-2 Diamond",
-        username: "ProPlayer99",
-        user_id: "user1",
-        user_avatar: "/api/placeholder/40/40",
-        likes: 245,
-        comments: [
-          { id: 1, username: "Coach123", content: "Great attacking setup!", created_at: "2024-07-12T10:30:00Z" },
-          { id: 2, username: "TacticMaster", content: "Love the midfield control", created_at: "2024-07-12T14:15:00Z" }
-        ],
-        views: 1250,
-        rating: 4.8,
-        created_at: "2024-07-10T12:00:00Z",
-        description: "Aggressive attacking formation with strong midfield control",
-        tags: ["attacking", "midfield", "fast-paced"],
-        is_following: false,
-        liked_by: []
-      },
-      {
-        id: 2,
-        name: "Defensive Wall",
-        formation: "4-3-3",
-        username: "TacticalMaster",
-        user_id: "user2",
-        user_avatar: "/api/placeholder/40/40",
-        likes: 189,
-        comments: [
-          { id: 3, username: "DefenseExpert", content: "Solid defensive strategy", created_at: "2024-07-11T09:20:00Z" }
-        ],
-        views: 890,
-        rating: 4.6,
-        created_at: "2024-07-08T15:30:00Z",
-        description: "Solid defensive setup with quick counter-attacks",
-        tags: ["defensive", "counter-attack", "solid"],
-        is_following: true,
-        liked_by: []
-      }
-    ];
-
-    const mockFeaturedTeams = [
-      {
-        id: 4,
-        name: "Weekly Champion",
-        formation: "4-4-2 Diamond",
-        username: "ChampionBuilder",
-        likes: 567,
-        rating: 4.9,
-        badge: "Team of the Week"
-      },
-      {
-        id: 5,
-        name: "Rising Star",
-        formation: "4-3-3",
-        username: "NewTactician",
-        likes: 234,
-        rating: 4.7,
-        badge: "Rising Star"
-      }
-    ];
-
-    const mockPopularFormations = [
-      { formation: "4-4-2 Diamond", count: 234, percentage: 35 },
-      { formation: "4-3-3", count: 189, percentage: 28 },
-      { formation: "3-5-2", count: 145, percentage: 22 },
-      { formation: "4-2-3-1", count: 98, percentage: 15 }
-    ];
-
-    setCommunityTeams(mockCommunityTeams);
-    setFeaturedTeams(mockFeaturedTeams);
-    setPopularFormations(mockPopularFormations);
-  };
-
-  const handleLikeTeam = async (teamId) => {
-    try {
-      setActionLoading(prev => ({ ...prev, [`like_${teamId}`]: true }));
-      const result = await likeTeam(teamId);
-      if (result.success) {
-        setCommunityTeams(prev => prev.map(team => 
-          team.id === teamId 
-            ? { 
-                ...team, 
-                likes: result.liked ? team.likes + 1 : team.likes - 1,
-                liked_by: result.liked 
-                  ? [...(team.liked_by || []), user.id]
-                  : (team.liked_by || []).filter(id => id !== user.id)
-              }
-            : team
-        ));
-      }
-    } catch (error) {
-      console.error('Failed to like team:', error);
-    } finally {
-      setActionLoading(prev => ({ ...prev, [`like_${teamId}`]: false }));
-    }
-  };
-
-  const handleFollowUser = async (userId) => {
-    try {
-      setActionLoading(prev => ({ ...prev, [`follow_${userId}`]: true }));
-      const result = await followUser(userId);
-      if (result.success) {
-        setCommunityTeams(prev => prev.map(team => 
-          team.user_id === userId 
-            ? { ...team, is_following: result.following }
-            : team
-        ));
-        // Refresh social data
-        loadSocialData();
-      }
-    } catch (error) {
-      console.error('Failed to follow user:', error);
-    } finally {
-      setActionLoading(prev => ({ ...prev, [`follow_${userId}`]: false }));
-    }
-  };
-
-  const handleComment = async (teamId) => {
-    try {
-      setActionLoading(prev => ({ ...prev, [`comment_${teamId}`]: true }));
-      const result = await commentOnTeam(teamId, comment);
-      if (result.success) {
-        setCommunityTeams(prev => prev.map(team => 
-          team.id === teamId 
-            ? { 
-                ...team, 
-                comments: [...(team.comments || []), result.comment]
-              }
-            : team
-        ));
-        setComment('');
-        setShowCommentModal(false);
-      }
-    } catch (error) {
-      console.error('Failed to comment on team:', error);
-    } finally {
-      setActionLoading(prev => ({ ...prev, [`comment_${teamId}`]: false }));
-    }
-  };
-
-  const handleRate = async (teamId) => {
-    try {
-      setActionLoading(prev => ({ ...prev, [`rate_${teamId}`]: true }));
-      const result = await rateTeam(teamId, ratings);
-      if (result.success) {
-        setCommunityTeams(prev => prev.map(team => 
-          team.id === teamId 
-            ? { 
-                ...team, 
-                rating: result.rating.average_rating,
-                detailed_rating: result.rating
-              }
-            : team
-        ));
-        setShowRatingModal(false);
-      }
-    } catch (error) {
-      console.error('Failed to rate team:', error);
-    } finally {
-      setActionLoading(prev => ({ ...prev, [`rate_${teamId}`]: false }));
-    }
-  };
-
-  const filteredTeams = communityTeams.filter(team => {
-    const matchesSearch = team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         team.username.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFormation = filterFormation === 'all' || team.formation === filterFormation;
-    const matchesRating = filterRating === 'all' || 
-                         (filterRating === 'high' && team.rating >= 4.5) ||
-                         (filterRating === 'medium' && team.rating >= 4.0 && team.rating < 4.5) ||
-                         (filterRating === 'low' && team.rating < 4.0);
-    
-    return matchesSearch && matchesFormation && matchesRating;
-  });
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  const getRatingColor = (rating) => {
-    if (rating >= 4) return 'text-green-400';
-    if (rating >= 3) return 'text-yellow-400';
-    if (rating >= 2) return 'text-orange-400';
-    return 'text-red-400';
-  };
-
-  const isFollowing = (userId) => {
-    return following.some(user => user.id === userId);
-  };
-
-  const ratingCategories = [
-    { key: 'tension_usage', label: 'Tension Usage', description: 'How well the team uses tension mechanics' },
-    { key: 'difficulty', label: 'Difficulty', description: 'How challenging the team is to play against' },
-    { key: 'fun', label: 'Fun Factor', description: 'How enjoyable the team is to play' },
-    { key: 'creativity', label: 'Creativity', description: 'How creative and unique the team composition is' },
-    { key: 'effectiveness', label: 'Effectiveness', description: 'How effective the team is in matches' },
-    { key: 'balance', label: 'Balance', description: 'How well balanced the team composition is' }
-  ];
-
-  const getFormationColor = (formation) => {
-    switch (formation) {
-      case '4-4-2 Diamond': return 'bg-orange-500';
-      case '4-3-3': return 'bg-blue-500';
-      case '3-5-2': return 'bg-green-500';
-      case '4-2-3-1': return 'bg-purple-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
+        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold text-white mb-4 bg-clip-text text-transparent" 
+              style={{ background: logoColors.yellowOrangeGradient, WebkitBackgroundClip: 'text' }}>
             Community Hub
           </h1>
           <p className="text-xl text-gray-300">
-            Discover, share, and discuss the best team strategies
+            Discover amazing teams from coaches around the world
           </p>
         </div>
 
-        <Tabs defaultValue="browse" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-black/30 border-orange-400/20">
-            <TabsTrigger value="browse" className="text-white data-[state=active]:bg-orange-600">
-              Browse Teams
-            </TabsTrigger>
-            <TabsTrigger value="social" className="text-white data-[state=active]:bg-orange-600">
-              Social
-            </TabsTrigger>
-            <TabsTrigger value="featured" className="text-white data-[state=active]:bg-orange-600">
-              Featured
-            </TabsTrigger>
-            <TabsTrigger value="stats" className="text-white data-[state=active]:bg-orange-600">
-              Statistics
-            </TabsTrigger>
-          </TabsList>
+        {/* Community Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <Users className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryBlue }} />
+              <div className="text-2xl font-bold text-white">{stats.totalUsers}</div>
+              <div className="text-sm text-gray-300">Active Coaches</div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="browse" className="space-y-6">
-            {/* Search and Filter */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="Search teams or authors..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-orange-900/30 border-orange-400/30 text-white"
-                    />
-                  </div>
-                  
-                  <Select value={filterFormation} onValueChange={setFilterFormation}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
-                      <SelectValue placeholder="Filter by formation" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
-                      <SelectItem value="all">All Formations</SelectItem>
-                      <SelectItem value="4-4-2 Diamond">4-4-2 Diamond</SelectItem>
-                      <SelectItem value="4-3-3">4-3-3</SelectItem>
-                      <SelectItem value="3-5-2">3-5-2</SelectItem>
-                      <SelectItem value="4-2-3-1">4-2-3-1</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select value={filterRating} onValueChange={setFilterRating}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
-                      <SelectValue placeholder="Filter by rating" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
-                      <SelectItem value="all">All Ratings</SelectItem>
-                      <SelectItem value="high">4.5+ Stars</SelectItem>
-                      <SelectItem value="medium">4.0-4.5 Stars</SelectItem>
-                      <SelectItem value="low">Below 4.0 Stars</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </CardContent>
-            </Card>
+          <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <Trophy className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryYellow }} />
+              <div className="text-2xl font-bold text-white">{stats.totalTeams}</div>
+              <div className="text-sm text-gray-300">Teams Shared</div>
+            </CardContent>
+          </Card>
 
-            {/* Community Teams */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTeams.map((team) => (
-                <Card key={team.id} className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white hover:bg-orange-900/20 transition-colors">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{team.name}</CardTitle>
-                      <div className="flex items-center gap-1">
-                        <Star className={`h-4 w-4 ${getRatingColor(team.rating)} fill-current`} />
-                        <span className={`text-sm ${getRatingColor(team.rating)}`}>{team.rating.toFixed(1)}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-sm text-gray-300">
-                      <Avatar className="w-6 h-6">
-                        <AvatarImage src={team.user_avatar} alt={team.username} />
-                        <AvatarFallback className="bg-orange-600 text-white text-xs">
-                          {team.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>by {team.username}</span>
-                      {team.user_id !== user?.id && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className={`ml-auto h-6 px-2 text-xs ${
-                            isFollowing(team.user_id) 
-                              ? 'bg-gray-600 text-white border-gray-600' 
-                              : 'text-white border-orange-400/50 hover:bg-orange-700'
-                          }`}
-                          onClick={() => handleFollowUser(team.user_id)}
-                          disabled={actionLoading[`follow_${team.user_id}`]}
-                        >
-                          {actionLoading[`follow_${team.user_id}`] ? (
-                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
-                          ) : (
-                            <>
-                              {isFollowing(team.user_id) ? <UserMinus className="h-3 w-3 mr-1" /> : <UserPlus className="h-3 w-3 mr-1" />}
-                              {isFollowing(team.user_id) ? 'Unfollow' : 'Follow'}
-                            </>
-                          )}
-                        </Button>
-                      )}
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Target className="h-4 w-4 text-orange-400" />
-                      <Badge className={`${getFormationColor(team.formation)} text-white`}>
-                        {team.formation}
-                      </Badge>
-                    </div>
-                    
-                    <p className="text-sm text-gray-300 line-clamp-2">{team.description}</p>
-                    
-                    <div className="flex flex-wrap gap-1">
-                      {team.tags?.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs border-orange-400/50">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm text-gray-400">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          <span>{team.views}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <MessageCircle className="h-3 w-3" />
-                          <span>{team.comments?.length || 0}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        <span>{formatDate(team.created_at)}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-2 pt-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className={`flex-1 ${
-                          team.liked_by?.includes(user?.id)
-                            ? 'bg-red-600/20 border-red-500 text-red-400'
-                            : 'text-white border-orange-400/50 hover:bg-orange-700'
-                        }`}
-                        onClick={() => handleLikeTeam(team.id)}
-                        disabled={actionLoading[`like_${team.id}`]}
-                      >
-                        {actionLoading[`like_${team.id}`] ? (
-                          <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1" />
-                        ) : (
-                          <Heart className={`h-3 w-3 mr-1 ${team.liked_by?.includes(user?.id) ? 'fill-current' : ''}`} />
-                        )}
-                        {team.likes}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
-                        onClick={() => {
-                          setSelectedTeam(team);
-                          setShowCommentModal(true);
-                        }}
-                      >
-                        <MessageCircle className="h-3 w-3 mr-1" />
-                        Comment
-                      </Button>
-                      {team.user_id !== user?.id && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-1 text-white border-orange-400/50 hover:bg-orange-700"
-                          onClick={() => {
-                            setSelectedTeam(team);
-                            setShowRatingModal(true);
-                          }}
-                        >
-                          <Star className="h-3 w-3 mr-1" />
-                          Rate
-                        </Button>
-                      )}
-                    </div>
-                    
-                    {/* Recent Comments */}
-                    {team.comments && team.comments.length > 0 && (
-                      <div className="border-t border-orange-400/20 pt-3">
-                        <div className="space-y-2 max-h-32 overflow-y-auto">
-                          {team.comments.slice(-3).map((comment, index) => (
-                            <div key={index} className="text-sm">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium text-orange-400">{comment.username}</span>
-                                <span className="text-gray-500 text-xs">{formatDate(comment.created_at)}</span>
-                              </div>
-                              <p className="text-gray-300 mt-1">{comment.content}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
+          <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <Heart className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryOrange }} />
+              <div className="text-2xl font-bold text-white">{stats.totalLikes}</div>
+              <div className="text-sm text-gray-300">Total Likes</div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="social" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Followers */}
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-orange-400" />
-                    Your Followers ({followers.length})
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {followers.length === 0 ? (
-                      <div className="text-center py-8">
-                        <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-400">No followers yet</p>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Create public teams to attract followers!
-                        </p>
-                      </div>
-                    ) : (
-                      followers.map((follower) => (
-                        <div key={follower.id} className="flex items-center justify-between p-3 bg-orange-900/20 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-10 h-10">
-                              <AvatarImage src={follower.profile_picture} alt={follower.username} />
-                              <AvatarFallback className="bg-orange-600 text-white">
-                                {follower.username.slice(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <h4 className="font-medium">{follower.username}</h4>
-                              <p className="text-sm text-gray-400">Level {follower.coach_level}</p>
-                            </div>
-                          </div>
-                          <div className="text-right text-sm text-gray-400">
-                            <div>{follower.total_teams} teams</div>
-                            <div>{follower.total_likes_received} likes</div>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+          <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <Star className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.secondaryBlue }} />
+              <div className="text-2xl font-bold text-white">{stats.averageRating || '4.5'}</div>
+              <div className="text-sm text-gray-300">Avg Rating</div>
+            </CardContent>
+          </Card>
+        </div>
 
-              {/* Following */}
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <UserPlus className="h-5 w-5 text-orange-400" />
-                    You're Following ({following.length})
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {following.length === 0 ? (
-                      <div className="text-center py-8">
-                        <UserPlus className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-400">Not following anyone yet</p>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Explore teams to find coaches to follow!
-                        </p>
-                      </div>
-                    ) : (
-                      following.map((followedUser) => (
-                        <div key={followedUser.id} className="flex items-center justify-between p-3 bg-orange-900/20 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-10 h-10">
-                              <AvatarImage src={followedUser.profile_picture} alt={followedUser.username} />
-                              <AvatarFallback className="bg-orange-600 text-white">
-                                {followedUser.username.slice(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <h4 className="font-medium">{followedUser.username}</h4>
-                              <p className="text-sm text-gray-400">Level {followedUser.coach_level}</p>
-                            </div>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-gray-400 border-gray-400/50 hover:bg-gray-700"
-                            onClick={() => handleFollowUser(followedUser.id)}
-                            disabled={actionLoading[`follow_${followedUser.id}`]}
-                          >
-                            {actionLoading[`follow_${followedUser.id}`] ? (
-                              <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent mr-1" />
-                            ) : (
-                              <UserMinus className="h-3 w-3 mr-1" />
-                            )}
-                            Unfollow
-                          </Button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
+        {/* Search and Filters */}
+        <Card className="mb-8 backdrop-blur-lg text-white border" style={{ 
+          backgroundColor: logoColors.blackAlpha(0.3),
+          borderColor: logoColors.primaryBlueAlpha(0.2)
+        }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+              Search & Filters
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Search Input */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                        style={{ color: logoColors.primaryBlue }} />
+                <Input
+                  placeholder="Search teams..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.5),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
+                />
+              </div>
 
-          <TabsContent value="featured" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Teams of the Week */}
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Crown className="h-5 w-5 text-yellow-400" />
-                    Teams of the Week
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {featuredTeams.map((team) => (
-                    <div key={team.id} className="p-4 bg-orange-900/30 rounded-lg border border-orange-400/30">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{team.name}</h3>
-                        <Badge className="bg-yellow-600 text-white">
-                          {team.badge}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-300 mb-2">
-                        <span>by {team.username}</span>
-                        <Badge className={`${getFormationColor(team.formation)} text-white`}>
-                          {team.formation}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                          <span className="text-sm text-yellow-400">{team.rating}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Heart className="h-4 w-4 text-red-400" />
-                          <span className="text-sm">{team.likes}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Most Popular Formations */}
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-orange-400" />
-                    Most Popular Formations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {popularFormations.map((item, index) => (
-                    <div key={index} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge className={`${getFormationColor(item.formation)} text-white`}>
-                            {item.formation}
-                          </Badge>
-                          <span className="text-sm text-gray-300">{item.count} teams</span>
-                        </div>
-                        <span className="text-sm text-orange-400">{item.percentage}%</span>
-                      </div>
-                      <div className="w-full bg-gray-700 rounded-full h-2">
-                        <div 
-                          className="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${item.percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="stats" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="text-center">Total Teams</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-orange-400 mb-2">1,247</div>
-                    <p className="text-sm text-gray-300">Community teams shared</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="text-center">Active Users</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-orange-400 mb-2">8,923</div>
-                    <p className="text-sm text-gray-300">Community members</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <CardTitle className="text-center">Total Likes</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-orange-400 mb-2">45,678</div>
-                    <p className="text-sm text-gray-300">Likes given to teams</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Rating Modal */}
-        {showRatingModal && selectedTeam && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 p-1 rounded-lg max-w-md w-full mx-4">
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                      <Star className="h-5 w-5 text-orange-400" />
-                      Rate Team: {selectedTeam.name}
-                    </CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowRatingModal(false)}
-                      className="text-white hover:bg-orange-700/30"
+              {/* Sort By */}
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="text-white border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.5),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.9),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+                  {sortOptions.map(option => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="text-white hover:opacity-80"
+                      style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
                     >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {ratingCategories.map((category) => (
-                      <div key={category.key}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <Label className="text-white font-medium">{category.label}</Label>
-                            <p className="text-xs text-gray-400">{category.description}</p>
-                          </div>
-                          <Badge variant="outline" className="text-orange-400 border-orange-400">
-                            {ratings[category.key]}/5
-                          </Badge>
-                        </div>
-                        <Slider
-                          value={[ratings[category.key]]}
-                          onValueChange={(value) => setRatings(prev => ({ ...prev, [category.key]: value[0] }))}
-                          max={5}
-                          min={1}
-                          step={1}
-                          className="w-full"
-                        />
-                      </div>
-                    ))}
-                    
-                    <div className="flex gap-2 pt-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowRatingModal(false)}
-                        className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() => handleRate(selectedTeam.id)}
-                        disabled={actionLoading[`rate_${selectedTeam.id}`]}
-                        className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
-                      >
-                        {actionLoading[`rate_${selectedTeam.id}`] ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-                            Rating...
-                          </>
-                        ) : (
-                          <>
-                            <Star className="h-4 w-4 mr-2" />
-                            Submit Rating
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Filter By */}
+              <Select value={filterBy} onValueChange={setFilterBy}>
+                <SelectTrigger className="text-white border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.5),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+                  <SelectValue placeholder="Filter by" />
+                </SelectTrigger>
+                <SelectContent style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.9),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+                  {filterOptions.map(option => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      className="text-white hover:opacity-80"
+                      style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Clear Filters */}
+              <Button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSortBy('recent');
+                  setFilterBy('all');
+                }}
+                className="text-white border hover:opacity-80"
+                style={{ 
+                  backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}
+              >
+                Clear All
+              </Button>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Teams Grid */}
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="w-12 h-12 rounded-full mx-auto mb-4 animate-spin border-4 border-t-transparent" 
+                 style={{ borderColor: logoColors.primaryBlue, borderTopColor: 'transparent' }} />
+            <p className="text-gray-300">Loading community teams...</p>
+          </div>
+        ) : teams.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teams.map((team) => (
+              <TeamCard
+                key={team.id}
+                team={team}
+                showAuthor={true}
+                showStats={true}
+                onLike={() => {}}
+                onComment={() => {}}
+                onView={() => {}}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <Globe className="h-16 w-16 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+            <h3 className="text-xl font-bold text-white mb-2">No Teams Found</h3>
+            <p className="text-gray-300 mb-4">Try adjusting your search criteria.</p>
+            <Button
+              onClick={() => {
+                setSearchQuery('');
+                setSortBy('recent');
+                setFilterBy('all');
+              }}
+              className="text-black font-bold hover:opacity-80"
+              style={{ background: logoColors.yellowOrangeGradient }}
+            >
+              Reset Filters
+            </Button>
           </div>
         )}
 
-        {/* Comment Modal */}
-        {showCommentModal && selectedTeam && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 p-1 rounded-lg max-w-md w-full mx-4">
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                      <MessageCircle className="h-5 w-5 text-orange-400" />
-                      Comment on: {selectedTeam.name}
-                    </CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowCommentModal(false)}
-                      className="text-white hover:bg-orange-700/30"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="comment" className="text-white">Your Comment</Label>
-                      <Textarea
-                        id="comment"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Share your thoughts about this team..."
-                        className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400 resize-none"
-                        rows={4}
-                      />
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowCommentModal(false)}
-                        className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() => handleComment(selectedTeam.id)}
-                        disabled={actionLoading[`comment_${selectedTeam.id}`] || !comment.trim()}
-                        className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
-                      >
-                        {actionLoading[`comment_${selectedTeam.id}`] ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-                            Commenting...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="h-4 w-4 mr-2" />
-                            Post Comment
-                          </>
-                        )}
-                      </Button>
+        {/* Popular Formations */}
+        {stats.popularFormations && stats.popularFormations.length > 0 && (
+          <Card className="mt-8 backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+                Popular Formations
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {stats.popularFormations.map((formation, index) => (
+                  <div key={index} className="p-4 rounded-lg border" style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                           style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                        <Trophy className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                      </div>
+                      <div>
+                        <div className="font-bold text-white">{formation.name}</div>
+                        <div className="text-sm text-gray-300">{formation.usage_count} teams</div>
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         )}
+
+        {/* Community Actions */}
+        <Card className="mt-8 backdrop-blur-lg text-white border" style={{ 
+          backgroundColor: logoColors.blackAlpha(0.3),
+          borderColor: logoColors.primaryBlueAlpha(0.2)
+        }}>
+          <CardContent className="p-6 text-center">
+            <h3 className="text-xl font-bold text-white mb-2">Join the Community!</h3>
+            <p className="text-gray-300 mb-4">
+              Share your amazing teams and connect with fellow coaches
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => navigate('/team-builder')}
+                className="text-black font-bold hover:opacity-80"
+                style={{ background: logoColors.yellowOrangeGradient }}
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Create Team
+              </Button>
+              {!user && (
+                <Button
+                  onClick={() => navigate('/login')}
+                  className="text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
+                >
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Join Now
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

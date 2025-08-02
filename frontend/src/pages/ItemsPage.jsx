@@ -1,299 +1,412 @@
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { mockEquipment } from '../data/mock';
-import { Package, Info, Coins, Gem, Star, Award } from 'lucide-react';
+import { Input } from '../components/ui/input';
+import { 
+  Search, 
+  Package, 
+  Star, 
+  Shield, 
+  Zap, 
+  Award,
+  Coins,
+  Gem,
+  Trophy,
+  Target,
+  Info,
+  Filter
+} from 'lucide-react';
+import { logoColors, componentColors } from '../styles/colors';
 
 const ItemsPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('boots');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedItem, setSelectedItem] = useState(null);
-  const [hoveredCurrency, setHoveredCurrency] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Enhanced mock data for different item categories matching the image
-  const itemCategories = {
-    boots: {
-      name: 'Boots',
-      items: [
-        { ...mockEquipment.boots[0], cost: 250, currency: 'gold', description: 'Professional football boots with enhanced kick power' },
-        { ...mockEquipment.boots[1], cost: 180, currency: 'gold', description: 'High-quality boots with good agility boost' },
-        { ...mockEquipment.boots[2], cost: 120, currency: 'gold', description: 'Standard boots with fire element boost' },
-        { ...mockEquipment.boots[3], cost: 50, currency: 'gold', description: 'Basic training boots for beginners' },
-        { id: 17, name: "Gale Boots", rarity: "Epic", category: "Boots", icon: "https://images.unsplash.com/photo-1612387049695-637b743f80ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwzfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { agility: 18, technique: 8 }, cost: 300, currency: 'gold', description: 'Wind-powered boots with incredible speed enhancement' },
-        { id: 18, name: "Verdant Boots", rarity: "Rare", category: "Boots", icon: "https://images.unsplash.com/photo-1511426463457-0571e247d816?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { control: 12, technique: 10 }, cost: 150, currency: 'gold', description: 'Nature-infused boots with enhanced ball control' },
-        { id: 19, name: "Raimon Boots", rarity: "Legendary", category: "Boots", icon: "https://images.unsplash.com/photo-1612387048732-1840c48c0976?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { kick: 20, agility: 15 }, cost: 500, currency: 'gems', description: 'Legendary boots worn by Raimon champions' },
-        { id: 20, name: "Raimon Boots of Revolution", rarity: "Legendary", category: "Boots", icon: "https://images.unsplash.com/photo-1653681498612-37ec55093e29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBlcXVpcG1lbnR8ZW58MHx8fHwxNzU0MTA3MTc4fDA&ixlib=rb-4.1.0&q=85", stats: { kick: 25, control: 12, technique: 15 }, cost: 1000, currency: 'diamonds', description: 'Ultimate boots that revolutionized football tactics' },
-        { id: 21, name: "Backwater Raimon Boots", rarity: "Epic", category: "Boots", icon: "https://images.pexels.com/photos/358042/pexels-photo-358042.jpeg", stats: { kick: 15, pressure: 10 }, cost: 220, currency: 'gold', description: 'Weathered boots with mysterious power' }
-      ]
-    },
-    bracelets: mockEquipment.bracelets.map(item => ({ ...item, cost: Math.floor(Math.random() * 200) + 100, currency: 'gold' })),
-    pendants: mockEquipment.pendants.map(item => ({ ...item, cost: Math.floor(Math.random() * 150) + 80, currency: 'gold' })),
-    special: mockEquipment.special.map(item => ({ ...item, cost: Math.floor(Math.random() * 300) + 200, currency: 'gems' }))
-  };
+  const categories = [
+    { id: 'all', name: 'All Items', icon: Package, count: 45 },
+    { id: 'boots', name: 'Boots', icon: Shield, count: 12 },
+    { id: 'bracelets', name: 'Bracelets', icon: Star, count: 10 },
+    { id: 'pendants', name: 'Pendants', icon: Award, count: 8 },
+    { id: 'special', name: 'Special Items', icon: Zap, count: 6 },
+    { id: 'consumables', name: 'Consumables', icon: Target, count: 9 }
+  ];
 
-  // Currency data with hover explanations
   const currencies = [
     { 
-      name: 'Gold', 
+      name: 'Kizuna Stars', 
+      icon: Star, 
       amount: 1250, 
-      icon: 'https://images.unsplash.com/photo-1653590501805-cce7dec267e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxnYW1lJTIwY29pbnN8ZW58MHx8fHwxNzU0MTA3MjA5fDA&ixlib=rb-4.1.0&q=85',
-      color: 'text-yellow-400',
-      description: 'Earned by winning matches, completing training sessions, and daily challenges'
+      color: logoColors.primaryYellow,
+      description: 'Earned through matches and daily login. Used for gacha pulls and special purchases.' 
     },
     { 
-      name: 'Gems', 
-      amount: 42, 
-      icon: 'https://images.unsplash.com/photo-1521133573892-e44906baee46?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxnZW1zfGVufDB8fHx8MTc1NDEwNzIxNXww&ixlib=rb-4.1.0&q=85',
-      color: 'text-purple-400',
-      description: 'Premium currency obtained through tournaments, achievements, and special events'
+      name: 'Training Points', 
+      icon: Trophy, 
+      amount: 850, 
+      color: logoColors.primaryBlue,
+      description: 'Gained from training sessions. Used to upgrade player stats and abilities.' 
     },
     { 
-      name: 'Diamonds', 
-      amount: 10, 
-      icon: 'https://images.pexels.com/photos/1147946/pexels-photo-1147946.jpeg',
-      color: 'text-blue-400',
-      description: 'Ultra-rare currency earned only through major championship victories'
+      name: 'Victory Coins', 
+      icon: Coins, 
+      amount: 2340, 
+      color: logoColors.primaryOrange,
+      description: 'Earned from winning matches. Used to purchase equipment and items.' 
     },
     { 
-      name: 'Stars', 
-      amount: 182, 
-      icon: 'https://images.unsplash.com/photo-1637597384601-61e937e8bc15?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxjdXJyZW5jeSUyMHRva2Vuc3xlbnwwfHx8fDE3NTQxMDcyMjF8MA&ixlib=rb-4.1.0&q=85',
-      color: 'text-green-400',
-      description: 'Earned through constellation gacha pulls and character development'
+      name: 'Premium Gems', 
+      icon: Gem, 
+      amount: 45, 
+      color: logoColors.secondaryBlue,
+      description: 'Premium currency. Purchase with real money or earn from special events.' 
+    }
+  ];
+
+  const mockItems = [
+    {
+      id: 1,
+      name: 'Lightning Boots',
+      category: 'boots',
+      rarity: 'Legendary',
+      stats: { speed: +15, technique: +10, kick: +8 },
+      cost: { type: 'Victory Coins', amount: 500 },
+      description: 'These legendary boots crackle with electric energy, dramatically increasing your speed and agility on the field.',
+      image: 'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=200&h=200&fit=crop'
+    },
+    {
+      id: 2,
+      name: 'Phoenix Pendant',
+      category: 'pendants',
+      rarity: 'Epic',
+      stats: { spirit: +20, catch: +12, technique: +5 },
+      cost: { type: 'Kizuna Stars', amount: 75 },
+      description: 'A mystical pendant that burns with the spirit of the phoenix, enhancing your spiritual power.',
+      image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=200&fit=crop'
+    },
+    {
+      id: 3,
+      name: 'Iron Defense Bracelet',
+      category: 'bracelets',
+      rarity: 'Rare',
+      stats: { defense: +18, physical: +10, block: +8 },
+      cost: { type: 'Training Points', amount: 200 },
+      description: 'Forged from the strongest materials, this bracelet provides excellent defensive capabilities.',
+      image: 'https://images.unsplash.com/photo-1611955167811-4711904bb9f8?w=200&h=200&fit=crop'
+    },
+    {
+      id: 4,
+      name: 'Energy Drink',
+      category: 'consumables',
+      rarity: 'Common',
+      stats: { stamina: '+50% for 1 match' },
+      cost: { type: 'Victory Coins', amount: 25 },
+      description: 'A refreshing energy drink that temporarily boosts your stamina during matches.',
+      image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=200&h=200&fit=crop'
+    },
+    {
+      id: 5,
+      name: 'Mystic Orb',
+      category: 'special',
+      rarity: 'Legendary',
+      stats: { all_stats: +5, special_move_power: +25 },
+      cost: { type: 'Premium Gems', amount: 15 },
+      description: 'A rare orb containing ancient power that enhances all abilities and special move effectiveness.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop'
     }
   ];
 
   const getRarityColor = (rarity) => {
     switch (rarity) {
-      case 'Legendary': return 'bg-gradient-to-r from-yellow-500 to-orange-500 border-yellow-400';
-      case 'Epic': return 'bg-gradient-to-r from-purple-500 to-pink-500 border-purple-400';
-      case 'Rare': return 'bg-gradient-to-r from-blue-500 to-cyan-500 border-blue-400';
-      case 'Common': return 'bg-gradient-to-r from-gray-500 to-gray-600 border-gray-400';
-      default: return 'bg-gradient-to-r from-orange-500 to-red-600 border-orange-400';
+      case 'Legendary': return logoColors.primaryYellow;
+      case 'Epic': return logoColors.primaryOrange;
+      case 'Rare': return logoColors.primaryBlue;
+      case 'Common': return logoColors.lightGray;
+      default: return logoColors.white;
     }
-  };
-
-  const getRarityTextColor = (rarity) => {
-    switch (rarity) {
-      case 'Legendary': return 'text-yellow-400';
-      case 'Epic': return 'text-purple-400';
-      case 'Rare': return 'text-blue-400';
-      case 'Common': return 'text-gray-400';
-      default: return 'text-gray-400';
-    }
-  };
-
-  const getCurrencyIcon = (currencyType) => {
-    const currency = currencies.find(c => c.name.toLowerCase() === currencyType);
-    return currency?.icon || currencies[0].icon;
   };
 
   const getCurrencyColor = (currencyType) => {
-    const currency = currencies.find(c => c.name.toLowerCase() === currencyType);
-    return currency?.color || 'text-yellow-400';
+    const currency = currencies.find(c => c.name === currencyType);
+    return currency ? currency.color : logoColors.white;
   };
 
+  const filteredItems = mockItems.filter(item => {
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesSearch = !searchQuery || 
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-emerald-800 to-green-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
-        {/* Header with Title and Currency Display */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-2">Items Database</h1>
-            <p className="text-gray-300">Research equipment stats, costs, and availability</p>
-          </div>
-          
-          {/* Currency Display */}
-          <Card className="bg-black/40 backdrop-blur-lg border-green-400/20 text-white">
-            <CardContent className="p-4">
-              <div className="text-sm font-bold text-green-400 mb-2">CURRENCIES</div>
-              <div className="grid grid-cols-2 gap-3">
-                {currencies.map((currency) => (
-                  <div 
-                    key={currency.name}
-                    className="relative flex items-center gap-2 cursor-pointer hover:bg-green-700/20 p-1 rounded"
-                    onMouseEnter={() => setHoveredCurrency(currency.name)}
-                    onMouseLeave={() => setHoveredCurrency(null)}
-                  >
-                    <img src={currency.icon} alt={currency.name} className="w-6 h-6 rounded" />
-                    <span className={`font-bold ${currency.color}`}>{currency.amount}</span>
-                    
-                    {/* Hover Tooltip */}
-                    {hoveredCurrency === currency.name && (
-                      <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-black/90 border border-green-400/30 rounded-lg text-sm z-10">
-                        <div className="font-bold text-green-400 mb-1">{currency.name}</div>
-                        <div className="text-gray-300">{currency.description}</div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-4 bg-clip-text text-transparent" 
+              style={{ background: logoColors.yellowOrangeGradient, WebkitBackgroundClip: 'text' }}>
+            Items Database
+          </h1>
+          <p className="text-xl text-gray-300">
+            Discover powerful equipment and consumables for your team
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Panel - Categories */}
+        {/* Currency Display */}
+        <Card className="mb-8 backdrop-blur-lg text-white border" style={{ 
+          backgroundColor: logoColors.blackAlpha(0.3),
+          borderColor: logoColors.primaryBlueAlpha(0.2)
+        }}>
+          <CardContent className="p-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {currencies.map((currency) => {
+                const Icon = currency.icon;
+                return (
+                  <div 
+                    key={currency.name} 
+                    className="flex items-center gap-2 p-2 rounded-lg cursor-pointer group" 
+                    style={{ backgroundColor: logoColors.blackAlpha(0.3) }}
+                    title={currency.description}
+                  >
+                    <Icon className="h-5 w-5" style={{ color: currency.color }} />
+                    <div>
+                      <div className="font-bold text-white">{currency.amount.toLocaleString()}</div>
+                      <div className="text-xs text-gray-300">{currency.name}</div>
+                    </div>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+                      <Info className="h-4 w-4 text-gray-400" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Categories Panel */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-green-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border sticky top-4" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5 text-green-400" />
+                  <Filter className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Categories
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {Object.entries(itemCategories).map(([key, category]) => (
-                    <button
-                      key={key}
-                      className={`w-full p-3 rounded-lg text-left transition-all ${
-                        selectedCategory === key
-                          ? 'bg-green-600/40 border-green-400/50 text-white'
-                          : 'bg-green-800/20 border-green-400/20 text-gray-300 hover:bg-green-700/30'
-                      } border`}
-                      onClick={() => {
-                        setSelectedCategory(key);
-                        setSelectedItem(null);
-                      }}
-                    >
-                      <div className="font-medium">{category.name}</div>
-                      <div className="text-xs text-gray-400">{category.items ? category.items.length : category.length} items</div>
-                    </button>
-                  ))}
+              <CardContent className="space-y-2">
+                {/* Search */}
+                <div className="relative mb-4">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                          style={{ color: logoColors.primaryBlue }} />
+                  <Input
+                    placeholder="Search items..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.5),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
+                  />
                 </div>
+
+                {categories.map((category) => {
+                  const Icon = category.icon;
+                  const isSelected = selectedCategory === category.id;
+                  return (
+                    <Button
+                      key={category.id}
+                      variant="ghost"
+                      className={`w-full justify-start gap-3 h-12 ${
+                        isSelected 
+                          ? 'text-black hover:opacity-80' 
+                          : 'text-white hover:bg-blue-700/30'
+                      }`}
+                      style={isSelected ? { background: logoColors.yellowOrangeGradient } : {}}
+                      onClick={() => setSelectedCategory(category.id)}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="flex-1 text-left">{category.name}</span>
+                      <Badge 
+                        className="text-xs"
+                        style={{ 
+                          backgroundColor: isSelected ? logoColors.blackAlpha(0.2) : logoColors.primaryBlueAlpha(0.2),
+                          color: logoColors.white
+                        }}
+                      >
+                        {category.count}
+                      </Badge>
+                    </Button>
+                  );
+                })}
               </CardContent>
             </Card>
           </div>
 
-          {/* Middle Panel - Items List */}
+          {/* Items List */}
           <div className="lg:col-span-2">
-            <Card className="bg-black/30 backdrop-blur-lg border-green-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="h-5 w-5 text-green-400" />
-                  {itemCategories[selectedCategory]?.name || 'Items'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="max-h-[600px] overflow-y-auto">
-                <div className="space-y-3">
-                  {(itemCategories[selectedCategory]?.items || itemCategories[selectedCategory] || []).map((item) => (
-                    <div
-                      key={item.id}
-                      className={`p-3 rounded-lg border-2 cursor-pointer transition-all hover:scale-[1.02] ${
-                        selectedItem?.id === item.id
-                          ? 'bg-green-600/30 border-green-400/60'
-                          : 'bg-green-800/20 border-green-400/20 hover:bg-green-700/30'
-                      }`}
-                      onClick={() => setSelectedItem(item)}
-                    >
-                      <div className="flex items-center gap-4">
-                        <img src={item.icon} alt={item.name} className="w-12 h-12 rounded-lg bg-gray-800/50 p-1" />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium">{item.name}</span>
-                            <Badge className={`${getRarityTextColor(item.rarity)} border-current bg-transparent text-xs`}>
-                              {item.rarity}
-                            </Badge>
-                          </div>
-                          {item.cost && (
-                            <div className="flex items-center gap-2 text-sm">
-                              <img src={getCurrencyIcon(item.currency)} alt={item.currency} className="w-4 h-4 rounded" />
-                              <span className={getCurrencyColor(item.currency)}>{item.cost}</span>
-                            </div>
-                          )}
+            <div className="space-y-4">
+              {filteredItems.map((item) => (
+                <Card 
+                  key={item.id} 
+                  className="backdrop-blur-lg text-white border cursor-pointer hover:opacity-80 transition-all" 
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: selectedItem?.id === item.id ? logoColors.primaryYellow : logoColors.primaryBlueAlpha(0.2)
+                  }}
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0" 
+                           style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-bold text-white">{item.name}</h3>
+                          <Badge 
+                            className="text-xs"
+                            style={{ 
+                              backgroundColor: getRarityColor(item.rarity), 
+                              color: item.rarity === 'Common' ? logoColors.black : logoColors.white 
+                            }}
+                          >
+                            {item.rarity}
+                          </Badge>
                         </div>
-                        {item.stats && (
-                          <div className="text-xs text-gray-400">
-                            {Object.entries(item.stats).slice(0, 2).map(([stat, value]) => 
-                              `${stat}: +${value}`
-                            ).join(', ')}
+                        <p className="text-sm text-gray-300 mb-3">{item.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-xs">
+                            {Object.entries(item.stats).map(([stat, value]) => (
+                              <span key={stat} className="text-gray-300">
+                                <span className="capitalize">{stat.replace('_', ' ')}</span>: 
+                                <span className="font-bold ml-1" style={{ color: logoColors.primaryYellow }}>
+                                  {value}
+                                </span>
+                              </span>
+                            ))}
                           </div>
-                        )}
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm font-bold" style={{ color: getCurrencyColor(item.cost.type) }}>
+                              {item.cost.amount}
+                            </span>
+                            <span className="text-xs text-gray-300">{item.cost.type}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  </CardContent>
+                </Card>
+              ))}
+
+              {filteredItems.length === 0 && (
+                <div className="text-center py-16">
+                  <Package className="h-16 w-16 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+                  <h3 className="text-xl font-bold text-white mb-2">No Items Found</h3>
+                  <p className="text-gray-300 mb-4">Try adjusting your search or category filter.</p>
+                  <Button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedCategory('all');
+                    }}
+                    className="text-black font-bold hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient }}
+                  >
+                    Reset Filters
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
+              )}
+            </div>
           </div>
 
-          {/* Right Panel - Item Details */}
+          {/* Item Details */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-green-400/20 text-white min-h-[400px]">
+            <Card className="backdrop-blur-lg text-white border sticky top-4" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Info className="h-5 w-5 text-green-400" />
-                  {selectedItem ? 'Item Details' : 'Select Item'}
+                  <Info className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+                  {selectedItem ? 'Item Details' : 'Select an Item'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedItem ? (
                   <div className="space-y-4">
-                    {/* Item Image and Basic Info */}
-                    <div className="text-center">
-                      <div className={`inline-block p-4 rounded-lg ${getRarityColor(selectedItem.rarity)} border-2`}>
-                        <img src={selectedItem.icon} alt={selectedItem.name} className="w-16 h-16 mx-auto" />
+                    <div className="w-full h-32 rounded-lg overflow-hidden" 
+                         style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                      <img 
+                        src={selectedItem.image} 
+                        alt={selectedItem.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-bold text-xl text-white">{selectedItem.name}</h3>
+                        <Badge 
+                          style={{ 
+                            backgroundColor: getRarityColor(selectedItem.rarity), 
+                            color: selectedItem.rarity === 'Common' ? logoColors.black : logoColors.white 
+                          }}
+                        >
+                          {selectedItem.rarity}
+                        </Badge>
                       </div>
-                      <h3 className="font-bold text-lg mt-2">{selectedItem.name}</h3>
-                      <Badge className={`${getRarityTextColor(selectedItem.rarity)} border-current bg-transparent mt-1`}>
-                        {selectedItem.rarity}
-                      </Badge>
+                      <p className="text-sm text-gray-300 mb-4">{selectedItem.description}</p>
                     </div>
 
-                    {/* Cost */}
-                    {selectedItem.cost && (
-                      <div className="bg-green-800/30 rounded-lg p-3 border border-green-400/20">
-                        <div className="text-sm text-gray-300 mb-1">Cost</div>
-                        <div className="flex items-center gap-2">
-                          <img src={getCurrencyIcon(selectedItem.currency)} alt={selectedItem.currency} className="w-6 h-6 rounded" />
-                          <span className={`font-bold text-lg ${getCurrencyColor(selectedItem.currency)}`}>
-                            {selectedItem.cost}
-                          </span>
-                        </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-2">Stats</h4>
+                      <div className="space-y-2">
+                        {Object.entries(selectedItem.stats).map(([stat, value]) => (
+                          <div key={stat} className="flex justify-between">
+                            <span className="text-gray-300 capitalize">{stat.replace('_', ' ')}</span>
+                            <span className="font-bold" style={{ color: logoColors.primaryYellow }}>
+                              {value}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    )}
+                    </div>
 
-                    {/* Stats */}
-                    {selectedItem.stats && Object.keys(selectedItem.stats).length > 0 && (
-                      <div className="bg-green-800/30 rounded-lg p-3 border border-green-400/20">
-                        <div className="text-sm text-gray-300 mb-2">Stat Bonuses</div>
-                        <div className="space-y-1">
-                          {Object.entries(selectedItem.stats).map(([stat, value]) => (
-                            <div key={stat} className="flex justify-between items-center">
-                              <span className="capitalize text-sm">{stat}</span>
-                              <span className="text-green-400 font-bold">+{value}</span>
-                            </div>
-                          ))}
-                        </div>
+                    <div className="p-3 rounded-lg border" style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}>
+                      <div className="text-sm text-gray-300 mb-1">Cost</div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-lg" style={{ color: getCurrencyColor(selectedItem.cost.type) }}>
+                          {selectedItem.cost.amount}
+                        </span>
+                        <span className="text-gray-300">{selectedItem.cost.type}</span>
                       </div>
-                    )}
+                    </div>
 
-                    {/* Description */}
-                    {selectedItem.description && (
-                      <div className="bg-green-800/30 rounded-lg p-3 border border-green-400/20">
-                        <div className="text-sm text-gray-300 mb-1">Description</div>
-                        <p className="text-sm text-white">{selectedItem.description}</p>
-                      </div>
-                    )}
-
-                    {/* Research Note */}
-                    <div className="bg-blue-900/30 rounded-lg p-3 border border-blue-400/20">
-                      <div className="flex items-center gap-2 text-blue-400 text-sm font-medium mb-1">
-                        <Info className="h-4 w-4" />
-                        Research Database
-                      </div>
-                      <p className="text-xs text-gray-300">
-                        This is a research interface. Item stats and costs are for reference only.
-                      </p>
+                    <div className="text-center text-xs text-gray-400 p-2 rounded" 
+                         style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
+                      This is a research database for informational purposes
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center text-gray-400 mt-8">
-                    <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Select an item from the list to view its details, stats, and cost information.</p>
+                  <div className="text-center py-8">
+                    <Package className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+                    <p className="text-gray-300">Click on an item to view detailed information</p>
                   </div>
                 )}
               </CardContent>
