@@ -61,15 +61,24 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
       return matchingPositions[0].id;
     }
 
-    // If no exact position match available, try bench immediately
-    // This prevents attempting to add to already full positions
+    // If no exact position match available, try ANY available formation position
+    // This allows flexibility to place players in non-matching positions when needed
+    const anyAvailablePositions = currentFormation.positions.filter(
+      pos => !builtTeam.players[pos.id]
+    );
+
+    if (anyAvailablePositions.length > 0) {
+      return anyAvailablePositions[0].id;
+    }
+
+    // If all formation positions are full, try bench
     for (let i = 0; i < 5; i++) {
       if (!builtTeam.bench[i]) {
         return null; // Signal to add to bench
       }
     }
 
-    return null; // Team is full
+    return null; // Team is completely full
   };
 
   // Check if player is already selected
