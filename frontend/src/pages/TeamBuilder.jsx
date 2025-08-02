@@ -666,10 +666,12 @@ const TeamBuilder = () => {
             }}
             onPlayerSelect={handlePlayerSelect}
             position={selectedPosition}
-            selectedPlayerIds={[...Object.values(teamPlayers).map(p => p.id), ...Object.values(benchPlayers).map(p => p.id)]}
+            selectedPlayerIds={getCurrentlySelectedPlayerIds()}
             teamBuildingMode={teamBuildingMode}
             currentFormation={selectedFormation}
             onTeamBuilt={handleTeamBuilt}
+            currentTeamPlayers={teamPlayers}
+            currentBenchPlayers={benchPlayers}
           />
         )}
 
