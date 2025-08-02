@@ -458,7 +458,11 @@ const TechniquesPage = () => {
 
             {/* Technique Details Panel */}
             <div className="lg:col-span-1">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 sticky top-20">
+              <div className="rounded-lg p-4 backdrop-blur-sm sticky top-20"
+                   style={{ 
+                     backgroundColor: logoColors.blackAlpha(0.3),
+                     border: `1px solid ${logoColors.primaryBlueAlpha(0.2)}`
+                   }}>
                 {selectedTechnique ? (
                   <div>
                     <h3 className="text-white font-semibold mb-4">Technique Details</h3>
@@ -470,28 +474,48 @@ const TechniquesPage = () => {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-white/5 rounded-lg p-3">
+                        <div className="rounded-lg p-3"
+                             style={{ backgroundColor: logoColors.blackAlpha(0.5) }}>
                           <div className="text-gray-400 text-xs mb-1">Power</div>
-                          <div className={`text-2xl font-bold ${getPowerColor(selectedTechnique.power)}`}>
+                          <div 
+                            className={`text-2xl ${getPowerColor(selectedTechnique.power)}`}
+                            style={{ color: getPowerTextColor(selectedTechnique.power) }}
+                          >
                             {selectedTechnique.power}
                           </div>
                         </div>
-                        <div className="bg-white/5 rounded-lg p-3">
+                        <div className="rounded-lg p-3"
+                             style={{ backgroundColor: logoColors.blackAlpha(0.5) }}>
                           <div className="text-gray-400 text-xs mb-1">Min Level</div>
                           <div className="text-white font-semibold">{selectedTechnique.min_level}</div>
                         </div>
                       </div>
 
                       <div>
-                        <div className="text-gray-400 text-xs mb-2">Type & Category</div>
+                        <div className="text-gray-400 text-xs mb-2">Type & Element</div>
                         <div className="flex flex-wrap gap-2">
-                          <div className={`bg-gradient-to-r ${typeColors[selectedTechnique.technique_type]} text-white px-3 py-1 rounded-full text-sm font-medium`}>
+                          <div 
+                            className="text-white px-3 py-1 rounded-full text-sm font-medium"
+                            style={{ background: typeColors[selectedTechnique.technique_type] }}
+                          >
                             {selectedTechnique.technique_type.charAt(0).toUpperCase() + selectedTechnique.technique_type.slice(1)}
                           </div>
                           <span className={`px-3 py-1 rounded-full text-sm font-medium ${elementColors[selectedTechnique.element]}`}>
                             {selectedTechnique.element.charAt(0).toUpperCase() + selectedTechnique.element.slice(1)}
                           </span>
                         </div>
+                      </div>
+
+                      <div>
+                        <div className="text-gray-400 text-xs mb-1">Rarity</div>
+                        <span 
+                          className={`px-3 py-1 rounded-full text-sm font-medium text-white ${rarityColors[selectedTechnique.rarity]}`}
+                          style={selectedTechnique.rarity === 'Rare' ? { borderColor: logoColors.primaryBlue } :
+                                 selectedTechnique.rarity === 'Epic' ? { borderColor: logoColors.secondaryBlue } :
+                                 selectedTechnique.rarity === 'Legendary' ? { borderColor: logoColors.primaryYellow } : {}}
+                        >
+                          {selectedTechnique.rarity}
+                        </span>
                       </div>
 
                       {selectedTechnique.shot_type && (
@@ -536,9 +560,18 @@ const TechniquesPage = () => {
                             {Object.entries(selectedTechnique.stat_bonuses).map(([stat, value]) => (
                               <div key={stat} className="flex justify-between text-sm">
                                 <span className="text-gray-300 capitalize">{stat}</span>
-                                <span className="text-green-400 font-semibold">+{value}</span>
+                                <span style={{ color: logoColors.lightBlue }} className="font-semibold">+{value}</span>
                               </div>
                             ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedTechnique.learning_cost > 0 && (
+                        <div>
+                          <div className="text-gray-400 text-xs mb-1">Learning Cost</div>
+                          <div style={{ color: logoColors.primaryYellow }} className="font-semibold">
+                            {selectedTechnique.learning_cost} Points
                           </div>
                         </div>
                       )}
