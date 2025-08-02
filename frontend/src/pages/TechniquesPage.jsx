@@ -70,11 +70,9 @@ const TechniquesPage = () => {
   }, [techniques, searchTerm, filters]);
 
   const getBackendUrl = () => {
-    // Try different environment variable patterns
-    return import.meta.env.VITE_REACT_APP_BACKEND_URL || 
-           process.env.REACT_APP_BACKEND_URL || 
-           import.meta.env.REACT_APP_BACKEND_URL ||
-           'https://684c28f8-ea94-4ca4-ba52-65bc18ee2143.preview.emergentagent.com';
+    // In production, use the environment variable from .env file
+    // process.env.REACT_APP_BACKEND_URL is available in React apps
+    return process.env.REACT_APP_BACKEND_URL || 'https://684c28f8-ea94-4ca4-ba52-65bc18ee2143.preview.emergentagent.com';
   };
 
   const fetchTechniques = async () => {
