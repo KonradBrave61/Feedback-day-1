@@ -644,10 +644,16 @@ const TeamBuilder = () => {
         {showPlayerSearch && (
           <PlayerSearch
             isOpen={showPlayerSearch}
-            onClose={() => setShowPlayerSearch(false)}
+            onClose={() => {
+              setShowPlayerSearch(false);
+              setTeamBuildingMode(false);
+            }}
             onPlayerSelect={handlePlayerSelect}
             position={selectedPosition}
             selectedPlayerIds={[...Object.values(teamPlayers).map(p => p.id), ...Object.values(benchPlayers).map(p => p.id)]}
+            teamBuildingMode={teamBuildingMode}
+            currentFormation={selectedFormation}
+            onTeamBuilt={handleTeamBuilt}
           />
         )}
 
