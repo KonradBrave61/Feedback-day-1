@@ -2,395 +2,225 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Textarea } from '../components/ui/textarea';
-import { 
-  Users, 
-  Trophy, 
-  Calendar, 
-  Edit3, 
-  Trash2, 
-  Eye,
-  Plus,
-  Target,
-  TrendingUp,
-  Lock,
-  Unlock,
-  Globe,
-  Save,
-  X
-} from 'lucide-react';
+import { Users, Trophy, Target, Star, TrendingUp, Calendar, Award, User, Plus, Settings, Clock, Globe } from 'lucide-react';
+import { logoColors, componentColors } from '../styles/colors';
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const { user, updateUserProfile } = useAuth();
-  const [userTeams, setUserTeams] = useState([]);
-  const [editingTeamId, setEditingTeamId] = useState(null);
-  const [editingDescription, setEditingDescription] = useState('');
-  const [userStats, setUserStats] = useState({
-    username: "Player123",
-    joinDate: "2024-01-15",
-    totalTeams: 12,
-    favouriteTeam: "Lightning Strike",
-    avatar: "/api/placeholder/64/64"
+  const [stats, setStats] = useState({
+    teamsCreated: 3,
+    totalMatches: 45,
+    winRate: 72,
+    currentRank: 'Elite Coach',
+    weeklyGoal: 5,
+    weeklyProgress: 3
   });
 
-  // Mock user teams data
-  useEffect(() => {
-    const mockTeams = [
-      {
-        id: 1,
-        name: "Lightning Strike",
-        formation: "4-4-2 Diamond",
-        keyPlayers: ["Endou Mamoru", "Gouenji Shuuya", "Kidou Yuuto"],
-        createdDate: "2024-07-10",
-        isPublic: true,
-        likes: 45,
-        description: "Aggressive attacking formation with strong midfield control and fast counter-attacks"
-      },
-      {
-        id: 2,
-        name: "Defensive Wall",
-        formation: "4-3-3",
-        keyPlayers: ["Kazemaru Ichirouta", "Kabeyama Heigorou", "Tsunami Jousuke"],
-        createdDate: "2024-07-08",
-        isPublic: false,
-        likes: 23,
-        description: "Solid defensive setup with quick counter-attacks and strong midfield presence"
-      },
-      {
-        id: 3,
-        name: "Chaos Control",
-        formation: "4-4-2 Diamond",
-        keyPlayers: ["Fudou Akio", "Hiroto Kira", "Midorikawa Ryuuji"],
-        createdDate: "2024-07-05",
-        isPublic: true,
-        likes: 67,
-        description: "Unpredictable tactical approach with versatile players and dynamic positioning"
-      }
-    ];
-    setUserTeams(mockTeams);
-  }, []);
+  const recentActivity = [
+    { action: 'Team "Lightning Strikers" updated', time: '2 hours ago', type: 'team' },
+    { action: 'Defeated "Fire Dragons" 3-1', time: '1 day ago', type: 'match' },
+    { action: 'New player unlocked: Jude Sharp', time: '2 days ago', type: 'unlock' },
+    { action: 'Reached Coach Level 25', time: '3 days ago', type: 'level' }
+  ];
 
-  const handleEditTeam = (teamId) => {
-    navigate(`/team-builder?edit=${teamId}`);
-  };
-
-  const handleDeleteTeam = (teamId) => {
-    setUserTeams(prev => prev.filter(team => team.id !== teamId));
-  };
-
-  const handleViewTeam = (teamId) => {
-    navigate(`/team-details/${teamId}`);
-  };
-
-  const handleToggleTeamPrivacy = (teamId) => {
-    setUserTeams(prev => prev.map(team => 
-      team.id === teamId 
-        ? { ...team, isPublic: !team.isPublic }
-        : team
-    ));
-  };
-
-  const handleFavouriteTeamChange = (teamName) => {
-    setUserStats(prev => ({
-      ...prev,
-      favouriteTeam: teamName
-    }));
-    // Also update user profile if updateUserProfile is available
-    if (updateUserProfile) {
-      updateUserProfile({ favourite_team: teamName });
-    }
-  };
-
-  const handleEditDescription = (teamId, currentDescription) => {
-    setEditingTeamId(teamId);
-    setEditingDescription(currentDescription);
-  };
-
-  const handleSaveDescription = (teamId) => {
-    setUserTeams(prev => prev.map(team => 
-      team.id === teamId 
-        ? { ...team, description: editingDescription }
-        : team
-    ));
-    setEditingTeamId(null);
-    setEditingDescription('');
-  };
-
-  const handleCancelEdit = () => {
-    setEditingTeamId(null);
-    setEditingDescription('');
-  };
-
-  const getFormationColor = (formation) => {
-    switch (formation) {
-      case '4-4-2 Diamond': return 'bg-orange-500';
-      case '4-3-3': return 'bg-blue-500';
-      case '3-5-2': return 'bg-green-500';
-      default: return 'bg-gray-500';
-    }
-  };
+  const quickActions = [
+    { title: 'Team Builder', icon: Users, path: '/team-builder', color: logoColors.primaryBlue },
+    { title: 'Browse Characters', icon: Star, path: '/characters', color: logoColors.primaryYellow },
+    { title: 'Community Hub', icon: Globe, path: '/community', color: logoColors.secondaryBlue },
+    { title: 'Profile Settings', icon: Settings, path: '/profile', color: logoColors.primaryOrange }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
+        {/* Welcome Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-            Dashboard
+          <h1 className="text-4xl font-bold text-white mb-2">
+            Welcome back, <span style={{ color: logoColors.primaryYellow }}>{user?.username}</span>!
           </h1>
-          <p className="text-xl text-gray-300">
-            Welcome back, manage your teams and track your progress
-          </p>
+          <p className="text-gray-300">Ready to build your ultimate team?</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left Panel - User Profile */}
-          <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white mb-6">
-              <CardHeader className="text-center">
-                <Avatar className="w-20 h-20 mx-auto mb-4">
-                  <AvatarImage src={userStats.avatar} alt={userStats.username} />
-                  <AvatarFallback className="bg-orange-600 text-white text-xl">
-                    {userStats.username.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <CardTitle className="text-orange-400">{userStats.username}</CardTitle>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" 
+                     style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Users className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{stats.teamsCreated}</div>
+                  <div className="text-sm text-gray-300">Teams Created</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" 
+                     style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Trophy className="h-6 w-6" style={{ color: logoColors.primaryYellow }} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{stats.totalMatches}</div>
+                  <div className="text-sm text-gray-300">Total Matches</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" 
+                     style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <TrendingUp className="h-6 w-6" style={{ color: logoColors.secondaryBlue }} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-white">{stats.winRate}%</div>
+                  <div className="text-sm text-gray-300">Win Rate</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" 
+                     style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Award className="h-6 w-6" style={{ color: logoColors.primaryOrange }} />
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-white">{stats.currentRank}</div>
+                  <div className="text-sm text-gray-300">Current Rank</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Quick Actions */}
+          <div className="lg:col-span-2">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+                  Quick Actions
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Member Since:</span>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-orange-400" />
-                    <span className="text-sm">{new Date(userStats.joinDate).toLocaleDateString()}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Total Teams:</span>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-orange-400" />
-                    <span className="text-sm">{userStats.totalTeams}</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <span className="text-gray-300">Favourite Team:</span>
-                  <Select value={userStats.favouriteTeam} onValueChange={handleFavouriteTeamChange}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
-                      {userTeams.map((team) => (
-                        <SelectItem key={team.id} value={team.name} className="text-white hover:bg-orange-800">
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                      <SelectItem value="Default Team" className="text-white hover:bg-orange-800">
-                        Default Team
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="pt-4 border-t border-orange-400/20">
-                  <Button 
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-white"
-                    onClick={() => navigate('/team-builder')}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create New Team
-                  </Button>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {quickActions.map((action, index) => {
+                    const Icon = action.icon;
+                    return (
+                      <Button
+                        key={index}
+                        onClick={() => navigate(action.path)}
+                        className="h-20 flex flex-col items-center justify-center gap-2 text-white hover:opacity-80 border"
+                        style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.3),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
+                      >
+                        <Icon className="h-6 w-6" style={{ color: action.color }} />
+                        <span className="text-sm font-medium">{action.title}</span>
+                      </Button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Quick Stats */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            {/* Weekly Progress */}
+            <Card className="mt-6 backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-orange-400" />
-                  Quick Stats
+                  <Calendar className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+                  Weekly Goal Progress
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Public Teams:</span>
-                  <span className="text-orange-400">{userTeams.filter(t => t.isPublic).length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Private Teams:</span>
-                  <span className="text-orange-400">{userTeams.filter(t => !t.isPublic).length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Total Likes:</span>
-                  <span className="text-orange-400">{userTeams.reduce((sum, t) => sum + t.likes, 0)}</span>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Teams Built This Week</span>
+                    <span className="font-bold">{stats.weeklyProgress}/{stats.weeklyGoal}</span>
+                  </div>
+                  <div className="w-full rounded-full h-2" style={{ backgroundColor: logoColors.blackAlpha(0.5) }}>
+                    <div 
+                      className="h-2 rounded-full transition-all duration-300" 
+                      style={{ 
+                        background: logoColors.yellowOrangeGradient,
+                        width: `${(stats.weeklyProgress / stats.weeklyGoal) * 100}%` 
+                      }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    {stats.weeklyGoal - stats.weeklyProgress} more teams to reach your weekly goal!
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Right Panel - Team Gallery */}
-          <div className="lg:col-span-3">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          {/* Recent Activity */}
+          <div>
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-orange-400" />
-                  My Teams ({userTeams.length})
+                  <Clock className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+                  Recent Activity
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {userTeams.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 text-lg mb-4">No teams created yet</p>
-                    <Button 
-                      onClick={() => navigate('/team-builder')}
-                      className="bg-orange-600 hover:bg-orange-700 text-white"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create Your First Team
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {userTeams.map((team) => (
-                      <Card key={team.id} className="bg-orange-900/30 border-orange-400/30 hover:bg-orange-800/30 transition-colors">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg text-white">{team.name}</CardTitle>
-                            <div className="flex items-center gap-2">
-                              <Badge 
-                                variant={team.isPublic ? "default" : "secondary"}
-                                className={team.isPublic ? "bg-green-600" : "bg-gray-600"}
-                              >
-                                {team.isPublic ? (
-                                  <>
-                                    <Globe className="h-3 w-3 mr-1" />
-                                    Public
-                                  </>
-                                ) : (
-                                  <>
-                                    <Lock className="h-3 w-3 mr-1" />
-                                    Private
-                                  </>
-                                )}
-                              </Badge>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 text-gray-400 hover:text-white hover:bg-orange-700/30"
-                                onClick={() => handleToggleTeamPrivacy(team.id)}
-                                title={`Make ${team.isPublic ? 'Private' : 'Public'}`}
-                              >
-                                {team.isPublic ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
-                              </Button>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <Target className="h-4 w-4 text-orange-400" />
-                            <Badge className={`${getFormationColor(team.formation)} text-white`}>
-                              {team.formation}
-                            </Badge>
-                          </div>
-                          
-                          <div>
-                            <div className="flex items-center justify-between mb-2">
-                              <p className="text-sm text-gray-300">Description:</p>
-                              {editingTeamId !== team.id && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleEditDescription(team.id, team.description)}
-                                  className="h-6 text-xs text-orange-400 hover:bg-orange-700/30"
-                                >
-                                  <Edit3 className="h-3 w-3 mr-1" />
-                                  Edit
-                                </Button>
-                              )}
-                            </div>
-                            {editingTeamId === team.id ? (
-                              <div className="space-y-2">
-                                <Textarea
-                                  value={editingDescription}
-                                  onChange={(e) => setEditingDescription(e.target.value)}
-                                  className="text-xs bg-orange-900/30 border-orange-400/30 text-white resize-none"
-                                  rows={3}
-                                  placeholder="Enter team description..."
-                                />
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleSaveDescription(team.id)}
-                                    className="bg-green-600 hover:bg-green-700 text-white h-6 text-xs px-2"
-                                  >
-                                    <Save className="h-3 w-3 mr-1" />
-                                    Save
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    onClick={handleCancelEdit}
-                                    className="bg-gray-600 hover:bg-gray-700 text-white h-6 text-xs px-2"
-                                  >
-                                    <X className="h-3 w-3 mr-1" />
-                                    Cancel
-                                  </Button>
-                                </div>
-                              </div>
-                            ) : (
-                              <p className="text-xs text-gray-200 leading-relaxed">
-                                {team.description || 'No description available. Click Edit to add one.'}
-                              </p>
-                            )}
-                          </div>
-                          
-                          <div className="text-xs text-gray-400 flex items-center gap-2">
-                            <Calendar className="h-3 w-3" />
-                            Created: {new Date(team.createdDate).toLocaleDateString()}
-                          </div>
-                          
-                          <div className="text-xs text-gray-400">
-                            ❤️ {team.likes} likes
-                          </div>
-                          
-                          <div className="flex gap-2 pt-2">
-                            <Button 
-                              size="sm" 
-                              className="flex-1 bg-orange-800/60 border-orange-400/50 hover:bg-orange-700 text-white"
-                              onClick={() => handleViewTeam(team.id)}
-                            >
-                              <Eye className="h-3 w-3 mr-1" />
-                              View
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              className="flex-1 bg-orange-800/60 border-orange-400/50 hover:bg-orange-700 text-white"
-                              onClick={() => handleEditTeam(team.id)}
-                            >
-                              <Edit3 className="h-3 w-3 mr-1" />
-                              Edit
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              className="bg-red-800/60 border-red-400/50 hover:bg-red-700 text-white"
-                              onClick={() => handleDeleteTeam(team.id)}
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
+                <div className="space-y-4">
+                  {recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full mt-2" 
+                           style={{ backgroundColor: logoColors.primaryYellow }} />
+                      <div>
+                        <div className="text-sm font-medium text-white">
+                          {activity.action}
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {activity.time}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>

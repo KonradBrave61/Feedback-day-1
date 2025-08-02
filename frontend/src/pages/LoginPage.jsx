@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { User, Mail, Lock, Trophy, UserPlus, LogIn, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { logoColors, componentColors } from '../styles/colors';
 
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -59,13 +60,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: logoColors.backgroundGradient }}>
       {/* Back Button */}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => navigate('/')}
-        className="absolute top-4 left-4 text-white hover:bg-orange-700/30"
+        className="absolute top-4 left-4 text-white hover:bg-blue-700/30"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Home
@@ -74,87 +75,132 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Trophy className="h-8 w-8 text-white" />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" 
+               style={{ background: logoColors.yellowOrangeGradient }}>
+            <Trophy className="h-8 w-8 text-black" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
             Inazuma Eleven
           </h1>
-          <p className="text-orange-300">Victory Road</p>
+          <p className="text-sm" style={{ color: logoColors.lightBlue }}>
+            Victory Road
+          </p>
         </div>
 
-        {/* Login/Register Form */}
-        <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-          <CardHeader>
-            <CardTitle className="text-center">
-              {isLogin ? 'Welcome Back' : 'Create Account'}
+        {/* Login/Register Card */}
+        <Card className="backdrop-blur-lg text-white border shadow-2xl" style={{ 
+          backgroundColor: logoColors.blackAlpha(0.4),
+          borderColor: logoColors.primaryBlueAlpha(0.3)
+        }}>
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">
+              {isLogin ? 'Welcome Back' : 'Join the Team'}
             </CardTitle>
+            <p className="text-gray-300">
+              {isLogin 
+                ? 'Sign in to continue your football journey' 
+                : 'Create your account to start building teams'
+              }
+            </p>
           </CardHeader>
+          
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
-                <div>
-                  <label className="block text-sm font-medium mb-2">Username</label>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                    Username
+                  </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                          style={{ color: logoColors.primaryBlue }} />
                     <Input
                       type="text"
                       name="username"
                       value={formData.username}
                       onChange={handleChange}
-                      required={!isLogin}
-                      className="pl-10 bg-orange-900/30 border-orange-400/30 text-white"
                       placeholder="Enter your username"
+                      className="pl-10 text-white border focus:ring-2"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        borderColor: logoColors.primaryBlueAlpha(0.3),
+                        focusRingColor: logoColors.secondaryBlue
+                      }}
+                      required={!isLogin}
                     />
                   </div>
                 </div>
               )}
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                  Email
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                        style={{ color: logoColors.primaryBlue }} />
                   <Input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    required
-                    className="pl-10 bg-orange-900/30 border-orange-400/30 text-white"
                     placeholder="Enter your email"
+                    className="pl-10 text-white border focus:ring-2"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.5),
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      focusRingColor: logoColors.secondaryBlue
+                    }}
+                    required
                   />
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Password</label>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                  Password
+                </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                        style={{ color: logoColors.primaryBlue }} />
                   <Input
                     type="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
-                    className="pl-10 bg-orange-900/30 border-orange-400/30 text-white"
                     placeholder="Enter your password"
+                    className="pl-10 text-white border focus:ring-2"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.5),
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      focusRingColor: logoColors.secondaryBlue
+                    }}
+                    required
                   />
                 </div>
               </div>
 
               {!isLogin && (
-                <div>
-                  <label className="block text-sm font-medium mb-2">Confirm Password</label>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                    Confirm Password
+                  </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" 
+                          style={{ color: logoColors.primaryBlue }} />
                     <Input
                       type="password"
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      required={!isLogin}
-                      className="pl-10 bg-orange-900/30 border-orange-400/30 text-white"
                       placeholder="Confirm your password"
+                      className="pl-10 text-white border focus:ring-2"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.5),
+                        borderColor: logoColors.primaryBlueAlpha(0.3),
+                        focusRingColor: logoColors.secondaryBlue
+                      }}
+                      required={!isLogin}
                     />
                   </div>
                 </div>
@@ -162,15 +208,21 @@ const LoginPage = () => {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
                 disabled={loading}
+                className="w-full text-black font-bold hover:opacity-80 disabled:opacity-50"
+                style={{ background: logoColors.yellowOrangeGradient }}
               >
                 {loading ? (
-                  'Please wait...'
+                  'Processing...'
+                ) : isLogin ? (
+                  <>
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
+                  </>
                 ) : (
                   <>
-                    {isLogin ? <LogIn className="mr-2 h-4 w-4" /> : <UserPlus className="mr-2 h-4 w-4" />}
-                    {isLogin ? 'Sign In' : 'Create Account'}
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Create Account
                   </>
                 )}
               </Button>
@@ -180,23 +232,27 @@ const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-orange-400 hover:text-orange-300 text-sm"
+                className="text-sm hover:opacity-80 underline"
+                style={{ color: logoColors.lightBlue }}
               >
-                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                {isLogin 
+                  ? "Don't have an account? Sign up" 
+                  : "Already have an account? Sign in"
+                }
               </button>
             </div>
 
-            {/* Demo Login */}
-            <div className="mt-4 pt-4 border-t border-orange-400/20">
-              <p className="text-xs text-gray-400 text-center mb-2">Demo Account</p>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full text-white border-orange-400/30 hover:bg-orange-700/30"
-                onClick={() => setFormData({ email: 'demo@demo.com', password: 'demo123' })}
-              >
-                Use Demo Login
-              </Button>
+            {/* Demo Account */}
+            <div className="mt-4 p-3 rounded-lg border" style={{ 
+              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+              borderColor: logoColors.primaryBlueAlpha(0.3)
+            }}>
+              <p className="text-xs text-center mb-2" style={{ color: logoColors.lightBlue }}>
+                Demo Account
+              </p>
+              <p className="text-xs text-center text-gray-300">
+                Email: demo@inazuma.com | Password: demo123
+              </p>
             </div>
           </CardContent>
         </Card>
