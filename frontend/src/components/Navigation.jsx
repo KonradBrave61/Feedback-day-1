@@ -259,7 +259,8 @@ const Navigation = () => {
                       navigate('/login');
                       setShowHamburgerMenu(false);
                     }}
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                    className="w-full text-black hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient }}
                   >
                     <User className="h-4 w-4 mr-2" />
                     Sign In
