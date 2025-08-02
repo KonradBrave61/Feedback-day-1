@@ -217,4 +217,89 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
   );
 };
 
+// BenchSlot component for drag & drop with formation
+const BenchSlot = ({ slotIndex, player, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench }) => {
+  const isOccupied = !!player;
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'PLAYER',
+    item: { player, fromPosition: slotIndex, fromType: 'bench' },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    canDrag: isOccupied,
+  });
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'PLAYER',
+    drop: (draggedItem) => {
+      if (draggedItem.fromPosition !== slotIndex) {
+        if (draggedItem.fromType === 'formation') {
+          // Moving from formation to bench
+          onMoveToBench(draggedItem.fromPosition, slotIndex);
+        } else {
+          // Moving within bench (swap)
+          if (player) {
+            // Swap bench players
+            onMoveFromBench(slotIndex, draggedItem.fromPosition, true); // true for swap
+          } else {
+            // Moving to empty bench slot
+            onMoveFromBench(draggedItem.fromPosition, slotIndex);
+          }
+        }
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  const attachDragDrop = (el) => {
+    drag(drop(el));
+  };
+
+  return (
+    <div key={slotIndex} className="w-16 h-[calc(20%-0.5rem)]">
+      {isOccupied ? (
+        <div 
+          ref={attachDragDrop}
+          className={`relative group h-full w-full ${isDragging ? 'opacity-50' : ''}`}
+        >
+          <div className={`w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors ${
+            isOver ? 'border-orange-400 bg-orange-400/20' : ''
+          }`}>
+            <img
+              src={player.portrait}
+              alt={player.name}
+              className="w-8 h-8 rounded-full mb-1"
+            />
+            <div className="text-xs text-center font-medium truncate w-full leading-tight">{player.name}</div>
+            <div className="text-xs text-gray-400 text-center">{player.position}</div>
+          </div>
+          <button
+            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemoveBenchPlayer(slotIndex);
+            }}
+          >
+            <X className="h-2 w-2" />
+          </button>
+        </div>
+      ) : (
+        <div
+          ref={drop}
+          className={`w-full h-full bg-orange-800/20 rounded-lg border-2 border-dashed border-orange-400/30 flex items-center justify-center cursor-pointer hover:bg-orange-700/20 transition-colors ${
+            isOver ? 'border-orange-400 bg-orange-400/20' : ''
+          }`}
+          onClick={() => onAddBenchPlayer(slotIndex)}
+        >
+          <Plus className="h-4 w-4 text-orange-400" />
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default FormationField;
+export { BenchSlot };
