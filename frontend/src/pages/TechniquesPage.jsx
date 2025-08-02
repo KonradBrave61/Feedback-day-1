@@ -69,15 +69,23 @@ const TechniquesPage = () => {
     applyFilters();
   }, [techniques, searchTerm, filters]);
 
+  const getBackendUrl = () => {
+    // Try different environment variable patterns
+    return import.meta.env.VITE_REACT_APP_BACKEND_URL || 
+           process.env.REACT_APP_BACKEND_URL || 
+           import.meta.env.REACT_APP_BACKEND_URL ||
+           'https://684c28f8-ea94-4ca4-ba52-65bc18ee2143.preview.emergentagent.com';
+  };
+
   const fetchTechniques = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+      const backendUrl = getBackendUrl();
       console.log('Fetching techniques from:', `${backendUrl}/api/techniques/`);
       const response = await fetch(`${backendUrl}/api/techniques/`);
       console.log('Response status:', response.status);
       if (response.ok) {
         const data = await response.json();
-        console.log('Techniques data:', data);
+        console.log('Techniques data received:', data.length, 'techniques');
         setTechniques(data);
       } else {
         console.error('Failed to fetch techniques:', response.status, response.statusText);
@@ -91,13 +99,13 @@ const TechniquesPage = () => {
 
   const fetchStats = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+      const backendUrl = getBackendUrl();
       console.log('Fetching stats from:', `${backendUrl}/api/techniques/categories/stats`);
       const response = await fetch(`${backendUrl}/api/techniques/categories/stats`);
       console.log('Stats response status:', response.status);
       if (response.ok) {
         const data = await response.json();
-        console.log('Stats data:', data);
+        console.log('Stats data received:', data);
         setStats(data);
       } else {
         console.error('Failed to fetch technique stats:', response.status, response.statusText);
