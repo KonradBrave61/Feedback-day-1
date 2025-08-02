@@ -657,7 +657,7 @@ const TeamBuilder = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Intelligence:</span>
-                        <span className="text-cyan-400">{teamStats.intelligence}</span>
+                        <span style={{ color: logoColors.lightBlue }}>{teamStats.intelligence}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Pressure:</span>
