@@ -36,7 +36,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="bg-gradient-to-r from-orange-900 via-red-800 to-orange-900 shadow-lg backdrop-blur-lg border-b border-orange-400/20">
+      <nav className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 shadow-lg backdrop-blur-lg border-b border-blue-400/20" style={{ background: logoColors.backgroundGradient }}>
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Hamburger Menu + Logo */}
@@ -45,7 +45,7 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-orange-700/30 p-2"
+                className="text-white hover:bg-blue-700/30 p-2"
                 onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
               >
                 {showHamburgerMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -56,12 +56,12 @@ const Navigation = () => {
                 className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => navigate('/')}
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
-                  <Trophy className="h-6 w-6 text-white" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: logoColors.yellowOrangeGradient }}>
+                  <Trophy className="h-6 w-6 text-black" />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-white">Inazuma Eleven</h1>
-                  <p className="text-sm text-orange-300">Victory Road</p>
+                  <p className="text-sm" style={{ color: logoColors.lightBlue }}>Victory Road</p>
                 </div>
               </div>
             </div>
