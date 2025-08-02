@@ -95,7 +95,7 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
             <Button
               variant="ghost"
               size="sm"
-              className="absolute -top-1 left-12 w-6 h-6 rounded-full p-0 bg-blue-600/80 hover:bg-blue-500 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute -top-1 -left-1 w-6 h-6 rounded-full p-0 bg-blue-600/80 hover:bg-blue-500 text-white opacity-0 group-hover:opacity-100 transition-opacity z-10"
               onClick={(e) => {
                 e.stopPropagation();
                 onEditPlayer && onEditPlayer(player);
@@ -108,8 +108,11 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
             <Button
               variant="destructive"
               size="sm"
-              className="absolute -top-1 -right-1 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => onRemovePlayer(position.id)}
+              className="absolute -top-1 -right-1 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemovePlayer(position.id);
+              }}
             >
               <X className="h-3 w-3" />
             </Button>
