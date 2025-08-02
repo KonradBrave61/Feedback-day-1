@@ -6,6 +6,7 @@ import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { mockTactics } from '../data/mock';
 import { Check, X, Save, RotateCcw } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const TacticsSelector = ({ 
   isOpen, 
@@ -109,7 +110,11 @@ const TacticsSelector = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
+      <DialogContent className="max-w-4xl max-h-[90vh] text-white border"
+                     style={{ 
+                       background: logoColors.backgroundGradient,
+                       borderColor: logoColors.primaryBlueAlpha(0.2)
+                     }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             {editingPreset ? `Edit ${presets[editingPreset].name}` : 'Tactics Presets'}
@@ -124,20 +129,28 @@ const TacticsSelector = ({
             {/* Preset Management */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {Object.entries(presets).map(([id, preset]) => (
-                <Card key={id} className={`transition-all ${
+                <Card key={id} className={`transition-all border ${
                   currentPreset === parseInt(id) 
-                    ? 'bg-orange-600/30 border-orange-500' 
-                    : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
-                }`}>
+                    ? 'border' 
+                    : 'border hover:opacity-80'
+                }`}
+                      style={currentPreset === parseInt(id) ? {
+                        backgroundColor: logoColors.primaryBlueAlpha(0.3),
+                        borderColor: logoColors.primaryBlue
+                      } : {
+                        backgroundColor: logoColors.blackAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold">{preset.name}</h3>
+                      <h3 className="font-semibold text-white">{preset.name}</h3>
                       <div className="flex gap-2">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handlePresetEdit(parseInt(id))}
-                          className="text-orange-400 hover:bg-orange-700/30"
+                          className="text-white hover:opacity-80"
+                          style={{ color: logoColors.primaryBlue }}
                         >
                           Edit
                         </Button>
@@ -145,7 +158,8 @@ const TacticsSelector = ({
                           variant="ghost"
                           size="sm"
                           onClick={() => handlePresetSwitch(parseInt(id))}
-                          className="text-green-400 hover:bg-green-700/30"
+                          className="text-white hover:opacity-80"
+                          style={{ color: logoColors.primaryYellow }}
                         >
                           {currentPreset === parseInt(id) ? 'Active' : 'Apply'}
                         </Button>
@@ -154,7 +168,11 @@ const TacticsSelector = ({
                     
                     <div className="grid grid-cols-3 gap-2">
                       {[0, 1, 2].map(index => (
-                        <div key={index} className="h-12 bg-black/20 rounded-lg border border-orange-400/30 flex items-center justify-center">
+                        <div key={index} className="h-12 rounded-lg border flex items-center justify-center"
+                             style={{ 
+                               backgroundColor: logoColors.blackAlpha(0.2),
+                               borderColor: logoColors.primaryBlueAlpha(0.3)
+                             }}>
                           {preset.tactics[index] ? (
                             <div className="text-center">
                               <div className="text-lg mb-1">{getTacticIcon(preset.tactics[index].name)}</div>
@@ -176,7 +194,11 @@ const TacticsSelector = ({
               <h3 className="text-lg font-semibold mb-3">Currently Active: {presets[currentPreset].name}</h3>
               <div className="grid grid-cols-3 gap-4">
                 {getCurrentTactics().map((tactic, index) => (
-                  <Card key={index} className="bg-green-600/20 border-green-500">
+                  <Card key={index} className="border"
+                        style={{ 
+                          backgroundColor: logoColors.yellowAlpha(0.2),
+                          borderColor: logoColors.primaryYellow
+                        }}>
                     <CardContent className="p-3 text-center">
                       <div className="text-2xl mb-2">{getTacticIcon(tactic.name)}</div>
                       <div className="font-medium text-white">{tactic.name}</div>
@@ -185,7 +207,11 @@ const TacticsSelector = ({
                   </Card>
                 ))}
                 {Array.from({ length: 3 - getCurrentTactics().length }, (_, index) => (
-                  <Card key={`empty-${index}`} className="bg-black/20 border-orange-400/30">
+                  <Card key={`empty-${index}`} className="border"
+                        style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.2),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
                     <CardContent className="p-3 text-center">
                       <div className="text-gray-500 text-sm">Empty Slot</div>
                     </CardContent>
@@ -198,14 +224,19 @@ const TacticsSelector = ({
             <div className="flex justify-end gap-3">
               <Button 
                 onClick={handleClose} 
-                className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                className="text-white border hover:opacity-80"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.4),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}
               >
                 <X className="h-4 w-4 mr-2" />
                 Close
               </Button>
               <Button 
                 onClick={handleConfirm}
-                className="bg-green-600 hover:bg-green-700"
+                className="text-white hover:opacity-80"
+                style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
               >
                 <Check className="h-4 w-4 mr-2" />
                 Apply Current Preset
@@ -219,7 +250,11 @@ const TacticsSelector = ({
               <h3 className="text-lg font-semibold mb-3">Selected Tactics ({currentSelection.length}/3)</h3>
               <div className="grid grid-cols-3 gap-4">
                 {currentSelection.map((tactic, index) => (
-                  <Card key={index} className="bg-green-600/20 border-green-500">
+                  <Card key={index} className="border"
+                        style={{ 
+                          backgroundColor: logoColors.yellowAlpha(0.2),
+                          borderColor: logoColors.primaryYellow
+                        }}>
                     <CardContent className="p-3 text-center">
                       <div className="text-2xl mb-2">{getTacticIcon(tactic.name)}</div>
                       <div className="font-medium text-white">{tactic.name}</div>
@@ -228,7 +263,11 @@ const TacticsSelector = ({
                   </Card>
                 ))}
                 {Array.from({ length: 3 - currentSelection.length }, (_, index) => (
-                  <Card key={`empty-${index}`} className="bg-black/20 border-orange-400/30">
+                  <Card key={`empty-${index}`} className="border"
+                        style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.2),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
                     <CardContent className="p-3 text-center">
                       <div className="text-gray-500 text-sm">Empty Slot</div>
                     </CardContent>
@@ -246,11 +285,14 @@ const TacticsSelector = ({
                   return (
                     <Card
                       key={tactic.id}
-                      className={`cursor-pointer transition-all ${
-                        isSelected 
-                          ? 'bg-green-600/30 border-green-500' 
-                          : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
-                      }`}
+                      className={`cursor-pointer transition-all border ${isSelected ? '' : 'hover:opacity-80'}`}
+                      style={isSelected ? {
+                        backgroundColor: logoColors.yellowAlpha(0.3),
+                        borderColor: logoColors.primaryYellow
+                      } : {
+                        backgroundColor: logoColors.blackAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                       onClick={() => handleTacticToggle(tactic)}
                     >
                       <CardContent className="p-3 text-center">
@@ -258,7 +300,7 @@ const TacticsSelector = ({
                         <div className="font-medium text-white">{tactic.name}</div>
                         <div className="text-xs text-gray-300 mt-1">{tactic.effect}</div>
                         {isSelected && (
-                          <Check className="h-4 w-4 text-green-400 mx-auto mt-2" />
+                          <Check className="h-4 w-4 mx-auto mt-2" style={{ color: logoColors.primaryYellow }} />
                         )}
                       </CardContent>
                     </Card>
@@ -271,14 +313,16 @@ const TacticsSelector = ({
             <div className="flex justify-end gap-3">
               <Button 
                 onClick={handleCancelEdit} 
-                className="bg-gray-600/40 hover:bg-gray-600/60 text-white"
+                className="text-white hover:opacity-80"
+                style={{ backgroundColor: logoColors.blackAlpha(0.6) }}
               >
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
               <Button 
                 onClick={handleSavePreset}
-                className="bg-green-600 hover:bg-green-700"
+                className="text-white hover:opacity-80"
+                style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save Preset

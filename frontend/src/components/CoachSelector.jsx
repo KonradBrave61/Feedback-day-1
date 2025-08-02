@@ -5,6 +5,7 @@ import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { mockCoaches } from '../data/mock';
 import { Check, X } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
   const [currentSelection, setCurrentSelection] = useState(selectedCoach);
@@ -20,7 +21,11 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
+      <DialogContent className="max-w-3xl max-h-[90vh] text-white border"
+                     style={{ 
+                       background: logoColors.backgroundGradient,
+                       borderColor: logoColors.primaryBlueAlpha(0.2)
+                     }}>
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Select Coach</DialogTitle>
           <p className="text-gray-300">Choose a coach to boost your team's performance</p>
@@ -30,7 +35,11 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
         {currentSelection && (
           <div className="mb-4">
             <h3 className="text-lg font-semibold mb-2">Selected Coach</h3>
-            <Card className="bg-green-600/20 border-green-500">
+            <Card className="border"
+                  style={{ 
+                    backgroundColor: logoColors.yellowAlpha(0.2),
+                    borderColor: logoColors.primaryYellow
+                  }}>
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   <img
@@ -44,12 +53,13 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                     <p className="text-xs text-gray-400 mt-1">{currentSelection.bonuses.description}</p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {currentSelection.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="outline" className="text-xs text-green-400 border-green-400">
+                        <Badge key={index} variant="outline" className="text-xs border"
+                               style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
                           {specialty}
                         </Badge>
                       ))}
                     </div>
-                    <div className="mt-4 text-xs text-yellow-400">
+                    <div className="mt-4 text-xs" style={{ color: logoColors.primaryBlue }}>
                       Stat Bonuses: {Object.entries(currentSelection.bonuses.teamStats).map(([stat, value]) => 
                         `${stat}: +${value}`
                       ).join(', ')}
@@ -70,11 +80,14 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
               return (
                 <Card
                   key={coach.id}
-                  className={`cursor-pointer transition-all ${
-                    isSelected 
-                      ? 'bg-green-600/30 border-green-500' 
-                      : 'bg-black/20 border-orange-400/30 hover:bg-orange-700/30'
-                  }`}
+                  className={`cursor-pointer transition-all border ${isSelected ? '' : 'hover:opacity-80'}`}
+                  style={isSelected ? {
+                    backgroundColor: logoColors.yellowAlpha(0.3),
+                    borderColor: logoColors.primaryYellow
+                  } : {
+                    backgroundColor: logoColors.blackAlpha(0.2),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => handleCoachToggle(coach)}
                 >
                   <CardContent className="p-4">
@@ -90,19 +103,24 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
                         <p className="text-xs text-gray-400 mt-1">{coach.bonuses.description}</p>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {coach.specialties.map((specialty, index) => (
-                            <Badge key={index} variant="outline" className="text-xs border-orange-400/30 bg-orange-800/30 text-orange-200">
+                            <Badge key={index} variant="outline" className="text-xs border"
+                                   style={{ 
+                                     borderColor: logoColors.primaryBlueAlpha(0.3),
+                                     backgroundColor: logoColors.blackAlpha(0.3),
+                                     color: logoColors.lightBlue
+                                   }}>
                               {specialty}
                             </Badge>
                           ))}
                         </div>
-                        <div className="mt-4 text-xs text-yellow-400">
+                        <div className="mt-4 text-xs" style={{ color: logoColors.primaryBlue }}>
                           Bonuses: {Object.entries(coach.bonuses.teamStats).map(([stat, value]) => 
                             `${stat}: +${value}`
                           ).join(', ')}
                         </div>
                       </div>
                       {isSelected && (
-                        <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
+                        <Check className="h-5 w-5 flex-shrink-0" style={{ color: logoColors.primaryYellow }} />
                       )}
                     </div>
                   </CardContent>
@@ -116,14 +134,19 @@ const CoachSelector = ({ isOpen, onClose, onCoachSelect, selectedCoach }) => {
         <div className="flex justify-end gap-3">
           <Button 
             onClick={onClose} 
-            className="bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+            className="text-white border hover:opacity-80"
+            style={{ 
+              backgroundColor: logoColors.blackAlpha(0.4),
+              borderColor: logoColors.primaryBlueAlpha(0.3)
+            }}
           >
             <X className="h-4 w-4 mr-2" />
             Cancel
           </Button>
           <Button 
             onClick={handleConfirm}
-            className="bg-green-600 hover:bg-green-700"
+            className="text-white hover:opacity-80"
+            style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
           >
             <Check className="h-4 w-4 mr-2" />
             Select Coach

@@ -9,6 +9,7 @@ import { Search, X, Users, Check, Plus, Target, Trophy } from 'lucide-react';
 import { mockCharacters, mockFormations } from '../data/mock';
 import CharacterCard from './CharacterCard';
 import CharacterModal from './CharacterModal';
+import { logoColors } from '../styles/colors';
 
 const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt, currentTeamPlayers = {}, currentBenchPlayers = {} }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -297,10 +298,14 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-7xl max-h-[90vh] bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 text-white border-orange-400/20">
+      <DialogContent className="max-w-7xl max-h-[90vh] text-white border"
+                     style={{ 
+                       background: logoColors.backgroundGradient,
+                       borderColor: logoColors.primaryBlueAlpha(0.2)
+                     }}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5 text-orange-400" />
+            <Search className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
             {teamBuildingMode ? (
               <span>Quick Team Builder - {builtTeam.totalPlayers}/16 players selected</span>
             ) : (
@@ -331,23 +336,32 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
             <div className="flex flex-col gap-4 mb-4">
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-orange-400" />
+                  <Search className="absolute left-3 top-3 h-4 w-4" style={{ color: logoColors.primaryBlue }} />
                   <Input
                     placeholder="Search players by name..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-orange-900/30 border-orange-400/30 text-white placeholder-orange-300"
+                    className="pl-10 text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      '--placeholder-color': logoColors.primaryBlue
+                    }}
                   />
                 </div>
                 
                 <div className="flex gap-2">
                   <Select value={filterPosition} onValueChange={setFilterPosition}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[100px]">
+                    <SelectTrigger className="text-white min-w-[100px] border"
+                                  style={{ 
+                                    backgroundColor: logoColors.blackAlpha(0.3),
+                                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                                  }}>
                       <SelectValue placeholder="Position" />
                     </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
+                    <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
                       {positions.map(pos => (
-                        <SelectItem key={pos} value={pos} className="text-white hover:bg-orange-800">
+                        <SelectItem key={pos} value={pos} className="text-white hover:bg-blue-800">
                           {pos === 'all' ? 'All' : pos}
                         </SelectItem>
                       ))}
@@ -355,12 +369,16 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                   </Select>
 
                   <Select value={filterElement} onValueChange={setFilterElement}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[100px]">
+                    <SelectTrigger className="text-white min-w-[100px] border"
+                                  style={{ 
+                                    backgroundColor: logoColors.blackAlpha(0.3),
+                                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                                  }}>
                       <SelectValue placeholder="Element" />
                     </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
+                    <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
                       {elements.map(elem => (
-                        <SelectItem key={elem} value={elem} className="text-white hover:bg-orange-800">
+                        <SelectItem key={elem} value={elem} className="text-white hover:bg-blue-800">
                           {elem === 'all' ? 'All' : elem}
                         </SelectItem>
                       ))}
@@ -368,12 +386,16 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                   </Select>
 
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white min-w-[140px]">
+                    <SelectTrigger className="text-white min-w-[140px] border"
+                                  style={{ 
+                                    backgroundColor: logoColors.blackAlpha(0.3),
+                                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                                  }}>
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
-                    <SelectContent className="bg-orange-900 border-orange-400/30">
+                    <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
                       {sortOptions.map(option => (
-                        <SelectItem key={option.value} value={option.value} className="text-white hover:bg-orange-800">
+                        <SelectItem key={option.value} value={option.value} className="text-white hover:bg-blue-800">
                           {option.label}
                         </SelectItem>
                       ))}
@@ -382,7 +404,11 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
                   <Button 
                     onClick={clearFilters} 
-                    className="bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 px-4"
+                    className="text-white border px-4 hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.4),
+                      borderColor: logoColors.primaryBlueAlpha(0.5)
+                    }}
                     title="Clear Filters"
                   >
                     Clear
@@ -393,16 +419,19 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
             {/* Results Info */}
             <div className="mb-4 flex items-center justify-between">
-              <Badge variant="secondary" className="bg-orange-700 text-white">
+              <Badge variant="secondary" className="text-white"
+                     style={{ backgroundColor: logoColors.primaryBlue }}>
                 {filteredPlayers.length} players found
               </Badge>
               
               {teamBuildingMode && (
                 <div className="flex gap-2">
-                  <Badge variant="outline" className="text-green-400 border-green-400">
+                  <Badge variant="outline" className="border"
+                         style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
                     Main: {Object.keys(builtTeam.players).length}/11
                   </Badge>
-                  <Badge variant="outline" className="text-blue-400 border-blue-400">
+                  <Badge variant="outline" className="border"
+                         style={{ color: logoColors.lightBlue, borderColor: logoColors.lightBlue }}>
                     Bench: {Object.keys(builtTeam.bench).length}/5
                   </Badge>
                 </div>
@@ -426,8 +455,9 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                       
                       {/* Visual Feedback Option 1: Checkmark */}
                       {isAlreadySelected && (
-                        <div className="absolute top-2 right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <Check className="h-4 w-4 text-white" />
+                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
+                             style={{ backgroundColor: logoColors.primaryYellow }}>
+                          <Check className="h-4 w-4 text-black" />
                         </div>
                       )}
                       
@@ -435,11 +465,13 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                       {teamBuildingMode && positionInfo && (
                         <div className="absolute bottom-2 left-2">
                           {positionInfo.type === 'main' ? (
-                            <Badge className="bg-green-600 text-white text-xs">
+                            <Badge className="text-white text-xs"
+                                   style={{ backgroundColor: logoColors.primaryYellow, color: logoColors.black }}>
                               {positionInfo.position}
                             </Badge>
                           ) : (
-                            <Badge className="bg-blue-600 text-white text-xs">
+                            <Badge className="text-white text-xs"
+                                   style={{ backgroundColor: logoColors.primaryBlue }}>
                               Bench {positionInfo.slot}
                             </Badge>
                           )}
@@ -486,13 +518,18 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
           {/* Right Panel - Team Composition (Visual Feedback Option 3) */}
           {teamBuildingMode && (
-            <div className="w-80 bg-black/30 backdrop-blur-lg border border-orange-400/20 rounded-lg p-4">
+            <div className="w-80 backdrop-blur-lg border rounded-lg p-4"
+                 style={{ 
+                   backgroundColor: logoColors.blackAlpha(0.3),
+                   borderColor: logoColors.primaryBlueAlpha(0.2)
+                 }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold flex items-center gap-2">
-                  <Users className="h-5 w-5 text-orange-400" />
+                  <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Team Composition
                 </h3>
-                <Badge className="bg-orange-700 text-white">
+                <Badge className="text-white"
+                       style={{ backgroundColor: logoColors.primaryBlue }}>
                   {builtTeam.totalPlayers}/16
                 </Badge>
               </div>
@@ -500,7 +537,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
               {/* Formation Preview */}
               {currentFormation && (
                 <div className="mb-4">
-                  <h4 className="font-medium text-orange-400 mb-2 flex items-center gap-2">
+                  <h4 className="font-medium mb-2 flex items-center gap-2"
+                      style={{ color: logoColors.primaryBlue }}>
                     <Target className="h-4 w-4" />
                     {currentFormation.name}
                   </h4>
@@ -512,10 +550,16 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                           key={pos.id}
                           className={`absolute w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold ${
                             player 
-                              ? 'bg-orange-600 border-orange-400 text-white' 
+                              ? 'text-white border-2' 
                               : 'bg-gray-700 border-gray-500 text-gray-300'
                           }`}
-                          style={{
+                          style={player ? {
+                            backgroundColor: logoColors.primaryBlue,
+                            borderColor: logoColors.lightBlue,
+                            left: `${pos.x}%`,
+                            top: `${pos.y}%`,
+                            transform: 'translate(-50%, -50%)'
+                          } : {
                             left: `${pos.x}%`,
                             top: `${pos.y}%`,
                             transform: 'translate(-50%, -50%)'
@@ -532,7 +576,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
               {/* Bench Preview */}
               <div className="mb-4">
-                <h4 className="font-medium text-blue-400 mb-2">Bench Players</h4>
+                <h4 className="font-medium mb-2" style={{ color: logoColors.lightBlue }}>Bench Players</h4>
                 <div className="grid grid-cols-5 gap-2">
                   {Array.from({ length: 5 }, (_, index) => {
                     const player = builtTeam.bench[index];
@@ -541,9 +585,13 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                         key={index}
                         className={`aspect-square rounded border-2 flex items-center justify-center text-xs ${
                           player 
-                            ? 'bg-blue-600 border-blue-400 text-white' 
+                            ? 'text-white' 
                             : 'bg-gray-700 border-gray-500 text-gray-400'
                         }`}
+                        style={player ? {
+                          backgroundColor: logoColors.lightBlue,
+                          borderColor: logoColors.primaryBlue
+                        } : {}}
                         title={player ? player.name : `Empty bench slot ${index + 1}`}
                       >
                         {player ? player.name.charAt(0) : (index + 1)}
@@ -556,7 +604,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
               {/* Team Actions */}
               <div className="space-y-2">
                 <Button
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white"
+                  className="w-full text-white hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                   onClick={handleApplyTeam}
                   disabled={builtTeam.totalPlayers === 0}
                 >
@@ -566,7 +615,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                 
                 <Button
                   variant="outline"
-                  className="w-full text-white border-orange-400/30 hover:bg-orange-700/30"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                   onClick={handleClearTeam}
                   disabled={builtTeam.totalPlayers === 0}
                 >
@@ -578,27 +628,33 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
               <div className="mt-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Main Team Progress:</span>
-                  <span className="text-green-400">
+                  <span style={{ color: logoColors.primaryYellow }}>
                     {Object.keys(builtTeam.players).length}/11
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div 
-                    className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(Object.keys(builtTeam.players).length / 11) * 100}%` }}
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{ 
+                      backgroundColor: logoColors.primaryYellow,
+                      width: `${(Object.keys(builtTeam.players).length / 11) * 100}%` 
+                    }}
                   ></div>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-gray-400">Bench Progress:</span>
-                  <span className="text-blue-400">
+                  <span style={{ color: logoColors.lightBlue }}>
                     {Object.keys(builtTeam.bench).length}/5
                   </span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
                   <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(Object.keys(builtTeam.bench).length / 5) * 100}%` }}
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{ 
+                      backgroundColor: logoColors.lightBlue,
+                      width: `${(Object.keys(builtTeam.bench).length / 5) * 100}%` 
+                    }}
                   ></div>
                 </div>
               </div>

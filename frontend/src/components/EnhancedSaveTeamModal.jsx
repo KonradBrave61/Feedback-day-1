@@ -8,6 +8,7 @@ import { Switch } from './ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { X, Save, Lock, Globe, Tag, Plus, Archive, Edit2, Trash2 } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const SaveTeamModal = ({ 
   isOpen, 
@@ -135,19 +136,24 @@ const SaveTeamModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-gradient-to-br from-orange-900 via-red-800 to-orange-900 p-1 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+      <div className="p-1 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+           style={{ background: logoColors.backgroundGradient }}>
+        <Card className="backdrop-blur-lg border text-white"
+              style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <Save className="h-5 w-5 text-orange-400" />
+                <Save className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                 {isEditing ? 'Edit Team' : 'Save Team'}
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="text-white hover:bg-orange-700/30"
+                className="text-white hover:opacity-80"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -166,7 +172,11 @@ const SaveTeamModal = ({
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Enter team name"
-                    className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400"
+                    className="text-white placeholder-gray-400 border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                     required
                   />
                 </div>
@@ -179,7 +189,11 @@ const SaveTeamModal = ({
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Describe your team strategy, playstyle, key players, or any other info..."
-                    className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400 resize-none"
+                    className="text-white placeholder-gray-400 resize-none border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                     rows={3}
                   />
                 </div>
@@ -188,7 +202,7 @@ const SaveTeamModal = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {formData.is_public ? (
-                      <Globe className="h-4 w-4 text-green-400" />
+                      <Globe className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
                     ) : (
                       <Lock className="h-4 w-4 text-gray-400" />
                     )}
@@ -224,14 +238,19 @@ const SaveTeamModal = ({
                       onChange={(e) => setCurrentTag(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Add a tag (e.g., attacking, defensive, 4-3-3)"
-                      className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400"
+                      className="text-white placeholder-gray-400 border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                     />
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={handleAddTag}
-                      className="text-white border-orange-400/30 hover:bg-orange-700/30"
+                      className="text-white border hover:opacity-80"
+                      style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                     >
                       Add
                     </Button>
@@ -243,7 +262,8 @@ const SaveTeamModal = ({
                         <Badge
                           key={index}
                           variant="outline"
-                          className="text-white border-orange-400/50 flex items-center gap-1"
+                          className="text-white border flex items-center gap-1"
+                          style={{ borderColor: logoColors.primaryBlueAlpha(0.5) }}
                         >
                           {tag}
                           <button
@@ -265,14 +285,16 @@ const SaveTeamModal = ({
                     type="button"
                     variant="outline"
                     onClick={onClose}
-                    className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
+                    className="flex-1 text-white border hover:opacity-80"
+                    style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={isSaving || !formData.name.trim()}
-                    className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                    className="flex-1 text-white hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                   >
                     {isSaving ? (
                       <>
@@ -298,7 +320,8 @@ const SaveTeamModal = ({
                 {/* Create New Slot Button */}
                 <Button
                   onClick={handleCreateNewSlot}
-                  className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
+                  className="w-full text-white hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Save Slot
@@ -311,17 +334,24 @@ const SaveTeamModal = ({
                       key={slot.slot_number}
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                         selectedSlot?.slot_number === slot.slot_number
-                          ? 'border-orange-400 bg-orange-900/20'
-                          : 'border-orange-400/30 hover:border-orange-400/50'
+                          ? 'border-blue-400'
+                          : 'border hover:opacity-80'
                       }`}
+                      style={selectedSlot?.slot_number === slot.slot_number ? {
+                        borderColor: logoColors.primaryBlue,
+                        backgroundColor: logoColors.primaryBlueAlpha(0.2)
+                      } : {
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                       onClick={() => handleSlotSelection(slot)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Archive className="h-4 w-4 text-orange-400" />
+                          <Archive className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
                           <span className="text-white font-medium">{slot.slot_name}</span>
                           {slot.is_occupied && (
-                            <Badge variant="outline" className="text-xs border-orange-400/30">
+                            <Badge variant="outline" className="text-xs border"
+                                   style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                               Occupied
                             </Badge>
                           )}
@@ -346,7 +376,11 @@ const SaveTeamModal = ({
                       value={newSlotName}
                       onChange={(e) => setNewSlotName(e.target.value)}
                       placeholder="Enter slot name"
-                      className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400"
+                      className="text-white placeholder-gray-400 border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                     />
                   </div>
                 )}
@@ -361,7 +395,11 @@ const SaveTeamModal = ({
                       value={newSlotName}
                       onChange={(e) => setNewSlotName(e.target.value)}
                       placeholder="Enter slot name"
-                      className="bg-orange-900/30 border-orange-400/30 text-white placeholder-gray-400"
+                      className="text-white placeholder-gray-400 border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                     />
                   </div>
                 )}
@@ -372,7 +410,8 @@ const SaveTeamModal = ({
                     type="button"
                     variant="outline"
                     onClick={() => setShowSlotSelection(false)}
-                    className="flex-1 text-white border-orange-400/30 hover:bg-orange-700/30"
+                    className="flex-1 text-white border hover:opacity-80"
+                    style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                   >
                     Back
                   </Button>
@@ -381,7 +420,8 @@ const SaveTeamModal = ({
                     <Button
                       onClick={() => handleSlotSave(saveSlots.length + 1, false)}
                       disabled={isSaving || !newSlotName.trim()}
-                      className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
+                      className="flex-1 text-white hover:opacity-80"
+                      style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                     >
                       {isSaving ? (
                         <>
@@ -399,7 +439,8 @@ const SaveTeamModal = ({
                     <Button
                       onClick={() => handleSlotSave(selectedSlot.slot_number, selectedSlot.is_occupied)}
                       disabled={isSaving || !newSlotName.trim()}
-                      className="flex-1 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
+                      className="flex-1 text-white hover:opacity-80"
+                      style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                     >
                       {isSaving ? (
                         <>
