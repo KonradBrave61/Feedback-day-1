@@ -153,10 +153,17 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
       return;
     }
 
+    // Prevent rapid clicks and double processing
+    if (isProcessingPlayer) {
+      return;
+    }
+
     // Team building mode - check if player is already selected
     if (isPlayerInTeam(player.id)) {
       return; // Already selected, do nothing
     }
+
+    setIsProcessingPlayer(true);
 
     // Check if we can add the player
     const assignedPosition = autoAssignPosition(player);
@@ -180,6 +187,16 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
 
     // Direct team assignment
     setBuiltTeam(prev => {
+      // Double-check again inside the state update to prevent race conditions
+      const currentTeamPlayerIds = Object.values(prev.players).map(p => p.id);
+      const currentBenchPlayerIds = Object.values(prev.bench).map(p => p.id);
+      
+      if (currentTeamPlayerIds.includes(player.id) || currentBenchPlayerIds.includes(player.id)) {
+        // Player was already added, don't add again
+        setIsProcessingPlayer(false);
+        return prev;
+      }
+      
       const newTeam = { ...prev };
       
       if (assignedPosition) {
@@ -210,11 +227,13 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
           } else {
             alert('Team is full! (11 main players + 5 bench players)');
           }
+          setIsProcessingPlayer(false);
           return prev;
         }
       }
       
       newTeam.totalPlayers = Object.keys(newTeam.players).length + Object.keys(newTeam.bench).length;
+      setIsProcessingPlayer(false);
       return newTeam;
     });
   };
