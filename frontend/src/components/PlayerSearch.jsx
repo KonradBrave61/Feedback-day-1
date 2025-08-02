@@ -156,7 +156,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
       return; // Already selected, do nothing
     }
 
-    // Auto-assign position
+    // Check if we can add the player
     const assignedPosition = autoAssignPosition(player);
     
     // Create enhanced player with default settings for quick selection
@@ -181,15 +181,33 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
       const newTeam = { ...prev };
       
       if (assignedPosition) {
-        // Add to main team
+        // Add to main team position
         newTeam.players[assignedPosition] = enhancedPlayer;
       } else {
-        // Add to bench
-        const emptyBenchSlot = Object.keys(newTeam.bench).length;
-        if (emptyBenchSlot < 5) {
-          newTeam.bench[emptyBenchSlot] = enhancedPlayer;
-        } else {
-          alert('Team is full! (11 main players + 5 bench players)');
+        // Try to add to bench - find first available slot
+        let foundBenchSlot = false;
+        for (let i = 0; i < 5; i++) {
+          if (!newTeam.bench[i]) {
+            newTeam.bench[i] = enhancedPlayer;
+            foundBenchSlot = true;
+            break;
+          }
+        }
+        
+        if (!foundBenchSlot) {
+          // Check if all positions for this player type are full
+          const positionsOfThisType = currentFormation.positions.filter(
+            pos => pos.position === player.position
+          );
+          const occupiedPositionsOfThisType = positionsOfThisType.filter(
+            pos => newTeam.players[pos.id]
+          );
+          
+          if (occupiedPositionsOfThisType.length === positionsOfThisType.length) {
+            alert(`All ${player.position} positions are full! Team is also full (11 main players + 5 bench players).`);
+          } else {
+            alert('Team is full! (11 main players + 5 bench players)');
+          }
           return prev;
         }
       }
