@@ -42,11 +42,11 @@ const MainPage = () => {
 
   const getActivityColor = (type) => {
     switch (type) {
-      case 'team': return 'text-orange-400';
-      case 'character': return 'text-yellow-400';
-      case 'match': return 'text-green-400';
-      case 'level': return 'text-blue-400';
-      default: return 'text-gray-400';
+      case 'team': return { color: logoColors.primaryBlue };
+      case 'character': return { color: logoColors.primaryYellow };
+      case 'match': return { color: logoColors.secondaryBlue };
+      case 'level': return { color: logoColors.primaryOrange };
+      default: return { color: logoColors.lightGray };
     }
   };
 
