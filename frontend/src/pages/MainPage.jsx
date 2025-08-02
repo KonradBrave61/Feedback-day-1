@@ -9,6 +9,7 @@ import { mockCharacters } from '../data/mock';
 import CharacterCard from '../components/CharacterCard';
 import CharacterModal from '../components/CharacterModal';
 import { Play, Users, Trophy, Target, Star, TrendingUp, Clock, Award, LogIn } from 'lucide-react';
+import { logoColors, componentColors } from '../styles/colors';
 
 const MainPage = () => {
   const navigate = useNavigate();
