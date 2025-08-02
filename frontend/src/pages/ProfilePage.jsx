@@ -1,356 +1,424 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { User, Mail, Trophy, Users, Target, Save, LogOut, Calendar, Star } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { 
+  User, 
+  Mail, 
+  Trophy, 
+  Users, 
+  Target, 
+  Star, 
+  Edit3, 
+  Save, 
+  Camera, 
+  Award,
+  UserPlus,
+  UserCheck,
+  Heart,
+  MessageSquare,
+  TrendingUp
+} from 'lucide-react';
 import { toast } from 'sonner';
+import { logoColors, componentColors } from '../styles/colors';
 
 const ProfilePage = () => {
-  const { user, logout, updateProfile, loadTeams } = useAuth();
+  const { user, updateProfile, loadTeams, loadUserFollowData } = useAuth();
   const navigate = useNavigate();
+  
   const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    coachLevel: 1,
-    favoritePosition: 'MF',
-    favoriteElement: 'Fire',
-    favouriteTeam: ''
+  const [profile, setProfile] = useState({
+    username: user?.username || '',
+    email: user?.email || '',
+    coachLevel: user?.coach_level || 1,
+    favoritePosition: user?.favorite_position || 'FW',
+    favoriteElement: user?.favorite_element || 'Fire',
+    favoriteTeam: user?.favourite_team || ''
   });
   const [teams, setTeams] = useState([]);
   const [stats, setStats] = useState({
     teamsCreated: 0,
     totalMatches: 0,
-    victories: 0,
-    favoriteFormation: '4-4-2'
+    winRate: 0,
+    currentRank: 'Rookie Coach'
   });
+  const [followData, setFollowData] = useState({
+    followers: [],
+    following: [],
+    followerCount: 0,
+    followingCount: 0
+  });
+  const [loading, setLoading] = useState(false);
+
+  const positions = ['FW', 'MF', 'DF', 'GK'];
+  const elements = ['Fire', 'Earth', 'Wind', 'Wood', 'Void'];
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+    fetchUserData();
+  }, []);
 
-    setFormData({
-      username: user.username || '',
-      email: user.email || '',
-      coachLevel: user.coachLevel || 1,
-      favoritePosition: user.favoritePosition || 'MF',
-      favoriteElement: user.favoriteElement || 'Fire',
-      favouriteTeam: user.favourite_team || ''
-    });
-
+  const fetchUserData = async () => {
     // Load user teams
-    const fetchTeams = async () => {
-      const result = await loadTeams();
-      if (result.success) {
-        setTeams(result.teams);
-        setStats(prev => ({
-          ...prev,
-          teamsCreated: result.teams.length
-        }));
-      }
-    };
+    const teamsResult = await loadTeams();
+    if (teamsResult.success) {
+      setTeams(teamsResult.teams);
+      setStats(prev => ({
+        ...prev,
+        teamsCreated: teamsResult.teams.length
+      }));
+    }
 
-    fetchTeams();
-  }, [user, navigate, loadTeams]);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSave = async () => {
-    const result = await updateProfile(formData);
-    if (result.success) {
-      toast.success('Profile updated successfully!');
-      setEditing(false);
-    } else {
-      toast.error('Failed to update profile');
+    // Load follow data
+    const followResult = await loadUserFollowData();
+    if (followResult.success) {
+      setFollowData(followResult.data);
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-    toast.success('Logged out successfully');
+  const handleSaveProfile = async () => {
+    setLoading(true);
+    try {
+      const result = await updateProfile(profile);
+      if (result.success) {
+        toast.success('Profile updated successfully!');
+        setEditing(false);
+      } else {
+        toast.error(result.error || 'Failed to update profile');
+      }
+    } catch (error) {
+      toast.error('An error occurred while updating profile');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!user) {
-    return null;
-  }
+  const handleInputChange = (field, value) => {
+    setProfile(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const getRankByLevel = (level) => {
+    if (level >= 50) return 'Legendary Coach';
+    if (level >= 30) return 'Elite Coach';
+    if (level >= 20) return 'Professional Coach';
+    if (level >= 10) return 'Experienced Coach';
+    return 'Rookie Coach';
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold text-white mb-2">
             Coach Profile
           </h1>
-          <p className="text-xl text-gray-300">
-            Manage your coaching career
-          </p>
+          <p className="text-gray-300">Manage your Inazuma Eleven journey</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Information */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-orange-400" />
-                    Profile Information
-                  </CardTitle>
+          {/* Profile Info Card */}
+          <div className="lg:col-span-1">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
+              <CardHeader className="text-center">
+                <div className="relative inline-block">
+                  <div className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center" 
+                       style={{ background: logoColors.yellowOrangeGradient }}>
+                    <User className="h-12 w-12 text-black" />
+                  </div>
                   <Button
-                    variant="outline"
                     size="sm"
-                    onClick={() => setEditing(!editing)}
-                    className="text-white border-orange-400/30 hover:bg-orange-700"
+                    className="absolute bottom-2 right-2 w-8 h-8 p-0 rounded-full"
+                    style={{ backgroundColor: logoColors.primaryBlue }}
                   >
-                    {editing ? 'Cancel' : 'Edit'}
+                    <Camera className="h-4 w-4" />
                   </Button>
                 </div>
+                <CardTitle className="text-xl">{profile.username}</CardTitle>
+                <p className="text-sm" style={{ color: logoColors.lightBlue }}>
+                  Level {profile.coachLevel} • {getRankByLevel(profile.coachLevel)}
+                </p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Username</label>
-                    {editing ? (
+                {editing ? (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                        Username
+                      </label>
                       <Input
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        className="bg-orange-900/30 border-orange-400/30 text-white"
+                        value={profile.username}
+                        onChange={(e) => handleInputChange('username', e.target.value)}
+                        className="text-white border"
+                        style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
                       />
-                    ) : (
-                      <p className="text-lg">{user.username}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
-                    {editing ? (
-                      <Input
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="bg-orange-900/30 border-orange-400/30 text-white"
-                      />
-                    ) : (
-                      <p className="text-lg">{user.email}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Coach Level</label>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-orange-600 text-white">
-                        Level {user.coachLevel || 1}
-                      </Badge>
-                      <Trophy className="h-4 w-4 text-yellow-400" />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Member Since</label>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-orange-400" />
-                      <span>{new Date(user.createdAt || Date.now()).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Favorite Position</label>
-                    {editing ? (
-                      <select
-                        name="favoritePosition"
-                        value={formData.favoritePosition}
-                        onChange={handleChange}
-                        className="w-full p-2 rounded bg-orange-900/30 border border-orange-400/30 text-white"
-                      >
-                        <option value="FW">Forward (FW)</option>
-                        <option value="MF">Midfielder (MF)</option>
-                        <option value="DF">Defender (DF)</option>
-                        <option value="GK">Goalkeeper (GK)</option>
-                      </select>
-                    ) : (
-                      <Badge className="bg-blue-600 text-white">
-                        {user.favoritePosition || 'MF'}
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Favourite Team</label>
-                    {editing ? (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                        Favorite Team
+                      </label>
                       <Input
-                        name="favouriteTeam"
-                        value={formData.favouriteTeam}
-                        onChange={handleChange}
-                        className="bg-orange-900/30 border-orange-400/30 text-white"
-                        placeholder="Enter your favourite team name"
+                        value={profile.favoriteTeam}
+                        onChange={(e) => handleInputChange('favoriteTeam', e.target.value)}
+                        placeholder="e.g., Raimon Eleven"
+                        className="text-white border"
+                        style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
                       />
-                    ) : (
-                      <Badge className="bg-purple-600 text-white">
-                        {user.favourite_team || 'Not set'}
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Favorite Element</label>
-                    {editing ? (
-                      <select
-                        name="favoriteElement"
-                        value={formData.favoriteElement}
-                        onChange={handleChange}
-                        className="w-full p-2 rounded bg-orange-900/30 border border-orange-400/30 text-white"
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                        Favorite Position
+                      </label>
+                      <Select value={profile.favoritePosition} onValueChange={(value) => handleInputChange('favoritePosition', value)}>
+                        <SelectTrigger className="text-white border" style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.9),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
+                          {positions.map(position => (
+                            <SelectItem 
+                              key={position} 
+                              value={position}
+                              className="text-white hover:opacity-80"
+                              style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
+                            >
+                              {position}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
+                        Favorite Element
+                      </label>
+                      <Select value={profile.favoriteElement} onValueChange={(value) => handleInputChange('favoriteElement', value)}>
+                        <SelectTrigger className="text-white border" style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.5),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent style={{ 
+                          backgroundColor: logoColors.blackAlpha(0.9),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}>
+                          {elements.map(element => (
+                            <SelectItem 
+                              key={element} 
+                              value={element}
+                              className="text-white hover:opacity-80"
+                              style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
+                            >
+                              {element}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveProfile}
+                        disabled={loading}
+                        className="flex-1 text-black font-bold hover:opacity-80 disabled:opacity-50"
+                        style={{ background: logoColors.yellowOrangeGradient }}
                       >
-                        <option value="Fire">Fire</option>
-                        <option value="Earth">Earth</option>
-                        <option value="Wind">Wind</option>
-                        <option value="Wood">Wood</option>
-                      </select>
-                    ) : (
-                      <Badge className="bg-red-600 text-white">
-                        {user.favoriteElement || 'Fire'}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {editing && (
-                  <div className="flex gap-3 pt-4">
+                        <Save className="h-4 w-4 mr-2" />
+                        Save
+                      </Button>
+                      <Button
+                        onClick={() => setEditing(false)}
+                        className="text-white border hover:opacity-80"
+                        style={{ 
+                          backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Mail className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                        <span className="text-sm text-gray-300">{profile.email}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Trophy className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                        <span className="text-sm text-gray-300">{profile.favoriteTeam || 'No team set'}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Target className="h-4 w-4" style={{ color: logoColors.secondaryBlue }} />
+                        <span className="text-sm text-gray-300">{profile.favoritePosition}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Star className="h-4 w-4" style={{ color: logoColors.primaryOrange }} />
+                        <span className="text-sm text-gray-300">{profile.favoriteElement}</span>
+                      </div>
+                    </div>
                     <Button
-                      onClick={handleSave}
-                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => setEditing(true)}
+                      className="w-full text-white border hover:opacity-80"
+                      style={{ 
+                        backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}
                     >
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Changes
+                      <Edit3 className="h-4 w-4 mr-2" />
+                      Edit Profile
                     </Button>
-                  </div>
+                  </>
                 )}
               </CardContent>
             </Card>
 
-            {/* My Teams */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            {/* Follow Stats */}
+            <Card className="mt-6 backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
+              <CardContent className="p-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-white">{followData.followerCount}</div>
+                    <div className="text-sm text-gray-300">Followers</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-white">{followData.followingCount}</div>
+                    <div className="text-sm text-gray-300">Following</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Stats and Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
+                <CardContent className="p-4">
+                  <Users className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryBlue }} />
+                  <div className="text-xl font-bold">{stats.teamsCreated}</div>
+                  <div className="text-xs text-gray-300">Teams</div>
+                </CardContent>
+              </Card>
+
+              <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
+                <CardContent className="p-4">
+                  <Trophy className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryYellow }} />
+                  <div className="text-xl font-bold">{stats.totalMatches}</div>
+                  <div className="text-xs text-gray-300">Matches</div>
+                </CardContent>
+              </Card>
+
+              <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
+                <CardContent className="p-4">
+                  <TrendingUp className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.secondaryBlue }} />
+                  <div className="text-xl font-bold">{stats.winRate}%</div>
+                  <div className="text-xs text-gray-300">Win Rate</div>
+                </CardContent>
+              </Card>
+
+              <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
+                <CardContent className="p-4">
+                  <Award className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryOrange }} />
+                  <div className="text-sm font-bold">{getRankByLevel(profile.coachLevel)}</div>
+                  <div className="text-xs text-gray-300">Rank</div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Teams Section */}
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-orange-400" />
+                  <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   My Teams ({teams.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {teams.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {teams.map((team, index) => (
-                      <div key={index} className="p-4 bg-orange-600/20 rounded-lg border border-orange-500/30">
-                        <h3 className="font-medium mb-2">{team.name || `Team ${index + 1}`}</h3>
-                        <div className="text-sm text-gray-300">
-                          <p>Formation: {team.formation}</p>
-                          <p>Players: {team.players?.length || 0}/11</p>
-                          <p>Created: {new Date(team.createdAt).toLocaleDateString()}</p>
+                    {teams.map((team) => (
+                      <div key={team.id} className="p-4 rounded-lg border" style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}>
+                        <h3 className="font-bold text-white mb-1">{team.name}</h3>
+                        <p className="text-sm text-gray-300 mb-2">{team.formation_name}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Heart className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                            <span className="text-xs">{team.likes || 0}</span>
+                            <MessageSquare className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                            <span className="text-xs">{team.comments || 0}</span>
+                          </div>
+                          <Badge className="text-xs" style={{ 
+                            backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.2) : logoColors.blackAlpha(0.5),
+                            color: logoColors.white
+                          }}>
+                            {team.is_public ? 'Public' : 'Private'}
+                          </Badge>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8 text-gray-400">
-                    <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No teams created yet</p>
+                  <div className="text-center py-8">
+                    <Users className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+                    <h3 className="text-lg font-bold text-white mb-2">No Teams Created</h3>
+                    <p className="text-gray-300 mb-4">Start building your first team!</p>
                     <Button
-                      variant="outline"
-                      className="mt-4 text-white border-orange-400/30 hover:bg-orange-700"
+                      className="text-black font-bold hover:opacity-80"
+                      style={{ background: logoColors.yellowOrangeGradient }}
                       onClick={() => navigate('/team-builder')}
                     >
                       Create Your First Team
                     </Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Stats & Actions */}
-          <div className="space-y-6">
-            {/* Stats Card */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-orange-400" />
-                  Coach Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Teams Created</span>
-                  <Badge variant="outline" className="text-white border-orange-400/30">
-                    {stats.teamsCreated}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Total Matches</span>
-                  <Badge variant="outline" className="text-white border-orange-400/30">
-                    {stats.totalMatches}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Victories</span>
-                  <Badge variant="outline" className="text-green-400 border-green-400">
-                    {stats.victories}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Win Rate</span>
-                  <Badge variant="outline" className="text-yellow-400 border-yellow-400">
-                    {stats.totalMatches > 0 ? Math.round((stats.victories / stats.totalMatches) * 100) : 0}%
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick Actions */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-400" />
-                  Quick Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
-                  onClick={() => navigate('/team-builder')}
-                >
-                  <Users className="mr-2 h-4 w-4" />
-                  Team Builder
-                </Button>
-                <Button
-                  className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
-                  onClick={() => navigate('/characters')}
-                >
-                  <Star className="mr-2 h-4 w-4" />
-                  View Characters
-                </Button>
-                <Button
-                  className="w-full bg-red-600/40 hover:bg-red-600/60 text-white border border-red-500/50 justify-start"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </Button>
               </CardContent>
             </Card>
           </div>
