@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { mockCharacters, mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import Navigation from '../components/Navigation';
-import FormationField from '../components/FormationField';
+import FormationField, { BenchSlot } from '../components/FormationField';
 import PlayerSearch from '../components/PlayerSearch';
 import TacticsSelector from '../components/TacticsSelector';
 import TacticVisualizationModal from '../components/TacticVisualizationModal';
