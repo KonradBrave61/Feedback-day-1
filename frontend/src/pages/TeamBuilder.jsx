@@ -39,6 +39,7 @@ const TeamBuilder = () => {
   const [showCharacterModal, setShowCharacterModal] = useState(false);
   const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
   const [editingPlayer, setEditingPlayer] = useState(null);
+  const [isProcessingPlayer, setIsProcessingPlayer] = useState(false);
   
   // Add team building mode state
   const [teamBuildingMode, setTeamBuildingMode] = useState(false);
