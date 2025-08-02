@@ -377,7 +377,7 @@ Look pic 4 There is a problem cause the user cant select the configuration butto
 ## metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 1
+  test_sequence: 2
   run_ui: false
 
 ## test_plan:
