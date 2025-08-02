@@ -12,10 +12,22 @@ import CharacterModal from './CharacterModal';
 
 const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterPosition, setFilterPosition] = useState('all'); // Changed from position to 'all'
+  const [filterPosition, setFilterPosition] = useState('all');
   const [filterElement, setFilterElement] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [filteredPlayers, setFilteredPlayers] = useState(mockCharacters);
+  
+  // Team building states
+  const [builtTeam, setBuiltTeam] = useState({
+    players: {}, // position -> player mapping
+    bench: {}, // slot (0-4) -> player mapping
+    totalPlayers: 0
+  });
+  const [showCharacterModal, setShowCharacterModal] = useState(false);
+  const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
+  const [pendingPosition, setPendingPosition] = useState(null);
+  const [pendingIsBench, setPendingIsBench] = useState(false);
+  const [pendingBenchSlot, setPendingBenchSlot] = useState(null);
 
   const positions = ['all', 'FW', 'MF', 'DF', 'GK'];
   const elements = ['all', 'Fire', 'Earth', 'Wind', 'Wood'];
@@ -24,6 +36,73 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
     { value: 'name_desc', label: 'Name (Z-A)' },
     { value: 'position', label: 'Position' }
   ];
+
+  // Auto-assign player to best position
+  const autoAssignPosition = (player) => {
+    if (!currentFormation || !teamBuildingMode) return null;
+
+    // First, try to find an empty position that matches the player's position
+    const matchingPositions = currentFormation.positions.filter(
+      pos => pos.position === player.position && !builtTeam.players[pos.id]
+    );
+
+    if (matchingPositions.length > 0) {
+      return matchingPositions[0].id;
+    }
+
+    // If no exact match, find any empty position of the same type
+    const anyEmptyPositions = currentFormation.positions.filter(
+      pos => pos.position === player.position && !builtTeam.players[pos.id]
+    );
+
+    if (anyEmptyPositions.length > 0) {
+      return anyEmptyPositions[0].id;
+    }
+
+    // If no position available, try bench
+    for (let i = 0; i < 5; i++) {
+      if (!builtTeam.bench[i]) {
+        return null; // Signal to add to bench
+      }
+    }
+
+    return null; // Team is full
+  };
+
+  // Check if player is already selected
+  const isPlayerInTeam = (playerId) => {
+    const teamPlayerIds = Object.values(builtTeam.players).map(p => p.id);
+    const benchPlayerIds = Object.values(builtTeam.bench).map(p => p.id);
+    return teamPlayerIds.includes(playerId) || benchPlayerIds.includes(playerId) || selectedPlayerIds.includes(playerId);
+  };
+
+  // Get visual feedback class for character cards
+  const getCardVisualFeedback = (player) => {
+    const isSelected = isPlayerInTeam(player.id);
+    if (!isSelected) return '';
+    
+    return 'ring-2 ring-green-400 ring-opacity-70 shadow-lg shadow-green-400/50 relative';
+  };
+
+  // Get position info for a player in the built team
+  const getPlayerPositionInfo = (playerId) => {
+    // Check main team
+    for (const [positionId, player] of Object.entries(builtTeam.players)) {
+      if (player.id === playerId) {
+        const position = currentFormation?.positions.find(p => p.id === positionId);
+        return { type: 'main', position: position?.position || 'Unknown' };
+      }
+    }
+    
+    // Check bench
+    for (const [slot, player] of Object.entries(builtTeam.bench)) {
+      if (player.id === playerId) {
+        return { type: 'bench', slot: parseInt(slot) + 1 };
+      }
+    }
+    
+    return null;
+  };
 
   useEffect(() => {
     applyFilters();
