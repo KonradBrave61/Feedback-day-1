@@ -131,7 +131,8 @@ const MainPage = () => {
           }}>
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>}
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Trophy className="h-6 w-6" style={{ color: logoColors.primaryYellow }} />
                   <Users className="h-6 w-6 text-orange-400" />
                 </div>
                 <div>
