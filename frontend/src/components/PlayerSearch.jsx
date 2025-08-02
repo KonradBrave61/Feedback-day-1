@@ -17,6 +17,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
   const [filterElement, setFilterElement] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [filteredPlayers, setFilteredPlayers] = useState(mockCharacters);
+  const [isProcessingPlayer, setIsProcessingPlayer] = useState(false); // Add loading state
   
   // Team building states - Initialize with current team if in team building mode
   const [builtTeam, setBuiltTeam] = useState(() => {
