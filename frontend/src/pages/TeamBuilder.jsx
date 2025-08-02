@@ -553,7 +553,7 @@ const TeamBuilder = () => {
             }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <UserCheck className="h-5 w-5 text-orange-400" />
+                  <UserCheck className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Coach
                 </CardTitle>
               </CardHeader>
