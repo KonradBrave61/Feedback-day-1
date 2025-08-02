@@ -71,10 +71,16 @@ const TechniquesPage = () => {
 
   const fetchTechniques = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL}/api/techniques/`);
+      const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+      console.log('Fetching techniques from:', `${backendUrl}/api/techniques/`);
+      const response = await fetch(`${backendUrl}/api/techniques/`);
+      console.log('Response status:', response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log('Techniques data:', data);
         setTechniques(data);
+      } else {
+        console.error('Failed to fetch techniques:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching techniques:', error);
@@ -85,10 +91,16 @@ const TechniquesPage = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL}/api/techniques/categories/stats`);
+      const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+      console.log('Fetching stats from:', `${backendUrl}/api/techniques/categories/stats`);
+      const response = await fetch(`${backendUrl}/api/techniques/categories/stats`);
+      console.log('Stats response status:', response.status);
       if (response.ok) {
         const data = await response.json();
+        console.log('Stats data:', data);
         setStats(data);
+      } else {
+        console.error('Failed to fetch technique stats:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching technique stats:', error);
