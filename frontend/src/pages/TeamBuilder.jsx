@@ -437,7 +437,11 @@ const TeamBuilder = () => {
                     Browse Players
                   </Button>
                   <Button
-                    className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                    className="w-full text-white border hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                     onClick={() => {
                       setTeamBuildingMode(false);
                       setSelectedPosition(null);
@@ -453,21 +457,35 @@ const TeamBuilder = () => {
             </Card>
 
             {/* Formation Selection */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-orange-400" />
+                  <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Formation
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Select value={selectedFormation.id.toString()} onValueChange={handleFormationChange}>
-                  <SelectTrigger className="bg-orange-900/30 border-orange-400/30 text-white">
+                  <SelectTrigger className="text-white border" style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-orange-900 border-orange-400/30">
+                  <SelectContent style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.9),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}>
                     {mockFormations.map(formation => (
-                      <SelectItem key={formation.id} value={formation.id.toString()} className="text-white hover:bg-orange-800">
+                      <SelectItem 
+                        key={formation.id} 
+                        value={formation.id.toString()} 
+                        className="text-white hover:opacity-80"
+                        style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
+                      >
                         {formation.name}
                       </SelectItem>
                     ))}
@@ -477,10 +495,13 @@ const TeamBuilder = () => {
             </Card>
 
             {/* Tactics Selection */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-orange-400" />
+                  <Zap className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Tactics Presets
                 </CardTitle>
               </CardHeader>
@@ -488,7 +509,10 @@ const TeamBuilder = () => {
                 <div className="space-y-2 mb-4">
                   {selectedTactics.length > 0 ? (
                     selectedTactics.map((tactic, index) => (
-                      <div key={index} className="p-2 bg-orange-600/20 rounded-lg border border-orange-500/30">
+                      <div key={index} className="p-2 rounded-lg border" style={{ 
+                        backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                      }}>
                         <div className="font-medium text-sm">{tactic.name}</div>
                         <div className="text-xs text-gray-300">{tactic.effect}</div>
                       </div>
@@ -498,14 +522,22 @@ const TeamBuilder = () => {
                   )}
                 </div>
                 <Button
-                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white mb-2"
+                  className="w-full text-white border hover:opacity-80 mb-2"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => setShowTacticVisualization(true)}
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Tactical Visualization
                 </Button>
                 <Button
-                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => setShowTacticsSelector(true)}
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -515,7 +547,10 @@ const TeamBuilder = () => {
             </Card>
 
             {/* Coach Selection */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <UserCheck className="h-5 w-5 text-orange-400" />
