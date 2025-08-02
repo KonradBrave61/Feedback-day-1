@@ -555,6 +555,25 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
         </div>
 
+        {/* Add to Team Button - Restored with enhanced functionality */}
+        {onAddToTeam && (
+          <div className="mt-6 flex justify-center">
+            <Button
+              onClick={addToTeam}
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3 text-lg font-semibold"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              {teamBuildingMode ? (
+                pendingIsBench ? 
+                  'Add to Bench' : 
+                  `Add to ${pendingPosition ? 'Position' : 'Team'}`
+              ) : (
+                'Add to Team'
+              )}
+            </Button>
+          </div>
+        )}
+
         {/* Equipment List Modal */}
         {showEquipmentList && selectedCategory && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
