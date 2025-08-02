@@ -556,9 +556,9 @@ const TeamBuilder = () => {
               </Card>
             )}
 
-            {/* Save Team Button */}
+            {/* Team Actions */}
             <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardContent className="p-4">
+              <CardContent className="p-4 space-y-2">
                 <Button
                   className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
                   onClick={() => setShowSaveTeamModal(true)}
@@ -566,6 +566,17 @@ const TeamBuilder = () => {
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save Team
+                </Button>
+                <Button
+                  className="w-full bg-red-800/40 border-red-400/30 hover:bg-red-700/60 text-white"
+                  onClick={() => {
+                    setTeamPlayers({});
+                    setBenchPlayers({});
+                  }}
+                  disabled={Object.keys(teamPlayers).length === 0 && Object.keys(benchPlayers).length === 0}
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Clear Team
                 </Button>
               </CardContent>
             </Card>
