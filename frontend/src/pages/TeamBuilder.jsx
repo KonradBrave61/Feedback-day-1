@@ -652,10 +652,15 @@ const TeamBuilder = () => {
                 <FormationField
                   formation={selectedFormation}
                   teamPlayers={teamPlayers}
+                  benchPlayers={benchPlayers}
                   onAddPlayer={handleAddPlayer}
                   onRemovePlayer={handleRemovePlayer}
                   onMovePlayer={handleMovePlayer}
                   onEditPlayer={handleEditPlayer}
+                  onAddBenchPlayer={handleAddBenchPlayer}
+                  onRemoveBenchPlayer={handleRemoveBenchPlayer}
+                  onMoveToBench={handleMoveToBench}
+                  onMoveFromBench={handleMoveFromBench}
                 />
               </CardContent>
             </Card>
