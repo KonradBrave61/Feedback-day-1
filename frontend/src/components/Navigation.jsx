@@ -122,7 +122,6 @@ const Navigation = () => {
                           }}
                         >
                           <User className="h-4 w-4 mr-2" />
-                          Profile
                         </Button>
                         <Button
                           variant="ghost"
@@ -139,7 +138,8 @@ const Navigation = () => {
               ) : (
                 <Button
                   onClick={() => navigate('/login')}
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  style={{ background: logoColors.yellowOrangeGradient }}
+                  className="text-black hover:opacity-80"
                 >
                   <User className="h-4 w-4 mr-2" />
                   Sign In
@@ -154,7 +154,8 @@ const Navigation = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-orange-300 hover:bg-orange-700/30"
+                className="hover:bg-blue-700/30"
+                style={{ color: logoColors.lightBlue }}
                 onClick={() => setShowHamburgerMenu(!showHamburgerMenu)}
               >
                 {showHamburgerMenu ? 'Close Menu' : 'Open Menu'}
