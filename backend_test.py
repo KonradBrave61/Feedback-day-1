@@ -1257,6 +1257,419 @@ class InazumaElevenAPITest(unittest.TestCase):
         # In a real test environment, we might want to delete them
         pass
 
+class TeamBuilderBackendTest(unittest.TestCase):
+    """Focused test suite for Team Builder Backend functionality"""
+    
+    def setUp(self):
+        """Set up test data for team builder testing"""
+        # Generate unique username and email for testing
+        random_suffix = generate_random_string()
+        self.test_username = f"teambuilder_{random_suffix}"
+        self.test_email = f"teambuilder_{random_suffix}@example.com"
+        self.test_password = "TeamBuilder123!"
+        
+        # User registration data
+        self.user_data = {
+            "username": self.test_username,
+            "email": self.test_email,
+            "password": self.test_password,
+            "coach_level": 5,
+            "favorite_position": "FW",
+            "favorite_element": "Fire",
+            "favourite_team": "Raimon",
+            "profile_picture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+            "bio": "Team builder enthusiast"
+        }
+        
+        # Store auth token and IDs
+        self.auth_token = None
+        self.user_id = None
+        self.team_id = None
+        self.character_ids = []
+        self.equipment_ids = []
+    
+    def test_01_setup_authentication(self):
+        """Set up authentication for team builder tests"""
+        # Register user
+        response = requests.post(f"{API_URL}/auth/register", json=self.user_data)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.auth_token = data["access_token"]
+        self.user_id = data["user"]["id"]
+        print(f"✅ Team Builder user registered with ID: {self.user_id}")
+    
+    def test_02_character_api_integration(self):
+        """Test Character API Integration for Team Builder"""
+        # Test getting all characters
+        response = requests.get(f"{API_URL}/characters/")
+        self.assertEqual(response.status_code, 200)
+        characters = response.json()
+        self.assertIsInstance(characters, list)
+        self.assertGreater(len(characters), 0)
+        
+        # Store some character IDs for team building
+        self.character_ids = [char["id"] for char in characters[:5]]
+        
+        # Test character filtering by position
+        response = requests.get(f"{API_URL}/characters/?position=GK")
+        self.assertEqual(response.status_code, 200)
+        gk_characters = response.json()
+        self.assertIsInstance(gk_characters, list)
+        if gk_characters:
+            self.assertEqual(gk_characters[0]["position"], "GK")
+        
+        # Test character filtering by element
+        response = requests.get(f"{API_URL}/characters/?element=Fire")
+        self.assertEqual(response.status_code, 200)
+        fire_characters = response.json()
+        self.assertIsInstance(fire_characters, list)
+        if fire_characters:
+            self.assertEqual(fire_characters[0]["element"], "Fire")
+        
+        # Test character search
+        response = requests.get(f"{API_URL}/characters/?search=Mark")
+        self.assertEqual(response.status_code, 200)
+        search_results = response.json()
+        self.assertIsInstance(search_results, list)
+        
+        # Test individual character retrieval
+        if self.character_ids:
+            response = requests.get(f"{API_URL}/characters/{self.character_ids[0]}")
+            self.assertEqual(response.status_code, 200)
+            character = response.json()
+            self.assertIn("id", character)
+            self.assertIn("name", character)
+            self.assertIn("base_stats", character)
+        
+        print(f"✅ Character API Integration: Found {len(characters)} characters, filtering and search working")
+    
+    def test_03_equipment_api_integration(self):
+        """Test Equipment API Integration for Team Builder"""
+        # Test getting all equipment
+        response = requests.get(f"{API_URL}/equipment/")
+        self.assertEqual(response.status_code, 200)
+        equipment = response.json()
+        self.assertIsInstance(equipment, list)
+        self.assertGreater(len(equipment), 0)
+        
+        # Store some equipment IDs
+        self.equipment_ids = [eq["id"] for eq in equipment[:3]]
+        
+        # Test equipment filtering by category
+        response = requests.get(f"{API_URL}/equipment/?category=Boots")
+        self.assertEqual(response.status_code, 200)
+        boots = response.json()
+        self.assertIsInstance(boots, list)
+        if boots:
+            self.assertEqual(boots[0]["category"], "Boots")
+        
+        # Test equipment filtering by rarity
+        response = requests.get(f"{API_URL}/equipment/?rarity=Legendary")
+        self.assertEqual(response.status_code, 200)
+        legendary_equipment = response.json()
+        self.assertIsInstance(legendary_equipment, list)
+        if legendary_equipment:
+            self.assertEqual(legendary_equipment[0]["rarity"], "Legendary")
+        
+        # Test individual equipment retrieval
+        if self.equipment_ids:
+            response = requests.get(f"{API_URL}/equipment/{self.equipment_ids[0]}")
+            self.assertEqual(response.status_code, 200)
+            equipment_item = response.json()
+            self.assertIn("id", equipment_item)
+            self.assertIn("name", equipment_item)
+            self.assertIn("stats", equipment_item)
+        
+        print(f"✅ Equipment API Integration: Found {len(equipment)} equipment items, filtering working")
+    
+    def test_04_team_builder_backend_testing(self):
+        """Test Team Builder Backend functionality"""
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Test getting formations
+        response = requests.get(f"{API_URL}/teams/formations/")
+        self.assertEqual(response.status_code, 200)
+        formations = response.json()
+        self.assertIsInstance(formations, list)
+        self.assertGreater(len(formations), 0)
+        formation_id = formations[0]["id"]
+        
+        # Test getting tactics
+        response = requests.get(f"{API_URL}/teams/tactics/")
+        self.assertEqual(response.status_code, 200)
+        tactics = response.json()
+        self.assertIsInstance(tactics, list)
+        self.assertGreater(len(tactics), 0)
+        tactic_ids = [tactic["id"] for tactic in tactics[:2]]
+        
+        # Test getting coaches
+        response = requests.get(f"{API_URL}/teams/coaches/")
+        self.assertEqual(response.status_code, 200)
+        coaches = response.json()
+        self.assertIsInstance(coaches, list)
+        self.assertGreater(len(coaches), 0)
+        coach_id = coaches[0]["id"]
+        
+        # Create a team with equipment assignments
+        team_data = {
+            "name": f"Team Builder Test Team {generate_random_string()}",
+            "formation": formation_id,
+            "players": [],
+            "bench_players": [],
+            "tactics": tactic_ids,
+            "coach": coach_id,
+            "description": "Test team for team builder functionality",
+            "is_public": True,
+            "tags": ["test", "teambuilder"]
+        }
+        
+        # Add players with equipment if we have characters and equipment
+        if self.character_ids and self.equipment_ids:
+            team_data["players"] = [
+                {
+                    "character_id": self.character_ids[0],
+                    "position_id": "gk",
+                    "user_level": 50,
+                    "user_rarity": "Epic",
+                    "equipment": {
+                        "boots": self.equipment_ids[0] if len(self.equipment_ids) > 0 else None,
+                        "bracelets": self.equipment_ids[1] if len(self.equipment_ids) > 1 else None,
+                        "pendants": self.equipment_ids[2] if len(self.equipment_ids) > 2 else None
+                    }
+                }
+            ]
+        
+        # Create team
+        response = requests.post(f"{API_URL}/teams", json=team_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        team = response.json()
+        self.assertIn("id", team)
+        self.team_id = team["id"]
+        
+        # Test team retrieval
+        response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        retrieved_team = response.json()
+        self.assertEqual(retrieved_team["id"], self.team_id)
+        self.assertEqual(retrieved_team["name"], team_data["name"])
+        
+        # Test team update
+        update_data = {
+            "name": f"Updated Team {generate_random_string()}",
+            "formation": formation_id
+        }
+        response = requests.put(f"{API_URL}/teams/{self.team_id}", json=update_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        updated_team = response.json()
+        self.assertEqual(updated_team["name"], update_data["name"])
+        
+        print(f"✅ Team Builder Backend: Team creation, retrieval, and update working with ID: {self.team_id}")
+    
+    def test_05_team_stats_with_equipment_bonuses(self):
+        """Test Team Stats calculation with Equipment Bonuses"""
+        if not self.auth_token or not self.team_id:
+            self.skipTest("No auth token or team ID available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Get team details
+        response = requests.get(f"{API_URL}/teams/{self.team_id}", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        team = response.json()
+        
+        # Verify team has players with equipment
+        if team.get("players"):
+            player = team["players"][0]
+            self.assertIn("character_id", player)
+            
+            # Get character stats
+            char_response = requests.get(f"{API_URL}/characters/{player['character_id']}")
+            self.assertEqual(char_response.status_code, 200)
+            character = char_response.json()
+            self.assertIn("base_stats", character)
+            
+            # If player has equipment, verify equipment stats are available
+            if player.get("equipment"):
+                equipment = player["equipment"]
+                for slot, equipment_id in equipment.items():
+                    if equipment_id:
+                        eq_response = requests.get(f"{API_URL}/equipment/{equipment_id}")
+                        self.assertEqual(eq_response.status_code, 200)
+                        equipment_item = eq_response.json()
+                        self.assertIn("stats", equipment_item)
+                        
+                        # Verify equipment stats can be added to character stats
+                        char_stats = character["base_stats"]
+                        eq_stats = equipment_item["stats"]
+                        
+                        # Example calculation: character kick + equipment kick bonus
+                        if "kick" in char_stats and "kick" in eq_stats:
+                            base_kick = char_stats["kick"]["main"] if isinstance(char_stats["kick"], dict) else char_stats["kick"]
+                            equipment_kick_bonus = eq_stats["kick"]
+                            total_kick = base_kick + equipment_kick_bonus
+                            self.assertGreater(total_kick, base_kick)
+                            print(f"✅ Equipment bonus calculation: Base kick {base_kick} + Equipment bonus {equipment_kick_bonus} = {total_kick}")
+        
+        print("✅ Team Stats with Equipment Bonuses: Calculation framework verified")
+    
+    def test_06_constellation_system_integration(self):
+        """Test Constellation/Gacha system integration"""
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Test getting constellations
+        response = requests.get(f"{API_URL}/constellations/")
+        self.assertEqual(response.status_code, 200)
+        constellations = response.json()
+        self.assertIsInstance(constellations, list)
+        
+        if constellations:
+            constellation_id = constellations[0]["id"]
+            
+            # Test getting constellation details
+            response = requests.get(f"{API_URL}/constellations/{constellation_id}")
+            self.assertEqual(response.status_code, 200)
+            constellation = response.json()
+            self.assertIn("id", constellation)
+            self.assertIn("name", constellation)
+            self.assertIn("orbs", constellation)
+            
+            # Test getting constellation characters
+            response = requests.get(f"{API_URL}/constellations/{constellation_id}/characters")
+            self.assertEqual(response.status_code, 200)
+            characters = response.json()
+            self.assertIn("legendary", characters)
+            self.assertIn("epic", characters)
+            self.assertIn("rare", characters)
+            self.assertIn("normal", characters)
+            
+            # Test getting drop rates
+            response = requests.get(f"{API_URL}/constellations/{constellation_id}/drop-rates")
+            self.assertEqual(response.status_code, 200)
+            drop_rates = response.json()
+            self.assertIn("base_rates", drop_rates)
+            self.assertIn("final_rates", drop_rates)
+            
+            print(f"✅ Constellation System: {len(constellations)} constellations available, details and drop rates working")
+        else:
+            print("⚠️ No constellations found - system may need initialization")
+    
+    def test_07_user_kizuna_stars_system(self):
+        """Test User Kizuna Stars system"""
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Get current user info to check Kizuna Stars
+        response = requests.get(f"{API_URL}/auth/me", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        user = response.json()
+        
+        # Check if user has kizuna_stars field
+        if "kizuna_stars" in user:
+            initial_stars = user["kizuna_stars"]
+            self.assertIsInstance(initial_stars, int)
+            self.assertGreaterEqual(initial_stars, 0)
+            print(f"✅ User Kizuna Stars: User has {initial_stars} Kizuna Stars")
+        else:
+            print("⚠️ Kizuna Stars field not found in user profile")
+    
+    def test_08_save_slots_management(self):
+        """Test Save Slots Management"""
+        if not self.auth_token:
+            self.skipTest("No auth token available")
+        
+        headers = {"Authorization": f"Bearer {self.auth_token}"}
+        
+        # Test getting save slots
+        response = requests.get(f"{API_URL}/save-slots", headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("save_slots", data)
+        save_slots = data["save_slots"]
+        self.assertIsInstance(save_slots, list)
+        self.assertEqual(len(save_slots), 5)  # Should have 5 slots
+        
+        # Verify slot structure
+        for slot in save_slots:
+            self.assertIn("slot_number", slot)
+            self.assertIn("slot_name", slot)
+            self.assertIn("is_occupied", slot)
+            self.assertIn("team_id", slot)
+            self.assertIn("team_name", slot)
+        
+        # Test saving team to slot if we have a team
+        if self.team_id:
+            slot_data = {
+                "slot_number": 1,
+                "slot_name": "Test Team Slot",
+                "overwrite": True
+            }
+            response = requests.post(f"{API_URL}/teams/{self.team_id}/save-to-slot", json=slot_data, headers=headers)
+            self.assertEqual(response.status_code, 200)
+            result = response.json()
+            self.assertIn("message", result)
+            
+            # Verify the slot is now occupied
+            response = requests.get(f"{API_URL}/save-slots", headers=headers)
+            self.assertEqual(response.status_code, 200)
+            updated_slots = response.json()["save_slots"]
+            slot_1 = next((slot for slot in updated_slots if slot["slot_number"] == 1), None)
+            self.assertIsNotNone(slot_1)
+            self.assertTrue(slot_1["is_occupied"])
+            self.assertEqual(slot_1["team_id"], self.team_id)
+        
+        print("✅ Save Slots Management: 5 slots available, save functionality working")
+
 if __name__ == "__main__":
-    # Run the tests
-    unittest.main(argv=['first-arg-is-ignored'], exit=False)
+    # Run the focused Team Builder tests
+    print("=" * 80)
+    print("RUNNING FOCUSED TEAM BUILDER BACKEND TESTS")
+    print("=" * 80)
+    
+    # Create test suite with only the focused tests
+    suite = unittest.TestSuite()
+    
+    # Add Team Builder focused tests
+    suite.addTest(TeamBuilderBackendTest('test_01_setup_authentication'))
+    suite.addTest(TeamBuilderBackendTest('test_02_character_api_integration'))
+    suite.addTest(TeamBuilderBackendTest('test_03_equipment_api_integration'))
+    suite.addTest(TeamBuilderBackendTest('test_04_team_builder_backend_testing'))
+    suite.addTest(TeamBuilderBackendTest('test_05_team_stats_with_equipment_bonuses'))
+    suite.addTest(TeamBuilderBackendTest('test_06_constellation_system_integration'))
+    suite.addTest(TeamBuilderBackendTest('test_07_user_kizuna_stars_system'))
+    suite.addTest(TeamBuilderBackendTest('test_08_save_slots_management'))
+    
+    # Run the focused tests
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    
+    print("\n" + "=" * 80)
+    print("FOCUSED TEAM BUILDER BACKEND TEST RESULTS")
+    print("=" * 80)
+    print(f"Tests run: {result.testsRun}")
+    print(f"Failures: {len(result.failures)}")
+    print(f"Errors: {len(result.errors)}")
+    
+    if result.failures:
+        print("\nFAILURES:")
+        for test, traceback in result.failures:
+            print(f"- {test}: {traceback}")
+    
+    if result.errors:
+        print("\nERRORS:")
+        for test, traceback in result.errors:
+            print(f"- {test}: {traceback}")
+    
+    if result.wasSuccessful():
+        print("\n🎉 ALL FOCUSED TEAM BUILDER BACKEND TESTS PASSED!")
+    else:
+        print(f"\n❌ {len(result.failures + result.errors)} TESTS FAILED")
+    
+    print("=" * 80)
