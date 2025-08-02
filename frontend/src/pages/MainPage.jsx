@@ -132,8 +132,7 @@ const MainPage = () => {
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
-                  <Trophy className="h-6 w-6" style={{ color: logoColors.primaryYellow }} />
-                  <Users className="h-6 w-6 text-orange-400" />
+                  <Users className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{mockCharacters.length}</div>
@@ -143,11 +142,14 @@ const MainPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                  <Target className="h-6 w-6 text-orange-400" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Target className="h-6 w-6" style={{ color: logoColors.secondaryBlue }} />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">15</div>
@@ -157,11 +159,14 @@ const MainPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                  <Trophy className="h-6 w-6 text-orange-400" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Trophy className="h-6 w-6" style={{ color: logoColors.primaryOrange }} />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{user ? 8 : '?'}</div>
@@ -171,11 +176,14 @@ const MainPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                  <Award className="h-6 w-6 text-orange-400" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <Award className="h-6 w-6" style={{ color: logoColors.primaryYellow }} />
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">{user ? user.coachLevel || 1 : '?'}</div>
@@ -189,10 +197,13 @@ const MainPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Featured Characters */}
           <div className="lg:col-span-2">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-orange-400" />
+                  <Star className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Featured Characters
                 </CardTitle>
               </CardHeader>
