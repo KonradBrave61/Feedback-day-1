@@ -576,7 +576,11 @@ const TeamBuilder = () => {
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {selectedCoach.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="outline" className="text-xs border-orange-400/30 bg-orange-800/30 text-orange-200">
+                        <Badge key={index} variant="outline" className="text-xs text-white" 
+                               style={{ 
+                                 borderColor: logoColors.primaryBlueAlpha(0.3),
+                                 backgroundColor: logoColors.primaryBlueAlpha(0.3)
+                               }}>
                           {specialty}
                         </Badge>
                       ))}
@@ -586,7 +590,11 @@ const TeamBuilder = () => {
                   <div className="text-gray-400 text-sm mb-4">No coach selected</div>
                 )}
                 <Button
-                  className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => setShowCoachSelector(true)}
                 >
                   <UserCheck className="h-4 w-4 mr-2" />
@@ -597,10 +605,13 @@ const TeamBuilder = () => {
 
             {/* Team Stats */}
             {teamStats && (
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <Card className="backdrop-blur-lg text-white border" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5 text-orange-400" />
+                    <Trophy className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                     Team Stats
                   </CardTitle>
                 </CardHeader>
@@ -608,13 +619,21 @@ const TeamBuilder = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Players:</span>
-                      <Badge variant="outline" className="text-white border-orange-400/30 bg-orange-800/30">
+                      <Badge variant="outline" className="text-white" 
+                             style={{ 
+                               borderColor: logoColors.primaryBlueAlpha(0.3),
+                               backgroundColor: logoColors.primaryBlueAlpha(0.3)
+                             }}>
                         {teamStats.playerCount}/11
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300">Avg Level:</span>
-                      <Badge variant="outline" className="text-orange-400 border-orange-400 bg-orange-800/30">
+                      <Badge variant="outline" className="text-black font-bold" 
+                             style={{ 
+                               borderColor: logoColors.primaryYellow,
+                               backgroundColor: logoColors.primaryYellow
+                             }}>
                         {teamStats.avgLevel}
                       </Badge>
                     </div>
