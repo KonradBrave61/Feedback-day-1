@@ -555,17 +555,6 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
         </div>
 
-        {/* Add to Team Button */}
-        <div className="flex justify-center mt-6">
-          <Button
-            onClick={addToTeam}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-3 text-lg"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Add to Team
-          </Button>
-        </div>
-
         {/* Equipment List Modal */}
         {showEquipmentList && selectedCategory && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
