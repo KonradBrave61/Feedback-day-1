@@ -220,7 +220,11 @@ const MainPage = () => {
                 </div>
                 <div className="mt-6 text-center">
                   <Button
-                    className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white"
+                    className="text-white border hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.primaryBlueAlpha(0.6),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
                     onClick={() => navigate('/characters')}
                   >
                     View All Characters
@@ -232,10 +236,13 @@ const MainPage = () => {
 
           {/* Recent Activity */}
           <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-orange-400" />
+                  <Clock className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   {user ? 'Recent Activity' : 'Getting Started'}
                 </CardTitle>
               </CardHeader>
@@ -244,7 +251,11 @@ const MainPage = () => {
                   <div className="space-y-4">
                     {recentActivity.map((activity, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-orange-600/20 ${getActivityColor(activity.type)}`}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                             style={{ 
+                               backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                               ...getActivityColor(activity.type) 
+                             }}>
                           {getActivityIcon(activity.type)}
                         </div>
                         <div className="flex-1">
@@ -261,11 +272,12 @@ const MainPage = () => {
                 ) : (
                   <div className="space-y-4">
                     <div className="text-center py-4">
-                      <LogIn className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+                      <LogIn className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryYellow }} />
                       <p className="text-white font-medium mb-2">Welcome to Inazuma Eleven!</p>
                       <p className="text-sm text-gray-300 mb-4">Sign in to save teams, track progress, and unlock features.</p>
                       <Button
-                        className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                        className="text-black font-bold hover:opacity-80"
+                        style={{ background: logoColors.yellowOrangeGradient }}
                         onClick={() => navigate('/login')}
                       >
                         <LogIn className="h-4 w-4 mr-2" />
@@ -278,24 +290,35 @@ const MainPage = () => {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="mt-6 bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="mt-6 backdrop-blur-lg text-white border" style={{ 
+              backgroundColor: logoColors.blackAlpha(0.3),
+              borderColor: logoColors.primaryBlueAlpha(0.2)
+            }}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-400" />
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Quick Actions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <Button
-                    className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
+                    className="w-full text-white border justify-start hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                      borderColor: logoColors.primaryBlueAlpha(0.5)
+                    }}
                     onClick={() => user ? navigate('/team-builder') : navigate('/login')}
                   >
                     <Users className="mr-2 h-4 w-4" />
                     Team Builder
                   </Button>
                   <Button
-                    className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
+                    className="w-full text-white border justify-start hover:opacity-80"
+                    style={{ 
+                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                      borderColor: logoColors.primaryBlueAlpha(0.5)
+                    }}
                     onClick={() => navigate('/characters')}
                   >
                     <Star className="mr-2 h-4 w-4" />
