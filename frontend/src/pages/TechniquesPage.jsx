@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import { Search, Filter, Star, Zap, Shield, Target, Eye, Book, Award } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const TechniquesPage = () => {
   const [techniques, setTechniques] = useState([]);
@@ -30,26 +31,26 @@ const TechniquesPage = () => {
     min_power: 0
   });
 
-  // Color schemes for different attributes
+  // Updated color schemes using logoColors
   const typeColors = {
-    avatar: 'from-purple-500 to-indigo-600',
-    totem: 'from-green-500 to-emerald-600', 
-    'mix-max': 'from-red-500 to-pink-600'
+    avatar: logoColors.blueGradient,
+    totem: 'linear-gradient(135deg, #32CD32 0%, #228B22 100%)', // Green gradient
+    'mix-max': logoColors.yellowOrangeGradient
   };
 
   const elementColors = {
-    fire: 'text-red-500 bg-red-100',
-    earth: 'text-amber-700 bg-amber-100',
-    wind: 'text-cyan-600 bg-cyan-100',
-    wood: 'text-green-600 bg-green-100',
-    void: 'text-purple-600 bg-purple-100'
+    fire: `text-red-500 bg-red-500/10 border border-red-500/20`,
+    earth: `text-amber-600 bg-amber-600/10 border border-amber-600/20`,
+    wind: `text-cyan-400 bg-cyan-400/10 border border-cyan-400/20`,
+    wood: `text-green-500 bg-green-500/10 border border-green-500/20`,
+    void: `text-purple-500 bg-purple-500/10 border border-purple-500/20`
   };
 
   const rarityColors = {
-    Common: 'text-gray-600 bg-gray-100',
-    Rare: 'text-blue-600 bg-blue-100',
-    Epic: 'text-purple-600 bg-purple-100',
-    Legendary: 'text-yellow-600 bg-yellow-100'
+    Common: `text-gray-400 bg-gray-400/10 border border-gray-400/20`,
+    Rare: `border border-blue-500/30`,
+    Epic: `border border-purple-500/30`,
+    Legendary: `border border-yellow-500/30`
   };
 
   const categoryIcons = {
