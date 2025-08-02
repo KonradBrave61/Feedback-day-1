@@ -186,6 +186,15 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
   const StatRadarChart = ({ stats }) => {
     const statNames = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
+    const statIcons = {
+      'kick': '⚡',
+      'control': '🎯', 
+      'technique': '👥',
+      'intelligence': '📊',
+      'pressure': '🛡️',
+      'agility': '⚡',
+      'physical': '💪'
+    };
     
     // Calculate dynamic max value based on actual stats for better scaling
     const statValues = statNames.map(stat => stats[stat].main);
@@ -242,22 +251,22 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
             );
           })}
           
-          {/* Stat labels */}
+          {/* Stat labels with icons */}
           {statNames.map((stat, index) => {
             const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
-            const labelRadius = radius + 12;
+            const labelRadius = radius + 15;
             const x = center + labelRadius * Math.cos(angle);
             const y = center + labelRadius * Math.sin(angle);
             return (
               <text
                 key={stat}
                 x={x}
-                y={y + 1}
+                y={y + 2}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="fill-white text-[8px] font-medium"
+                className="fill-white text-[12px]"
               >
-                {stat.slice(0, 4).toUpperCase()}
+                {statIcons[stat]}
               </text>
             );
           })}
