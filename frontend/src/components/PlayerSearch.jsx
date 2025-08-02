@@ -223,19 +223,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
         }
         
         if (!foundBenchSlot) {
-          // Check if all positions for this player type are full
-          const positionsOfThisType = currentFormation.positions.filter(
-            pos => pos.position === player.position
-          );
-          const occupiedPositionsOfThisType = positionsOfThisType.filter(
-            pos => newTeam.players[pos.id]
-          );
-          
-          if (occupiedPositionsOfThisType.length === positionsOfThisType.length) {
-            alert(`All ${player.position} positions are full! Team is also full (11 main players + 5 bench players).`);
-          } else {
-            alert('Team is full! (11 main players + 5 bench players)');
-          }
+          // Team is completely full - all formation spots and bench spots are occupied
+          alert('Team is completely full! All 11 formation positions and 5 bench slots are occupied.');
           setIsProcessingPlayer(false);
           return prev;
         }
