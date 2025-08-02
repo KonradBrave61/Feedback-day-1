@@ -116,15 +116,18 @@ const FormationField = ({ formation, teamPlayers, onAddPlayer, onRemovePlayer, o
           </div>
         ) : (
           <div 
-            className={`w-16 h-20 bg-black/20 backdrop-blur-md border-2 border-dashed border-orange-400/30 hover:border-orange-400/60 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-105 ${
+            className={`w-16 h-20 bg-black/30 backdrop-blur-md border-2 border-dashed border-orange-400/50 hover:border-orange-400 rounded-lg flex flex-col items-center justify-center transition-all hover:scale-110 cursor-pointer group ${
               isOver ? 'border-orange-400 bg-orange-400/20' : ''
             }`}
             onClick={() => onAddPlayer(position.id)}
           >
-            <Plus className="h-6 w-6 text-orange-400/60 mb-1" />
-            <Badge className={`${getPositionColor(position.position)} text-xs`}>
+            <Plus className="h-8 w-8 text-orange-400 mb-1 group-hover:text-white transition-colors" />
+            <Badge className={`${getPositionColor(position.position)} text-xs group-hover:scale-105 transition-transform`}>
               {position.position}
             </Badge>
+            <div className="text-xs text-orange-300 text-center mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              Add Player
+            </div>
           </div>
         )}
       </div>
