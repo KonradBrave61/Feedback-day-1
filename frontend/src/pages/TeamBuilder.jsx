@@ -230,6 +230,58 @@ const TeamBuilder = () => {
     });
   };
 
+  // Move player from formation to bench
+  const handleMoveToBench = (fromPosition, toBenchSlot) => {
+    const playerToMove = teamPlayers[fromPosition];
+    if (!playerToMove) return;
+
+    // Remove from formation
+    setTeamPlayers(prev => {
+      const newTeam = { ...prev };
+      delete newTeam[fromPosition];
+      return newTeam;
+    });
+
+    // Add to bench (replace if slot is occupied)
+    setBenchPlayers(prev => ({
+      ...prev,
+      [toBenchSlot]: playerToMove
+    }));
+  };
+
+  // Move player from bench to formation
+  const handleMoveFromBench = (fromBenchSlot, toPosition, isSwap = false) => {
+    const playerToMove = benchPlayers[fromBenchSlot];
+    if (!playerToMove) return;
+
+    if (isSwap && teamPlayers[toPosition]) {
+      // Swap players between bench and formation
+      const formationPlayer = teamPlayers[toPosition];
+      
+      setTeamPlayers(prev => ({
+        ...prev,
+        [toPosition]: playerToMove
+      }));
+      
+      setBenchPlayers(prev => ({
+        ...prev,
+        [fromBenchSlot]: formationPlayer
+      }));
+    } else {
+      // Simple move from bench to formation
+      setTeamPlayers(prev => ({
+        ...prev,
+        [toPosition]: playerToMove
+      }));
+
+      setBenchPlayers(prev => {
+        const newBench = { ...prev };
+        delete newBench[fromBenchSlot];
+        return newBench;
+      });
+    }
+  };
+
   const handleTacticsSelect = (tactics) => {
     setSelectedTactics(tactics);
   };
