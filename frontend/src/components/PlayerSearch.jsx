@@ -17,11 +17,20 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
   const [sortBy, setSortBy] = useState('name');
   const [filteredPlayers, setFilteredPlayers] = useState(mockCharacters);
   
-  // Team building states
-  const [builtTeam, setBuiltTeam] = useState({
-    players: {}, // position -> player mapping
-    bench: {}, // slot (0-4) -> player mapping
-    totalPlayers: 0
+  // Team building states - Initialize with current team if in team building mode
+  const [builtTeam, setBuiltTeam] = useState(() => {
+    if (teamBuildingMode) {
+      return {
+        players: { ...currentTeamPlayers },
+        bench: { ...currentBenchPlayers },
+        totalPlayers: Object.keys(currentTeamPlayers).length + Object.keys(currentBenchPlayers).length
+      };
+    }
+    return {
+      players: {},
+      bench: {},
+      totalPlayers: 0
+    };
   });
   const [showCharacterModal, setShowCharacterModal] = useState(false);
   const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
