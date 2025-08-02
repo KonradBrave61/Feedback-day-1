@@ -326,7 +326,11 @@ const MainPage = () => {
                   </Button>
                   {user && (
                     <Button
-                      className="w-full bg-orange-600/40 hover:bg-orange-600/60 text-white border border-orange-500/50 justify-start"
+                      className="w-full text-white border justify-start hover:opacity-80"
+                      style={{ 
+                        backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                        borderColor: logoColors.primaryBlueAlpha(0.5)
+                      }}
                       onClick={() => navigate('/profile')}
                     >
                       <Award className="mr-2 h-4 w-4" />
