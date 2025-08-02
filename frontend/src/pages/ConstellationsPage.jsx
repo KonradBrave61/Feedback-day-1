@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 import { toast } from 'sonner';
+import { logoColors } from '../styles/colors';
 import {
   Stars, Zap, Info, Gamepad2, Monitor, Smartphone,
   Sparkles, ArrowLeft, ArrowRight, RotateCcw
@@ -337,7 +338,7 @@ const ConstellationsPage = () => {
     const colors = {
       legendary: 'bg-gradient-to-br from-red-500 to-red-700 border-red-400',
       epic: 'bg-gradient-to-br from-purple-500 to-purple-700 border-purple-400',
-      rare: 'bg-gradient-to-br from-blue-500 to-blue-700 border-blue-400',
+      rare: `bg-gradient-to-br from-blue-500 to-[${logoColors.secondaryBlue}] border-blue-400`,
       normal: 'bg-gradient-to-br from-gray-500 to-gray-700 border-gray-400'
     };
     return colors[rarity?.toLowerCase()] || colors.normal;
@@ -349,11 +350,11 @@ const ConstellationsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+      <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
         <Navigation />
         <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <Stars className="h-12 w-12 text-orange-400 mx-auto mb-4 animate-spin" />
+            <Stars className="h-12 w-12 mx-auto mb-4 animate-spin" style={{ color: logoColors.primaryBlue }} />
             <p className="text-white text-lg">Loading Constellations...</p>
           </div>
         </div>
@@ -363,11 +364,11 @@ const ConstellationsPage = () => {
 
   if (constellations.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+      <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
         <Navigation />
         <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <Stars className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+            <Stars className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
             <p className="text-white text-lg">No constellations available</p>
           </div>
         </div>
@@ -380,22 +381,26 @@ const ConstellationsPage = () => {
   const currentRates = dropRates[currentConstellation?.id]?.final_rates || { legendary: 0.5, epic: 4.5, rare: 25.0, normal: 70.0 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-            <Stars className="h-8 w-8 text-orange-400" />
+            <Stars className="h-8 w-8" style={{ color: logoColors.primaryBlue }} />
             Constellation Gacha
           </h1>
-          <p className="text-orange-300 text-lg">Pull legendary characters from the cosmic constellations</p>
+          <p className="text-lg" style={{ color: logoColors.lightBlue }}>Pull legendary characters from the cosmic constellations</p>
           
           {user && (
             <div className="mt-4 flex items-center justify-center gap-2">
-              <div className="bg-black/30 backdrop-blur-lg border border-orange-400/20 rounded-lg px-4 py-2">
-                <span className="text-orange-400 font-medium">Kizuna Stars: </span>
+              <div className="backdrop-blur-lg rounded-lg px-4 py-2 border text-white"
+                   style={{ 
+                     backgroundColor: logoColors.blackAlpha(0.3),
+                     borderColor: logoColors.primaryBlueAlpha(0.2)
+                   }}>
+                <span style={{ color: logoColors.primaryYellow }} className="font-medium">Kizuna Stars: </span>
                 <span className="text-white font-bold text-lg">{user.kizuna_stars}</span>
               </div>
             </div>
@@ -405,14 +410,19 @@ const ConstellationsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Constellation Visualization */}
           <div className="lg:col-span-2">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-orange-400" />
+                    <Zap className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                     {currentConstellation?.name}
                   </CardTitle>
-                  <Badge variant="outline" className="border-orange-400/30 text-orange-400">
+                  <Badge variant="outline" className="border text-white"
+                         style={{ borderColor: logoColors.primaryBlueAlpha(0.3), color: logoColors.primaryBlue }}>
                     {currentConstellation?.element}
                   </Badge>
                 </div>
@@ -420,7 +430,8 @@ const ConstellationsPage = () => {
               </CardHeader>
               <CardContent>
                 {/* Constellation Canvas */}
-                <div className="relative mb-6 bg-black/50 rounded-lg overflow-hidden">
+                <div className="relative mb-6 rounded-lg overflow-hidden" 
+                     style={{ backgroundColor: logoColors.blackAlpha(0.5) }}>
                   <canvas
                     ref={canvasRef}
                     className="w-full h-auto cursor-pointer"
@@ -434,20 +445,28 @@ const ConstellationsPage = () => {
                   <Button
                     variant="outline"
                     onClick={() => navigateConstellation('prev')}
-                    className="border-orange-400/30 text-white hover:bg-orange-700/30"
+                    className="text-white hover:opacity-80"
+                    style={{ 
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      backgroundColor: logoColors.blackAlpha(0.2)
+                    }}
                   >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Previous
                   </Button>
                   
-                  <span className="text-orange-400 font-medium">
+                  <span className="font-medium" style={{ color: logoColors.primaryBlue }}>
                     {currentConstellationIndex + 1} / {constellations.length}
                   </span>
                   
                   <Button
                     variant="outline"
                     onClick={() => navigateConstellation('next')}
-                    className="border-orange-400/30 text-white hover:bg-orange-700/30"
+                    className="text-white hover:opacity-80"
+                    style={{ 
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      backgroundColor: logoColors.blackAlpha(0.2)
+                    }}
                   >
                     Next
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -457,7 +476,7 @@ const ConstellationsPage = () => {
                 {/* Platform Bonuses */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                    <Gamepad2 className="h-5 w-5 text-orange-400" />
+                    <Gamepad2 className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                     Platform Bonuses
                   </h3>
                   <div className="grid grid-cols-3 gap-3">
@@ -466,7 +485,11 @@ const ConstellationsPage = () => {
                       onClick={() => handlePlatformBonusToggle('nintendo')}
                       className={`${platformBonuses.nintendo 
                         ? 'bg-red-600 hover:bg-red-700 text-white' 
-                        : 'border-orange-400/30 text-white hover:bg-orange-700/30'}`}
+                        : 'text-white hover:opacity-80'}`}
+                      style={!platformBonuses.nintendo ? {
+                        borderColor: logoColors.primaryBlueAlpha(0.3),
+                        backgroundColor: logoColors.blackAlpha(0.2)
+                      } : {}}
                     >
                       <Gamepad2 className="h-4 w-4 mr-2" />
                       Nintendo
@@ -476,7 +499,11 @@ const ConstellationsPage = () => {
                       onClick={() => handlePlatformBonusToggle('playstation')}
                       className={`${platformBonuses.playstation 
                         ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                        : 'border-orange-400/30 text-white hover:bg-orange-700/30'}`}
+                        : 'text-white hover:opacity-80'}`}
+                      style={!platformBonuses.playstation ? {
+                        borderColor: logoColors.primaryBlueAlpha(0.3),
+                        backgroundColor: logoColors.blackAlpha(0.2)
+                      } : {}}
                     >
                       <Monitor className="h-4 w-4 mr-2" />
                       PlayStation
@@ -486,7 +513,11 @@ const ConstellationsPage = () => {
                       onClick={() => handlePlatformBonusToggle('pc')}
                       className={`${platformBonuses.pc 
                         ? 'bg-gray-600 hover:bg-gray-700 text-white' 
-                        : 'border-orange-400/30 text-white hover:bg-orange-700/30'}`}
+                        : 'text-white hover:opacity-80'}`}
+                      style={!platformBonuses.pc ? {
+                        borderColor: logoColors.primaryBlueAlpha(0.3),
+                        backgroundColor: logoColors.blackAlpha(0.2)
+                      } : {}}
                     >
                       <Smartphone className="h-4 w-4 mr-2" />
                       PC
@@ -503,7 +534,8 @@ const ConstellationsPage = () => {
                     <Button
                       onClick={() => handleGachaPull(1)}
                       disabled={isPulling || user.kizuna_stars < 5}
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                      className="flex-1 text-white hover:opacity-80"
+                      style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
                     >
                       {isPulling ? (
                         <RotateCcw className="h-4 w-4 mr-2 animate-spin" />
@@ -515,7 +547,8 @@ const ConstellationsPage = () => {
                     <Button
                       onClick={() => handleGachaPull(10)}
                       disabled={isPulling || user.kizuna_stars < 50}
-                      className="flex-1 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600"
+                      className="flex-1 text-white hover:opacity-80"
+                      style={{ background: logoColors.blueGradient }}
                     >
                       {isPulling ? (
                         <RotateCcw className="h-4 w-4 mr-2 animate-spin" />
@@ -534,17 +567,25 @@ const ConstellationsPage = () => {
           <div className="space-y-6">
             {selectedOrbCharacters.length > 0 ? (
               // Show selected orb characters
-              <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Stars className="h-5 w-5 text-orange-400" />
+                    <Stars className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                     Orb Characters
                   </CardTitle>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setSelectedOrbCharacters([])}
-                    className="border-orange-400/30 text-white hover:bg-orange-700/30 w-fit"
+                    className="text-white hover:opacity-80 w-fit"
+                    style={{ 
+                      borderColor: logoColors.primaryBlueAlpha(0.3),
+                      backgroundColor: logoColors.blackAlpha(0.2)
+                    }}
                   >
                     ← Back to Pool
                   </Button>
@@ -554,12 +595,17 @@ const ConstellationsPage = () => {
                     {selectedOrbCharacters.map((character) => (
                       <div
                         key={character.id}
-                        className="relative bg-gradient-to-br from-orange-900/30 to-red-900/30 border border-orange-400/20 rounded-lg p-4"
+                        className="relative rounded-lg p-4 border"
+                        style={{ 
+                          background: `linear-gradient(to bottom right, ${logoColors.blackAlpha(0.3)}, ${logoColors.primaryBlueAlpha(0.3)})`,
+                          borderColor: logoColors.primaryBlueAlpha(0.2)
+                        }}
                       >
                         {/* Character Profile Picture in Circle */}
                         <div className="flex items-center gap-4">
                           <div className="relative">
-                            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full flex items-center justify-center"
+                                 style={{ background: logoColors.yellowOrangeGradient }}>
                               {character.profile_picture ? (
                                 <img 
                                   src={character.profile_picture} 
@@ -574,12 +620,14 @@ const ConstellationsPage = () => {
                             </div>
                             
                             {/* Position in left low corner */}
-                            <div className="absolute -bottom-1 -left-1 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            <div className="absolute -bottom-1 -left-1 text-white text-xs font-bold px-2 py-1 rounded"
+                                 style={{ backgroundColor: logoColors.primaryBlue }}>
                               {character.position}
                             </div>
                             
                             {/* Element in right low corner */}
-                            <div className="absolute -bottom-1 -right-1 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            <div className="absolute -bottom-1 -right-1 text-white text-xs font-bold px-2 py-1 rounded"
+                                 style={{ backgroundColor: logoColors.primaryYellow, color: logoColors.black }}>
                               {character.element?.charAt(0).toUpperCase() || 'N'}
                             </div>
                           </div>
@@ -587,10 +635,12 @@ const ConstellationsPage = () => {
                           <div className="flex-1">
                             <h3 className="text-lg font-bold text-white mb-1">{character.name}</h3>
                             <div className="flex items-center gap-2 text-sm text-gray-300">
-                              <span className="bg-blue-600/20 px-2 py-1 rounded text-blue-300">
+                              <span className="px-2 py-1 rounded text-white"
+                                    style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2), color: logoColors.lightBlue }}>
                                 {character.position}
                               </span>
-                              <span className="bg-yellow-600/20 px-2 py-1 rounded text-yellow-300">
+                              <span className="px-2 py-1 rounded"
+                                    style={{ backgroundColor: logoColors.yellowAlpha(0.2), color: logoColors.primaryYellow }}>
                                 {character.element}
                               </span>
                             </div>
@@ -616,10 +666,14 @@ const ConstellationsPage = () => {
             ) : (
               <>
                 {/* Drop Rates */}
-                <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <Card className="backdrop-blur-lg text-white border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.2)
+                      }}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Info className="h-5 w-5 text-orange-400" />
+                      <Info className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                       Drop Rates
                     </CardTitle>
                   </CardHeader>
@@ -633,8 +687,12 @@ const ConstellationsPage = () => {
                         <span className="text-purple-400 font-medium">Epic</span>
                         <span className="text-white font-bold">{formatDropRate(currentRates.epic)}</span>
                       </div>
-                      <div className="flex items-center justify-between p-2 rounded-lg bg-blue-600/20 border border-blue-400/30">
-                        <span className="text-blue-400 font-medium">Rare</span>
+                      <div className="flex items-center justify-between p-2 rounded-lg border"
+                           style={{ 
+                             backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                             borderColor: logoColors.primaryBlueAlpha(0.3)
+                           }}>
+                        <span className="font-medium" style={{ color: logoColors.lightBlue }}>Rare</span>
                         <span className="text-white font-bold">{formatDropRate(currentRates.rare)}</span>
                       </div>
                       <div className="flex items-center justify-between p-2 rounded-lg bg-gray-600/20 border border-gray-400/30">
@@ -646,10 +704,14 @@ const ConstellationsPage = () => {
                 </Card>
 
                 {/* Character Pool */}
-                <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+                <Card className="backdrop-blur-lg text-white border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.2)
+                      }}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Stars className="h-5 w-5 text-orange-400" />
+                      <Stars className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                       Character Pool
                       <span className="text-xs text-gray-400 ml-2">(Click orbs to inspect)</span>
                     </CardTitle>
@@ -706,8 +768,8 @@ const ConstellationsPage = () => {
                       {/* Rare */}
                       {currentPool.rare.length > 0 && (
                         <div>
-                          <h4 className="text-blue-400 font-medium mb-2 flex items-center gap-2">
-                            <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
+                          <h4 className="font-medium mb-2 flex items-center gap-2" style={{ color: logoColors.lightBlue }}>
+                            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: logoColors.primaryBlue }}></span>
                             Rare ({currentPool.rare.length})
                           </h4>
                           <div className="grid grid-cols-2 gap-2">

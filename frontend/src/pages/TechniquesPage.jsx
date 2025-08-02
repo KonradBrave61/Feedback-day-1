@@ -2,10 +2,11 @@ import React from 'react';
 import Navigation from '../components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Zap } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const TechniquesPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
@@ -15,10 +16,14 @@ const TechniquesPage = () => {
         </div>
         
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          <Card className="backdrop-blur-lg text-white border"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-orange-400" />
+                <Zap className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                 Techniques System
               </CardTitle>
             </CardHeader>
