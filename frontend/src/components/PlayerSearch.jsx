@@ -469,7 +469,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                     <div className={`${isAlreadySelected ? 'opacity-90' : ''} ${getCardVisualFeedback(player)}`}>
                       <CharacterCard
                         character={player}
-                        onClick={() => !isAlreadySelected && handlePlayerSelect(player)}
+                        onClick={() => !isAlreadySelected && !isProcessingPlayer && handlePlayerSelect(player)}
                         viewMode="grid"
                       />
                       
