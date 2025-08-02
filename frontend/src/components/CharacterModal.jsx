@@ -96,8 +96,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     setUserRarity('Legendary');
     setSelectedEquipment({
       boots: null,
-      bracelet: null,
-      pendant: null,
+      bracelets: null,
+      pendants: null,
       special: null
     });
   };
