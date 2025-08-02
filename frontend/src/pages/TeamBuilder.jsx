@@ -116,6 +116,13 @@ const TeamBuilder = () => {
   };
 
   const handleCharacterModalConfirm = (character, userLevel, userRarity, equipment, hissatsu) => {
+    // Prevent double processing
+    if (isProcessingPlayer) {
+      return;
+    }
+
+    setIsProcessingPlayer(true);
+
     // Create enhanced player object with user customizations
     const enhancedPlayer = {
       ...character,
@@ -135,6 +142,7 @@ const TeamBuilder = () => {
           if (benchSlot) {
             newBench[benchSlot] = enhancedPlayer;
           }
+          setIsProcessingPlayer(false);
           return newBench;
         });
       } else {
@@ -145,18 +153,31 @@ const TeamBuilder = () => {
           if (position) {
             newTeam[position] = enhancedPlayer;
           }
+          setIsProcessingPlayer(false);
           return newTeam;
         });
       }
     } else {
-      // Add new player
+      // Add new player - double check for duplicates
+      const currentTeamPlayerIds = Object.values(teamPlayers).map(p => p.id);
+      const currentBenchPlayerIds = Object.values(benchPlayers).map(p => p.id);
+      
+      if (currentTeamPlayerIds.includes(character.id) || currentBenchPlayerIds.includes(character.id)) {
+        alert('This player is already in your team or on the bench!');
+        setIsProcessingPlayer(false);
+        return;
+      }
+
       if (isBenchSelection) {
         if (selectedBenchSlot !== null) {
           // Specific bench slot selected
-          setBenchPlayers(prev => ({
-            ...prev,
-            [selectedBenchSlot]: enhancedPlayer
-          }));
+          setBenchPlayers(prev => {
+            setIsProcessingPlayer(false);
+            return {
+              ...prev,
+              [selectedBenchSlot]: enhancedPlayer
+            };
+          });
         } else {
           // Find first available bench slot
           setBenchPlayers(prev => {
@@ -167,6 +188,7 @@ const TeamBuilder = () => {
                 break;
               }
             }
+            setIsProcessingPlayer(false);
             return newBench;
           });
         }
@@ -174,14 +196,18 @@ const TeamBuilder = () => {
         setSelectedBenchSlot(null);
       } else if (selectedPosition) {
         // Specific position selected
-        setTeamPlayers(prev => ({
-          ...prev,
-          [selectedPosition]: enhancedPlayer
-        }));
+        setTeamPlayers(prev => {
+          setIsProcessingPlayer(false);
+          return {
+            ...prev,
+            [selectedPosition]: enhancedPlayer
+          };
+        });
       } else {
         // No specific position - user needs to select during modal or find best fit
         // For now, we'll alert user to select a specific position
         alert('Please select a specific position on the field or use the position-specific add buttons.');
+        setIsProcessingPlayer(false);
         return;
       }
     }
