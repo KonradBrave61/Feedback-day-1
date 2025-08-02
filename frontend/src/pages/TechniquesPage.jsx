@@ -404,28 +404,45 @@ const TechniquesPage = () => {
                     <div
                       key={technique.id}
                       onClick={() => setSelectedTechnique(technique)}
-                      className={`bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 cursor-pointer transition-all hover:bg-white/20 ${
-                        selectedTechnique?.id === technique.id ? 'ring-2 ring-blue-500' : ''
-                      }`}
+                      className="rounded-lg p-4 backdrop-blur-sm cursor-pointer transition-all hover:scale-[1.02] transform"
+                      style={{
+                        backgroundColor: selectedTechnique?.id === technique.id 
+                          ? logoColors.blackAlpha(0.5) 
+                          : logoColors.blackAlpha(0.3),
+                        border: selectedTechnique?.id === technique.id 
+                          ? `2px solid ${logoColors.secondaryBlue}` 
+                          : `1px solid ${logoColors.primaryBlueAlpha(0.2)}`,
+                      }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <CategoryIcon className="text-blue-400" size={18} />
+                            <CategoryIcon style={{ color: logoColors.primaryBlue }} size={18} />
                             <h4 className="text-white font-semibold">{technique.name}</h4>
-                            <span className={`text-xl font-bold ${getPowerColor(technique.power)}`}>
+                            <span 
+                              className={`text-xl ${getPowerColor(technique.power)}`}
+                              style={{ color: getPowerTextColor(technique.power) }}
+                            >
                               {technique.power}
                             </span>
                           </div>
                           
                           <div className="flex items-center space-x-2 mb-2">
-                            <div className={`bg-gradient-to-r ${typeColors[technique.technique_type]} text-white px-2 py-1 rounded text-xs font-medium`}>
+                            <div 
+                              className="text-white px-2 py-1 rounded text-xs font-medium"
+                              style={{ background: typeColors[technique.technique_type] }}
+                            >
                               {technique.technique_type.charAt(0).toUpperCase() + technique.technique_type.slice(1)}
                             </div>
                             <span className={`px-2 py-1 rounded text-xs font-medium ${elementColors[technique.element]}`}>
                               {technique.element.charAt(0).toUpperCase() + technique.element.slice(1)}
                             </span>
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${rarityColors[technique.rarity]}`}>
+                            <span 
+                              className={`px-2 py-1 rounded text-xs font-medium text-white ${rarityColors[technique.rarity]}`}
+                              style={technique.rarity === 'Rare' ? { borderColor: logoColors.primaryBlue } :
+                                     technique.rarity === 'Epic' ? { borderColor: logoColors.secondaryBlue } :
+                                     technique.rarity === 'Legendary' ? { borderColor: logoColors.primaryYellow } : {}}
+                            >
                               {technique.rarity}
                             </span>
                           </div>
