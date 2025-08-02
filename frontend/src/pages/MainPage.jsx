@@ -51,17 +51,18 @@ const MainPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-800 to-orange-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <div className="mb-6">
-            <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            <h1 className="text-6xl font-bold text-white mb-4 bg-clip-text text-transparent" 
+                style={{ background: logoColors.yellowOrangeGradient, WebkitBackgroundClip: 'text' }}>
               Inazuma Eleven
             </h1>
-            <h2 className="text-3xl font-semibold text-orange-300 mb-2">
+            <h2 className="text-3xl font-semibold mb-2" style={{ color: logoColors.lightBlue }}>
               Victory Road
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -74,7 +75,8 @@ const MainPage = () => {
               <>
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
+                  className="text-black px-8 py-4 text-lg font-bold hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient }}
                   onClick={() => navigate('/team-builder')}
                 >
                   <Play className="mr-2 h-5 w-5" />
@@ -82,7 +84,11 @@ const MainPage = () => {
                 </Button>
                 <Button
                   size="lg"
-                  className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white px-8 py-4 text-lg"
+                  className="text-white px-8 py-4 text-lg border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.6),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => navigate('/characters')}
                 >
                   <Users className="mr-2 h-5 w-5" />
@@ -93,7 +99,8 @@ const MainPage = () => {
               <>
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 text-lg"
+                  className="text-black px-8 py-4 text-lg font-bold hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient }}
                   onClick={() => navigate('/login')}
                 >
                   <LogIn className="mr-2 h-5 w-5" />
@@ -101,7 +108,11 @@ const MainPage = () => {
                 </Button>
                 <Button
                   size="lg"
-                  className="bg-orange-800/60 border-orange-400/30 hover:bg-orange-700/80 text-white px-8 py-4 text-lg"
+                  className="text-white px-8 py-4 text-lg border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlueAlpha(0.6),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
+                  }}
                   onClick={() => navigate('/characters')}
                 >
                   <Users className="mr-2 h-5 w-5" />
@@ -114,10 +125,13 @@ const MainPage = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
+          <Card className="backdrop-blur-lg text-white border" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>}
                   <Users className="h-6 w-6 text-orange-400" />
                 </div>
                 <div>
