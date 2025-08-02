@@ -348,7 +348,20 @@ const TeamBuilder = () => {
                   <Button
                     className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
                     onClick={() => {
-                      setSelectedPosition(null); // No specific position
+                      setTeamBuildingMode(true);
+                      setSelectedPosition(null);
+                      setIsBenchSelection(false);
+                      setShowPlayerSearch(true);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Quick Team Builder
+                  </Button>
+                  <Button
+                    className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
+                    onClick={() => {
+                      setTeamBuildingMode(false);
+                      setSelectedPosition(null);
                       setIsBenchSelection(false);
                       setShowPlayerSearch(true);
                     }}
@@ -359,6 +372,7 @@ const TeamBuilder = () => {
                   <Button
                     className="w-full bg-orange-800/40 border-orange-400/30 hover:bg-orange-700/60 text-white"
                     onClick={() => {
+                      setTeamBuildingMode(false);
                       setSelectedPosition(null);
                       setIsBenchSelection(true);
                       setShowPlayerSearch(true);
