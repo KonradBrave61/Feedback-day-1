@@ -284,31 +284,7 @@ look image and recreate the same thing on the website
         comment: "Sample constellation data initialization fully tested and working perfectly. Successfully tested: 1) Three sample constellations (Lightning, Flame, Wind) automatically created on first API call 2) Each constellation has proper orb positions (x, y coordinates 0-100), glow intensities, and connections between orbs 3) Character pools populated from existing characters in database, organized by element and rarity 4) Proper legendary/epic/rare/normal distribution with at least 1 legendary per constellation 5) Base drop rates sum to 100% (0.5% legendary, 4.5% epic, 25% rare, 70% normal) 6) Background colors and orb colors properly set for visual theming 7) Constellation initialization only occurs when database is empty, preventing duplicates. All sample data initialization verified through comprehensive testing."
 
 ## frontend:
-  - task: "Update pitch markings to match real football field"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/FormationField.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Updated field markings to match real football pitch specifications: Added proper penalty areas (18-yard boxes), goal areas (6-yard boxes), center circle with center spot, penalty spots, penalty arcs (D-shaped areas), corner arcs in all four corners, outer boundary, and goal lines. The pitch now looks authentic and professional."
-
-  - task: "Make team builder pitch vertical"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/FormationField.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Changed FormationField height from h-96 to h-[600px] to make the pitch more vertical and football-like"
-
-  - task: "Move bench from below pitch to right side"
+  - task: "Fix equipment saving and team stats calculation"
     implemented: true
     working: true
     file: "/app/frontend/src/pages/TeamBuilder.jsx"
@@ -318,7 +294,67 @@ look image and recreate the same thing on the website
     status_history:
       - working: true
         agent: "main"
-        comment: "Restructured TeamBuilder layout from 3-column to 4-column grid. Moved bench to right side as vertical column instead of horizontal grid below pitch. Changed grid layout to: Left panel (controls) | Formation field (2 columns) | Bench (right side). Added mt-16 to bench Card for perfect vertical alignment with pitch content. Updated bench styling with optimized height calculations: minimized header space, CardContent uses calc(100%-2.5rem), and each slot takes calc(20%-0.5rem) for perfect 5-slot distribution. Bench now perfectly matches pitch height (600px) and vertical position alignment. Final bench design achieves exact height and position alignment with the pitch."
+        comment: "Fixed equipment stats property reference from 'statBoosts' to 'stats' in getTeamStats function. Equipment bonuses now properly add to team stats calculation."
+
+  - task: "Optimize Parameters Radar chart scale and visibility"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Enhanced StatRadarChart component with dynamic scaling based on actual stat values, improved visibility with minimum radius for low stats, added stat labels around the radar, better opacity and colors, added max value indicator, and white stroke on points for better visibility."
+
+  - task: "Remove Add to Team button from Character Modal"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Removed the 'Add to Team' button from Character Modal as requested. Team building should only happen through the Team Builder page for better UX flow."
+
+  - task: "Fix equipment category naming consistency"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed selectedEquipment state to use 'bracelets' and 'pendants' (plural) to match mockEquipment data structure for proper equipment selection functionality."
+
+  - task: "Create Items Database interface matching game design"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ItemsPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Completely redesigned ItemsPage to match the game interface from user's image. Created 3-panel layout: Categories (left), Items list (middle), Item details (right). Added currency display with hover tooltips explaining how to get each currency type. Enhanced item data with costs, descriptions, and proper rarity styling. Interface is purely informational for research purposes as requested."
+
+  - task: "Update mock equipment data with real images"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated mockEquipment data to use high-quality images from vision expert agent instead of placeholder URLs. Added proper equipment and currency icons to enhance the visual experience."
 
 ## metadata:
   created_by: "main_agent"
