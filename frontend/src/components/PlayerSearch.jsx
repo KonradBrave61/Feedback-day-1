@@ -59,16 +59,8 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
       return matchingPositions[0].id;
     }
 
-    // If no exact match, find any empty position of the same type
-    const anyEmptyPositions = currentFormation.positions.filter(
-      pos => pos.position === player.position && !builtTeam.players[pos.id]
-    );
-
-    if (anyEmptyPositions.length > 0) {
-      return anyEmptyPositions[0].id;
-    }
-
-    // If no position available, try bench
+    // If no exact position match available, try bench immediately
+    // This prevents attempting to add to already full positions
     for (let i = 0; i < 5; i++) {
       if (!builtTeam.bench[i]) {
         return null; // Signal to add to bench
