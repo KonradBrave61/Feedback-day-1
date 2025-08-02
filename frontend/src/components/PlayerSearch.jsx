@@ -169,26 +169,44 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
     // Auto-assign position
     const assignedPosition = autoAssignPosition(player);
     
-    if (assignedPosition) {
-      // Direct assignment to main team
-      setPendingPosition(assignedPosition);
-      setPendingIsBench(false);
-    } else {
-      // Try bench assignment
-      const emptyBenchSlot = Object.keys(builtTeam.bench).length;
-      if (emptyBenchSlot < 5) {
-        setPendingPosition(null);
-        setPendingIsBench(true);
-        setPendingBenchSlot(emptyBenchSlot);
-      } else {
-        alert('Team is full! (11 main players + 5 bench players)');
-        return;
+    // Create enhanced player with default settings for quick selection
+    const enhancedPlayer = {
+      ...player,
+      userLevel: player.baseLevel, // Use base level
+      userRarity: player.baseRarity, // Use base rarity
+      userEquipment: {
+        boots: null,
+        bracelets: null,
+        pendants: null,
+        special: null
+      },
+      userHissatsu: {
+        preset1: player.hissatsu?.slice(0, 3) || [],
+        preset2: player.hissatsu?.slice(3, 6) || []
       }
-    }
+    };
 
-    // Open character modal for configuration
-    setSelectedCharacterForModal(player);
-    setShowCharacterModal(true);
+    // Direct team assignment
+    setBuiltTeam(prev => {
+      const newTeam = { ...prev };
+      
+      if (assignedPosition) {
+        // Add to main team
+        newTeam.players[assignedPosition] = enhancedPlayer;
+      } else {
+        // Add to bench
+        const emptyBenchSlot = Object.keys(newTeam.bench).length;
+        if (emptyBenchSlot < 5) {
+          newTeam.bench[emptyBenchSlot] = enhancedPlayer;
+        } else {
+          alert('Team is full! (11 main players + 5 bench players)');
+          return prev;
+        }
+      }
+      
+      newTeam.totalPlayers = Object.keys(newTeam.players).length + Object.keys(newTeam.bench).length;
+      return newTeam;
+    });
   };
 
   const handleCharacterModalConfirm = (character, userLevel, userRarity, equipment, hissatsu) => {
