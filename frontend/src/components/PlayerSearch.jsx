@@ -10,7 +10,7 @@ import { mockCharacters, mockFormations } from '../data/mock';
 import CharacterCard from './CharacterCard';
 import CharacterModal from './CharacterModal';
 
-const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt }) => {
+const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt, currentTeamPlayers = {}, currentBenchPlayers = {} }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPosition, setFilterPosition] = useState('all');
   const [filterElement, setFilterElement] = useState('all');
