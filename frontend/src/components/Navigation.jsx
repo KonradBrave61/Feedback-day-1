@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars, Menu, X, Package, Zap, HelpCircle, Headphones } from 'lucide-react';
+import { logoColors, componentColors } from '../styles/colors';
 
 const Navigation = () => {
   const navigate = useNavigate();
