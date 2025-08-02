@@ -186,14 +186,19 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
   const StatRadarChart = ({ stats }) => {
     const statNames = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
-    const maxValue = 300;
+    
+    // Calculate dynamic max value based on actual stats for better scaling
+    const statValues = statNames.map(stat => stats[stat].main);
+    const maxStatValue = Math.max(...statValues);
+    const maxValue = Math.max(150, maxStatValue * 1.2); // At least 150, or 20% above max stat
+    
     const center = 60;
     const radius = 50;
     
     const points = statNames.map((stat, index) => {
       const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
       const value = stats[stat].main;
-      const r = (value / maxValue) * radius;
+      const r = Math.max(3, (value / maxValue) * radius); // Minimum radius of 3 for visibility
       const x = center + r * Math.cos(angle);
       const y = center + r * Math.sin(angle);
       return { x, y, value, stat };
@@ -206,7 +211,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     return (
       <div className="relative">
         <svg width="120" height="120" className="mx-auto">
-          {/* Background circles */}
+          {/* Background circles with better visibility */}
           {[0.2, 0.4, 0.6, 0.8, 1.0].map((ratio, index) => (
             <circle
               key={index}
@@ -214,7 +219,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               cy={center}
               r={radius * ratio}
               fill="none"
-              stroke="rgba(255,255,255,0.1)"
+              stroke="rgba(255,255,255,0.15)"
               strokeWidth="1"
             />
           ))}
@@ -231,21 +236,41 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                 y1={center}
                 x2={x}
                 y2={y}
-                stroke="rgba(255,255,255,0.1)"
+                stroke="rgba(255,255,255,0.2)"
                 strokeWidth="1"
               />
             );
           })}
           
-          {/* Stat area */}
+          {/* Stat labels */}
+          {statNames.map((stat, index) => {
+            const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
+            const labelRadius = radius + 12;
+            const x = center + labelRadius * Math.cos(angle);
+            const y = center + labelRadius * Math.sin(angle);
+            return (
+              <text
+                key={stat}
+                x={x}
+                y={y + 1}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className="fill-white text-[8px] font-medium"
+              >
+                {stat.slice(0, 4).toUpperCase()}
+              </text>
+            );
+          })}
+          
+          {/* Stat area with better opacity */}
           <path
             d={pathData}
-            fill={`rgba(213, 84, 42, 0.3)`}
+            fill={`rgba(213, 84, 42, 0.4)`}
             stroke="rgb(213, 84, 42)"
             strokeWidth="2"
           />
           
-          {/* Stat points */}
+          {/* Stat points with better visibility */}
           {points.map((point, index) => (
             <circle
               key={index}
@@ -253,9 +278,15 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               cy={point.y}
               r="3"
               fill="rgb(213, 84, 42)"
+              stroke="white"
+              strokeWidth="1"
             />
           ))}
         </svg>
+        {/* Max value indicator */}
+        <div className="text-center mt-2">
+          <span className="text-xs text-gray-400">Max: {Math.round(maxValue)}</span>
+        </div>
       </div>
     );
   };
