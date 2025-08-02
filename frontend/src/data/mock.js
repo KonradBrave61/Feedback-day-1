@@ -183,28 +183,28 @@ export const mockTactics = [
 
 export const mockEquipment = {
   boots: [
-    { id: 1, name: "Omega Boots", rarity: "Legendary", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 15, agility: 10 } },
-    { id: 2, name: "Genesis Boots", rarity: "Epic", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 12, agility: 8 } },
-    { id: 3, name: "Flame Boots", rarity: "Rare", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 8, agility: 6 } },
-    { id: 4, name: "Basic Boots", rarity: "Common", category: "Boots", icon: "/api/placeholder/40/40", stats: { kick: 5, agility: 3 } },
+    { id: 1, name: "Omega Boots", rarity: "Legendary", category: "Boots", icon: "https://images.unsplash.com/photo-1612387048732-1840c48c0976?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { kick: 15, agility: 10 } },
+    { id: 2, name: "Genesis Boots", rarity: "Epic", category: "Boots", icon: "https://images.unsplash.com/photo-1612387049695-637b743f80ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwzfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { kick: 12, agility: 8 } },
+    { id: 3, name: "Flame Boots", rarity: "Rare", category: "Boots", icon: "https://images.unsplash.com/photo-1511426463457-0571e247d816?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwxfHxzb2NjZXIlMjBib290c3xlbnwwfHx8fDE3NTQxMDcxNjF8MA&ixlib=rb-4.1.0&q=85", stats: { kick: 8, agility: 6 } },
+    { id: 4, name: "Basic Boots", rarity: "Common", category: "Boots", icon: "https://images.unsplash.com/photo-1653681498612-37ec55093e29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxzcG9ydHMlMjBlcXVpcG1lbnR8ZW58MHx8fHwxNzU0MTA3MTc4fDA&ixlib=rb-4.1.0&q=85", stats: { kick: 5, agility: 3 } },
   ],
   bracelets: [
-    { id: 5, name: "Genesis Bangle", rarity: "Legendary", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 15, technique: 10 } },
-    { id: 6, name: "Striker's Band", rarity: "Epic", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 12, technique: 8 } },
-    { id: 7, name: "Guardian Bangle", rarity: "Rare", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 8, technique: 6 } },
-    { id: 8, name: "Simple Band", rarity: "Common", category: "Bracelet", icon: "/api/placeholder/40/40", stats: { control: 5, technique: 3 } },
+    { id: 5, name: "Genesis Bangle", rarity: "Legendary", category: "Bracelet", icon: "https://images.pexels.com/photos/358042/pexels-photo-358042.jpeg", stats: { control: 15, technique: 10 } },
+    { id: 6, name: "Striker's Band", rarity: "Epic", category: "Bracelet", icon: "https://images.unsplash.com/photo-1653590501805-cce7dec267e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxnYW1lJTIwY29pbnN8ZW58MHx8fHwxNzU0MTA3MjA5fDA&ixlib=rb-4.1.0&q=85", stats: { control: 12, technique: 8 } },
+    { id: 7, name: "Guardian Bangle", rarity: "Rare", category: "Bracelet", icon: "https://images.unsplash.com/photo-1521133573892-e44906baee46?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxnZW1zfGVufDB8fHx8MTc1NDEwNzIxNXww&ixlib=rb-4.1.0&q=85", stats: { control: 8, technique: 6 } },
+    { id: 8, name: "Simple Band", rarity: "Common", category: "Bracelet", icon: "https://images.pexels.com/photos/1147946/pexels-photo-1147946.jpeg", stats: { control: 5, technique: 3 } },
   ],
   pendants: [
-    { id: 9, name: "Shiny Mascot", rarity: "Legendary", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 15, pressure: 10 } },
-    { id: 10, name: "Fire Pendant", rarity: "Epic", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 12, pressure: 8 } },
-    { id: 11, name: "Shield Pendant", rarity: "Rare", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 8, pressure: 6 } },
-    { id: 12, name: "Lucky Charm", rarity: "Common", category: "Pendant", icon: "/api/placeholder/40/40", stats: { intelligence: 5, pressure: 3 } },
+    { id: 9, name: "Shiny Mascot", rarity: "Legendary", category: "Pendant", icon: "https://images.unsplash.com/photo-1637597384601-61e937e8bc15?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxjdXJyZW5jeSUyMHRva2Vuc3xlbnwwfHx8fDE3NTQxMDcyMjF8MA&ixlib=rb-4.1.0&q=85", stats: { intelligence: 15, pressure: 10 } },
+    { id: 10, name: "Fire Pendant", rarity: "Epic", category: "Pendant", icon: "https://images.unsplash.com/photo-1653590501805-cce7dec267e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxnYW1lJTIwY29pbnN8ZW58MHx8fHwxNzU0MTA3MjA5fDA&ixlib=rb-4.1.0&q=85", stats: { intelligence: 12, pressure: 8 } },
+    { id: 11, name: "Shield Pendant", rarity: "Rare", category: "Pendant", icon: "https://images.unsplash.com/photo-1521133573892-e44906baee46?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxnZW1zfGVufDB8fHx8MTc1NDEwNzIxNXww&ixlib=rb-4.1.0&q=85", stats: { intelligence: 8, pressure: 6 } },
+    { id: 12, name: "Lucky Charm", rarity: "Common", category: "Pendant", icon: "https://images.pexels.com/photos/1147946/pexels-photo-1147946.jpeg", stats: { intelligence: 5, pressure: 3 } },
   ],
   special: [
-    { id: 13, name: "Professor Layton Accessory", rarity: "Legendary", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 15, agility: 10 } },
-    { id: 14, name: "Captain's Armband", rarity: "Epic", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 12, agility: 8 } },
-    { id: 15, name: "Ace Number", rarity: "Rare", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 8, agility: 6 } },
-    { id: 16, name: "Team Badge", rarity: "Common", category: "Special", icon: "/api/placeholder/40/40", stats: { physical: 5, agility: 3 } },
+    { id: 13, name: "Professor Layton Accessory", rarity: "Legendary", category: "Special", icon: "https://images.unsplash.com/photo-1637597384601-61e937e8bc15?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwyfHxjdXJyZW5jeSUyMHRva2Vuc3xlbnwwfHx8fDE3NTQxMDcyMjF8MA&ixlib=rb-4.1.0&q=85", stats: { physical: 15, agility: 10 } },
+    { id: 14, name: "Captain's Armband", rarity: "Epic", category: "Special", icon: "https://images.pexels.com/photos/358042/pexels-photo-358042.jpeg", stats: { physical: 12, agility: 8 } },
+    { id: 15, name: "Ace Number", rarity: "Rare", category: "Special", icon: "https://images.unsplash.com/photo-1653590501805-cce7dec267e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxnYW1lJTIwY29pbnN8ZW58MHx8fHwxNzU0MTA3MjA5fDA&ixlib=rb-4.1.0&q=85", stats: { physical: 8, agility: 6 } },
+    { id: 16, name: "Team Badge", rarity: "Common", category: "Special", icon: "https://images.unsplash.com/photo-1521133573892-e44906baee46?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxnZW1zfGVufDB8fHx8MTc1NDEwNzIxNXww&ixlib=rb-4.1.0&q=85", stats: { physical: 5, agility: 3 } },
   ]
 };
 
