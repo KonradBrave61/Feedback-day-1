@@ -21,6 +21,7 @@ import {
 import { logoColors } from '../styles/colors';
 
 const SupportPage = () => {
+  const [activeTab, setActiveTab] = useState('overview');
   const [bugFormData, setBugFormData] = useState({
     title: '',
     category: 'Gameplay Issues',
