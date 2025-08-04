@@ -10,18 +10,17 @@ import {
   ChevronDown,
   MessageSquare
 } from 'lucide-react';
-import { logoColors } from '../styles/colors';
 
 const HelperPage = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [selectedLanguage, setSelectedLanguage] = useState('us');
   const [expandedSection, setExpandedSection] = useState(null);
-  const [expandedFaq, setExpandedFaq] = useState(null);
+  const [expandedFaq, setExpandedFaq] = useState(0); // First FAQ expanded by default
 
   const languages = [
-    { code: 'en', flag: '🇺🇸', name: 'English' },
-    { code: 'it', flag: '🇮🇹', name: 'Italian' },
-    { code: 'es', flag: '🇪🇸', name: 'Spanish' },
-    { code: 'fr', flag: '🇫🇷', name: 'French' }
+    { code: 'us', flag: 'US', name: 'English' },
+    { code: 'it', flag: 'IT', name: 'Italian' },
+    { code: 'es', flag: 'ES', name: 'Spanish' },
+    { code: 'fr', flag: 'FR', name: 'French' }
   ];
 
   const toggleSection = (section) => {
