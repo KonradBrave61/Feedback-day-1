@@ -33,7 +33,7 @@ const HelperPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -44,7 +44,11 @@ const HelperPage = () => {
         </div>
 
         {/* Language Selection */}
-        <Card className="backdrop-blur-lg border mb-8 bg-blue-800/30 border-blue-600/30">
+        <Card className="backdrop-blur-lg border mb-8"
+              style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
           <CardContent className="p-6">
             <h3 className="text-white font-medium mb-4">Select Language</h3>
             <div className="grid grid-cols-4 gap-3">
@@ -54,9 +58,14 @@ const HelperPage = () => {
                   variant={selectedLanguage === lang.code ? "default" : "outline"}
                   className={`px-4 py-3 ${
                     selectedLanguage === lang.code 
-                      ? 'bg-orange-500 text-black hover:bg-orange-600 border-orange-500' 
-                      : 'text-white border-gray-600 hover:bg-gray-700 bg-blue-900/50'
+                      ? 'text-black hover:opacity-80' 
+                      : 'text-white border-gray-600 hover:bg-gray-700'
                   }`}
+                  style={selectedLanguage === lang.code ? {
+                    background: logoColors.yellowOrangeGradient
+                  } : {
+                    backgroundColor: logoColors.blackAlpha(0.5)
+                  }}
                   onClick={() => setSelectedLanguage(lang.code)}
                 >
                   <span className="text-sm font-medium">{lang.flag} {lang.name}</span>
@@ -68,17 +77,37 @@ const HelperPage = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="guides" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-blue-800/50 border-blue-600/30">
-            <TabsTrigger value="guides" className="text-white data-[state=active]:text-black data-[state=active]:bg-blue-500">
+          <TabsList className="grid w-full grid-cols-4 mb-8"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.5),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}>
+            <TabsTrigger value="guides" className="text-white data-[state=active]:text-black"
+                         style={{ 
+                           background: 'transparent',
+                           '&[data-state=active]': { background: logoColors.primaryBlue }
+                         }}>
               Game Guides
             </TabsTrigger>
-            <TabsTrigger value="tips" className="text-white data-[state=active]:text-black data-[state=active]:bg-blue-500">
+            <TabsTrigger value="tips" className="text-white data-[state=active]:text-black"
+                         style={{ 
+                           background: 'transparent',
+                           '&[data-state=active]': { background: logoColors.primaryBlue }
+                         }}>
               Tips & Strategies
             </TabsTrigger>
-            <TabsTrigger value="faq" className="text-white data-[state=active]:text-black data-[state=active]:bg-blue-500">
+            <TabsTrigger value="faq" className="text-white data-[state=active]:text-black"
+                         style={{ 
+                           background: 'transparent',
+                           '&[data-state=active]': { background: logoColors.primaryBlue }
+                         }}>
               FAQ
             </TabsTrigger>
-            <TabsTrigger value="forum" className="text-white data-[state=active]:text-black data-[state=active]:bg-blue-500">
+            <TabsTrigger value="forum" className="text-white data-[state=active]:text-black"
+                         style={{ 
+                           background: 'transparent',
+                           '&[data-state=active]': { background: logoColors.primaryBlue }
+                         }}>
               Community Forum
             </TabsTrigger>
           </TabsList>
@@ -90,21 +119,30 @@ const HelperPage = () => {
               <Search className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search guides and tips..."
-                className="pl-10 bg-blue-800/30 border-blue-600/30 text-white h-12 text-base placeholder-gray-400"
+                className="pl-10 bg-black/20 border-gray-600 text-white h-12 text-base placeholder-gray-400"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}
               />
             </div>
 
             {/* Expandable Guide Sections */}
             <div className="space-y-4">
               {/* Team Building Fundamentals */}
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-blue-700/20 transition-colors"
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
                     onClick={() => toggleSection('team-building')}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                           style={{ backgroundColor: logoColors.primaryYellow }}>
                         <span className="text-black font-bold text-sm">👥</span>
                       </div>
                       <div>
@@ -118,7 +156,7 @@ const HelperPage = () => {
                     }
                   </button>
                   {expandedSection === 'team-building' && (
-                    <div className="px-6 pb-6 border-t border-blue-600/30">
+                    <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                       <div className="pt-4 space-y-3 text-gray-300 text-sm">
                         <p>• Understanding player positions and their roles on the field</p>
                         <p>• Choosing the right formation for your playstyle</p>
@@ -131,14 +169,19 @@ const HelperPage = () => {
               </Card>
 
               {/* Formation Strategy Guide */}
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-blue-700/20 transition-colors"
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
                     onClick={() => toggleSection('formation')}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                           style={{ backgroundColor: logoColors.primaryYellow }}>
                         <span className="text-black font-bold text-sm">⚡</span>
                       </div>
                       <div>
@@ -152,7 +195,7 @@ const HelperPage = () => {
                     }
                   </button>
                   {expandedSection === 'formation' && (
-                    <div className="px-6 pb-6 border-t border-blue-600/30">
+                    <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                       <div className="pt-4 space-y-3 text-gray-300 text-sm">
                         <p>• 4-4-2: Balanced formation for beginners</p>
                         <p>• 3-5-2: Midfield control and possession</p>
@@ -165,14 +208,19 @@ const HelperPage = () => {
               </Card>
 
               {/* Character Stats Explained */}
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-blue-700/20 transition-colors"
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
                     onClick={() => toggleSection('stats')}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                           style={{ backgroundColor: logoColors.primaryYellow }}>
                         <span className="text-black font-bold text-sm">🏆</span>
                       </div>
                       <div>
@@ -186,7 +234,7 @@ const HelperPage = () => {
                     }
                   </button>
                   {expandedSection === 'stats' && (
-                    <div className="px-6 pb-6 border-t border-blue-600/30">
+                    <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                       <div className="pt-4 space-y-3 text-gray-300 text-sm">
                         <p>• Kick: Shooting power and accuracy</p>
                         <p>• Dribble: Ball control and agility</p>
@@ -200,14 +248,19 @@ const HelperPage = () => {
               </Card>
 
               {/* Equipment & Enhancement */}
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-blue-700/20 transition-colors"
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
                     onClick={() => toggleSection('equipment')}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                           style={{ backgroundColor: logoColors.primaryYellow }}>
                         <span className="text-black font-bold text-sm">⚡</span>
                       </div>
                       <div>
@@ -221,7 +274,7 @@ const HelperPage = () => {
                     }
                   </button>
                   {expandedSection === 'equipment' && (
-                    <div className="px-6 pb-6 border-t border-blue-600/30">
+                    <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                       <div className="pt-4 space-y-3 text-gray-300 text-sm">
                         <p>• Boots: Increase speed and kicking power</p>
                         <p>• Bracelets: Boost dribbling and technique</p>
@@ -242,16 +295,25 @@ const HelperPage = () => {
               <Search className="absolute left-3 top-3.5 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search guides and tips..."
-                className="pl-10 bg-blue-800/30 border-blue-600/30 text-white h-12 text-base placeholder-gray-400"
+                className="pl-10 bg-black/20 border-gray-600 text-white h-12 text-base placeholder-gray-400"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}
               />
             </div>
 
             {/* Strategy Cards Grid */}
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                         style={{ backgroundColor: logoColors.primaryYellow }}>
                       <span className="text-black font-bold text-sm">⚡</span>
                     </div>
                     <h3 className="font-semibold text-lg">Formation Synergy</h3>
@@ -262,10 +324,15 @@ const HelperPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                         style={{ backgroundColor: logoColors.primaryYellow }}>
                       <span className="text-black font-bold text-sm">⚡</span>
                     </div>
                     <h3 className="font-semibold text-lg">Balanced Team Composition</h3>
@@ -276,10 +343,15 @@ const HelperPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                         style={{ backgroundColor: logoColors.primaryYellow }}>
                       <span className="text-black font-bold text-sm">⚡</span>
                     </div>
                     <h3 className="font-semibold text-lg">Equipment Strategy</h3>
@@ -290,10 +362,15 @@ const HelperPage = () => {
                 </CardContent>
               </Card>
 
-              <Card className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+              <Card className="backdrop-blur-lg text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" 
+                         style={{ backgroundColor: logoColors.primaryYellow }}>
                       <span className="text-black font-bold text-sm">⚡</span>
                     </div>
                     <h3 className="font-semibold text-lg">Technique Mastery</h3>
@@ -327,15 +404,20 @@ const HelperPage = () => {
                   answer: "Yes! You can switch between different saved formations at any time during team management."
                 }
               ].map((faq, index) => (
-                <Card key={index} className="backdrop-blur-lg text-white border bg-blue-800/30 border-blue-600/30">
+                <Card key={index} className="backdrop-blur-lg text-white border"
+                      style={{ 
+                        backgroundColor: logoColors.blackAlpha(0.3),
+                        borderColor: logoColors.primaryBlueAlpha(0.2)
+                      }}>
                   <CardContent className="p-0">
                     <button
-                      className="flex items-center justify-between w-full text-left p-6 hover:bg-blue-700/20 transition-colors"
+                      className="flex items-center justify-between w-full text-left p-6 hover:bg-white/5 transition-colors"
                       onClick={() => toggleFaq(index)}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center">
-                          <span className="text-black text-xs font-bold">Q</span>
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center" 
+                             style={{ backgroundColor: logoColors.primaryYellow }}>
+                          <span className="text-black text-xs font-bold">?</span>
                         </div>
                         <span className="font-medium">{faq.question}</span>
                       </div>
@@ -345,7 +427,7 @@ const HelperPage = () => {
                       }
                     </button>
                     {expandedFaq === index && (
-                      <div className="px-6 pb-6 border-t border-blue-600/30">
+                      <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                         <div className="mt-3 ml-9 text-gray-300 text-sm">
                           {faq.answer}
                         </div>
@@ -359,9 +441,14 @@ const HelperPage = () => {
 
           {/* Community Forum Tab */}
           <TabsContent value="forum" className="space-y-4">
-            <Card className="backdrop-blur-lg text-white border text-center bg-blue-800/30 border-blue-600/30">
+            <Card className="backdrop-blur-lg text-white border text-center"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
               <CardContent className="p-12">
-                <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center mx-auto mb-6">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" 
+                     style={{ backgroundColor: logoColors.primaryYellow }}>
                   <MessageSquare className="h-8 w-8 text-black" />
                 </div>
                 <h3 className="text-xl font-semibold mb-4">Community Forum</h3>
@@ -369,7 +456,8 @@ const HelperPage = () => {
                   Connect with other players, share strategies, and get help from the community.
                 </p>
                 <Button 
-                  className="bg-orange-500 text-black hover:bg-orange-600 px-8 py-3"
+                  style={{ background: logoColors.yellowOrangeGradient }}
+                  className="text-black hover:opacity-80 px-8 py-3"
                   onClick={() => window.open('/community', '_blank')}
                 >
                   Join Discussion
