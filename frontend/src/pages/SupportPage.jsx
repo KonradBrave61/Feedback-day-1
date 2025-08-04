@@ -181,58 +181,83 @@ const SupportPage = () => {
               </div>
 
               {/* Known Issues */}
-              <Card className="backdrop-blur-lg text-white border"
+              <Card className="backdrop-blur-lg text-white border select-none"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
-                      borderColor: logoColors.primaryBlueAlpha(0.2)
-                    }}>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                      borderColor: logoColors.primaryBlueAlpha(0.2),
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      MozUserSelect: 'none',
+                      msUserSelect: 'none'
+                    }}
+                    onSelectStart={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
+                    onMouseDown={(e) => e.preventDefault()}>
+                <CardHeader style={{ userSelect: 'none' }}>
+                  <CardTitle className="flex items-center gap-2 select-none" style={{ userSelect: 'none' }}>
                     <AlertTriangle className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                     Known Issues
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-4 rounded-lg border border-yellow-500/20" style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                <CardContent className="space-y-4" style={{ userSelect: 'none' }}>
+                  <div className="p-4 rounded-lg border border-yellow-500/20 select-none" 
+                       style={{ 
+                         backgroundColor: logoColors.blackAlpha(0.2),
+                         userSelect: 'none'
+                       }}
+                       onSelectStart={(e) => e.preventDefault()}
+                       onDragStart={(e) => e.preventDefault()}>
+                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
+                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
                         <Clock className="h-4 w-4 text-yellow-400" />
-                        <span className="font-medium">Team Formation Not Saving</span>
+                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Team Formation Not Saving</span>
                       </div>
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 select-none">
                         Investigating
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">Some users report formations reset after browser refresh</p>
-                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Use explicit save button before closing browser</p>
+                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Some users report formations reset after browser refresh</p>
+                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Use explicit save button before closing browser</p>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-green-500/20" style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                  <div className="p-4 rounded-lg border border-green-500/20 select-none" 
+                       style={{ 
+                         backgroundColor: logoColors.blackAlpha(0.2),
+                         userSelect: 'none'
+                       }}
+                       onSelectStart={(e) => e.preventDefault()}
+                       onDragStart={(e) => e.preventDefault()}>
+                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
+                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
                         <CheckCircle className="h-4 w-4 text-green-400" />
-                        <span className="font-medium">Constellation Pulls Loading Slowly</span>
+                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Constellation Pulls Loading Slowly</span>
                       </div>
-                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30 select-none">
                         Fixed
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">Fixed in latest update - clear browser cache if still experiencing issues</p>
-                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Refresh page if pull takes more than 10 seconds</p>
+                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Fixed in latest update - clear browser cache if still experiencing issues</p>
+                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Refresh page if pull takes more than 10 seconds</p>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-orange-500/20" style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
+                  <div className="p-4 rounded-lg border border-orange-500/20 select-none" 
+                       style={{ 
+                         backgroundColor: logoColors.blackAlpha(0.2),
+                         userSelect: 'none'
+                       }}
+                       onSelectStart={(e) => e.preventDefault()}
+                       onDragStart={(e) => e.preventDefault()}>
+                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
+                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
                         <AlertTriangle className="h-4 w-4 text-orange-400" />
-                        <span className="font-medium">Equipment Stats Not Displaying</span>
+                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Equipment Stats Not Displaying</span>
                       </div>
-                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
+                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 select-none">
                         Monitoring
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">Rare cases where equipment bonuses don't show in team stats</p>
-                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Re-equip items or refresh the Team Builder page</p>
+                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Rare cases where equipment bonuses don't show in team stats</p>
+                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Re-equip items or refresh the Team Builder page</p>
                   </div>
                 </CardContent>
               </Card>
