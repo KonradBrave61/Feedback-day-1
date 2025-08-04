@@ -50,8 +50,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (userData) => {
+  const register = async (username, email, password) => {
     try {
+      const userData = {
+        username,
+        email, 
+        password,
+        coach_level: 1,
+        favorite_position: "MF",
+        favorite_element: "Fire",
+        favourite_team: "Default Team",
+        bio: "",
+        kizuna_stars: 50
+      };
+
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -61,7 +73,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Registration failed');
       }
 
       const data = await response.json();
