@@ -51,18 +51,64 @@ const SupportPage = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
+    <div className="min-h-screen" 
+         style={{ 
+           background: logoColors.backgroundGradient,
+           userSelect: 'none',
+           WebkitUserSelect: 'none',
+           MozUserSelect: 'none',
+           msUserSelect: 'none',
+           WebkitTouchCallout: 'none'
+         }}
+         onSelectStart={(e) => e.preventDefault()}
+         onDragStart={(e) => e.preventDefault()}
+         onMouseDown={(e) => {
+           // Only prevent selection for non-input elements
+           if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+             e.preventDefault();
+           }
+         }}>
       <Navigation />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8" 
+           style={{ 
+             userSelect: 'none',
+             WebkitUserSelect: 'none',
+             MozUserSelect: 'none',
+             msUserSelect: 'none'
+           }}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">Technical Support</h1>
-          <p className="text-gray-300 text-lg">Get help with technical issues and account problems</p>
+        <div className="text-center mb-8" 
+             style={{ 
+               userSelect: 'none',
+               WebkitUserSelect: 'none',
+               MozUserSelect: 'none',
+               msUserSelect: 'none'
+             }}>
+          <h1 className="text-4xl font-bold text-white mb-4" 
+              style={{ 
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                MozUserSelect: 'none',
+                msUserSelect: 'none'
+              }}>Technical Support</h1>
+          <p className="text-gray-300 text-lg" 
+             style={{ 
+               userSelect: 'none',
+               WebkitUserSelect: 'none',
+               MozUserSelect: 'none',
+               msUserSelect: 'none'
+             }}>Get help with technical issues and account problems</p>
         </div>
 
         {/* Main Content */}
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto" 
+             style={{ 
+               userSelect: 'none',
+               WebkitUserSelect: 'none',
+               MozUserSelect: 'none',
+               msUserSelect: 'none'
+             }}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mb-8"
                       style={{ 
