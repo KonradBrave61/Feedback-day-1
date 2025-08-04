@@ -633,10 +633,11 @@ const ConstellationsPage = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => setSelectedOrbCharacters([])}
-                    className="text-white hover:opacity-80 w-fit"
+                    className="text-yellow-300 hover:text-white hover:bg-yellow-600/20 border-yellow-400/50 w-fit transition-all duration-300"
                     style={{ 
-                      borderColor: logoColors.primaryBlueAlpha(0.3),
-                      backgroundColor: logoColors.blackAlpha(0.2)
+                      borderColor: logoColors.primaryYellow,
+                      backgroundColor: logoColors.yellowAlpha(0.1),
+                      color: logoColors.primaryYellow
                     }}
                   >
                     ← Back to Pool
