@@ -417,7 +417,7 @@ const HelperPage = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-6 h-6 rounded-full flex items-center justify-center" 
                              style={{ backgroundColor: logoColors.primaryYellow }}>
-                          <span className="text-black text-xs font-bold">?</span>
+                          <span className="text-black text-sm font-black leading-none" style={{ fontFamily: 'serif' }}>?</span>
                         </div>
                         <span className="font-medium">{faq.question}</span>
                       </div>
