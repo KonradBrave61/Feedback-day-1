@@ -89,51 +89,51 @@ const SupportPage = () => {
             <TabsContent value="overview" className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {/* Report a Bug */}
-                <Card className="backdrop-blur-lg text-white border cursor-pointer hover:border-orange-400/50 transition-colors"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ 
-                        backgroundColor: logoColors.blackAlpha(0.3),
+                        background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
                       }}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <Bug className="h-6 w-6" style={{ color: '#FF8C00' }} />
+                      <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Report a Bug</h3>
                     </div>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-800 text-sm">
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
                   </CardContent>
                 </Card>
 
                 {/* Account Issues */}
-                <Card className="backdrop-blur-lg text-white border cursor-pointer hover:border-blue-400/50 transition-colors"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ 
-                        backgroundColor: logoColors.blackAlpha(0.3),
+                        background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
                       }}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <User className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
+                      <User className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Account Issues</h3>
                     </div>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-800 text-sm">
                       Problems with login, profile, or account settings.
                     </p>
                   </CardContent>
                 </Card>
 
                 {/* Technical Problems */}
-                <Card className="backdrop-blur-lg text-white border cursor-pointer hover:border-yellow-400/50 transition-colors"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ 
-                        backgroundColor: logoColors.blackAlpha(0.3),
+                        background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
                       }}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
-                      <Settings className="h-6 w-6" style={{ color: logoColors.primaryYellow }} />
+                      <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Technical Problems</h3>
                     </div>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-800 text-sm">
                       Performance issues, loading problems, or browser compatibility.
                     </p>
                   </CardContent>
