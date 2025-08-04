@@ -189,9 +189,14 @@ export const AuthProvider = ({ children }) => {
 
   const loadTeams = async () => {
     try {
+      const token = localStorage.getItem('authToken') || user?.token;
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
         headers: {
-          'Authorization': `Bearer ${user.token}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
