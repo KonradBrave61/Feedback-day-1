@@ -16,7 +16,73 @@ code {
         monospace;
 }
 
+/* Global Text Selection and Focus Fixes */
+::selection {
+    background-color: rgba(30, 144, 255, 0.3) !important; /* Light blue selection */
+    color: white !important; /* Keep text white when selected */
+    text-shadow: none !important;
+}
 
+::-moz-selection {
+    background-color: rgba(30, 144, 255, 0.3) !important; /* Firefox support */
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Fix for clickable text elements */
+button::selection,
+a::selection,
+span::selection,
+p::selection,
+h1::selection,
+h2::selection,
+h3::selection,
+h4::selection,
+h5::selection,
+h6::selection,
+div::selection {
+    background-color: rgba(30, 144, 255, 0.3) !important;
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Fix for focused elements */
+button:focus,
+a:focus,
+span:focus {
+    outline: 2px solid rgba(30, 144, 255, 0.5) !important;
+    outline-offset: 2px !important;
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Fix for button active states */
+button:active {
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Specific fixes for text elements on dark backgrounds */
+.text-white::selection,
+.text-gray-300::selection,
+.text-gray-200::selection {
+    background-color: rgba(30, 144, 255, 0.4) !important;
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Fix for input elements */
+input::selection,
+textarea::selection {
+    background-color: rgba(30, 144, 255, 0.3) !important;
+    color: white !important;
+}
+
+/* Additional accessibility improvements */
+*:focus-visible {
+    outline: 2px solid rgba(255, 215, 0, 0.8) !important; /* Yellow outline for keyboard navigation */
+    outline-offset: 2px !important;
+}
 
 @layer base {
   :root {
