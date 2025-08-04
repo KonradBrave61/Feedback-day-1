@@ -86,7 +86,7 @@ const TacticVisualizationModal = ({ isOpen, onClose, onTacticSelect, selectedTac
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-24 h-24 rounded-full border-2 animate-pulse"
                  style={{ 
-                   background: `linear-gradient(to right, ${logoColors.primaryBlueAlpha(0.4)}, ${logoColors.primaryOrangeAlpha(0.4)})`,
+                   background: `linear-gradient(to right, ${logoColors.primaryBlueAlpha(0.4)}, ${logoColors.orangeAlpha(0.4)})`,
                    borderColor: logoColors.primaryBlueAlpha(0.6)
                  }}>
               <div className="text-center text-white font-bold text-xs mt-8">EFFECT</div>
