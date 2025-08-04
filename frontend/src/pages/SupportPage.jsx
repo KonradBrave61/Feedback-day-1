@@ -143,7 +143,7 @@ const SupportPage = () => {
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Account Issues</h3>
                     </div>
-                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
                       Problems with login, profile, or account settings.
                     </p>
                   </div>
