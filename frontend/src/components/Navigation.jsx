@@ -214,7 +214,7 @@ const Navigation = () => {
                       className={`flex items-center gap-4 justify-start w-full h-14 text-left px-4 ${
                         isActive(item.path) 
                           ? 'text-white hover:opacity-80 border-l-4' 
-                          : 'text-white hover:border-l-4'
+                          : 'text-white hover:border-l-4 hover:bg-blue-900/20'
                       }`}
                       style={isActive(item.path) ? {
                         background: logoColors.blueGradient,
