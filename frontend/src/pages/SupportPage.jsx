@@ -141,7 +141,7 @@ const SupportPage = () => {
               <div className="grid md:grid-cols-3 gap-6 mb-8" style={{ userSelect: 'none' }}>
                 {/* Report a Bug */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -161,9 +161,9 @@ const SupportPage = () => {
                   <div className="p-6" style={{ userSelect: 'none' }}>
                     <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Report a Bug</h3>
+                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Report a Bug</h3>
                     </div>
-                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
                   </div>
@@ -171,7 +171,7 @@ const SupportPage = () => {
 
                 {/* Account Issues */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -191,9 +191,9 @@ const SupportPage = () => {
                   <div className="p-6" style={{ userSelect: 'none' }}>
                     <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Account Issues</h3>
+                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Account Issues</h3>
                     </div>
-                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
                       Problems with login, profile, or account settings.
                     </p>
                   </div>
@@ -201,7 +201,7 @@ const SupportPage = () => {
 
                 {/* Technical Problems */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -221,9 +221,9 @@ const SupportPage = () => {
                   <div className="p-6" style={{ userSelect: 'none' }}>
                     <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Technical Problems</h3>
+                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Technical Problems</h3>
                     </div>
-                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
                       Performance issues, loading problems, or browser compatibility.
                     </p>
                   </div>
