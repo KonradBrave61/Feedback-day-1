@@ -115,7 +115,11 @@ CONTINUATION REQUEST:
 In every browser /searching on the team builder remove one X the closing tab button look pic 1  remove the one without the box 
 second thing pic 2 in quick builder-> team composition The user should be able to move players between position and bench  also make people able to add more than 3 FW on their squad and etc so in game there will be an option to play with the players on different positions
 Another thing look pic 3 when I select a player and then remove it by X he stays selected but dissapear on the pitch thats good but just he display is working here wrongly and also I dont like the green selection box around it remove it for now 
-Look pic 4 There is a problem cause the user cant select the configuration button cause the X is covering it try to find a solution for it 
+Look pic 4 There is a problem cause the user cant select the configuration button cause the X is covering it try to find a solution for it
+
+LATEST TASK:
+load the code 
+and recreate the helper and support that is on this website https://page-builder-aid.preview.emergentagent.com/helper 
 
 ## backend:
   - task: "Color theme update to #D6542A"
