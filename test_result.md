@@ -308,29 +308,53 @@ users after saving team cannot access it or even change status of that team from
         agent: "testing"
         comment: "Sample constellation data initialization fully tested and working perfectly. Successfully tested: 1) Three sample constellations (Lightning, Flame, Wind) automatically created on first API call 2) Each constellation has proper orb positions (x, y coordinates 0-100), glow intensities, and connections between orbs 3) Character pools populated from existing characters in database, organized by element and rarity 4) Proper legendary/epic/rare/normal distribution with at least 1 legendary per constellation 5) Base drop rates sum to 100% (0.5% legendary, 4.5% epic, 25% rare, 70% normal) 6) Background colors and orb colors properly set for visual theming 7) Constellation initialization only occurs when database is empty, preventing duplicates. All sample data initialization verified through comprehensive testing."
 
-  - task: "Comprehensive Game Helper System Recreation"
+  - task: "Fix Tactical Visualization Runtime Error"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/HelperPage.jsx"
+    file: "/app/frontend/src/components/TacticVisualizationModal.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Successfully recreated the comprehensive Game Helper system from https://8e871e45-a38a-427b-b33d-e0c3179e2cc3.preview.emergentagent.com/helper with multi-language support (English, Italian, Spanish, French), tabbed navigation (Game Guides, Tips & Strategies, FAQ, Community Forum), and four main content sections (Team Building Fundamentals, Formation Strategy Guide, Character Stats Explained, Equipment & Enhancement). Includes interactive accordions, language switching with flag icons, and comprehensive help content for Inazuma Eleven team building."
+        comment: "Fixed runtime error '_styles_colors__WEBPACK_IMPORTED_MODULE_6__.logoColors.primaryOrangeAlpha is not a function' by changing from non-existent primaryOrangeAlpha() to existing orangeAlpha() function in colors.js. Tactical visualization now works without crashes."
 
-  - task: "Enhanced Support Center System"
+  - task: "Improve Constellation Pull Animations"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/SupportPage.jsx"
+    file: "/app/frontend/src/pages/ConstellationsPage.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Created comprehensive Support Center with three main tabs: Contact Support (support ticket form with multiple issue types, contact methods including email/live chat/community), System Status (real-time status indicators for all services), and Resources (documentation links, known issues, quick actions). Includes fully functional support ticket submission form with priority levels and issue categorization."
+        comment: "Enhanced constellation pull animations with multi-stage sequence: initiation toast, constellation visual effects (brightness/contrast boost), enhanced pull results with rarity emojis and animated icons, staged character reveal with 600ms intervals, and final summary toast. Pull experience is now much more engaging and informative."
+
+  - task: "Fix Constellation Button Visibility"  
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ConstellationsPage.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Changed 'Back to Pool' button from blue/black color scheme to bright yellow (primaryYellow) for better visibility against the constellation background. Stars and buttons are now much more visible."
+
+  - task: "Fix Team Access Authentication Issues"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/contexts/AuthContext.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed authentication token consistency issues in AuthContext. Updated loadTeams, updateTeam, saveTeam, deleteTeam, and updateProfile functions to use localStorage.getItem('authToken') with fallback to user?.token. Added proper token validation. Backend testing confirms all team management APIs are working correctly with 100% success rate."
 
 ## frontend:
   - task: "Fix equipment saving and team stats calculation"
