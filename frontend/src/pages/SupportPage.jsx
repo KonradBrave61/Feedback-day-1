@@ -90,14 +90,20 @@ const SupportPage = () => {
             <TabsContent value="overview" className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {/* Report a Bug */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
-                      style={{ 
-                        background: logoColors.yellowOrangeGradient,
-                        borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}
-                      onClick={() => document.querySelector('[data-state="active"][value="bug"]')?.click() || 
-                               document.querySelector('[role="tab"][data-value="bug"]')?.click()}>
-                  <CardContent className="p-6">
+                <div 
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  style={{ 
+                    background: logoColors.yellowOrangeGradient,
+                    borderColor: logoColors.primaryBlueAlpha(0.2),
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none'
+                  }}
+                  onClick={() => setActiveTab('bug')}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Report a Bug</h3>
@@ -105,18 +111,24 @@ const SupportPage = () => {
                     <p className="text-gray-800 text-sm">
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
                 {/* Account Issues */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
-                      style={{ 
-                        background: logoColors.yellowOrangeGradient,
-                        borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}
-                      onClick={() => document.querySelector('[data-state="active"][value="account"]')?.click() || 
-                               document.querySelector('[role="tab"][data-value="account"]')?.click()}>
-                  <CardContent className="p-6">
+                <div 
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  style={{ 
+                    background: logoColors.yellowOrangeGradient,
+                    borderColor: logoColors.primaryBlueAlpha(0.2),
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none'
+                  }}
+                  onClick={() => setActiveTab('account')}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Account Issues</h3>
@@ -124,18 +136,24 @@ const SupportPage = () => {
                     <p className="text-gray-800 text-sm">
                       Problems with login, profile, or account settings.
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
                 {/* Technical Problems */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
-                      style={{ 
-                        background: logoColors.yellowOrangeGradient,
-                        borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}
-                      onClick={() => document.querySelector('[data-state="active"][value="technical"]')?.click() || 
-                               document.querySelector('[role="tab"][data-value="technical"]')?.click()}>
-                  <CardContent className="p-6">
+                <div 
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  style={{ 
+                    background: logoColors.yellowOrangeGradient,
+                    borderColor: logoColors.primaryBlueAlpha(0.2),
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none'
+                  }}
+                  onClick={() => setActiveTab('technical')}
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Technical Problems</h3>
@@ -143,8 +161,8 @@ const SupportPage = () => {
                     <p className="text-gray-800 text-sm">
                       Performance issues, loading problems, or browser compatibility.
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
 
               {/* Known Issues */}
