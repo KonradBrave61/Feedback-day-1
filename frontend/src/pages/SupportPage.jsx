@@ -63,10 +63,14 @@ const SupportPage = () => {
          onSelectStart={(e) => e.preventDefault()}
          onDragStart={(e) => e.preventDefault()}
          onMouseDown={(e) => {
-           // Only prevent selection for non-input elements
-           if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-             e.preventDefault();
+           // Allow clicks on buttons, forms, and interactive elements
+           if (e.target.closest('button') || 
+               e.target.closest('[role="tab"]') ||
+               e.target.closest('div[style*="cursor-pointer"]') ||
+               ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(e.target.tagName)) {
+             return; // Allow normal behavior for interactive elements
            }
+           e.preventDefault(); // Prevent text selection for other elements
          }}>
       <Navigation />
       
