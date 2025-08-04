@@ -267,6 +267,24 @@ const ConstellationsPage = () => {
 
     setIsPulling(true);
     
+    // Enhanced pull animation sequence
+    toast.info(
+      <div className="flex items-center gap-2">
+        <div className="animate-pulse">⭐</div>
+        <span>Initiating pull sequence...</span>
+      </div>,
+      { duration: 1500 }
+    );
+    
+    // Add constellation animation enhancement
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.style.filter = 'contrast(1.5) brightness(1.3)';
+      setTimeout(() => {
+        canvas.style.filter = '';
+      }, 2000);
+    }
+    
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/constellations/pull`, {
         method: 'POST',
@@ -287,7 +305,7 @@ const ConstellationsPage = () => {
         // Update user's Kizuna Stars
         updateUser({ ...user, kizuna_stars: result.kizuna_stars_remaining });
         
-        // Show pull results
+        // Enhanced pull results animation
         const rarityColors = {
           legendary: 'text-red-400',
           epic: 'text-purple-400', 
@@ -295,19 +313,53 @@ const ConstellationsPage = () => {
           normal: 'text-gray-400'
         };
         
+        const rarityEmojis = {
+          legendary: '🌟',
+          epic: '💜', 
+          rare: '💙',
+          normal: '⚪'
+        };
+        
+        // Show pull results with enhanced animation
+        setTimeout(() => {
+          toast.info(
+            <div className="flex items-center gap-2">
+              <div className="animate-bounce">🎁</div>
+              <span>Characters obtained!</span>
+            </div>,
+            { duration: 1000 }
+          );
+        }, 800);
+        
         result.characters_obtained.forEach((character, index) => {
           setTimeout(() => {
+            const rarity = character.base_rarity.toLowerCase();
             toast.success(
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4" />
-                <span>Pulled <span className={rarityColors[character.base_rarity.toLowerCase()]}>{character.name}</span>!</span>
+                <div className="animate-spin">{rarityEmojis[rarity]}</div>
+                <span>Pulled <span className={rarityColors[rarity]}>{character.name}</span>!</span>
+                <div className="text-xs bg-black/20 px-2 py-1 rounded">
+                  {character.base_rarity}
+                </div>
               </div>,
-              { duration: 3000 }
+              { duration: 4000 }
             );
-          }, index * 500);
+          }, 1200 + (index * 600));
         });
         
-        toast.success(`Spent ${result.kizuna_stars_spent} Kizuna Stars. ${result.kizuna_stars_remaining} remaining.`);
+        // Final summary toast
+        setTimeout(() => {
+          toast.success(
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 animate-pulse" />
+              <span>Spent {result.kizuna_stars_spent} ⭐ Kizuna Stars</span>
+              <br />
+              <span>{result.kizuna_stars_remaining} ⭐ remaining</span>
+            </div>,
+            { duration: 3000 }
+          );
+        }, 1200 + (result.characters_obtained.length * 600));
+        
       } else {
         const error = await response.json();
         toast.error(error.detail || 'Failed to pull characters');
