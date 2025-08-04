@@ -10,6 +10,7 @@ import {
   ChevronDown,
   MessageSquare
 } from 'lucide-react';
+import { logoColors } from '../styles/colors';
 
 const HelperPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('us');
