@@ -89,11 +89,13 @@ const SupportPage = () => {
             <TabsContent value="overview" className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {/* Report a Bug */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
                       style={{ 
                         background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}>
+                      }}
+                      onClick={() => document.querySelector('[data-state="active"][value="bug"]')?.click() || 
+                               document.querySelector('[role="tab"][data-value="bug"]')?.click()}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
@@ -106,11 +108,13 @@ const SupportPage = () => {
                 </Card>
 
                 {/* Account Issues */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
                       style={{ 
                         background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}>
+                      }}
+                      onClick={() => document.querySelector('[data-state="active"][value="account"]')?.click() || 
+                               document.querySelector('[role="tab"][data-value="account"]')?.click()}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
@@ -123,11 +127,13 @@ const SupportPage = () => {
                 </Card>
 
                 {/* Technical Problems */}
-                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:opacity-80 transition-opacity"
+                <Card className="backdrop-blur-lg text-black border cursor-pointer hover:scale-105 transition-transform select-none"
                       style={{ 
                         background: logoColors.yellowOrangeGradient,
                         borderColor: logoColors.primaryBlueAlpha(0.2)
-                      }}>
+                      }}
+                      onClick={() => document.querySelector('[data-state="active"][value="technical"]')?.click() || 
+                               document.querySelector('[role="tab"][data-value="technical"]')?.click()}>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
