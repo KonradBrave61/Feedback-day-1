@@ -98,12 +98,16 @@ const SupportPage = () => {
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
                     MozUserSelect: 'none',
-                    msUserSelect: 'none'
+                    msUserSelect: 'none',
+                    WebkitTouchCallout: 'none',
+                    WebkitTapHighlightColor: 'transparent'
                   }}
                   onClick={() => setActiveTab('bug')}
                   onMouseDown={(e) => e.preventDefault()}
+                  onSelectStart={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
+                  <div className="p-6 pointer-events-none">
                     <div className="flex items-center gap-3 mb-4">
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Report a Bug</h3>
@@ -123,12 +127,16 @@ const SupportPage = () => {
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
                     MozUserSelect: 'none',
-                    msUserSelect: 'none'
+                    msUserSelect: 'none',
+                    WebkitTouchCallout: 'none',
+                    WebkitTapHighlightColor: 'transparent'
                   }}
                   onClick={() => setActiveTab('account')}
                   onMouseDown={(e) => e.preventDefault()}
+                  onSelectStart={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
+                  <div className="p-6 pointer-events-none">
                     <div className="flex items-center gap-3 mb-4">
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Account Issues</h3>
@@ -148,12 +156,16 @@ const SupportPage = () => {
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
                     MozUserSelect: 'none',
-                    msUserSelect: 'none'
+                    msUserSelect: 'none',
+                    WebkitTouchCallout: 'none',
+                    WebkitTapHighlightColor: 'transparent'
                   }}
                   onClick={() => setActiveTab('technical')}
                   onMouseDown={(e) => e.preventDefault()}
+                  onSelectStart={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
+                  <div className="p-6 pointer-events-none">
                     <div className="flex items-center gap-3 mb-4">
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg">Technical Problems</h3>
