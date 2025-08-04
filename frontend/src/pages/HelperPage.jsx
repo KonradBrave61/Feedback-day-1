@@ -381,6 +381,5 @@ const HelperPage = () => {
     </div>
   );
 };
-};
 
 export default HelperPage;
