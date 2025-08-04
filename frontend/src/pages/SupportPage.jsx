@@ -173,7 +173,7 @@ const SupportPage = () => {
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Technical Problems</h3>
                     </div>
-                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
                       Performance issues, loading problems, or browser compatibility.
                     </p>
                   </div>
