@@ -146,11 +146,16 @@ export const AuthProvider = ({ children }) => {
 
   const updateTeam = async (teamId, teamData) => {
     try {
+      const token = localStorage.getItem('authToken') || user?.token;
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(teamData),
       });
