@@ -88,10 +88,10 @@ const SupportPage = () => {
 
             {/* Support Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="grid md:grid-cols-3 gap-6 mb-8" style={{ userSelect: 'none' }}>
                 {/* Report a Bug */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out select-none"
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -106,13 +106,14 @@ const SupportPage = () => {
                   onMouseDown={(e) => e.preventDefault()}
                   onSelectStart={(e) => e.preventDefault()}
                   onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
+                  <div className="p-6" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg select-none">Report a Bug</h3>
+                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Report a Bug</h3>
                     </div>
-                    <p className="text-gray-800 text-sm select-none">
+                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
                   </div>
@@ -120,7 +121,7 @@ const SupportPage = () => {
 
                 {/* Account Issues */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out select-none"
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -135,13 +136,14 @@ const SupportPage = () => {
                   onMouseDown={(e) => e.preventDefault()}
                   onSelectStart={(e) => e.preventDefault()}
                   onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
+                  <div className="p-6" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg select-none">Account Issues</h3>
+                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Account Issues</h3>
                     </div>
-                    <p className="text-gray-800 text-sm select-none">
+                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
                       Problems with login, profile, or account settings.
                     </p>
                   </div>
@@ -149,7 +151,7 @@ const SupportPage = () => {
 
                 {/* Technical Problems */}
                 <div 
-                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out select-none"
+                  className="backdrop-blur-lg text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
                     borderColor: logoColors.primaryBlueAlpha(0.2),
@@ -164,13 +166,14 @@ const SupportPage = () => {
                   onMouseDown={(e) => e.preventDefault()}
                   onSelectStart={(e) => e.preventDefault()}
                   onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
+                  <div className="p-6" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg select-none">Technical Problems</h3>
+                      <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Technical Problems</h3>
                     </div>
-                    <p className="text-gray-800 text-sm select-none">
+                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
                       Performance issues, loading problems, or browser compatibility.
                     </p>
                   </div>
