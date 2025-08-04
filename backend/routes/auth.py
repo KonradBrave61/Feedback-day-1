@@ -98,6 +98,7 @@ async def register(user_data: UserCreate):
         "favourite_team": user_data.favourite_team,
         "profile_picture": user_data.profile_picture,
         "bio": user_data.bio,
+        "kizuna_stars": user_data.kizuna_stars,
         "total_teams": 0,
         "total_likes_received": 0,
         "followers": [],
