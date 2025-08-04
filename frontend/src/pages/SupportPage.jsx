@@ -113,7 +113,7 @@ const SupportPage = () => {
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
                       <h3 className="font-semibold text-lg" style={{ userSelect: 'none' }}>Report a Bug</h3>
                     </div>
-                    <p className="text-gray-800 text-sm" style={{ userSelect: 'none' }}>
+                    <p className="text-black font-medium text-sm" style={{ userSelect: 'none' }}>
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
                   </div>
