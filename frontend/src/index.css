@@ -16,72 +16,170 @@ code {
         monospace;
 }
 
-/* Global Text Selection and Focus Fixes */
-::selection {
-    background-color: rgba(30, 144, 255, 0.3) !important; /* Light blue selection */
-    color: white !important; /* Keep text white when selected */
-    text-shadow: none !important;
-}
+/* COMPREHENSIVE TEXT VISIBILITY AND SELECTION FIXES */
 
-::-moz-selection {
-    background-color: rgba(30, 144, 255, 0.3) !important; /* Firefox support */
-    color: white !important;
-    text-shadow: none !important;
-}
-
-/* Fix for clickable text elements */
-button::selection,
-a::selection,
-span::selection,
-p::selection,
-h1::selection,
-h2::selection,
-h3::selection,
-h4::selection,
-h5::selection,
-h6::selection,
-div::selection {
+/* Global text selection - force consistent behavior */
+*::selection {
     background-color: rgba(30, 144, 255, 0.3) !important;
     color: white !important;
     text-shadow: none !important;
 }
 
-/* Fix for focused elements */
-button:focus,
-a:focus,
-span:focus {
-    outline: 2px solid rgba(30, 144, 255, 0.5) !important;
-    outline-offset: 2px !important;
+*::-moz-selection {
+    background-color: rgba(30, 144, 255, 0.3) !important;
     color: white !important;
     text-shadow: none !important;
 }
 
-/* Fix for button active states */
-button:active {
+/* Force white text to stay white in ALL states */
+.text-white,
+.text-white *,
+[class*="text-white"],
+[class*="text-gray-"] {
     color: white !important;
-    text-shadow: none !important;
 }
 
-/* Specific fixes for text elements on dark backgrounds */
 .text-white::selection,
-.text-gray-300::selection,
-.text-gray-200::selection {
+.text-white *::selection,
+[class*="text-white"]::selection,
+[class*="text-gray-"]::selection {
     background-color: rgba(30, 144, 255, 0.4) !important;
     color: white !important;
     text-shadow: none !important;
 }
 
-/* Fix for input elements */
+/* Button and interactive element fixes */
+button,
+button *,
+a,
+a *,
+[role="button"],
+[role="button"] * {
+    transition: none !important; /* Prevent color transitions that cause flashing */
+}
+
+button:hover,
+button:focus,
+button:active,
+button:hover *,
+button:focus *,
+button:active * {
+    color: inherit !important; /* Maintain original text color */
+}
+
+/* Tab component specific fixes */
+[role="tablist"] button,
+[role="tablist"] button *,
+[data-state="active"],
+[data-state="active"] *,
+[data-state="inactive"],
+[data-state="inactive"] * {
+    transition: none !important;
+}
+
+[role="tablist"] button:hover,
+[role="tablist"] button:focus,
+[role="tablist"] button:active {
+    color: inherit !important;
+}
+
+/* Prevent text color changes on click/focus for white text */
+.text-white:hover,
+.text-white:focus,
+.text-white:active,
+.text-gray-300:hover,
+.text-gray-300:focus,
+.text-gray-300:active,
+.text-gray-200:hover,
+.text-gray-200:focus,
+.text-gray-200:active {
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Force consistent button text colors */
+button.text-white,
+button .text-white,
+a.text-white,
+a .text-white {
+    color: white !important;
+}
+
+button.text-white:hover,
+button.text-white:focus,
+button.text-white:active,
+button .text-white:hover,
+button .text-white:focus,
+button .text-white:active,
+a.text-white:hover,
+a.text-white:focus,
+a.text-white:active,
+a .text-white:hover,
+a .text-white:focus,
+a .text-white:active {
+    color: white !important;
+    text-shadow: none !important;
+}
+
+/* Outline and focus fixes */
+*:focus,
+*:focus-visible {
+    outline: 2px solid rgba(255, 215, 0, 0.8) !important;
+    outline-offset: 2px !important;
+    color: inherit !important;
+}
+
+/* Input and form element fixes */
+input,
+textarea,
+select {
+    color: white !important;
+}
+
 input::selection,
-textarea::selection {
+textarea::selection,
+select::selection {
     background-color: rgba(30, 144, 255, 0.3) !important;
     color: white !important;
 }
 
-/* Additional accessibility improvements */
-*:focus-visible {
-    outline: 2px solid rgba(255, 215, 0, 0.8) !important; /* Yellow outline for keyboard navigation */
-    outline-offset: 2px !important;
+input:focus,
+textarea:focus,
+select:focus {
+    color: white !important;
+    outline: 2px solid rgba(30, 144, 255, 0.5) !important;
+}
+
+/* Prevent any webkit/browser overrides */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Fix for any remaining edge cases */
+.text-black:not(.bg-yellow-500):not(.bg-orange-500):not([style*="background"]) {
+    color: white !important; /* Override black text on dark backgrounds */
+}
+
+/* Ensure headings stay visible */
+h1, h2, h3, h4, h5, h6 {
+    color: white !important;
+}
+
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover,
+h1:focus, h2:focus, h3:focus, h4:focus, h5:focus, h6:focus,
+h1:active, h2:active, h3:active, h4:active, h5:active, h6:active {
+    color: white !important;
+}
+
+/* Override any Tailwind hover/focus utilities that might cause issues */
+.hover\:text-black:hover,
+.focus\:text-black:focus,
+.active\:text-black:active {
+    color: white !important;
 }
 
 @layer base {
@@ -139,8 +237,6 @@ textarea::selection {
         --chart-5: 340 75% 55%;
     }
 }
-
-
 
 @layer base {
   * {
