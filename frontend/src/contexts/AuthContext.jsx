@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/me`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
