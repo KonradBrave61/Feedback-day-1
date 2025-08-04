@@ -63,7 +63,7 @@ const SupportPage = () => {
 
         {/* Main Content */}
         <div className="max-w-6xl mx-auto">
-          <Tabs defaultValue="overview" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mb-8"
                       style={{ 
                         backgroundColor: logoColors.blackAlpha(0.5),
