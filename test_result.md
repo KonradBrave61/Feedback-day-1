@@ -121,6 +121,12 @@ LATEST TASK:
 load the code 
 and recreate the helper and support that is on this website https://8e871e45-a38a-427b-b33d-e0c3179e2cc3.preview.emergentagent.com/helper 
 
+CURRENT TASK:
+there is a problem with tactical visualization after selecting any type of tactic look image 1 
+pic 2 in the dashboard community hub there is another problem or just the community hub is bugged 
+in the constelacions make the button other color look pic 3 cause the star is not visable well 
+users after saving team cannot access it or even change status of that team from private to public and from public to private 
+
 ## backend:
   - task: "Color theme update to #D6542A"
     implemented: true
