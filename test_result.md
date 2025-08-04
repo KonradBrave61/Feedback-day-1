@@ -274,6 +274,9 @@ and recreate the helper and support that is on this website https://8e871e45-a38
       - working: true
         agent: "testing"
         comment: "Gacha pull system fully tested and working perfectly. Successfully tested: 1) POST /api/constellations/pull with proper authentication and Kizuna Stars deduction (5 stars per pull) 2) Single and multiple pulls return proper character data with rarity information 3) Platform bonuses affect drop rates correctly (Nintendo, PlayStation, PC bonuses each add 0.2% to legendary rate) 4) Proper error handling for insufficient Kizuna Stars (returns 400 with detailed message) 5) Unauthorized pulls properly rejected with 403 status 6) Pull results include character details, rarity, stars spent/remaining, and platform bonuses applied 7) Gacha pull records saved to database with user_id, constellation_id, character_id, and rarity. All gacha functionality verified through comprehensive testing."
+      - working: true
+        agent: "testing"
+        comment: "REVIEW REQUEST TESTING: POST /api/constellations/pull endpoint verified working correctly. Gacha system properly deducts 5 Kizuna Stars per pull, applies platform bonuses to drop rates, returns character rewards, and updates user balance. Authentication properly enforced. Constellation pulling functionality is fully operational after authentication token fixes."
 
   - task: "User Kizuna Stars System"
     implemented: true
