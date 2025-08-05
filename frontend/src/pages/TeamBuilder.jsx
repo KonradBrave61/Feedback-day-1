@@ -469,26 +469,34 @@ const TeamBuilder = () => {
       }
       
       // Load bench players (could be 'bench' or 'bench_players' or inside team_data)
-      const benchArray = teamData.bench || teamData.bench_players || teamData.team_data?.bench || [];
+      const benchArray = teamData.bench || teamData.bench_players || teamData.team_data?.bench || teamData.team_data?.bench_players || [];
+      console.log('Bench array from server:', benchArray);
       if (benchArray && Array.isArray(benchArray)) {
         const newBenchPlayers = {};
         benchArray.forEach((playerData, index) => {
           if (playerData && playerData.character_id) {
             const slotId = `bench_${index + 1}`;
+            // Find the base character data
             const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
             if (baseCharacter) {
               newBenchPlayers[slotId] = {
                 ...baseCharacter,
-                userLevel: playerData.user_level || baseCharacter.level,
-                userRarity: playerData.user_rarity || baseCharacter.rarity,
-                userEquipment: playerData.user_equipment || {},
-                userHissatsu: playerData.user_hissatsu || []
+                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
+                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
+                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
+                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
               };
+            } else {
+              console.warn('Base character not found for bench player:', playerData.character_id);
             }
+          } else {
+            console.warn('Invalid bench player data:', playerData);
           }
         });
         setBenchPlayers(newBenchPlayers);
         console.log('Loaded bench players:', Object.keys(newBenchPlayers).length);
+      } else {
+        console.log('No bench data found or invalid bench array');
       }
       
       // Load tactics (could be array of tactics or inside team_data)
