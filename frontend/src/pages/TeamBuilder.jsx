@@ -497,14 +497,22 @@ const TeamBuilder = () => {
         // Load tactics into selectedTactics array
         const loadedTactics = [];
         tacticsArray.forEach(tacticData => {
-          // Find matching tactic from mockTactics
-          const tactic = mockTactics.find(t => 
-            t.id === tacticData.id || 
-            t.name === tacticData.name || 
-            t.name === tacticData
-          );
-          if (tactic) {
-            loadedTactics.push(tactic);
+          // Add null check for tacticData
+          if (tacticData && typeof tacticData === 'object') {
+            // Find matching tactic from mockTactics
+            const tactic = mockTactics.find(t => 
+              (tacticData.id && t.id === tacticData.id) || 
+              (tacticData.name && t.name === tacticData.name)
+            );
+            if (tactic) {
+              loadedTactics.push(tactic);
+            }
+          } else if (typeof tacticData === 'string') {
+            // Handle case where tacticData is just a string name
+            const tactic = mockTactics.find(t => t.name === tacticData);
+            if (tactic) {
+              loadedTactics.push(tactic);
+            }
           }
         });
         setSelectedTactics(loadedTactics);
