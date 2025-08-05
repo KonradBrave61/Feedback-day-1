@@ -521,6 +521,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loadPublicTeamDetails = async (teamId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/public`);
+
+      if (!response.ok) {
+        throw new Error('Public team details load failed');
+      }
+
+      const data = await response.json();
+      return { success: true, ...data };
+    } catch (error) {
+      console.error('Public team details load error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const saveTeamToSlot = async (teamId, slotData) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/save-to-slot`, {
