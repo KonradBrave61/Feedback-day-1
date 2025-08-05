@@ -221,7 +221,7 @@ class BackendHealthChecker:
         
         # Test formations/tactics endpoints
         try:
-            response = requests.get(f"{API_BASE}/formations", timeout=10)
+            response = requests.get(f"{API_BASE}/teams/formations", timeout=10)
             if response.status_code == 200:
                 formations = response.json()
                 self.log_result("Get Formations", True, f"Retrieved {len(formations)} formations")
