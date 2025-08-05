@@ -134,11 +134,10 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
     
     return (
-      <div className="w-full flex justify-center">
-        <div className="relative rounded-lg overflow-hidden" 
+      <div className="w-full h-full">
+        <div className="relative w-full h-full rounded-lg overflow-hidden" 
              style={{ 
-               width: '400px',
-               height: '300px',
+               minHeight: '350px',
                background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
                backgroundImage: `
                  radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),
@@ -155,22 +154,22 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <div className="absolute top-1/2 left-1/2 w-16 h-16 border-2 border-white/40 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
             
             {/* Penalty areas - properly positioned for goals at top and bottom */}
-            <div className="absolute top-0 left-1/2 w-24 h-12 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-1/2 w-24 h-12 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
+            <div className="absolute top-0 left-1/2 w-32 h-16 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-1/2 w-32 h-16 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
             
             {/* Goal areas - smaller boxes inside penalty areas */}
-            <div className="absolute top-0 left-1/2 w-12 h-6 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-1/2 w-12 h-6 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
+            <div className="absolute top-0 left-1/2 w-16 h-8 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-1/2 w-16 h-8 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
             
             {/* Goals - visible goal posts */}
-            <div className="absolute top-0 left-1/2 w-8 h-1 bg-white/60 transform -translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-1/2 w-8 h-1 bg-white/60 transform -translate-x-1/2"></div>
+            <div className="absolute top-0 left-1/2 w-12 h-1 bg-white/60 transform -translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-1/2 w-12 h-1 bg-white/60 transform -translate-x-1/2"></div>
             
             {/* Corner arcs */}
-            <div className="absolute top-0 left-0 w-3 h-3 border-b-2 border-r-2 border-white/40 rounded-br-lg"></div>
-            <div className="absolute top-0 right-0 w-3 h-3 border-b-2 border-l-2 border-white/40 rounded-bl-lg"></div>
-            <div className="absolute bottom-0 left-0 w-3 h-3 border-t-2 border-r-2 border-white/40 rounded-tr-lg"></div>
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
+            <div className="absolute top-0 left-0 w-4 h-4 border-b-2 border-r-2 border-white/40 rounded-br-lg"></div>
+            <div className="absolute top-0 right-0 w-4 h-4 border-b-2 border-l-2 border-white/40 rounded-bl-lg"></div>
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-t-2 border-r-2 border-white/40 rounded-tr-lg"></div>
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
           </div>
 
           {/* Players */}
@@ -190,7 +189,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   <div className="flex flex-col items-center">
                     {/* Player avatar */}
                     <div className="relative">
-                      <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
                         {player.image ? (
                           <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
                         ) : (
@@ -213,7 +212,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
                       <div className="text-white/50 text-xs">{position.position}</div>
                     </div>
                   </div>
