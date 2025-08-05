@@ -127,6 +127,11 @@ pic 2 in the dashboard community hub there is another problem or just the commun
 in the constelacions make the button other color look pic 3 cause the star is not visable well 
 users after saving team cannot access it or even change status of that team from private to public and from public to private 
 
+CONTINUATION REQUEST:
+Character player detail modal User need to be able to unequip equipment 
+The emotes on the radar doesnt match the emotes of the statistics , and are not visable to user . Also for stats make basevalue stat + items value= combined value  so the player can see how much is the item giving in the statistic make different color of the item value . 
+Look at listdowns and on support where the button with white text after click becomes double white and the user cant see what is writed on and repair it 
+
 ## backend:
   - task: "Character Management API endpoints"
     implemented: true
