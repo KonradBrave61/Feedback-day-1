@@ -378,7 +378,11 @@ const SupportPage = () => {
                         <select 
                           value={bugFormData.category}
                           onChange={(e) => setBugFormData({ ...bugFormData, category: e.target.value })}
-                          className="w-full bg-orange-900/20 border border-orange-400/30 text-white rounded-md p-2"
+                          className="w-full text-white rounded-md p-2"
+                          style={{ 
+                            backgroundColor: logoColors.blackAlpha(0.3),
+                            borderColor: logoColors.primaryBlueAlpha(0.3)
+                          }}
                         >
                           <option value="Gameplay Issues">Gameplay Issues</option>
                           <option value="UI/UX Problems">UI/UX Problems</option>
