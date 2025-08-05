@@ -81,9 +81,16 @@ const ProfilePage = () => {
     }
 
     // Load follow data
-    const followResult = await loadUserFollowData();
-    if (followResult.success) {
-      setFollowData(followResult.data);
+    const followersResult = await loadFollowers();
+    const followingResult = await loadFollowing();
+    
+    if (followersResult.success && followingResult.success) {
+      setFollowData({
+        followers: followersResult.followers || [],
+        following: followingResult.following || [],
+        followerCount: followersResult.followers?.length || 0,
+        followingCount: followingResult.following?.length || 0
+      });
     }
   };
 
