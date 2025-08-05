@@ -799,6 +799,7 @@ const TeamBuilder = () => {
                       onRemoveBenchPlayer={handleRemoveBenchPlayer}
                       onMoveToBench={handleMoveToBench}
                       onMoveFromBench={handleMoveFromBench}
+                      onEditPlayer={handleEditPlayer}
                     />
                   ))}
                 </div>
