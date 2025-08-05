@@ -84,7 +84,7 @@ const TeamBuilder = () => {
         
         // Second pass: Move displaced players to same position type or closest available
         playersToRelocate.forEach(player => {
-          const oldPosition = oldFormation.positions.find(pos => prev[pos.id]?.id === player.id);
+          const oldPosition = oldFormation.positions.find(pos => prev[pos.id] && prev[pos.id].id === player.id);
           if (!oldPosition) return;
           
           // Try to find same position type in new formation
