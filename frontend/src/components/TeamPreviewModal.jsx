@@ -51,13 +51,133 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   };
 
   const getPositionStyle = (position) => {
-    const colors = {
-      'GK': '#10B981', // Green
-      'DF': '#3B82F6', // Blue  
-      'MF': '#F59E0B', // Orange
-      'FW': '#EF4444'  // Red
+    const positionColors = {
+      'GK': { backgroundColor: logoColors.primaryYellow, color: logoColors.black },
+      'DF': { backgroundColor: logoColors.primaryBlue, color: logoColors.white },
+      'MF': { backgroundColor: logoColors.primaryOrange, color: logoColors.white },
+      'FW': { backgroundColor: logoColors.secondaryBlue, color: logoColors.white }
     };
-    return { backgroundColor: colors[position] || '#6B7280' };
+    return positionColors[position] || { backgroundColor: logoColors.lightGray, color: logoColors.black };
+  };
+
+  const calculatePlayerStats = (player) => {
+    const baseStats = {
+      kick: 50,
+      control: 50,
+      technique: 50,
+      intelligence: 50,
+      pressure: 50,
+      agility: 50,
+      physical: 50
+    };
+
+    // Apply equipment bonuses if available
+    let equipmentBonus = {};
+    const equipment = player.user_equipment || player.userEquipment || {};
+    Object.values(equipment).forEach(item => {
+      if (item && item.stats) {
+        Object.entries(item.stats).forEach(([stat, bonus]) => {
+          equipmentBonus[stat] = (equipmentBonus[stat] || 0) + bonus;
+        });
+      }
+    });
+
+    // Calculate final stats
+    const finalStats = {};
+    Object.keys(baseStats).forEach(stat => {
+      const base = baseStats[stat];
+      const bonus = equipmentBonus[stat] || 0;
+      finalStats[stat] = base + bonus;
+    });
+
+    return finalStats;
+  };
+
+  const renderFormationField = () => {
+    if (!teamDetails || !teamDetails.players) return null;
+
+    // Find the formation
+    const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
+    
+    return (
+      <div className="relative mx-auto rounded-lg overflow-hidden" 
+           style={{ 
+             width: '600px', 
+             height: '400px',
+             background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
+             backgroundImage: `
+               radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),
+               linear-gradient(90deg, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 51%)
+             `
+           }}>
+        
+        {/* Field markings */}
+        <div className="absolute inset-0">
+          {/* Center line */}
+          <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-white/40 transform -translate-x-1/2"></div>
+          
+          {/* Center circle */}
+          <div className="absolute top-1/2 left-1/2 w-20 h-20 border-2 border-white/40 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+          
+          {/* Penalty areas */}
+          <div className="absolute top-8 left-0 w-16 h-32 border-2 border-white/40 border-l-0"></div>
+          <div className="absolute bottom-8 right-0 w-16 h-32 border-2 border-white/40 border-r-0"></div>
+          
+          {/* Goal areas */}
+          <div className="absolute top-16 left-0 w-8 h-16 border-2 border-white/40 border-l-0"></div>
+          <div className="absolute bottom-16 right-0 w-8 h-16 border-2 border-white/40 border-r-0"></div>
+        </div>
+
+        {/* Players */}
+        {formation.positions.map((position) => {
+          const player = teamDetails.players.find(p => p.position_id === position.id);
+          
+          return (
+            <div
+              key={position.id}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+              style={{
+                left: `${position.x}%`,
+                top: `${position.y}%`
+              }}
+            >
+              {player ? (
+                <div className="flex flex-col items-center">
+                  {/* Player avatar */}
+                  <div className="relative">
+                    <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                      {player.image ? (
+                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="text-white text-xs font-bold">
+                          {player.name?.substring(0, 2) || '??'}
+                        </div>
+                      )}
+                    </div>
+                    {/* Position badge */}
+                    <div className="absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded text-white font-bold"
+                         style={{ backgroundColor: getPositionStyle(position.position).backgroundColor }}>
+                      {position.position}
+                    </div>
+                  </div>
+                  
+                  {/* Player name */}
+                  <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
+                    {player.name || 'Player'}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
+                    <div className="text-white/50 text-xs">{position.position}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   const renderFormationField = () => {
