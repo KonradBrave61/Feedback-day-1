@@ -468,7 +468,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     Formation: {teamDetails?.formation || 'Unknown'}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 flex justify-center">
+                <CardContent className="p-4 h-96">
                   {renderFormationField()}
                 </CardContent>
               </Card>
