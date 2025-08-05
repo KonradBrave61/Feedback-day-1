@@ -118,6 +118,27 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
     applyFilters();
   }, [searchQuery, filterPosition, filterElement, sortBy]);
 
+  // Sync builtTeam with current team state when in team building mode
+  useEffect(() => {
+    if (teamBuildingMode) {
+      setBuiltTeam(prevBuiltTeam => {
+        const currentTeamCount = Object.keys(currentTeamPlayers || {}).length;
+        const currentBenchCount = Object.keys(currentBenchPlayers || {}).length;
+        const newTotalPlayers = currentTeamCount + currentBenchCount;
+        
+        // Only update if the count has actually changed
+        if (prevBuiltTeam.totalPlayers !== newTotalPlayers) {
+          return {
+            players: { ...currentTeamPlayers },
+            bench: { ...currentBenchPlayers },
+            totalPlayers: newTotalPlayers
+          };
+        }
+        return prevBuiltTeam;
+      });
+    }
+  }, [teamBuildingMode, currentTeamPlayers, currentBenchPlayers]);
+
   const applyFilters = () => {
     let filtered = [...mockCharacters];
 
