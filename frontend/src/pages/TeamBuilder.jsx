@@ -66,12 +66,62 @@ const TeamBuilder = () => {
     if (oldFormation && formation) {
       setTeamPlayers(prev => {
         const newTeamPlayers = {};
-        const newFormationPositionIds = formation.positions.map(p => p.id);
+        const newFormationPositions = formation.positions;
+        const playersToRelocate = [];
         
-        // Keep players whose positions exist in the new formation
+        // First pass: Keep players whose exact position exists in the new formation
         Object.entries(prev).forEach(([positionId, player]) => {
-          if (newFormationPositionIds.includes(positionId)) {
+          const existsInNewFormation = newFormationPositions.some(pos => pos.id === positionId);
+          if (existsInNewFormation) {
             newTeamPlayers[positionId] = player;
+          } else {
+            playersToRelocate.push(player);
+          }
+        });
+        
+        // Second pass: Move displaced players to same position type or closest available
+        playersToRelocate.forEach(player => {
+          const oldPosition = oldFormation.positions.find(pos => prev[pos.id]?.id === player.id);
+          if (!oldPosition) return;
+          
+          // Try to find same position type in new formation
+          const samePositionTypeSlots = newFormationPositions.filter(pos => 
+            pos.position === oldPosition.position && !newTeamPlayers[pos.id]
+          );
+          
+          if (samePositionTypeSlots.length > 0) {
+            // Place in same position type
+            newTeamPlayers[samePositionTypeSlots[0].id] = player;
+          } else {
+            // Find closest available position by priority: same line, then any available
+            const availableSlots = newFormationPositions.filter(pos => !newTeamPlayers[pos.id]);
+            if (availableSlots.length > 0) {
+              // Priority order for position placement
+              const positionPriority = {
+                'GK': ['GK', 'DF', 'MF', 'FW'],
+                'DF': ['DF', 'MF', 'GK', 'FW'], 
+                'MF': ['MF', 'DF', 'FW', 'GK'],
+                'FW': ['FW', 'MF', 'DF', 'GK']
+              };
+              
+              const playerPositionPriority = positionPriority[oldPosition.position] || ['GK', 'DF', 'MF', 'FW'];
+              
+              // Find best available slot based on priority
+              let placedPlayer = false;
+              for (const preferredPos of playerPositionPriority) {
+                const matchingSlot = availableSlots.find(slot => slot.position === preferredPos);
+                if (matchingSlot) {
+                  newTeamPlayers[matchingSlot.id] = player;
+                  placedPlayer = true;
+                  break;
+                }
+              }
+              
+              // If still not placed, use first available slot
+              if (!placedPlayer && availableSlots.length > 0) {
+                newTeamPlayers[availableSlots[0].id] = player;
+              }
+            }
           }
         });
         
