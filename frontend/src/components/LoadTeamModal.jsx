@@ -65,13 +65,22 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
 
   const handleLoadSavedTeam = async (slot) => {
     try {
-      if (slot.team_data) {
-        onLoadTeam(slot.team_data);
-        toast.success(`Loaded team: ${slot.slot_name}`);
-        onClose();
+      if (slot.team_id) {
+        setLoading(true);
+        const teamDetails = await loadTeamDetails(slot.team_id);
+        if (teamDetails.success) {
+          onLoadTeam(teamDetails.team);
+          toast.success(`Loaded team: ${slot.team_name}`);
+          onClose();
+        } else {
+          toast.error('Failed to load team details');
+        }
       }
     } catch (error) {
+      console.error('Failed to load saved team:', error);
       toast.error('Failed to load saved team');
+    } finally {
+      setLoading(false);
     }
   };
 
