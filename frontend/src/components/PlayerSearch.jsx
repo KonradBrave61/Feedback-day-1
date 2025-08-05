@@ -633,8 +633,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                 
                 <Button
                   variant="outline"
-                  className="w-full text-white border hover:opacity-80"
-                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                  className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-black hover:text-white"
                   onClick={handleClearTeam}
                 >
                   Clear Team
