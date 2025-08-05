@@ -34,6 +34,8 @@ export const logoColors = {
   yellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
   primaryYellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
   orangeAlpha: (alpha) => `rgba(255, 140, 0, ${alpha})`,
+  primaryOrangeAlpha: (alpha) => `rgba(255, 140, 0, ${alpha})`, // Alias for orangeAlpha
+  yellowOrangeAlpha: (alpha) => `rgba(255, 140, 0, ${alpha})`, // Alias for orangeAlpha
   blackAlpha: (alpha) => `rgba(0, 0, 0, ${alpha})`,
   whiteAlpha: (alpha) => `rgba(255, 255, 255, ${alpha})`
 };
