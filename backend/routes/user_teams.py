@@ -488,20 +488,61 @@ async def get_team_details(
             {"$inc": {"views": 1}}
         )
     
-    # Get updated team with incremented views
-    updated_team = await db.teams.find_one({"id": team_id})
+    # Get user information
+    user = await db.users.find_one({"id": team["user_id"]})
+    if user:
+        team["username"] = user["username"]
+        team["user_avatar"] = user.get("profile_picture", "")
     
     # Check if current user has liked this team
-    is_liked = current_user.id in updated_team.get("liked_by", [])
+    is_liked = await db.likes.find_one({"user_id": current_user.id, "team_id": team_id}) is not None
     
     # Check if current user is following team owner
-    is_following = updated_team["user_id"] in current_user.following
+    is_following = False
+    if team["user_id"] != current_user.id:
+        is_following = await db.followers.find_one({
+            "follower_id": current_user.id,
+            "following_id": team["user_id"]
+        }) is not None
+    
+    # Check if user can rate this team (not their own team)
+    can_rate = team["user_id"] != current_user.id
     
     return {
-        "team": Team(**updated_team),
+        "team": team,
         "is_liked": is_liked,
         "is_following": is_following,
-        "can_rate": updated_team["user_id"] != current_user.id
+        "can_rate": can_rate
+    }
+
+@router.get("/teams/{team_id}/public")
+async def get_public_team_details(team_id: str):
+    """Get public team information without authentication (for sharing URLs)"""
+    db = await get_database()
+    
+    team = await db.teams.find_one({"id": team_id, "is_public": True})
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Team not found or not public"
+        )
+    
+    # Increment view count
+    await db.teams.update_one(
+        {"id": team_id},
+        {"$inc": {"views": 1}}
+    )
+    
+    # Get user information
+    user = await db.users.find_one({"id": team["user_id"]})
+    if user:
+        team["username"] = user["username"]
+        team["user_avatar"] = user.get("profile_picture", "")
+    
+    return {
+        "team": team,
+        "is_public": True,
+        "sharing_url": f"/team/{team_id}"
     }
 
 @router.post("/teams/{team_id}/save-to-slot")
