@@ -18,6 +18,9 @@ export const logoColors = {
   lightGray: '#D3D3D3',        // Light gray
   darkGray: '#2F2F2F',         // Dark gray for backgrounds
   
+  // Composite colors
+  yellowOrange: '#FF8C00',     // Alias for primaryOrange
+  
   // Gradients (CSS gradient strings)
   blueGradient: 'linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%)',
   yellowOrangeGradient: 'linear-gradient(135deg, #FFD700 0%, #FF8C00 100%)',
