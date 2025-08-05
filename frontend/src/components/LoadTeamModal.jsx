@@ -28,11 +28,19 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
   const fetchSavedTeams = async () => {
     setLoading(true);
     try {
+      console.log('Fetching saved teams...');
       const result = await loadSaveSlots();
+      console.log('Save slots result:', result);
+      
       if (result.success) {
+        console.log('Save slots data:', result.saveSlots);
         // Filter out empty slots and get occupied slots with team data
         const occupiedSlots = result.saveSlots.filter(slot => slot.is_occupied && slot.team_id);
+        console.log('Occupied slots:', occupiedSlots);
         setSavedTeams(occupiedSlots);
+      } else {
+        console.error('Failed to load save slots:', result.error);
+        toast.error(result.error || 'Failed to load saved teams');
       }
     } catch (error) {
       console.error('Failed to load saved teams:', error);
