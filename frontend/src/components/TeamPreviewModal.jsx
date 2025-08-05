@@ -44,6 +44,40 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     }
   };
 
+  const getPlayerName = (player) => {
+    // If player has a name already, use it
+    if (player.name && player.name !== 'Unknown' && player.name !== 'Unnamed Player' && player.name !== 'Player') {
+      return player.name;
+    }
+    
+    // Try to find the character by character_id
+    if (player.character_id) {
+      const character = mockCharacters.find(char => char.id === player.character_id || char.id === parseInt(player.character_id));
+      if (character) {
+        return character.name;
+      }
+    }
+    
+    // Try to find by player id as fallback
+    if (player.id) {
+      const character = mockCharacters.find(char => char.id === player.id || char.id === parseInt(player.id));
+      if (character) {
+        return character.name;
+      }
+    }
+    
+    // Final fallback - generate a proper football player name
+    const footballNames = [
+      'Roberto Silva', 'Marco Gonzalez', 'David Rodriguez', 'Carlos Mendez', 'Antonio Lopez',
+      'Miguel Santos', 'Fernando Torres', 'Alberto Vega', 'Diego Morales', 'Ricardo Herrera',
+      'Gabriel Ruiz', 'Manuel Castro', 'Alejandro Ortiz', 'Francisco Jimenez', 'Juan Romero'
+    ];
+    
+    // Use a consistent name based on player position and some identifier
+    const nameIndex = (parseInt(player.position_id || player.id || 1) + (player.position?.charCodeAt(0) || 65)) % footballNames.length;
+    return footballNames[nameIndex];
+  };
+
   const handlePrivacyToggle = async () => {
     if (onPrivacyToggle) {
       await onPrivacyToggle(team.id, !team.is_public);
