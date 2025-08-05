@@ -5,7 +5,7 @@ import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
-import { mockFormations } from '../data/mock';
+import { mockFormations, mockCharacters } from '../data/mock';
 
 const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   const { loadTeamDetails } = useAuth();
