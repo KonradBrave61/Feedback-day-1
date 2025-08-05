@@ -10,6 +10,7 @@ import { mockFormations, mockCharacters } from '../data/mock';
 
 const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   const { loadTeamDetails } = useAuth();
+  const navigate = useNavigate();
   const [teamDetails, setTeamDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
