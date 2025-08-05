@@ -306,7 +306,7 @@ const ProfilePage = () => {
                       </Button>
                       <Button
                         onClick={() => setEditing(false)}
-                        className="text-white border hover:opacity-80"
+                        className="text-white border hover:opacity-80 hover:text-white"
                         style={{ 
                           backgroundColor: logoColors.primaryBlueAlpha(0.4),
                           borderColor: logoColors.primaryBlueAlpha(0.3)
