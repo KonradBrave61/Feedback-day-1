@@ -132,8 +132,8 @@ class BenchPlayersDetailedTest:
             "is_public": True
         }
         
-        # Add main players (11 players)
-        for i, char in enumerate(self.test_characters[:11]):
+        # Add main players (use first 3 characters)
+        for i, char in enumerate(self.test_characters[:3]):
             player_data = {
                 "character_id": char["id"],
                 "position_id": f"pos_{i+1}",
@@ -152,12 +152,14 @@ class BenchPlayersDetailedTest:
             }
             team_data["players"].append(player_data)
         
-        # Add bench players with specific slot_ids (5 bench players)
-        bench_slot_ids = ["bench_1", "bench_2", "bench_3", "bench_4", "bench_5"]
-        for i, char in enumerate(self.test_characters[11:16]):
+        # Add bench players with specific slot_ids (use remaining characters)
+        bench_slot_ids = ["bench_1", "bench_2", "bench_3"]
+        available_bench_chars = self.test_characters[3:6] if len(self.test_characters) > 5 else self.test_characters[3:]
+        
+        for i, char in enumerate(available_bench_chars):
             bench_player_data = {
                 "character_id": char["id"],
-                "slot_id": bench_slot_ids[i],  # Specific slot ID
+                "slot_id": bench_slot_ids[i] if i < len(bench_slot_ids) else f"bench_{i+1}",
                 "user_level": 95,
                 "user_rarity": "Epic",
                 "user_equipment": {
