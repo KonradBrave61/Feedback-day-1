@@ -19,7 +19,7 @@ import { logoColors, componentColors } from '../styles/colors';
 import { toast } from 'sonner';
 
 const TeamBuilder = () => {
-  const { saveTeam } = useAuth();
+  const { saveTeam, loadTeamDetails } = useAuth();
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
@@ -46,6 +46,36 @@ const TeamBuilder = () => {
   
   // Add team building mode state
   const [teamBuildingMode, setTeamBuildingMode] = useState(false);
+
+  // Check for team data to load from Profile page
+  useEffect(() => {
+    const loadTeamDataFromStorage = async () => {
+      const loadTeamData = localStorage.getItem('loadTeamData');
+      if (loadTeamData) {
+        try {
+          const data = JSON.parse(loadTeamData);
+          if (data.loadOnOpen && data.teamId) {
+            // Clear the localStorage data
+            localStorage.removeItem('loadTeamData');
+            
+            // Load the team details
+            const result = await loadTeamDetails(data.teamId);
+            if (result.success) {
+              await handleLoadTeamFromProfile(result.team);
+              toast.success('Team loaded successfully!');
+            } else {
+              toast.error('Failed to load team details');
+            }
+          }
+        } catch (error) {
+          console.error('Error loading team from storage:', error);
+          localStorage.removeItem('loadTeamData');
+        }
+      }
+    };
+
+    loadTeamDataFromStorage();
+  }, []);
 
   // Handle team built from enhanced Browse Players
   const handleTeamBuilt = (builtTeam) => {
