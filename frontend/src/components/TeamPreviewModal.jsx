@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users, Shield, Zap, Target, Star, Trophy, Shirt, Award, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Users, Shield, Zap, Target, Star, Trophy, Shirt, Award, TrendingUp, Edit } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
