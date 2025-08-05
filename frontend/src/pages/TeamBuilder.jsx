@@ -388,18 +388,22 @@ const TeamBuilder = () => {
         tags: teamData.tags,
         formation: selectedFormation.name,
         players: Object.entries(teamPlayers).map(([positionId, player]) => ({
-          character_id: player.id,
           position_id: positionId,
-          user_level: player.baseLevel,
-          user_rarity: player.rarity
-        })),
-        bench_players: Object.entries(benchPlayers).map(([slotIndex, player]) => ({
           character_id: player.id,
-          slot_index: parseInt(slotIndex),
-          user_level: player.baseLevel,
-          user_rarity: player.rarity
+          user_level: player.userLevel || player.level || 1,
+          user_rarity: player.userRarity || player.rarity || 'common',
+          user_equipment: player.userEquipment || {},
+          user_hissatsu: player.userHissatsu || []
         })),
-        tactics: selectedTactics,
+        bench: Object.entries(benchPlayers).map(([slotId, player]) => ({
+          slot_id: slotId,
+          character_id: player.id,
+          user_level: player.userLevel || player.level || 1,
+          user_rarity: player.userRarity || player.rarity || 'common',
+          user_equipment: player.userEquipment || {},
+          user_hissatsu: player.userHissatsu || []
+        })),
+        tactics: selectedTactic,
         coach: selectedCoach
       };
 
@@ -409,11 +413,90 @@ const TeamBuilder = () => {
         // You could show a success toast here
         return result;
       } else {
-        throw new Error(result.error);
+        throw new Error(result.error || 'Failed to save team');
       }
     } catch (error) {
       console.error('Error saving team:', error);
       throw error;
+    }
+  };
+
+  const handleLoadTeam = (teamData) => {
+    try {
+      // Clear current team
+      setTeamPlayers({});
+      setBenchPlayers({});
+      
+      // Load formation if available
+      if (teamData.formation) {
+        const formation = mockFormations.find(f => f.name === teamData.formation);
+        if (formation) {
+          setSelectedFormation(formation);
+        }
+      }
+      
+      // Load players
+      if (teamData.players && Array.isArray(teamData.players)) {
+        const newTeamPlayers = {};
+        teamData.players.forEach((playerData, index) => {
+          const positionId = `position_${index + 1}`;
+          if (playerData) {
+            // Find the base character data
+            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id || c.name === playerData.name);
+            if (baseCharacter) {
+              newTeamPlayers[positionId] = {
+                ...baseCharacter,
+                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
+                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
+                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
+                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
+              };
+            }
+          }
+        });
+        setTeamPlayers(newTeamPlayers);
+      }
+      
+      // Load bench players
+      if (teamData.bench && Array.isArray(teamData.bench)) {
+        const newBenchPlayers = {};
+        teamData.bench.forEach((playerData, index) => {
+          const slotId = `bench_${index + 1}`;
+          if (playerData) {
+            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id || c.name === playerData.name);
+            if (baseCharacter) {
+              newBenchPlayers[slotId] = {
+                ...baseCharacter,
+                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
+                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
+                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
+                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
+              };
+            }
+          }
+        });
+        setBenchPlayers(newBenchPlayers);
+      }
+      
+      // Load tactics
+      if (teamData.tactics) {
+        const tactic = mockTactics.find(t => t.name === teamData.tactics || t.name === teamData.tactics?.name);
+        if (tactic) {
+          setSelectedTactic(tactic);
+        }
+      }
+      
+      // Load coach
+      if (teamData.coach) {
+        const coach = mockCoaches.find(c => c.name === teamData.coach || c.name === teamData.coach?.name);
+        if (coach) {
+          setSelectedCoach(coach);
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error loading team:', error);
+      toast.error('Failed to load team data');
     }
   };
 
