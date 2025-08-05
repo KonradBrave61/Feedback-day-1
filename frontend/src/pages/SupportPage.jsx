@@ -604,22 +604,22 @@ const SupportPage = () => {
                     <div>
                       <label className="block text-sm font-medium mb-2">Category</label>
                       <Select value={contactFormData.category} onValueChange={(value) => setContactFormData({ ...contactFormData, category: value })}>
-                        <SelectTrigger className="text-white border focus:ring-2 focus:ring-blue-500"
+                        <SelectTrigger className="text-white border"
                                       style={{ 
-                                        backgroundColor: logoColors.blackAlpha(0.3),
+                                        backgroundColor: logoColors.blackAlpha(0.5),
                                         borderColor: logoColors.primaryBlueAlpha(0.3)
                                       }}>
-                          <SelectValue className="text-white" />
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent style={{ 
-                          backgroundColor: logoColors.blackAlpha(0.95),
-                          border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`
+                          backgroundColor: logoColors.blackAlpha(0.9),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
                         }}>
-                          <SelectItem value="General Question" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">General Question</SelectItem>
-                          <SelectItem value="Technical Issue" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Technical Issue</SelectItem>
-                          <SelectItem value="Account Problem" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Account Problem</SelectItem>
-                          <SelectItem value="Feature Request" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Feature Request</SelectItem>
-                          <SelectItem value="Bug Report" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Bug Report</SelectItem>
+                          <SelectItem value="General Question" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>General Question</SelectItem>
+                          <SelectItem value="Technical Issue" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Technical Issue</SelectItem>
+                          <SelectItem value="Account Problem" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Account Problem</SelectItem>
+                          <SelectItem value="Feature Request" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Feature Request</SelectItem>
+                          <SelectItem value="Bug Report" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Bug Report</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
