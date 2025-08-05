@@ -388,44 +388,40 @@ const SupportPage = () => {
                             backgroundColor: logoColors.blackAlpha(0.9),
                             borderColor: logoColors.primaryBlueAlpha(0.3)
                           }}>
-                            <SelectItem value="Gameplay Issues" className="text-white focus:text-white data-[highlighted]:text-white" 
-                                       style={{ 
-                                         backgroundColor: `${logoColors.primaryBlueAlpha(0.1)} !important`,
-                                         '--tw-bg-opacity': '1'
-                                       }}
-                                       onFocus={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseEnter={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseLeave={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.1)}>
+                            <SelectItem 
+                              value="Gameplay Issues" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
                               Gameplay Issues
                             </SelectItem>
-                            <SelectItem value="UI/UX Problems" className="text-white focus:text-white data-[highlighted]:text-white" 
-                                       style={{ 
-                                         backgroundColor: `${logoColors.primaryBlueAlpha(0.1)} !important`,
-                                         '--tw-bg-opacity': '1'
-                                       }}
-                                       onFocus={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseEnter={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseLeave={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.1)}>
+                            <SelectItem 
+                              value="UI/UX Problems" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
                               UI/UX Problems
                             </SelectItem>
-                            <SelectItem value="Performance" className="text-white focus:text-white data-[highlighted]:text-white" 
-                                       style={{ 
-                                         backgroundColor: `${logoColors.primaryBlueAlpha(0.1)} !important`,
-                                         '--tw-bg-opacity': '1'
-                                       }}
-                                       onFocus={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseEnter={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseLeave={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.1)}>
+                            <SelectItem 
+                              value="Performance" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
                               Performance
                             </SelectItem>
-                            <SelectItem value="Data Loss" className="text-white focus:text-white data-[highlighted]:text-white" 
-                                       style={{ 
-                                         backgroundColor: `${logoColors.primaryBlueAlpha(0.1)} !important`,
-                                         '--tw-bg-opacity': '1'
-                                       }}
-                                       onFocus={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseEnter={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.2)}
-                                       onMouseLeave={(e) => e.target.style.backgroundColor = logoColors.primaryBlueAlpha(0.1)}>
+                            <SelectItem 
+                              value="Data Loss" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
                               Data Loss
                             </SelectItem>
                           </SelectContent>
