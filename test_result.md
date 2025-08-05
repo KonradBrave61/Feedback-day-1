@@ -128,9 +128,7 @@ in the constelacions make the button other color look pic 3 cause the star is no
 users after saving team cannot access it or even change status of that team from private to public and from public to private 
 
 CONTINUATION REQUEST:
-Character player detail modal User need to be able to unequip equipment 
-The emotes on the radar doesnt match the emotes of the statistics , and are not visable to user . Also for stats make basevalue stat + items value= combined value  so the player can see how much is the item giving in the statistic make different color of the item value . 
-Look at listdowns and on support where the button with white text after click becomes double white and the user cant see what is writed on and repair it 
+On the profile page after user log in he need to be able to access the team and also to change the team from public to private and from private to public in the profile page lets player be able to click on team and then a window with this team open like q preview . In the Team Builder add option to load a team and make it that the user can pick from his saved teams and also give an idea how user will be able to load someones team 
 
 ## backend:
   - task: "Character Management API endpoints"
