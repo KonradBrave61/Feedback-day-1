@@ -952,7 +952,7 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {selectedFormation && (
+                {selectedFormation ? (
                   <FormationField
                     formation={selectedFormation}
                     teamPlayers={teamPlayers}
@@ -966,6 +966,17 @@ const TeamBuilder = () => {
                     onMoveToBench={handleMoveToBench}
                     onMoveFromBench={handleMoveFromBench}
                   />
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">Please select a formation to start building your team</div>
+                    <Button
+                      onClick={() => setSelectedFormation(mockFormations[0])}
+                      className="text-black font-bold hover:opacity-80"
+                      style={{ background: logoColors.yellowOrangeGradient }}
+                    >
+                      Select Formation
+                    </Button>
+                  </div>
                 )}
               </CardContent>
             </Card>
