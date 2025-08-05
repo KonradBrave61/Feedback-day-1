@@ -671,7 +671,7 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Select value={selectedFormation.id.toString()} onValueChange={handleFormationChange}>
+                <Select value={selectedFormation?.id?.toString() || ''} onValueChange={handleFormationChange}>
                   <SelectTrigger className="text-white border" style={{ 
                     backgroundColor: logoColors.blackAlpha(0.3),
                     borderColor: logoColors.primaryBlueAlpha(0.3)
