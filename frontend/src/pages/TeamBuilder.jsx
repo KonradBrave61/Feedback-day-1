@@ -922,9 +922,9 @@ const TeamBuilder = () => {
                       2: { name: 'Preset 2', tactics: [] }
                     });
                     setCurrentTacticsPreset(1);
-                    // Also clear coach and formation
+                    // Clear coach but reset formation to default instead of null
                     setSelectedCoach(null);
-                    setSelectedFormation(null);
+                    setSelectedFormation(mockFormations[0]); // Reset to first formation instead of null
                     toast.success('All team data cleared!');
                   }}
                   disabled={
