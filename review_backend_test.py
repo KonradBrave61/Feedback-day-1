@@ -65,13 +65,6 @@ class ReviewBackendTest(unittest.TestCase):
         """Test Core API Health - Verify server is running properly and all endpoints are accessible"""
         print("\n=== TESTING CORE API HEALTH ===")
         
-        # Test API root endpoint
-        response = requests.get(f"{ROOT_URL}/")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertIn("message", data)
-        print("✅ API root endpoint working")
-        
         # Test API status endpoint
         response = requests.get(f"{API_URL}/status")
         self.assertEqual(response.status_code, 200)
@@ -79,6 +72,12 @@ class ReviewBackendTest(unittest.TestCase):
         self.assertIn("status", data)
         self.assertEqual(data["status"], "healthy")
         print("✅ API status endpoint working")
+        
+        # Test frontend is serving (root endpoint serves React app)
+        response = requests.get(f"{ROOT_URL}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("html", response.text.lower())
+        print("✅ Frontend serving properly")
         
         print("✅ CORE API HEALTH: All endpoints accessible")
     
