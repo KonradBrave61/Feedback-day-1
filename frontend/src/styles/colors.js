@@ -27,7 +27,9 @@ export const logoColors = {
   // Opacity variants
   primaryBlueAlpha: (alpha) => `rgba(30, 144, 255, ${alpha})`,
   secondaryBlueAlpha: (alpha) => `rgba(0, 191, 255, ${alpha})`,
+  lightBlueAlpha: (alpha) => `rgba(135, 206, 235, ${alpha})`,
   yellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
+  primaryYellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
   orangeAlpha: (alpha) => `rgba(255, 140, 0, ${alpha})`,
   blackAlpha: (alpha) => `rgba(0, 0, 0, ${alpha})`,
   whiteAlpha: (alpha) => `rgba(255, 255, 255, ${alpha})`
