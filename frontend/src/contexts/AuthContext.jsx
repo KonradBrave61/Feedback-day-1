@@ -584,6 +584,7 @@ export const AuthProvider = ({ children }) => {
     clearSaveSlot,
     rateTeam,
     loadTeamDetails,
+    loadPublicTeamDetails,
     saveTeamToSlot,
   };
 
