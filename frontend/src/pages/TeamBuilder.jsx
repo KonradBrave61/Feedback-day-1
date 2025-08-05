@@ -595,7 +595,8 @@ const TeamBuilder = () => {
         const newBenchPlayers = {};
         benchArray.forEach((playerData, index) => {
           if (playerData && playerData.character_id) {
-            const slotId = `bench_${index + 1}`;
+            // Use original slot_id if available, otherwise generate one
+            const slotId = playerData.slot_id || `bench_${index + 1}`;
             // Find the base character data
             const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
             if (baseCharacter) {
