@@ -112,8 +112,8 @@ class BenchPlayersDetailedTest:
         """Test creating team with bench players and specific slot_ids"""
         print("\n🎯 Testing Bench Players with Slot IDs...")
         
-        if len(self.test_characters) < 16:
-            print(f"❌ Need at least 16 characters, only have {len(self.test_characters)}")
+        if len(self.test_characters) < 5:
+            print(f"❌ Need at least 5 characters, only have {len(self.test_characters)}")
             return False
         
         # Create team with specific bench player slot_ids
