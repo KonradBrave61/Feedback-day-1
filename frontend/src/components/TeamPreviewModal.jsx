@@ -4,8 +4,10 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { logoColors } from '../styles/colors';
+import { useAuth } from '../contexts/AuthContext';
 
 const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
+  const { loadTeamDetails } = useAuth();
   const [teamDetails, setTeamDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
