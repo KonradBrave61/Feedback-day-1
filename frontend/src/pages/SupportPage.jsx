@@ -589,7 +589,7 @@ const SupportPage = () => {
                       <select 
                         value={contactFormData.category}
                         onChange={(e) => setContactFormData({ ...contactFormData, category: e.target.value })}
-                        className="w-full bg-black/20 border border-gray-600 text-white rounded-md p-2"
+                        className="w-full bg-orange-900/20 border border-orange-400/30 text-white rounded-md p-2"
                       >
                         <option value="General Question">General Question</option>
                         <option value="Technical Issue">Technical Issue</option>
