@@ -151,7 +151,7 @@ class TeamLoadingAPITest:
             "formation": self.formation_id,
             "players": [],
             "bench_players": [],
-            "tactics": self.tactic_ids,
+            "tactics": self.tactics_data,
             "coach": {"id": self.coach_id, "name": "Test Coach"} if self.coach_id else None,
             "description": "A comprehensive test team with players, bench, tactics, coach, and equipment",
             "is_public": True,
