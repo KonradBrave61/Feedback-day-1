@@ -506,20 +506,53 @@ Look at listdowns and on support where the button with white text after click be
         agent: "main"
         comment: "Bench player editing already implemented - BenchSlot component has onClick handler that calls onEditPlayer(player), and handleEditPlayer in TeamBuilder properly detects bench players and opens configuration modal. Feature is working correctly."
 
-  - task: "Fix Dropdown Styling in Support Page"
+  - task: "Equipment Unequip Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added unequip functionality to CharacterModal equipment slots. Users can now click red X button on equipped items to unequip them. Added handleEquipmentUnequip function and updated UI to show unequip button positioned in top-right corner of equipped items."
+
+  - task: "Enhanced Stats Display with Base + Equipment Breakdown"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx, /app/frontend/src/data/mock.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Enhanced stats display to show base stat + equipment bonus breakdown. Modified calculateStats function to return base, equipmentBonus, and final values. Updated UI to display final total in position color, with breakdown showing base value in white and equipment bonus in yellow (e.g., '120 = 100 + 20'). Users can now clearly see how much equipment is contributing to each stat."
+
+  - task: "Improved Radar Chart Emotes and Visibility"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CharacterModal.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Enhanced radar chart emotes for better visibility and consistency. Updated stat icons: kick=⚽, control=🎯, technique=⭐, intelligence=🧠, pressure=🛡️, agility=⚡, physical=💪. Added background circles for better contrast, increased icon size to 14px, added text shadow, and improved overall visibility with better stroke widths and colors."
+
+  - task: "Support Page Dropdown Styling Fixes"
     implemented: true
     working: true
     file: "/app/frontend/src/pages/SupportPage.jsx"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Updated Report Bug category, priority, and Contact Support category dropdowns to match character search styling. Changed from orange theme (bg-orange-900/20 border-orange-400/30) to consistent logoColors theme (backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3))."
-      - working: true
-        agent: "main"
-        comment: "FINAL IMPROVEMENT: Replaced HTML select elements with UI Select components to match character search design exactly. All dropdowns now use SelectTrigger, SelectContent with logoColors.blackAlpha(0.9), and SelectItems with hover:bg-blue-800 styling for consistent beautiful appearance matching character search filters."
+        comment: "Fixed dropdown styling issues in SupportPage where text became unreadable after clicking. Enhanced SelectTrigger with focus states, added explicit text-white className to SelectValue, improved SelectContent background opacity to 0.95, added proper border styling, and enhanced SelectItem focus/hover states with focus:bg-blue-700 and focus:text-white for better readability."
 
 ## metadata:
   created_by: "main_agent"
