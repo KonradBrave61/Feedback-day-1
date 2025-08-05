@@ -223,7 +223,7 @@ const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onR
 };
 
 // BenchSlot component for drag & drop with formation
-const BenchSlot = ({ slotIndex, player, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench }) => {
+const BenchSlot = ({ slotIndex, player, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench, onEditPlayer }) => {
   const isOccupied = !!player;
 
   const [{ isDragging }, drag] = useDrag({
@@ -272,7 +272,9 @@ const BenchSlot = ({ slotIndex, player, onAddBenchPlayer, onRemoveBenchPlayer, o
         >
           <div className={`w-full h-full bg-orange-800/30 rounded-lg border border-orange-400/30 p-1 flex flex-col items-center justify-center cursor-pointer hover:bg-orange-700/30 transition-colors ${
             isOver ? 'border-orange-400 bg-orange-400/20' : ''
-          }`}>
+          }`}
+          onClick={() => onEditPlayer && onEditPlayer(player)}
+          >
             <img
               src={player.portrait}
               alt={player.name}
