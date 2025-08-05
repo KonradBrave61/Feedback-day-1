@@ -57,7 +57,7 @@ const TeamBuilder = () => {
 
   // Get currently selected player IDs for all interfaces
   const getCurrentlySelectedPlayerIds = () => {
-    return [...Object.values(teamPlayers).map(p => p.id), ...Object.values(benchPlayers).map(p => p.id)];
+    return [...Object.values(teamPlayers).filter(p => p && p.id).map(p => p.id), ...Object.values(benchPlayers).filter(p => p && p.id).map(p => p.id)];
   };
 
   const handleFormationChange = (formationId) => {
