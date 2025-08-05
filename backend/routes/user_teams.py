@@ -474,39 +474,43 @@ async def get_team_details(
     """Get detailed team information including comments and ratings"""
     db = await get_database()
     
-    team = await db.teams.find_one({"id": team_id, "is_public": True})
-    if not team:
+    team_doc = await db.teams.find_one({"id": team_id, "is_public": True})
+    if not team_doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Team not found"
         )
     
     # Increment view count if not owner
-    if team["user_id"] != current_user.id:
+    if team_doc["user_id"] != current_user.id:
         await db.teams.update_one(
             {"id": team_id},
             {"$inc": {"views": 1}}
         )
+        # Get updated team document
+        team_doc = await db.teams.find_one({"id": team_id})
     
     # Get user information
-    user = await db.users.find_one({"id": team["user_id"]})
+    user = await db.users.find_one({"id": team_doc["user_id"]})
     if user:
-        team["username"] = user["username"]
-        team["user_avatar"] = user.get("profile_picture", "")
+        team_doc["username"] = user["username"]
+        team_doc["user_avatar"] = user.get("profile_picture", "")
     
-    # Check if current user has liked this team
-    is_liked = await db.likes.find_one({"user_id": current_user.id, "team_id": team_id}) is not None
+    # Check if current user has liked this team (check in liked_by array)
+    is_liked = current_user.id in team_doc.get("liked_by", [])
     
     # Check if current user is following team owner
     is_following = False
-    if team["user_id"] != current_user.id:
-        is_following = await db.followers.find_one({
-            "follower_id": current_user.id,
-            "following_id": team["user_id"]
-        }) is not None
+    if team_doc["user_id"] != current_user.id:
+        current_user_doc = await db.users.find_one({"id": current_user.id})
+        if current_user_doc:
+            is_following = team_doc["user_id"] in current_user_doc.get("following", [])
     
     # Check if user can rate this team (not their own team)
-    can_rate = team["user_id"] != current_user.id
+    can_rate = team_doc["user_id"] != current_user.id
+    
+    # Convert to Team model to ensure proper serialization
+    team = Team(**team_doc)
     
     return {
         "team": team,
