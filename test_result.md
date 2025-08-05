@@ -571,17 +571,65 @@ LATEST ISSUES FIXED:
         agent: "main"
         comment: "Implemented comprehensive Load Team functionality in Team Builder: 1) Created LoadTeamModal with 3 tabs: 'My Saved Teams', 'Community Teams', 'Import from URL' 2) Added Load Team button in Team Builder UI 3) Integration with loadSaveSlots API to show saved teams with preview 4) Integration with loadCommunityTeams API for browsing public teams 5) Added handleLoadTeam function to load team data and overwrite current team 6) Full support for loading formation, players, bench, equipment, techniques, tactics, and coach 7) Proper error handling and user feedback with toast notifications"
 
-  - task: "Team Sharing URL System"
+  - task: "Fix loadUserFollowData Function Error"
     implemented: true
     working: true
-    file: "/app/backend/routes/user_teams.py, /app/frontend/src/contexts/AuthContext.jsx"
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
     stuck_count: 0
-    priority: "high"  
+    priority: "high"
     needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Added comprehensive team sharing system: 1) Backend: Added GET /api/teams/{team_id}/public endpoint for unauthenticated public team access 2) Frontend: Added loadPublicTeamDetails function in AuthContext 3) LoadTeamModal 'Import from URL' tab supports both full URLs and team IDs 4) URL parsing extracts team ID from sharing URLs like '/team/{id}' 5) Fallback system: tries public endpoint first, then authenticated endpoint 6) Copy team URL functionality in community teams 7) Team sharing URLs increment view count and provide public access to team details"
+        comment: "Fixed 'loadUserFollowData is not a function' error by updating ProfilePage.jsx to use correct loadFollowers and loadFollowing functions from AuthContext instead of non-existent loadUserFollowData function"
+
+  - task: "Fix Team Loading in Team Builder"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/LoadTeamModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed Team Builder team loading functionality. Updated LoadTeamModal to properly handle save slots API data structure (team_id, team_name, is_occupied instead of team_data). Updated fetchSavedTeams to filter occupied slots correctly and handleLoadSavedTeam to fetch team details using team_id. Updated display to use correct property names from backend API."
+
+  - task: "Fix Profile Page Save Functionality"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed Profile Page save functionality by converting frontend camelCase properties (coachLevel, favoritePosition, favoriteElement, favoriteTeam) to backend snake_case format (coach_level, favorite_position, favorite_element, favourite_team) in handleSaveProfile function"
+
+  - task: "Improve Button Hover Text Visibility"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Enhanced button hover states by adding hover:text-white class to ensure text remains visible and readable when hovering over buttons, particularly for privacy toggle and edit buttons"
+
+  - task: "Adjust Photo Icon Positioning"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Moved photo icon positioning from bottom-2 right-2 to bottom-0 right-0 to place it at the exact bottom-right corner of the profile circle, closer to the user icon as requested"
 
 ## metadata:
   created_by: "main_agent"
