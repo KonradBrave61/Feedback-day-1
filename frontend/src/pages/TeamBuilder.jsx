@@ -162,6 +162,9 @@ const TeamBuilder = () => {
   };
 
   const handleEditPlayer = (player) => {
+    // Add null safety check
+    if (!player || !player.id) return;
+    
     // Check if the player is on the bench
     const isPlayerOnBench = Object.values(benchPlayers).some(benchPlayer => benchPlayer && benchPlayer.id === player.id);
     
