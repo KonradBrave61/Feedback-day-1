@@ -129,7 +129,7 @@ const SupportPage = () => {
               <TabsTrigger value="account" className="text-white data-[state=active]:text-black">
                 Account Issues
               </TabsTrigger>
-              <TabsTrigger value="technical" className="text-white data-[state=active]:text-black">
+              <TabsTrigger value="technical" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Technical Problems
               </TabsTrigger>
               <TabsTrigger value="contact" className="text-white data-[state=active]:text-black">
