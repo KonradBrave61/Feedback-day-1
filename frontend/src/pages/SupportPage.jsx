@@ -376,20 +376,21 @@ const SupportPage = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Category</label>
-                        <select 
-                          value={bugFormData.category}
-                          onChange={(e) => setBugFormData({ ...bugFormData, category: e.target.value })}
-                          className="w-full text-white rounded-md p-2"
-                          style={{ 
-                            backgroundColor: logoColors.blackAlpha(0.3),
-                            borderColor: logoColors.primaryBlueAlpha(0.3)
-                          }}
-                        >
-                          <option value="Gameplay Issues">Gameplay Issues</option>
-                          <option value="UI/UX Problems">UI/UX Problems</option>
-                          <option value="Performance">Performance</option>
-                          <option value="Data Loss">Data Loss</option>
-                        </select>
+                        <Select value={bugFormData.category} onValueChange={(value) => setBugFormData({ ...bugFormData, category: value })}>
+                          <SelectTrigger className="text-white border"
+                                        style={{ 
+                                          backgroundColor: logoColors.blackAlpha(0.3),
+                                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                                        }}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
+                            <SelectItem value="Gameplay Issues" className="text-white hover:bg-blue-800">Gameplay Issues</SelectItem>
+                            <SelectItem value="UI/UX Problems" className="text-white hover:bg-blue-800">UI/UX Problems</SelectItem>
+                            <SelectItem value="Performance" className="text-white hover:bg-blue-800">Performance</SelectItem>
+                            <SelectItem value="Data Loss" className="text-white hover:bg-blue-800">Data Loss</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Priority</label>
