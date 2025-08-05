@@ -603,16 +603,6 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     )}
                   </CardContent>
                 </Card>
-
-                {/* Bench */}
-                <Card className="backdrop-blur-lg text-white border" style={{ 
-                  backgroundColor: logoColors.blackAlpha(0.3),
-                  borderColor: logoColors.primaryBlueAlpha(0.2)
-                }}>
-                  <CardContent className="p-4">
-                    {renderBench()}
-                  </CardContent>
-                </Card>
               </div>
             </div>
 
