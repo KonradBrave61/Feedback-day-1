@@ -948,7 +948,7 @@ const TeamBuilder = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-orange-400" />
-                  {selectedFormation.name}
+                  {selectedFormation?.name || 'No Formation Selected'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
