@@ -62,6 +62,7 @@ class TeamLoadingAPITest:
         self.character_ids = []
         self.equipment_ids = []
         self.formation_id = None
+        self.tactics_data = []
         self.tactic_ids = []
         self.coach_id = None
     
