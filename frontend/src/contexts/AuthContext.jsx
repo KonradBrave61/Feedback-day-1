@@ -416,9 +416,14 @@ export const AuthProvider = ({ children }) => {
 
   const loadSaveSlots = async () => {
     try {
+      const token = localStorage.getItem('authToken') || user?.token;
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
         headers: {
-          'Authorization': `Bearer ${user.token}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
