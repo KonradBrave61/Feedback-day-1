@@ -220,15 +220,19 @@ class BackendHealthChecker:
             self.log_result("Get Equipment", False, "Request failed", str(e))
         
         # Test formations/tactics endpoints
-        try:
-            response = requests.get(f"{API_BASE}/teams/formations", timeout=10)
-            if response.status_code == 200:
-                formations = response.json()
-                self.log_result("Get Formations", True, f"Retrieved {len(formations)} formations")
-            else:
-                self.log_result("Get Formations", False, f"Status code: {response.status_code}")
-        except Exception as e:
-            self.log_result("Get Formations", False, "Request failed", str(e))
+        if self.auth_token:
+            headers = {"Authorization": f"Bearer {self.auth_token}"}
+            try:
+                response = requests.get(f"{API_BASE}/teams/formations", headers=headers, timeout=10)
+                if response.status_code == 200:
+                    formations = response.json()
+                    self.log_result("Get Formations", True, f"Retrieved {len(formations)} formations")
+                else:
+                    self.log_result("Get Formations", False, f"Status code: {response.status_code}")
+            except Exception as e:
+                self.log_result("Get Formations", False, "Request failed", str(e))
+        else:
+            self.log_result("Get Formations", False, "No auth token available")
     
     def run_health_check(self):
         """Run complete health check"""
