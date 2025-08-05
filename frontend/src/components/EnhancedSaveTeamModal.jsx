@@ -356,6 +356,16 @@ const SaveTeamModal = ({
                   ))}
                 </div>
 
+                {/* Create New Slot Button - Moved below the slots */}
+                <Button
+                  onClick={handleCreateNewSlot}
+                  className="w-full text-white hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Save Slot
+                </Button>
+
                 {/* New Slot Creation */}
                 {isCreatingNewSlot && (
                   <div className="space-y-2">
