@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
+import TeamPreviewModal from '../components/TeamPreviewModal';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -23,7 +24,10 @@ import {
   UserCheck,
   Heart,
   MessageSquare,
-  TrendingUp
+  TrendingUp,
+  Eye,
+  Lock,
+  Unlock
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logoColors, componentColors } from '../styles/colors';
