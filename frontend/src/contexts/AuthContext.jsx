@@ -234,6 +234,11 @@ export const AuthProvider = ({ children }) => {
 
   const loadCommunityTeams = async (filters = {}) => {
     try {
+      const token = localStorage.getItem('authToken') || user?.token;
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const params = new URLSearchParams();
       if (filters.search) params.append('search', filters.search);
       if (filters.formation) params.append('formation', filters.formation);
@@ -243,7 +248,7 @@ export const AuthProvider = ({ children }) => {
 
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/teams?${params}`, {
         headers: {
-          'Authorization': `Bearer ${user.token}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
