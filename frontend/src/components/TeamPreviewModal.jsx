@@ -388,12 +388,12 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                         <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
-                          {player.name?.substring(0, 2) || '??'}
+                          {getPlayerName(player).substring(0, 2)}
                         </div>
                       )}
                     </div>
                     <div className="flex-1">
-                      <h5 className="text-white font-medium text-sm">{player.name || 'Bench Player'}</h5>
+                      <h5 className="text-white font-medium text-sm">{getPlayerName(player)}</h5>
                       <div className="text-xs text-gray-400">
                         {player.position} • Level {player.user_level || player.userLevel || 1}
                       </div>
