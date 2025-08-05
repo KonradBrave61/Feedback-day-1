@@ -20,11 +20,24 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   const fetchTeamDetails = async () => {
     setLoading(true);
     try {
-      // For now, we'll use the team data directly
-      // In a full implementation, you'd call loadTeamDetails API
-      setTeamDetails(team);
+      if (team && team.id) {
+        // Try to load detailed team data from API
+        const result = await loadTeamDetails(team.id);
+        if (result.success) {
+          setTeamDetails(result.team);
+        } else {
+          // If API call fails, fall back to basic team data
+          console.warn('Failed to load team details, using basic team data:', result.error);
+          setTeamDetails(team);
+        }
+      } else {
+        // Use basic team data as fallback
+        setTeamDetails(team);
+      }
     } catch (error) {
       console.error('Failed to load team details:', error);
+      // Fall back to basic team data
+      setTeamDetails(team);
     } finally {
       setLoading(false);
     }
