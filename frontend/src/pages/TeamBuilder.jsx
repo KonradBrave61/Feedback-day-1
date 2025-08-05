@@ -198,7 +198,7 @@ const TeamBuilder = () => {
         setBenchPlayers(prev => {
           const newBench = { ...prev };
           // Find which bench slot has this player
-          const benchSlot = Object.keys(prev).find(slot => prev[slot].id === editingPlayer.id);
+          const benchSlot = Object.keys(prev).find(slot => prev[slot] && prev[slot].id === editingPlayer.id);
           if (benchSlot) {
             newBench[benchSlot] = enhancedPlayer;
           }
