@@ -149,10 +149,9 @@ const SupportPage = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="technical" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
                 style={{
-                  '--active-bg': 'transparent',
-                  '--active-border': '1px solid white'
+                  '--active-bg': 'transparent'
                 }}
               >
                 Technical Problems
