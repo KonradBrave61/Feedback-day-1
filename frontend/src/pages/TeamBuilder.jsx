@@ -447,38 +447,6 @@ const TeamBuilder = () => {
                     <Plus className="h-4 w-4 mr-2" />
                     Quick Team Builder
                   </Button>
-                  <Button
-                    className="w-full text-white border hover:opacity-80"
-                    style={{ 
-                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                      borderColor: logoColors.primaryBlueAlpha(0.3)
-                    }}
-                    onClick={() => {
-                      setTeamBuildingMode(false);
-                      setSelectedPosition(null);
-                      setIsBenchSelection(false);
-                      setShowPlayerSearch(true);
-                    }}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Browse Players
-                  </Button>
-                  <Button
-                    className="w-full text-white border hover:opacity-80"
-                    style={{ 
-                      backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                      borderColor: logoColors.primaryBlueAlpha(0.3)
-                    }}
-                    onClick={() => {
-                      setTeamBuildingMode(false);
-                      setSelectedPosition(null);
-                      setIsBenchSelection(true);
-                      setShowPlayerSearch(true);
-                    }}
-                  >
-                    <Users className="h-4 w-4 mr-2" />
-                    Add to Bench
-                  </Button>
                 </div>
               </CardContent>
             </Card>
