@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { logoColors } from '../styles/colors';
 
 const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
-  const { user, loadSaveSlots, loadCommunityTeams, loadTeamDetails } = useAuth();
+  const { user, loadSaveSlots, loadCommunityTeams, loadTeamDetails, loadPublicTeamDetails } = useAuth();
   const [activeTab, setActiveTab] = useState('saved');
   const [savedTeams, setSavedTeams] = useState([]);
   const [communityTeams, setCommunityTeams] = useState([]);
