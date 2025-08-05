@@ -404,7 +404,7 @@ const TeamBuilder = () => {
           user_equipment: player.userEquipment || {},
           user_hissatsu: player.userHissatsu || []
         })),
-        tactics: selectedTactic,
+        tactics: selectedTactics,
         coach: selectedCoach
       };
 
