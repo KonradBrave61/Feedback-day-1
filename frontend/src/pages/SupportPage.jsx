@@ -597,21 +597,22 @@ const SupportPage = () => {
 
                     <div>
                       <label className="block text-sm font-medium mb-2">Category</label>
-                      <select 
-                        value={contactFormData.category}
-                        onChange={(e) => setContactFormData({ ...contactFormData, category: e.target.value })}
-                        className="w-full text-white rounded-md p-2"
-                        style={{ 
-                          backgroundColor: logoColors.blackAlpha(0.3),
-                          borderColor: logoColors.primaryBlueAlpha(0.3)
-                        }}
-                      >
-                        <option value="General Question">General Question</option>
-                        <option value="Technical Issue">Technical Issue</option>
-                        <option value="Account Problem">Account Problem</option>
-                        <option value="Feature Request">Feature Request</option>
-                        <option value="Bug Report">Bug Report</option>
-                      </select>
+                      <Select value={contactFormData.category} onValueChange={(value) => setContactFormData({ ...contactFormData, category: value })}>
+                        <SelectTrigger className="text-white border"
+                                      style={{ 
+                                        backgroundColor: logoColors.blackAlpha(0.3),
+                                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                                      }}>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
+                          <SelectItem value="General Question" className="text-white hover:bg-blue-800">General Question</SelectItem>
+                          <SelectItem value="Technical Issue" className="text-white hover:bg-blue-800">Technical Issue</SelectItem>
+                          <SelectItem value="Account Problem" className="text-white hover:bg-blue-800">Account Problem</SelectItem>
+                          <SelectItem value="Feature Request" className="text-white hover:bg-blue-800">Feature Request</SelectItem>
+                          <SelectItem value="Bug Report" className="text-white hover:bg-blue-800">Bug Report</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div>
