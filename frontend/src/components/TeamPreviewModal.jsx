@@ -368,6 +368,81 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   </CardContent>
                 </Card>
 
+                {/* Coach Info */}
+                <Card className="backdrop-blur-lg text-white border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Users className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                      Coach
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    {teamDetails?.coach ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" 
+                               style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
+                            {teamDetails.coach.name?.substring(0, 2) || 'CO'}
+                          </div>
+                          <div>
+                            <div className="font-medium text-sm">{teamDetails.coach.name || 'Unknown Coach'}</div>
+                            <div className="text-xs text-gray-400">{teamDetails.coach.title || 'Coach'}</div>
+                          </div>
+                        </div>
+                        {teamDetails.coach.specialties && (
+                          <div className="flex flex-wrap gap-1">
+                            {teamDetails.coach.specialties.map((specialty, index) => (
+                              <span key={index} className="text-xs px-2 py-1 rounded" 
+                                    style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
+                                {specialty}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-gray-400 text-sm">No coach assigned</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Tactics */}
+                <Card className="backdrop-blur-lg text-white border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Zap className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                      Tactics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    {teamDetails?.tactics && teamDetails.tactics.length > 0 ? (
+                      <div className="space-y-2">
+                        {teamDetails.tactics.map((tactic, index) => (
+                          <div key={index} className="p-2 rounded border" style={{ 
+                            backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                            borderColor: logoColors.primaryBlueAlpha(0.2)
+                          }}>
+                            <div className="font-medium text-sm">{tactic.name || 'Unknown Tactic'}</div>
+                            <div className="text-xs text-gray-300">{tactic.effect || tactic.description || 'No description'}</div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <p className="text-gray-400 text-sm">No tactics selected</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
                 {/* Bench */}
                 <Card className="backdrop-blur-lg text-white border" style={{ 
                   backgroundColor: logoColors.blackAlpha(0.3),
