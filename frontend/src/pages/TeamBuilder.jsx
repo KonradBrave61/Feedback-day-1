@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Users, Trophy, Target, Shield, Zap, UserCheck, Plus, X, Save } from 'lucide-react';
 import { logoColors, componentColors } from '../styles/colors';
+import { toast } from 'react-hot-toast';
 
 const TeamBuilder = () => {
   const { saveTeam } = useAuth();
