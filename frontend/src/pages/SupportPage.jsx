@@ -120,19 +120,19 @@ const SupportPage = () => {
                         backgroundColor: logoColors.blackAlpha(0.5),
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       }}>
-              <TabsTrigger value="overview" className="text-white data-[state=active]:text-black">
+              <TabsTrigger value="overview" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Support Overview
               </TabsTrigger>
-              <TabsTrigger value="bug" className="text-white data-[state=active]:text-black">
+              <TabsTrigger value="bug" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Report Bug
               </TabsTrigger>
-              <TabsTrigger value="account" className="text-white data-[state=active]:text-black">
+              <TabsTrigger value="account" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Account Issues
               </TabsTrigger>
               <TabsTrigger value="technical" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Technical Problems
               </TabsTrigger>
-              <TabsTrigger value="contact" className="text-white data-[state=active]:text-black">
+              <TabsTrigger value="contact" className="text-white data-[state=active]:text-white data-[state=active]:bg-transparent data-[state=active]:border data-[state=active]:border-white">
                 Contact Support
               </TabsTrigger>
             </TabsList>
