@@ -132,6 +132,14 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     toast.success(`${equipment.name} equipped!`);
   };
 
+  const handleEquipmentUnequip = (category) => {
+    setSelectedEquipment(prev => ({
+      ...prev,
+      [category]: null
+    }));
+    toast.success(`Equipment unequipped!`);
+  };
+
   const handleHissatsuToggle = (hissatsu, slotIndex) => {
     const currentPreset = `preset${activePreset}`;
     setSelectedHissatsu(prev => {
