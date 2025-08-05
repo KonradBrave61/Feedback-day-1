@@ -446,9 +446,22 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                         <span className="text-sm capitalize">{stat}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className={`text-lg font-bold ${getStatColor(currentCharacter.position)}`}>
-                          {values.main}
-                        </span>
+                        <div className="text-right">
+                          {/* Final total value */}
+                          <div className={`text-lg font-bold ${getStatColor(currentCharacter.position)}`}>
+                            {values.main}
+                          </div>
+                          {/* Base + Equipment breakdown */}
+                          <div className="text-xs flex items-center gap-1">
+                            <span className="text-white">{values.base}</span>
+                            {values.equipmentBonus > 0 && (
+                              <>
+                                <span className="text-gray-400">+</span>
+                                <span className="text-yellow-400">{values.equipmentBonus}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                         <span className="text-sm text-gray-400">
                           {values.secondary}
                         </span>
