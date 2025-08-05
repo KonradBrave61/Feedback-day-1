@@ -130,10 +130,12 @@ class TeamLoadingAPITest:
         if response.status_code == 200:
             coaches = response.json()
             if coaches:
+                self.coach_data = coaches[0]  # Store full coach object
                 self.coach_id = coaches[0]["id"]
                 print(f"✅ Found {len(coaches)} coaches, using: {coaches[0]['name']}")
         else:
             print(f"❌ Failed to get coaches: {response.status_code}")
+            self.coach_data = None
     
     def create_comprehensive_team(self):
         """Create a team with players, bench, tactics, coach, and equipment"""
