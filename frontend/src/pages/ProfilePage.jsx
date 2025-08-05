@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 import { logoColors, componentColors } from '../styles/colors';
 
 const ProfilePage = () => {
-  const { user, updateProfile, loadTeams, loadUserFollowData, updateTeam } = useAuth();
+  const { user, updateProfile, loadTeams, loadFollowers, loadFollowing, updateTeam } = useAuth();
   const navigate = useNavigate();
   
   const [editing, setEditing] = useState(false);
