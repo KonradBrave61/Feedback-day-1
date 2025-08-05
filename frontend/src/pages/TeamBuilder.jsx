@@ -816,6 +816,13 @@ const TeamBuilder = () => {
             <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
               <CardContent className="p-4 space-y-2">
                 <Button
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                  onClick={() => setShowLoadTeamModal(true)}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Load Team
+                </Button>
+                <Button
                   className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
                   onClick={() => setShowSaveTeamModal(true)}
                   disabled={Object.keys(teamPlayers).length === 0}
