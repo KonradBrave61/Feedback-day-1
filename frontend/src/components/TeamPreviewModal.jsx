@@ -190,7 +190,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 <div className="flex flex-col items-center">
                   {/* Player avatar */}
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
                       {player.image ? (
                         <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
                       ) : (
@@ -213,7 +213,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
                     <div className="text-white/50 text-xs">{position.position}</div>
                   </div>
                 </div>
