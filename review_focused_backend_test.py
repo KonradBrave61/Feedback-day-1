@@ -83,7 +83,7 @@ class ReviewFocusedBackendTest:
         
         # Login to get token
         try:
-            login_data = {"username": self.test_username, "password": self.test_password}
+            login_data = {"email": self.test_email, "password": self.test_password}
             response = requests.post(f"{API_URL}/auth/login", json=login_data)
             
             if response.status_code == 200:
