@@ -679,11 +679,51 @@ const SupportPage = () => {
                           backgroundColor: logoColors.blackAlpha(0.9),
                           borderColor: logoColors.primaryBlueAlpha(0.3)
                         }}>
-                          <SelectItem value="General Question" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>General Question</SelectItem>
-                          <SelectItem value="Technical Issue" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Technical Issue</SelectItem>
-                          <SelectItem value="Account Problem" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Account Problem</SelectItem>
-                          <SelectItem value="Feature Request" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Feature Request</SelectItem>
-                          <SelectItem value="Bug Report" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Bug Report</SelectItem>
+                          <SelectItem 
+                            value="General Question" 
+                            className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                            style={{ 
+                              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                              color: 'white'
+                            }}>
+                            General Question
+                          </SelectItem>
+                          <SelectItem 
+                            value="Technical Issue" 
+                            className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                            style={{ 
+                              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                              color: 'white'
+                            }}>
+                            Technical Issue
+                          </SelectItem>
+                          <SelectItem 
+                            value="Account Problem" 
+                            className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                            style={{ 
+                              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                              color: 'white'
+                            }}>
+                            Account Problem
+                          </SelectItem>
+                          <SelectItem 
+                            value="Feature Request" 
+                            className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                            style={{ 
+                              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                              color: 'white'
+                            }}>
+                            Feature Request
+                          </SelectItem>
+                          <SelectItem 
+                            value="Bug Report" 
+                            className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                            style={{ 
+                              backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                              color: 'white'
+                            }}>
+                            Bug Report
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
