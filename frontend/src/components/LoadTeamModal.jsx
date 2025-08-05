@@ -30,11 +30,12 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
     try {
       const result = await loadSaveSlots();
       if (result.success) {
-        // Filter out empty slots and get team data
-        const teamsWithData = result.saveSlots.filter(slot => slot.team_data && slot.slot_name);
-        setSavedTeams(teamsWithData);
+        // Filter out empty slots and get occupied slots with team data
+        const occupiedSlots = result.saveSlots.filter(slot => slot.is_occupied && slot.team_id);
+        setSavedTeams(occupiedSlots);
       }
     } catch (error) {
+      console.error('Failed to load saved teams:', error);
       toast.error('Failed to load saved teams');
     } finally {
       setLoading(false);
