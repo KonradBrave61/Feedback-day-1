@@ -328,7 +328,7 @@ const ProfilePage = () => {
                         Save
                       </Button>
                       <Button
-                        onClick={() => setEditing(false)}
+                        onClick={handleCancelEdit}
                         className="text-white border hover:opacity-80 hover:text-white"
                         style={{ 
                           backgroundColor: logoColors.primaryBlueAlpha(0.4),
