@@ -175,6 +175,17 @@ const ProfilePage = () => {
     setShowTeamPreview(true);
   };
 
+  const handleEditTeamInBuilder = (team) => {
+    // Store team data in localStorage for team builder to pick up
+    localStorage.setItem('loadTeamData', JSON.stringify({
+      teamId: team.id,
+      loadOnOpen: true
+    }));
+    
+    // Navigate to team builder
+    navigate('/team-builder');
+  };
+
   const handleTeamPrivacyToggle = async (teamId, isPublic) => {
     try {
       const result = await updateTeam(teamId, { is_public: isPublic });
