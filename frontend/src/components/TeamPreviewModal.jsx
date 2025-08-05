@@ -172,39 +172,57 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   };
 
   const renderPlayerDetails = () => {
-    const allPlayers = [...(teamDetails?.players || []), ...(teamDetails?.bench || [])];
+    const allPlayers = [...(teamDetails?.players || []), ...(teamDetails?.bench_players || [])];
+    
+    if (allPlayers.length === 0) {
+      return (
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-white">Player Details</h4>
+          <div className="text-center py-8">
+            <Users className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+            <p className="text-gray-300">No players in this team yet.</p>
+          </div>
+        </div>
+      );
+    }
     
     return (
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-white">Player Details</h4>
+        <h4 className="text-sm font-medium text-white">Player Details ({allPlayers.length})</h4>
         <div className="max-h-60 overflow-y-auto space-y-2">
           {allPlayers.map((player, index) => (
-            <div key={index} className="p-3 rounded border" style={{ 
+            <div key={index} className="p-3 rounded border hover:opacity-80 cursor-pointer transition-opacity" style={{ 
               backgroundColor: logoColors.blackAlpha(0.3),
               borderColor: logoColors.primaryBlueAlpha(0.2)
             }}>
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h5 className="font-medium text-white">{player.name}</h5>
+                  <h5 className="font-medium text-white">{player.name || 'Unnamed Player'}</h5>
                   <p className="text-xs" style={{ color: logoColors.lightBlue }}>
-                    {player.position} • Level {player.userLevel || player.level || 1}
+                    {player.position || 'Unknown'} • Level {player.user_level || player.userLevel || player.level || 1}
                   </p>
+                  {(player.user_rarity || player.userRarity || player.rarity) && (
+                    <p className="text-xs text-yellow-400">
+                      {(player.user_rarity || player.userRarity || player.rarity).toUpperCase()}
+                    </p>
+                  )}
                 </div>
-                <Badge style={{ backgroundColor: getPositionStyle(player.position).backgroundColor }}>
-                  {player.position}
+                <Badge style={{ backgroundColor: getPositionStyle(player.position || 'Unknown').backgroundColor }}>
+                  {player.position || '?'}
                 </Badge>
               </div>
               
               {/* Equipment */}
-              {player.userEquipment && Object.keys(player.userEquipment).length > 0 && (
+              {((player.user_equipment && Object.keys(player.user_equipment).length > 0) ||
+                (player.userEquipment && Object.keys(player.userEquipment).length > 0)) && (
                 <div className="mb-2">
                   <h6 className="text-xs font-medium text-gray-300 mb-1">Equipment:</h6>
                   <div className="flex flex-wrap gap-1">
-                    {Object.values(player.userEquipment).map((equipment, eqIndex) => (
+                    {Object.values(player.user_equipment || player.userEquipment || {}).map((equipment, eqIndex) => (
                       equipment && (
                         <span key={eqIndex} className="text-xs px-2 py-1 rounded" 
                               style={{ backgroundColor: logoColors.primaryOrangeAlpha(0.2), color: logoColors.primaryOrange }}>
-                          {equipment.name}
+                          {equipment.name || 'Equipment'}
                         </span>
                       )
                     ))}
@@ -213,15 +231,31 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
               )}
               
               {/* Techniques */}
-              {player.userHissatsu && player.userHissatsu.length > 0 && (
+              {((player.user_hissatsu && player.user_hissatsu.length > 0) ||
+                (player.userHissatsu && player.userHissatsu.length > 0)) && (
                 <div>
                   <h6 className="text-xs font-medium text-gray-300 mb-1">Techniques:</h6>
                   <div className="flex flex-wrap gap-1">
-                    {player.userHissatsu.map((technique, techIndex) => (
+                    {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
                       <span key={techIndex} className="text-xs px-2 py-1 rounded" 
                             style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
-                        {technique.name}
+                        {technique.name || 'Technique'}
                       </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Base Stats if available */}
+              {player.baseStats && (
+                <div className="mt-2">
+                  <h6 className="text-xs font-medium text-gray-300 mb-1">Stats:</h6>
+                  <div className="grid grid-cols-3 gap-1 text-xs">
+                    {Object.entries(player.baseStats).slice(0, 6).map(([stat, value]) => (
+                      <div key={stat} className="flex justify-between">
+                        <span className="capitalize">{stat}:</span>
+                        <span className="text-white">{value.main || value}</span>
+                      </div>
                     ))}
                   </div>
                 </div>
