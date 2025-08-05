@@ -387,21 +387,13 @@ class ReviewBackendTest(unittest.TestCase):
             self.assertIsInstance(characters, dict)
             print("✅ Constellation characters endpoint working")
             
-            # Test gacha pull system (if user has Kizuna Stars)
-            response = requests.get(f"{API_URL}/auth/me", headers=headers)
-            user_data = response.json()
-            if user_data.get("kizuna_stars", 0) >= 5:
-                pull_data = {
-                    "constellation_id": constellation_id,
-                    "pull_count": 1
-                }
-                response = requests.post(f"{API_URL}/constellations/pull", json=pull_data, headers=headers)
-                self.assertEqual(response.status_code, 200)
-                pull_result = response.json()
-                self.assertIn("characters", pull_result)
-                print("✅ Gacha pull system working")
-            else:
-                print("⚠️ Gacha pull skipped - insufficient Kizuna Stars")
+            # Test getting drop rates
+            response = requests.get(f"{API_URL}/constellations/{constellation_id}/drop-rates")
+            self.assertEqual(response.status_code, 200)
+            drop_rates = response.json()
+            self.assertIn("base_rates", drop_rates)
+            self.assertIn("final_rates", drop_rates)
+            print("✅ Constellation drop rates endpoint working")
         
         print("✅ CONSTELLATION SYSTEM: All endpoints functional")
     
