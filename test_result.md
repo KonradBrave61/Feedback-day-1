@@ -521,10 +521,15 @@ users after saving team cannot access it or even change status of that team from
 
 ## test_plan:
   current_focus:
-    - "Team Builder Backend Testing - COMPLETED ✅"
-    - "Equipment API Integration - COMPLETED ✅"
-    - "Character API Integration - COMPLETED ✅"
-    - "Team Stats with Equipment Bonuses - COMPLETED ✅"
+    - "Backend API Testing After Frontend Fixes - COMPLETED ✅"
+    - "Core API Health Verification - COMPLETED ✅"
+    - "Authentication System Testing - COMPLETED ✅"
+    - "Character Management API Testing - COMPLETED ✅"
+    - "Equipment System API Testing - COMPLETED ✅"
+    - "Team Management CRUD Testing - COMPLETED ✅"
+    - "Formation & Tactics API Testing - COMPLETED ✅"
+    - "Constellation System Testing - COMPLETED ✅"
+    - "Community Features Testing - COMPLETED ✅"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
