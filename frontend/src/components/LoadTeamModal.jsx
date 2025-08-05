@@ -154,12 +154,13 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h3 className="font-bold text-white mb-1">{slot.slot_name}</h3>
+                    <h3 className="font-bold text-white mb-1">{slot.team_name}</h3>
                     <p className="text-sm text-gray-300 mb-2">
-                      Formation: {slot.team_data?.formation || 'Unknown'}
+                      Slot {slot.slot_number}
                     </p>
                     <p className="text-xs text-gray-400">
-                      Slot {slot.slot_number} • Saved {new Date(slot.created_at).toLocaleDateString()}
+                      {slot.created_at && `Saved ${new Date(slot.created_at).toLocaleDateString()}`}
+                      {slot.updated_at && ` • Updated ${new Date(slot.updated_at).toLocaleDateString()}`}
                     </p>
                   </div>
                   <Button
