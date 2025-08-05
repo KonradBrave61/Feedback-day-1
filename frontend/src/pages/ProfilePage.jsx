@@ -27,7 +27,8 @@ import {
   TrendingUp,
   Eye,
   Lock,
-  Unlock
+  Unlock,
+  Edit
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logoColors, componentColors } from '../styles/colors';
