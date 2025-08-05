@@ -958,6 +958,14 @@ const TeamBuilder = () => {
           />
         )}
 
+        {showLoadTeamModal && (
+          <LoadTeamModal
+            isOpen={showLoadTeamModal}
+            onClose={() => setShowLoadTeamModal(false)}
+            onLoadTeam={handleLoadTeam}
+          />
+        )}
+
         {showCharacterModal && selectedCharacterForModal && (
           <CharacterModal
             character={selectedCharacterForModal}
