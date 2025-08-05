@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -13,18 +13,37 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
     allCharacters.findIndex(c => c.id === character.id)
   );
-  const [userLevel, setUserLevel] = useState(character.baseLevel);
-  const [userRarity, setUserRarity] = useState(character.baseRarity);
+  // Initialize with saved values if they exist, otherwise use base values
+  const [userLevel, setUserLevel] = useState(character.userLevel || character.baseLevel);
+  const [userRarity, setUserRarity] = useState(character.userRarity || character.baseRarity);
   const [selectedEquipment, setSelectedEquipment] = useState({
-    boots: null,
-    bracelets: null,
-    pendants: null,
-    special: null
+    boots: character.userEquipment?.boots || null,
+    bracelets: character.userEquipment?.bracelets || null,
+    pendants: character.userEquipment?.pendants || null,
+    special: character.userEquipment?.special || null
   });
   const [selectedHissatsu, setSelectedHissatsu] = useState({
-    preset1: character.hissatsu?.slice(0, 3) || [],
-    preset2: character.hissatsu?.slice(3, 6) || []
+    preset1: character.userHissatsu?.preset1 || character.hissatsu?.slice(0, 3) || [],
+    preset2: character.userHissatsu?.preset2 || character.hissatsu?.slice(3, 6) || []
   });
+
+  // Update state when character changes (for editing different players)
+  useEffect(() => {
+    if (character) {
+      setUserLevel(character.userLevel || character.baseLevel);
+      setUserRarity(character.userRarity || character.baseRarity);
+      setSelectedEquipment({
+        boots: character.userEquipment?.boots || null,
+        bracelets: character.userEquipment?.bracelets || null,
+        pendants: character.userEquipment?.pendants || null,
+        special: character.userEquipment?.special || null
+      });
+      setSelectedHissatsu({
+        preset1: character.userHissatsu?.preset1 || character.hissatsu?.slice(0, 3) || [],
+        preset2: character.userHissatsu?.preset2 || character.hissatsu?.slice(3, 6) || []
+      });
+    }
+  }, [character, isOpen]);
   const [activePreset, setActivePreset] = useState(1);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [showHissatsuList, setShowHissatsuList] = useState(false);
