@@ -454,7 +454,7 @@ const ProfilePage = () => {
                               e.stopPropagation();
                               handleQuickPrivacyToggle(team);
                             }}
-                            className="ml-2 p-2 hover:opacity-80"
+                            className="ml-2 p-2 hover:opacity-80 hover:text-white"
                             style={{ 
                               backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
                               color: logoColors.white
