@@ -881,6 +881,35 @@ const TeamBuilder = () => {
                   <X className="h-4 w-4 mr-2" />
                   Clear Team
                 </Button>
+                <Button
+                  className="w-full bg-red-900/60 border-red-500/40 hover:bg-red-800/80 text-white"
+                  onClick={() => {
+                    // Clear all players and bench
+                    setTeamPlayers({});
+                    setBenchPlayers({});
+                    // Clear tactics and reset tactics presets
+                    setSelectedTactics([]);
+                    setTacticsPresets({
+                      1: { name: 'Preset 1', tactics: [] },
+                      2: { name: 'Preset 2', tactics: [] }
+                    });
+                    setCurrentTacticsPreset(1);
+                    // Also clear coach and formation
+                    setSelectedCoach(null);
+                    setSelectedFormation(null);
+                    toast.success('All team data cleared!');
+                  }}
+                  disabled={
+                    Object.keys(teamPlayers).length === 0 && 
+                    Object.keys(benchPlayers).length === 0 && 
+                    selectedTactics.length === 0 && 
+                    !selectedCoach && 
+                    !selectedFormation
+                  }
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Clear All
+                </Button>
               </CardContent>
             </Card>
           </div>
