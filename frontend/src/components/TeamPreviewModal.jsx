@@ -453,6 +453,14 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
               )}
             </Button>
             <Button
+              onClick={handleEditInBuilder}
+              className="text-black hover:opacity-80 font-bold"
+              style={{ background: logoColors.yellowOrangeGradient }}
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Edit in Builder
+            </Button>
+            <Button
               onClick={onClose}
               className="text-white hover:opacity-80"
               style={{ backgroundColor: logoColors.blackAlpha(0.5) }}
