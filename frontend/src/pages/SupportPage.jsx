@@ -441,10 +441,42 @@ const SupportPage = () => {
                             backgroundColor: logoColors.blackAlpha(0.9),
                             borderColor: logoColors.primaryBlueAlpha(0.3)
                           }}>
-                            <SelectItem value="Low" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Low</SelectItem>
-                            <SelectItem value="Medium" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Medium</SelectItem>
-                            <SelectItem value="High" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>High</SelectItem>
-                            <SelectItem value="Critical" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Critical</SelectItem>
+                            <SelectItem 
+                              value="Low" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
+                              Low
+                            </SelectItem>
+                            <SelectItem 
+                              value="Medium" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
+                              Medium
+                            </SelectItem>
+                            <SelectItem 
+                              value="High" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
+                              High
+                            </SelectItem>
+                            <SelectItem 
+                              value="Critical" 
+                              className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.1),
+                                color: 'white'
+                              }}>
+                              Critical
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
