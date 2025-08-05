@@ -413,6 +413,9 @@ LATEST ISSUES FIXED:
       - working: true
         agent: "main"
         comment: "Fixed authentication token consistency issues in AuthContext. Updated loadTeams, updateTeam, saveTeam, deleteTeam, and updateProfile functions to use localStorage.getItem('authToken') with fallback to user?.token. Added proper token validation. Backend testing confirms all team management APIs are working correctly with 100% success rate."
+      - working: true
+        agent: "testing"
+        comment: "TEAM LOADING API TESTING COMPLETED: Successfully tested all team loading endpoints requested in review. ✅ GET /api/teams (user teams loading) - Working correctly, returns proper team data structure ✅ GET /api/save-slots (save slots for Team Builder) - Working correctly, returns 5 slots with proper structure ✅ GET /api/community/teams (community teams for hub) - Working correctly, supports filtering and search ✅ GET /api/teams/{team_id}/details (team details for preview) - FIXED: Was returning 500 error due to MongoDB ObjectId serialization issue, now working correctly ✅ GET /api/teams/{team_id}/public (public team details) - FIXED: Was returning 500 error due to MongoDB ObjectId serialization issue, now working correctly. CRITICAL FIXES APPLIED: Fixed ObjectId serialization errors in /teams/{team_id}/details and /teams/{team_id}/public endpoints by properly converting MongoDB documents to Team models before returning. Authentication working properly (403 for no token, 401 for invalid token). All team loading functionality is now operational and ready for production use."
 
 ## frontend:
   - task: "Fix equipment saving and team stats calculation"
