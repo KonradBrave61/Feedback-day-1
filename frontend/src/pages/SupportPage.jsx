@@ -398,21 +398,21 @@ const SupportPage = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Priority</label>
                         <Select value={bugFormData.priority} onValueChange={(value) => setBugFormData({ ...bugFormData, priority: value })}>
-                          <SelectTrigger className="text-white border focus:ring-2 focus:ring-blue-500"
+                          <SelectTrigger className="text-white border"
                                         style={{ 
-                                          backgroundColor: logoColors.blackAlpha(0.3),
+                                          backgroundColor: logoColors.blackAlpha(0.5),
                                           borderColor: logoColors.primaryBlueAlpha(0.3)
                                         }}>
-                            <SelectValue className="text-white" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent style={{ 
-                            backgroundColor: logoColors.blackAlpha(0.95),
-                            border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`
+                            backgroundColor: logoColors.blackAlpha(0.9),
+                            borderColor: logoColors.primaryBlueAlpha(0.3)
                           }}>
-                            <SelectItem value="Low" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Low</SelectItem>
-                            <SelectItem value="Medium" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Medium</SelectItem>
-                            <SelectItem value="High" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">High</SelectItem>
-                            <SelectItem value="Critical" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Critical</SelectItem>
+                            <SelectItem value="Low" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Low</SelectItem>
+                            <SelectItem value="Medium" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Medium</SelectItem>
+                            <SelectItem value="High" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>High</SelectItem>
+                            <SelectItem value="Critical" className="text-white hover:opacity-80" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Critical</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
