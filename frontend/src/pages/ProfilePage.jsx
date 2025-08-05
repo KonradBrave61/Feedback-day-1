@@ -195,7 +195,7 @@ const ProfilePage = () => {
                   </div>
                   <Button
                     size="sm"
-                    className="absolute bottom-2 right-2 w-8 h-8 p-0 rounded-full"
+                    className="absolute bottom-0 right-0 w-8 h-8 p-0 rounded-full"
                     style={{ backgroundColor: logoColors.primaryBlue }}
                   >
                     <Camera className="h-4 w-4" />
