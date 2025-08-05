@@ -529,15 +529,24 @@ const TeamBuilder = () => {
       // Load coach (could be coach object or inside team_data)
       const coachData = teamData.coach || teamData.team_data?.coach;
       if (coachData) {
-        // Find matching coach from mockCoaches
-        const coach = mockCoaches.find(c => 
-          c.id === coachData.id || 
-          c.name === coachData.name ||
-          c.name === coachData
-        );
-        if (coach) {
-          setSelectedCoach(coach);
-          console.log('Loaded coach:', coach.name);
+        // Add null check for coachData
+        if (typeof coachData === 'object' && coachData !== null) {
+          // Find matching coach from mockCoaches
+          const coach = mockCoaches.find(c => 
+            (coachData.id && c.id === coachData.id) || 
+            (coachData.name && c.name === coachData.name)
+          );
+          if (coach) {
+            setSelectedCoach(coach);
+            console.log('Loaded coach:', coach.name);
+          }
+        } else if (typeof coachData === 'string') {
+          // Handle case where coachData is just a string name
+          const coach = mockCoaches.find(c => c.name === coachData);
+          if (coach) {
+            setSelectedCoach(coach);
+            console.log('Loaded coach:', coach.name);
+          }
         }
       }
       
