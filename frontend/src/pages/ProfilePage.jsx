@@ -199,17 +199,17 @@ const ProfilePage = () => {
             }}>
               <CardHeader className="text-center">
                 <div className="relative inline-block">
-                  <div className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center" 
+                  <div className="w-24 h-24 rounded-full mx-auto mb-4 flex items-center justify-center relative" 
                        style={{ background: logoColors.yellowOrangeGradient }}>
                     <User className="h-12 w-12 text-black" />
+                    <Button
+                      size="sm"
+                      className="absolute -bottom-1 -right-1 w-8 h-8 p-0 rounded-full border-2 border-black"
+                      style={{ backgroundColor: logoColors.primaryBlue }}
+                    >
+                      <Camera className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button
-                    size="sm"
-                    className="absolute bottom-0 right-0 w-8 h-8 p-0 rounded-full"
-                    style={{ backgroundColor: logoColors.primaryBlue }}
-                  >
-                    <Camera className="h-4 w-4" />
-                  </Button>
                 </div>
                 <CardTitle className="text-xl">{profile.username}</CardTitle>
                 <p className="text-sm" style={{ color: logoColors.lightBlue }}>
