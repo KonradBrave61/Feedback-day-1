@@ -931,8 +931,7 @@ const TeamBuilder = () => {
                     Object.keys(teamPlayers).length === 0 && 
                     Object.keys(benchPlayers).length === 0 && 
                     selectedTactics.length === 0 && 
-                    !selectedCoach && 
-                    !selectedFormation
+                    !selectedCoach
                   }
                 >
                   <X className="h-4 w-4 mr-2" />
