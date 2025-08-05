@@ -119,6 +119,36 @@ const ProfilePage = () => {
     return 'Rookie Coach';
   };
 
+  const handleTeamClick = (team) => {
+    setSelectedTeam(team);
+    setShowTeamPreview(true);
+  };
+
+  const handleTeamPrivacyToggle = async (teamId, isPublic) => {
+    try {
+      const result = await updateTeam(teamId, { is_public: isPublic });
+      if (result.success) {
+        toast.success(`Team ${isPublic ? 'made public' : 'made private'} successfully!`);
+        // Update the team in the local state
+        setTeams(prevTeams => prevTeams.map(team => 
+          team.id === teamId ? { ...team, is_public: isPublic } : team
+        ));
+        // Update selectedTeam if it's the one being modified
+        if (selectedTeam?.id === teamId) {
+          setSelectedTeam(prev => ({ ...prev, is_public: isPublic }));
+        }
+      } else {
+        toast.error(result.error || 'Failed to update team privacy');
+      }
+    } catch (error) {
+      toast.error('An error occurred while updating team privacy');
+    }
+  };
+
+  const handleQuickPrivacyToggle = async (team) => {
+    await handleTeamPrivacyToggle(team.id, !team.is_public);
+  };
+
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
