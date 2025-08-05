@@ -239,12 +239,12 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 <div 
                   className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold border border-white/30 mb-1 cursor-pointer hover:opacity-80"
                   style={{ backgroundColor: player ? getPositionStyle(player.position || 'Unknown').backgroundColor : logoColors.blackAlpha(0.5) }}
-                  title={player ? `${player.name} (${player.position || 'Unknown'})` : 'Empty slot'}
+                  title={player ? `${getPlayerName(player)} (${player.position || 'Unknown'})` : 'Empty slot'}
                 >
-                  {player ? player.name?.substring(0, 2) : '-'}
+                  {player ? getPlayerName(player).substring(0, 2) : '-'}
                 </div>
                 <div className="text-xs text-gray-300 truncate">
-                  {player?.name || 'Empty'}
+                  {player ? getPlayerName(player) : 'Empty'}
                 </div>
               </div>
             );
