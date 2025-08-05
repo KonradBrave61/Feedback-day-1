@@ -132,6 +132,19 @@ const ProfilePage = () => {
     }
   };
 
+  const handleCancelEdit = () => {
+    // Reset profile to original user data
+    setProfile({
+      username: user?.username || '',
+      email: user?.email || '',
+      coachLevel: user?.coach_level || 1,
+      favoritePosition: user?.favorite_position || 'FW',
+      favoriteElement: user?.favorite_element || 'Fire',
+      favoriteTeam: user?.favourite_team || ''
+    });
+    setEditing(false);
+  };
+
   const handleInputChange = (field, value) => {
     setProfile(prev => ({
       ...prev,
