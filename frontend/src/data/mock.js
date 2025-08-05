@@ -371,26 +371,46 @@ export const calculateStats = (character, equipment, userLevel = 1, userRarity =
   const rarityDifference = userRarityValue - currentRarityValue;
   const rarityModifier = rarityDifference * 10;
   
-  // Apply level and rarity modifiers to all stats
+  // Store base values (with level and rarity modifiers) before equipment
+  const adjustedBaseStats = {};
   Object.keys(baseStats).forEach(stat => {
-    baseStats[stat].main = Math.max(1, baseStats[stat].main + levelModifier + rarityModifier);
-    baseStats[stat].secondary = Math.max(1, baseStats[stat].secondary + levelModifier + rarityModifier);
+    const adjustedMain = Math.max(1, baseStats[stat].main + levelModifier + rarityModifier);
+    const adjustedSecondary = Math.max(1, baseStats[stat].secondary + levelModifier + rarityModifier);
+    adjustedBaseStats[stat] = {
+      main: adjustedMain,
+      secondary: adjustedSecondary
+    };
   });
   
-  // Apply equipment bonuses
+  // Calculate equipment bonuses
+  const equipmentBonuses = {};
+  Object.keys(baseStats).forEach(stat => {
+    equipmentBonuses[stat] = 0;
+  });
+  
   if (equipment) {
     Object.keys(equipment).forEach(slot => {
       const item = equipment[slot];
       if (item && item.stats) {
         Object.keys(item.stats).forEach(stat => {
-          if (baseStats[stat]) {
-            baseStats[stat].main += item.stats[stat];
-            baseStats[stat].secondary += item.stats[stat];
+          if (equipmentBonuses[stat] !== undefined) {
+            equipmentBonuses[stat] += item.stats[stat];
           }
         });
       }
     });
   }
   
-  return baseStats;
+  // Calculate final stats with equipment bonuses
+  const finalStats = {};
+  Object.keys(baseStats).forEach(stat => {
+    finalStats[stat] = {
+      main: adjustedBaseStats[stat].main + equipmentBonuses[stat],
+      secondary: adjustedBaseStats[stat].secondary + equipmentBonuses[stat],
+      base: adjustedBaseStats[stat].main,
+      equipmentBonus: equipmentBonuses[stat]
+    };
+  });
+  
+  return finalStats;
 };
