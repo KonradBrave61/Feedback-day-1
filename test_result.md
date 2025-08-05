@@ -119,7 +119,7 @@ Look pic 4 There is a problem cause the user cant select the configuration butto
 
 LATEST TASK:
 load the code 
-and recreate the helper and support that is on this website https://27754e72-a7f9-4c26-86c0-9386a1481f9b.preview.emergentagent.com/helper 
+and recreate the helper and support that is on this website https://10dab6c1-4455-44c2-bab7-13413fe388d4.preview.emergentagent.com/helper 
 
 CURRENT TASK:
 there is a problem with tactical visualization after selecting any type of tactic look image 1 
