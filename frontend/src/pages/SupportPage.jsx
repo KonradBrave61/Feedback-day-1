@@ -394,20 +394,21 @@ const SupportPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Priority</label>
-                        <select 
-                          value={bugFormData.priority}
-                          onChange={(e) => setBugFormData({ ...bugFormData, priority: e.target.value })}
-                          className="w-full text-white rounded-md p-2"
-                          style={{ 
-                            backgroundColor: logoColors.blackAlpha(0.3),
-                            borderColor: logoColors.primaryBlueAlpha(0.3)
-                          }}
-                        >
-                          <option value="Low">Low</option>
-                          <option value="Medium">Medium</option>
-                          <option value="High">High</option>
-                          <option value="Critical">Critical</option>
-                        </select>
+                        <Select value={bugFormData.priority} onValueChange={(value) => setBugFormData({ ...bugFormData, priority: value })}>
+                          <SelectTrigger className="text-white border"
+                                        style={{ 
+                                          backgroundColor: logoColors.blackAlpha(0.3),
+                                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                                        }}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
+                            <SelectItem value="Low" className="text-white hover:bg-blue-800">Low</SelectItem>
+                            <SelectItem value="Medium" className="text-white hover:bg-blue-800">Medium</SelectItem>
+                            <SelectItem value="High" className="text-white hover:bg-blue-800">High</SelectItem>
+                            <SelectItem value="Critical" className="text-white hover:bg-blue-800">Critical</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
