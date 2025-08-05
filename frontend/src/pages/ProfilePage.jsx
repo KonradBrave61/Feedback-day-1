@@ -529,18 +529,30 @@ const ProfilePage = () => {
                             {team.is_public ? 'Public' : 'Private'}
                           </Badge>
                         </div>
-                        <div className="mt-3 text-center">
+                        <div className="mt-3 flex gap-2 justify-center">
                           <Button
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleTeamClick(team);
                             }}
-                            className="text-white hover:opacity-80 text-xs"
+                            className="text-white hover:opacity-80 text-xs flex-1"
                             style={{ backgroundColor: logoColors.primaryBlueAlpha(0.4) }}
                           >
                             <Eye className="h-3 w-3 mr-1" />
                             View Details
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditTeamInBuilder(team);
+                            }}
+                            className="text-black hover:opacity-80 text-xs flex-1 font-bold"
+                            style={{ background: logoColors.yellowOrangeGradient }}
+                          >
+                            <Edit className="h-3 w-3 mr-1" />
+                            Edit in Builder
                           </Button>
                         </div>
                       </div>
