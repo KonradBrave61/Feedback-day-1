@@ -483,7 +483,7 @@ const TeamBuilder = () => {
       if (teamData.tactics) {
         const tactic = mockTactics.find(t => t.name === teamData.tactics || t.name === teamData.tactics?.name);
         if (tactic) {
-          setSelectedTactic(tactic);
+          setSelectedTactics(tactic);
         }
       }
       
