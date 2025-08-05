@@ -130,6 +130,13 @@ users after saving team cannot access it or even change status of that team from
 CONTINUATION REQUEST:
 On the profile page after user log in he need to be able to access the team and also to change the team from public to private and from private to public in the profile page lets player be able to click on team and then a window with this team open like q preview . In the Team Builder add option to load a team and make it that the user can pick from his saved teams and also give an idea how user will be able to load someones team 
 
+LATEST ISSUES FIXED:
+1. Fixed "loadUserFollowData is not a function" error by updating ProfilePage.jsx to use correct loadFollowers and loadFollowing functions
+2. Fixed Team Builder team loading functionality - LoadTeamModal now properly fetches and displays saved teams using the correct API data structure (team_id, team_name, is_occupied)
+3. Fixed Profile Page save functionality by converting frontend camelCase properties to backend snake_case format (coach_level, favorite_position, etc.)
+4. Improved button hover text visibility by adding hover:text-white to ensure text remains visible on hover
+5. Adjusted photo icon positioning to be at the exact bottom-right corner of the profile circle (bottom-0 right-0) 
+
 ## backend:
   - task: "Character Management API endpoints"
     implemented: true
