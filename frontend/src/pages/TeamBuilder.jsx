@@ -209,7 +209,7 @@ const TeamBuilder = () => {
         setTeamPlayers(prev => {
           const newTeam = { ...prev };
           // Find which position has this player
-          const position = Object.keys(prev).find(pos => prev[pos].id === editingPlayer.id);
+          const position = Object.keys(prev).find(pos => prev[pos] && prev[pos].id === editingPlayer.id);
           if (position) {
             newTeam[position] = enhancedPlayer;
           }
