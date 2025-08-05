@@ -486,12 +486,26 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                     }}
                   >
                     {item ? (
-                      <div className="flex items-center gap-2">
-                        <img src={item.icon} alt={item.name} className="w-8 h-8" />
-                        <div>
-                          <div className="font-medium text-sm">{item.name}</div>
-                          <div className="text-xs text-gray-200">{item.category}</div>
+                      <div className="relative">
+                        <div className="flex items-center gap-2">
+                          <img src={item.icon} alt={item.name} className="w-8 h-8" />
+                          <div>
+                            <div className="font-medium text-sm">{item.name}</div>
+                            <div className="text-xs text-gray-200">{item.category}</div>
+                          </div>
                         </div>
+                        {/* Unequip button */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="absolute -top-2 -right-2 w-5 h-5 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white flex-shrink-0"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEquipmentUnequip(category);
+                          }}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
                       </div>
                     ) : (
                       <div className="text-center">
