@@ -97,7 +97,17 @@ const ProfilePage = () => {
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
-      const result = await updateProfile(profile);
+      // Convert frontend camelCase to backend snake_case
+      const profilePayload = {
+        username: profile.username,
+        email: profile.email,
+        coach_level: profile.coachLevel,
+        favorite_position: profile.favoritePosition,
+        favorite_element: profile.favoriteElement,
+        favourite_team: profile.favoriteTeam
+      };
+      
+      const result = await updateProfile(profilePayload);
       if (result.success) {
         toast.success('Profile updated successfully!');
         setEditing(false);
@@ -105,6 +115,7 @@ const ProfilePage = () => {
         toast.error(result.error || 'Failed to update profile');
       }
     } catch (error) {
+      console.error('Profile update error:', error);
       toast.error('An error occurred while updating profile');
     } finally {
       setLoading(false);
