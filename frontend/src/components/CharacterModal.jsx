@@ -215,13 +215,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const StatRadarChart = ({ stats }) => {
     const statNames = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
     const statIcons = {
-      'kick': '⚡',
-      'control': '🎯', 
-      'technique': '👥',
-      'intelligence': '📊',
-      'pressure': '🛡️',
-      'agility': '⚡',
-      'physical': '💪'
+      'kick': '⚽',        // Soccer ball for kick (more visible)
+      'control': '🎯',     // Target for control 
+      'technique': '⭐',    // Star for technique (more visible)
+      'intelligence': '🧠', // Brain for intelligence
+      'pressure': '🛡️',    // Shield for pressure
+      'agility': '⚡',     // Lightning for agility
+      'physical': '💪'     // Muscle for physical
     };
     
     // Calculate dynamic max value based on actual stats for better scaling
@@ -256,7 +256,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               cy={center}
               r={radius * ratio}
               fill="none"
-              stroke="rgba(255,255,255,0.15)"
+              stroke="rgba(255,255,255,0.2)"
               strokeWidth="1"
             />
           ))}
@@ -273,29 +273,41 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                 y1={center}
                 x2={x}
                 y2={y}
-                stroke="rgba(255,255,255,0.2)"
+                stroke="rgba(255,255,255,0.3)"
                 strokeWidth="1"
               />
             );
           })}
           
-          {/* Stat labels with icons */}
+          {/* Stat labels with improved icons and visibility */}
           {statNames.map((stat, index) => {
             const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
-            const labelRadius = radius + 15;
+            const labelRadius = radius + 18;
             const x = center + labelRadius * Math.cos(angle);
             const y = center + labelRadius * Math.sin(angle);
             return (
-              <text
-                key={stat}
-                x={x}
-                y={y + 2}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="fill-white text-[12px]"
-              >
-                {statIcons[stat]}
-              </text>
+              <g key={stat}>
+                {/* White background circle for better visibility */}
+                <circle
+                  cx={x}
+                  cy={y}
+                  r="10"
+                  fill="rgba(255,255,255,0.1)"
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="1"
+                />
+                {/* Icon */}
+                <text
+                  x={x}
+                  y={y + 2}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="fill-white text-[14px]"
+                  style={{ textShadow: '0 0 3px rgba(0,0,0,0.8)' }}
+                >
+                  {statIcons[stat]}
+                </text>
+              </g>
             );
           })}
           
@@ -313,10 +325,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               key={index}
               cx={point.x}
               cy={point.y}
-              r="3"
+              r="4"
               fill={logoColors.primaryBlue}
               stroke="white"
-              strokeWidth="1"
+              strokeWidth="2"
             />
           ))}
         </svg>
