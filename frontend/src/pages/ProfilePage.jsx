@@ -108,25 +108,34 @@ const ProfilePage = () => {
       };
       
       const result = await updateProfile(profilePayload);
-      if (result.success) {
+      console.log('Profile update result:', result); // Debug log
+      
+      if (result && result.success) {
         // Update the local profile state with the saved data
-        setProfile(prev => ({
-          ...prev,
-          username: result.user.username,
-          email: result.user.email,
-          coachLevel: result.user.coach_level,
-          favoritePosition: result.user.favorite_position,
-          favoriteElement: result.user.favorite_element,
-          favoriteTeam: result.user.favourite_team
-        }));
+        if (result.user) {
+          setProfile(prev => ({
+            ...prev,
+            username: result.user.username || prev.username,
+            email: result.user.email || prev.email,
+            coachLevel: result.user.coach_level || prev.coachLevel,
+            favoritePosition: result.user.favorite_position || prev.favoritePosition,
+            favoriteElement: result.user.favorite_element || prev.favoriteElement,
+            favoriteTeam: result.user.favourite_team || prev.favoriteTeam
+          }));
+        }
         toast.success('Profile updated successfully!');
-        setEditing(false);
+        setEditing(false); // Exit editing mode
       } else {
-        toast.error(result.error || 'Failed to update profile');
+        console.error('Profile update failed:', result);
+        toast.error(result?.error || 'Failed to update profile');
+        // Still exit editing mode even if update failed
+        setEditing(false);
       }
     } catch (error) {
       console.error('Profile update error:', error);
       toast.error('An error occurred while updating profile');
+      // Still exit editing mode even if there was an error
+      setEditing(false);
     } finally {
       setLoading(false);
     }
