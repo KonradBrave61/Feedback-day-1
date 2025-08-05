@@ -357,10 +357,19 @@ class SaveSlotsTeamLoadingTest(unittest.TestCase):
         
         # Step 2: Create multiple teams
         team_ids = []
+        
+        # Get formations for team creation
+        formations_response = requests.get(f"{API_URL}/teams/formations/")
+        if formations_response.status_code == 200:
+            formations = formations_response.json()
+            formation_id = formations[0]["id"] if formations else "1"
+        else:
+            formation_id = "1"  # Fallback
+        
         for i in range(3):
             team_data = {
                 "name": f"Workflow Test Team {i+1}",
-                "formation": "1",  # Assuming formation ID 1 exists
+                "formation": formation_id,
                 "players": [],
                 "bench_players": [],
                 "tactics": [],
