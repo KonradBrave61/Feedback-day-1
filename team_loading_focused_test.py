@@ -64,6 +64,7 @@ class TeamLoadingAPITest:
         self.formation_id = None
         self.tactics_data = []
         self.tactic_ids = []
+        self.coach_data = None
         self.coach_id = None
     
     def setup_authentication(self):
