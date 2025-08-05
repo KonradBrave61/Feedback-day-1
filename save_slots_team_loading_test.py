@@ -141,7 +141,7 @@ class SaveSlotsTeamLoadingTest(unittest.TestCase):
         if not formations or not tactics or not coaches:
             self.skipTest("No formations, tactics, or coaches available")
         
-        # Create comprehensive team data
+        # Create comprehensive team data with correct structure (full objects, not IDs)
         team_data = {
             "name": f"Save Slot Test Team {generate_random_string()}",
             "formation": formations[0]["id"],
@@ -187,8 +187,8 @@ class SaveSlotsTeamLoadingTest(unittest.TestCase):
                     ]
                 }
             ],
-            "tactics": [tactics[0]["id"], tactics[1]["id"] if len(tactics) > 1 else tactics[0]["id"]],
-            "coach": coaches[0]["id"],
+            "tactics": [tactics[0], tactics[1] if len(tactics) > 1 else tactics[0]],  # Full objects
+            "coach": coaches[0],  # Full object
             "description": "Comprehensive test team with all data types",
             "is_public": True,
             "tags": ["test", "saveslots", "comprehensive"]
