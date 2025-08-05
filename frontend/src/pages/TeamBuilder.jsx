@@ -424,76 +424,116 @@ const TeamBuilder = () => {
 
   const handleLoadTeam = (teamData) => {
     try {
+      console.log('Loading team data:', teamData);
+      
       // Clear current team
       setTeamPlayers({});
       setBenchPlayers({});
+      setSelectedTactics([]);
+      setSelectedCoach(null);
+      setSelectedFormation(null);
       
       // Load formation if available
       if (teamData.formation) {
-        const formation = mockFormations.find(f => f.name === teamData.formation);
+        const formation = mockFormations.find(f => f.id === teamData.formation || f.name === teamData.formation);
         if (formation) {
           setSelectedFormation(formation);
+          console.log('Loaded formation:', formation.name);
         }
       }
       
-      // Load players
-      if (teamData.players && Array.isArray(teamData.players)) {
+      // Load players from the correct field (could be 'players' or 'team_data')
+      const playersArray = teamData.players || teamData.team_data?.players || [];
+      if (playersArray && Array.isArray(playersArray)) {
         const newTeamPlayers = {};
-        teamData.players.forEach((playerData, index) => {
-          const positionId = `position_${index + 1}`;
-          if (playerData) {
+        playersArray.forEach((playerData) => {
+          if (playerData && playerData.character_id) {
+            // Use the position_id from the data or generate one
+            const positionId = playerData.position_id || `position_${Object.keys(newTeamPlayers).length + 1}`;
+            
             // Find the base character data
-            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id || c.name === playerData.name);
+            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
             if (baseCharacter) {
               newTeamPlayers[positionId] = {
                 ...baseCharacter,
-                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
-                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
-                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
-                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
+                userLevel: playerData.user_level || baseCharacter.level,
+                userRarity: playerData.user_rarity || baseCharacter.rarity,
+                userEquipment: playerData.user_equipment || {},
+                userHissatsu: playerData.user_hissatsu || []
               };
             }
           }
         });
         setTeamPlayers(newTeamPlayers);
+        console.log('Loaded players:', Object.keys(newTeamPlayers).length);
       }
       
-      // Load bench players
-      if (teamData.bench && Array.isArray(teamData.bench)) {
+      // Load bench players (could be 'bench' or 'bench_players' or inside team_data)
+      const benchArray = teamData.bench || teamData.bench_players || teamData.team_data?.bench || [];
+      if (benchArray && Array.isArray(benchArray)) {
         const newBenchPlayers = {};
-        teamData.bench.forEach((playerData, index) => {
-          const slotId = `bench_${index + 1}`;
-          if (playerData) {
-            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id || c.name === playerData.name);
+        benchArray.forEach((playerData, index) => {
+          if (playerData && playerData.character_id) {
+            const slotId = `bench_${index + 1}`;
+            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
             if (baseCharacter) {
               newBenchPlayers[slotId] = {
                 ...baseCharacter,
-                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
-                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
-                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
-                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
+                userLevel: playerData.user_level || baseCharacter.level,
+                userRarity: playerData.user_rarity || baseCharacter.rarity,
+                userEquipment: playerData.user_equipment || {},
+                userHissatsu: playerData.user_hissatsu || []
               };
             }
           }
         });
         setBenchPlayers(newBenchPlayers);
+        console.log('Loaded bench players:', Object.keys(newBenchPlayers).length);
       }
       
-      // Load tactics
-      if (teamData.tactics) {
-        const tactic = mockTactics.find(t => t.name === teamData.tactics || t.name === teamData.tactics?.name);
-        if (tactic) {
-          setSelectedTactics(tactic);
+      // Load tactics (could be array of tactics or inside team_data)
+      const tacticsArray = teamData.tactics || teamData.team_data?.tactics || [];
+      if (tacticsArray && Array.isArray(tacticsArray) && tacticsArray.length > 0) {
+        // Load tactics into selectedTactics array
+        const loadedTactics = [];
+        tacticsArray.forEach(tacticData => {
+          // Find matching tactic from mockTactics
+          const tactic = mockTactics.find(t => 
+            t.id === tacticData.id || 
+            t.name === tacticData.name || 
+            t.name === tacticData
+          );
+          if (tactic) {
+            loadedTactics.push(tactic);
+          }
+        });
+        setSelectedTactics(loadedTactics);
+        console.log('Loaded tactics:', loadedTactics.map(t => t.name).join(', '));
+        
+        // Also update the tactics presets
+        if (loadedTactics.length > 0) {
+          const updatedPresets = { ...tacticsPresets };
+          updatedPresets[currentTacticsPreset].tactics = loadedTactics;
+          setTacticsPresets(updatedPresets);
         }
       }
       
-      // Load coach
-      if (teamData.coach) {
-        const coach = mockCoaches.find(c => c.name === teamData.coach || c.name === teamData.coach?.name);
+      // Load coach (could be coach object or inside team_data)
+      const coachData = teamData.coach || teamData.team_data?.coach;
+      if (coachData) {
+        // Find matching coach from mockCoaches
+        const coach = mockCoaches.find(c => 
+          c.id === coachData.id || 
+          c.name === coachData.name ||
+          c.name === coachData
+        );
         if (coach) {
           setSelectedCoach(coach);
+          console.log('Loaded coach:', coach.name);
         }
       }
+      
+      toast.success('Team loaded successfully!');
       
     } catch (error) {
       console.error('Error loading team:', error);
