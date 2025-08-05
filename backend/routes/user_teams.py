@@ -524,8 +524,8 @@ async def get_public_team_details(team_id: str):
     """Get public team information without authentication (for sharing URLs)"""
     db = await get_database()
     
-    team = await db.teams.find_one({"id": team_id, "is_public": True})
-    if not team:
+    team_doc = await db.teams.find_one({"id": team_id, "is_public": True})
+    if not team_doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Team not found or not public"
@@ -537,17 +537,19 @@ async def get_public_team_details(team_id: str):
         {"$inc": {"views": 1}}
     )
     
-    # Get user information
-    user = await db.users.find_one({"id": team["user_id"]})
-    if user:
-        team["username"] = user["username"]
-        team["user_avatar"] = user.get("profile_picture", "")
+    # Get updated team document
+    team_doc = await db.teams.find_one({"id": team_id})
     
-    return {
-        "team": team,
-        "is_public": True,
-        "sharing_url": f"/team/{team_id}"
-    }
+    # Get user information
+    user = await db.users.find_one({"id": team_doc["user_id"]})
+    if user:
+        team_doc["username"] = user["username"]
+        team_doc["user_avatar"] = user.get("profile_picture", "")
+    
+    # Convert to Team model to ensure proper serialization
+    team = Team(**team_doc)
+    
+    return team
 
 @router.post("/teams/{team_id}/save-to-slot")
 async def save_team_to_slot(
