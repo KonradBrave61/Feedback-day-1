@@ -418,18 +418,47 @@ const ProfilePage = () => {
                 {teams.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {teams.map((team) => (
-                      <div key={team.id} className="p-4 rounded-lg border" style={{ 
+                      <div key={team.id} className="p-4 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity" style={{ 
                         backgroundColor: logoColors.blackAlpha(0.3),
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       }}>
-                        <h3 className="font-bold text-white mb-1">{team.name}</h3>
-                        <p className="text-sm text-gray-300 mb-2">{team.formation_name}</p>
+                        <div className="flex justify-between items-start mb-2">
+                          <div 
+                            className="flex-1"
+                            onClick={() => handleTeamClick(team)}
+                          >
+                            <h3 className="font-bold text-white mb-1 hover:underline">{team.name}</h3>
+                            <p className="text-sm text-gray-300 mb-2">{team.formation_name}</p>
+                          </div>
+                          <Button
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuickPrivacyToggle(team);
+                            }}
+                            className="ml-2 p-2 hover:opacity-80"
+                            style={{ 
+                              backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
+                              color: logoColors.white
+                            }}
+                          >
+                            {team.is_public ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                          </Button>
+                        </div>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Heart className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
-                            <span className="text-xs">{team.likes || 0}</span>
-                            <MessageSquare className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
-                            <span className="text-xs">{team.comments || 0}</span>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1">
+                              <Heart className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                              <span className="text-xs text-gray-300">{team.likes || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MessageSquare className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                              <span className="text-xs text-gray-300">{team.comments || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-4 w-4" style={{ color: logoColors.secondaryBlue }} />
+                              <span className="text-xs text-gray-300">{team.views || 0}</span>
+                            </div>
                           </div>
                           <Badge className="text-xs" style={{ 
                             backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.2) : logoColors.blackAlpha(0.5),
@@ -437,6 +466,20 @@ const ProfilePage = () => {
                           }}>
                             {team.is_public ? 'Public' : 'Private'}
                           </Badge>
+                        </div>
+                        <div className="mt-3 text-center">
+                          <Button
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTeamClick(team);
+                            }}
+                            className="text-white hover:opacity-80 text-xs"
+                            style={{ backgroundColor: logoColors.primaryBlueAlpha(0.4) }}
+                          >
+                            <Eye className="h-3 w-3 mr-1" />
+                            View Details
+                          </Button>
                         </div>
                       </div>
                     ))}
