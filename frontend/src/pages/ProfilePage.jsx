@@ -109,6 +109,16 @@ const ProfilePage = () => {
       
       const result = await updateProfile(profilePayload);
       if (result.success) {
+        // Update the local profile state with the saved data
+        setProfile(prev => ({
+          ...prev,
+          username: result.user.username,
+          email: result.user.email,
+          coachLevel: result.user.coach_level,
+          favoritePosition: result.user.favorite_position,
+          favoriteElement: result.user.favorite_element,
+          favoriteTeam: result.user.favourite_team
+        }));
         toast.success('Profile updated successfully!');
         setEditing(false);
       } else {
