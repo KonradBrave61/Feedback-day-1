@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 import { logoColors, componentColors } from '../styles/colors';
 
 const ProfilePage = () => {
-  const { user, updateProfile, loadTeams, loadUserFollowData } = useAuth();
+  const { user, updateProfile, loadTeams, loadUserFollowData, updateTeam } = useAuth();
   const navigate = useNavigate();
   
   const [editing, setEditing] = useState(false);
@@ -59,6 +59,8 @@ const ProfilePage = () => {
     followingCount: 0
   });
   const [loading, setLoading] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [showTeamPreview, setShowTeamPreview] = useState(false);
 
   const positions = ['FW', 'MF', 'DF', 'GK'];
   const elements = ['Fire', 'Earth', 'Wind', 'Wood', 'Void'];
