@@ -134,11 +134,11 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
     
     return (
-      <div className="w-full max-w-full">
-        <div className="relative w-full rounded-lg overflow-hidden" 
+      <div className="w-full flex justify-center">
+        <div className="relative rounded-lg overflow-hidden" 
              style={{ 
+               width: '400px',
                height: '300px',
-               maxWidth: '100%',
                background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
                backgroundImage: `
                  radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),
@@ -173,54 +173,55 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <div className="absolute bottom-0 right-0 w-3 h-3 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
           </div>
 
-        {/* Players */}
-        {formation.positions.map((position) => {
-          const player = teamDetails.players.find(p => p.position_id === position.id);
-          
-          return (
-            <div
-              key={position.id}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-              style={{
-                left: `${position.x}%`,
-                top: `${position.y}%`
-              }}
-            >
-              {player ? (
-                <div className="flex flex-col items-center">
-                  {/* Player avatar */}
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
-                      {player.image ? (
-                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="text-white text-xs font-bold">
-                          {getPlayerName(player).substring(0, 2)}
-                        </div>
-                      )}
+          {/* Players */}
+          {formation.positions.map((position) => {
+            const player = teamDetails.players.find(p => p.position_id === position.id);
+            
+            return (
+              <div
+                key={position.id}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                style={{
+                  left: `${position.x}%`,
+                  top: `${position.y}%`
+                }}
+              >
+                {player ? (
+                  <div className="flex flex-col items-center">
+                    {/* Player avatar */}
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                        {player.image ? (
+                          <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="text-white text-xs font-bold">
+                            {getPlayerName(player).substring(0, 2)}
+                          </div>
+                        )}
+                      </div>
+                      {/* Position badge */}
+                      <div className="absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded text-white font-bold"
+                           style={{ backgroundColor: getPositionStyle(position.position).backgroundColor }}>
+                        {position.position}
+                      </div>
                     </div>
-                    {/* Position badge */}
-                    <div className="absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded text-white font-bold"
-                         style={{ backgroundColor: getPositionStyle(position.position).backgroundColor }}>
-                      {position.position}
+                    
+                    {/* Player name */}
+                    <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
+                      {getPlayerName(player)}
                     </div>
                   </div>
-                  
-                  {/* Player name */}
-                  <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
-                    {getPlayerName(player)}
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
+                      <div className="text-white/50 text-xs">{position.position}</div>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
-                    <div className="text-white/50 text-xs">{position.position}</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
