@@ -28,12 +28,12 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
 
   const getElementBackgroundColor = (element) => {
     switch (element) {
-      case 'Fire': return 'bg-gradient-to-br from-pink-500/30 to-rose-600/30 border-pink-400/40';
-      case 'Earth': return 'bg-gradient-to-br from-amber-500/30 to-yellow-600/30 border-amber-400/40';
-      case 'Wind': return `bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-[${logoColors.lightBlue}]/40`;
-      case 'Wood': return 'bg-gradient-to-br from-emerald-500/30 to-green-600/30 border-emerald-400/40';
-      case 'Lightning': return `bg-gradient-to-br from-[${logoColors.primaryBlue}]/30 to-[${logoColors.secondaryBlue}]/30 border-[${logoColors.primaryBlue}]/40`;
-      default: return 'bg-gradient-to-br from-slate-500/30 to-gray-600/30 border-slate-400/40';
+      case 'Fire': return 'bg-gradient-to-br from-pink-500/30 to-rose-600/30 border-white/40';
+      case 'Earth': return 'bg-gradient-to-br from-amber-500/30 to-yellow-600/30 border-white/40';
+      case 'Wind': return `bg-gradient-to-br from-sky-400/30 to-blue-600/30 border-white/40`;
+      case 'Wood': return 'bg-gradient-to-br from-emerald-500/30 to-green-600/30 border-white/40';
+      case 'Lightning': return `bg-gradient-to-br from-[${logoColors.primaryBlue}]/30 to-[${logoColors.secondaryBlue}]/30 border-white/40`;
+      default: return 'bg-gradient-to-br from-slate-500/30 to-gray-600/30 border-white/40';
     }
   };
 
