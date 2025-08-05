@@ -150,7 +150,7 @@ class BackendHealthChecker:
             response = requests.post(f"{API_BASE}/teams", json=test_team, headers=headers, timeout=10)
             if response.status_code == 200:
                 team_data = response.json()
-                team_id = team_data.get("team_id")
+                team_id = team_data.get("id")  # Changed from team_id to id
                 self.log_result("Team Creation", True, f"Team created with ID: {team_id}")
                 
                 # Test team update (privacy toggle)
