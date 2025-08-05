@@ -194,7 +194,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                         <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="text-white text-xs font-bold">
-                          {player.name?.substring(0, 2) || '??'}
+                          {getPlayerName(player).substring(0, 2)}
                         </div>
                       )}
                     </div>
@@ -207,7 +207,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   
                   {/* Player name */}
                   <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
-                    {player.name || 'Player'}
+                    {getPlayerName(player)}
                   </div>
                 </div>
               ) : (
