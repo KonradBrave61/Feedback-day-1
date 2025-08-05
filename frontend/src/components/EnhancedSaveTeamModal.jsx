@@ -317,16 +317,6 @@ const SaveTeamModal = ({
                   <p className="text-gray-400 text-sm">Select a slot to save your team or create a new one</p>
                 </div>
 
-                {/* Create New Slot Button */}
-                <Button
-                  onClick={handleCreateNewSlot}
-                  className="w-full text-white hover:opacity-80"
-                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create New Save Slot
-                </Button>
-
                 {/* Existing Slots */}
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {saveSlots.map((slot) => (
