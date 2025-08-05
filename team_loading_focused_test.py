@@ -117,10 +117,12 @@ class TeamLoadingAPITest:
         response = requests.get(f"{API_URL}/teams/tactics/")
         if response.status_code == 200:
             tactics = response.json()
+            self.tactics_data = tactics[:2]  # Store full tactic objects
             self.tactic_ids = [tactic["id"] for tactic in tactics[:2]]
             print(f"✅ Found {len(tactics)} tactics, using first 2")
         else:
             print(f"❌ Failed to get tactics: {response.status_code}")
+            self.tactics_data = []
         
         # Get coaches
         response = requests.get(f"{API_URL}/teams/coaches/")
