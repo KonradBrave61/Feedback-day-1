@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users, Shield, Zap, Target, Star, Trophy } from 'lucide-react';
+import { X, Users, Shield, Zap, Target, Star, Trophy, Shirt, Award, TrendingUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
+import { mockFormations } from '../data/mock';
 
 const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   const { loadTeamDetails } = useAuth();
