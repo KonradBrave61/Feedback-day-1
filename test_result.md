@@ -131,24 +131,30 @@ CONTINUATION REQUEST:
 On the profile page after user log in he need to be able to access the team and also to change the team from public to private and from private to public in the profile page lets player be able to click on team and then a window with this team open like q preview . In the Team Builder add option to load a team and make it that the user can pick from his saved teams and also give an idea how user will be able to load someones team 
 
 LATEST CONTINUATION REQUEST:
-Look pic 1 after saving one team the normal format with 5 save slots disappear and the user needs to create anew one it should not work like this at all delete this type of creating slots there is no need for it 
-Support have buttons on buttons there are two border yellow and white delete the white one , 
-In the Profile Page add to the team preview a button that would move the user to the team builder with all the things in the current team 
+Quick action team builder the clear team button background should be transparent or some different color for team to see or maybe text be black , 
+Apply Team have bugged number of players it should count when user is adding a character 
+Profile Page Team preview the stats of players doesnt match their real stats and make that the techniques shows instead of stats and next to rarity add the element of that character also there is a problem with bench that players from the bench doesnt save and load . 
 
 ✅ CONTINUATION REQUEST FIXES COMPLETED:
-1. **Fixed Save Team Slots Interface**: Modified EnhancedSaveTeamModal to always show the 5 default save slots with "Create New Save Slot" button positioned below them (not above). Eliminated the workflow where users were forced to create new slots after saving one team. The interface now maintains consistency showing all 5 slots + create button at the bottom ✅
+1. **Fixed Clear Team Button Styling**: Updated Clear Team button in both TeamBuilder.jsx and PlayerSearch.jsx to have transparent background with gray borders and black text that transitions to white on hover (bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-black hover:text-white) instead of the previous red styling ✅
 
-2. **Fixed Support Page Button Borders**: Removed white border styling from all support page tab buttons while maintaining yellow/orange color scheme. Updated all TabsTrigger components to remove data-[state=active]:!border-white classes and --active-border styles to eliminate double borders ✅
+2. **Fixed Apply Team Player Counting Bug**: Added useEffect hook in PlayerSearch.jsx to sync builtTeam state with currentTeamPlayers and currentBenchPlayers when in team building mode. The Apply Team button now correctly shows the count of players as they are added through the normal team builder interface ✅
 
-3. **Enhanced Profile Page Team Preview**: Added "Edit in Builder" button alongside existing "View Details" button in both Profile Page team cards and TeamPreviewModal. Implemented team loading functionality that stores team data in localStorage and navigates to team builder where all team data (players, bench, tactics, formation, coach, equipment, techniques) is properly loaded via handleLoadTeamFromProfile function ✅
+3. **Enhanced Profile Page Team Preview**: 
+   - Replaced player stats display with techniques display in TeamPreviewModal.jsx ✅
+   - Added element badge next to rarity badge for each player showing their elemental affinity (Fire, Earth, Wind, Wood, Lightning) ✅
+   - Enhanced techniques display with proper styling and fallback text for players without techniques ✅
+
+4. **Fixed Bench Players Save/Load Issues**: Fixed bench player loading logic in TeamBuilder.jsx to properly use original slot_id when available, ensuring bench players maintain their proper slot assignments during save and load operations ✅
 
 TECHNICAL IMPLEMENTATION DETAILS:
-- EnhancedSaveTeamModal: Moved "Create New Save Slot" button below the existing 5 slots display
-- SupportPage: Removed all white border styling from TabsTrigger components 
-- ProfilePage: Added handleEditTeamInBuilder function and "Edit in Builder" button with proper styling
-- TeamPreviewModal: Added handleEditInBuilder function and button in modal header
-- TeamBuilder: Added useEffect to check localStorage for loadTeamData, implemented handleLoadTeamFromProfile function for complete team data restoration
-- Backend APIs confirmed working: GET /api/save-slots (5 slots structure), POST /api/teams/{id}/save-to-slot, GET /api/teams/{id}/details with comprehensive data loading ✅
+- TeamBuilder Clear Team Button: Changed from red theme to transparent/gray theme for better visibility
+- PlayerSearch Clear Team Button: Applied consistent styling across components  
+- PlayerSearch useEffect: Added synchronization of builtTeam.totalPlayers with actual team state
+- TeamPreviewModal: Replaced calculatePlayerStats display with user_hissatsu/userHissatsu techniques display
+- TeamPreviewModal: Added element badge with blue styling next to existing rarity badge
+- TeamBuilder bench loading: Enhanced slot_id handling using playerData.slot_id || fallback generation
+- All changes maintain existing functionality while fixing the reported issues ✅
 
 ✅ CONTINUATION REQUEST FIXES COMPLETED:
 1. **Fixed Clear All Button Runtime Error**: Resolved "Cannot read properties of null (reading 'id')" error by adding null safety checks to selectedFormation references (selectedFormation?.id, selectedFormation?.name) and conditional rendering of FormationField component. Clear All button now resets to default formation instead of null to prevent errors ✅
