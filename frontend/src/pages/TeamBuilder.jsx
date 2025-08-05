@@ -159,9 +159,13 @@ const TeamBuilder = () => {
   };
 
   const handleEditPlayer = (player) => {
+    // Check if the player is on the bench
+    const isPlayerOnBench = Object.values(benchPlayers).some(benchPlayer => benchPlayer && benchPlayer.id === player.id);
+    
     // Set the player for editing
     setSelectedCharacterForModal(player);
     setEditingPlayer(player);
+    setIsBenchSelection(isPlayerOnBench); // Set bench selection flag if player is on bench
     setShowCharacterModal(true);
   };
 
