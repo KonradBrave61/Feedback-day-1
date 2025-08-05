@@ -223,7 +223,7 @@ class BackendHealthChecker:
         if self.auth_token:
             headers = {"Authorization": f"Bearer {self.auth_token}"}
             try:
-                response = requests.get(f"{API_BASE}/teams/formations", headers=headers, timeout=10)
+                response = requests.get(f"{API_BASE}/teams/formations/", headers=headers, timeout=10)
                 if response.status_code == 200:
                     formations = response.json()
                     self.log_result("Get Formations", True, f"Retrieved {len(formations)} formations")
