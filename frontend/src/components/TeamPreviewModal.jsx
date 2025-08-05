@@ -107,25 +107,35 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
              background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
              backgroundImage: `
                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),
-               linear-gradient(90deg, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 51%)
+               linear-gradient(0deg, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 51%)
              `
            }}>
         
         {/* Field markings */}
         <div className="absolute inset-0">
-          {/* Center line */}
-          <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-white/40 transform -translate-x-1/2"></div>
+          {/* Center line (horizontal) */}
+          <div className="absolute left-0 right-0 top-1/2 h-1 bg-white/40 transform -translate-y-1/2"></div>
           
           {/* Center circle */}
           <div className="absolute top-1/2 left-1/2 w-20 h-20 border-2 border-white/40 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
           
-          {/* Penalty areas */}
-          <div className="absolute top-8 left-0 w-16 h-32 border-2 border-white/40 border-l-0"></div>
-          <div className="absolute bottom-8 right-0 w-16 h-32 border-2 border-white/40 border-r-0"></div>
+          {/* Penalty areas - properly positioned for goals at top and bottom */}
+          <div className="absolute top-0 left-1/2 w-32 h-16 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-1/2 w-32 h-16 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
           
-          {/* Goal areas */}
-          <div className="absolute top-16 left-0 w-8 h-16 border-2 border-white/40 border-l-0"></div>
-          <div className="absolute bottom-16 right-0 w-8 h-16 border-2 border-white/40 border-r-0"></div>
+          {/* Goal areas - smaller boxes inside penalty areas */}
+          <div className="absolute top-0 left-1/2 w-16 h-8 border-2 border-white/40 border-t-0 transform -translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-1/2 w-16 h-8 border-2 border-white/40 border-b-0 transform -translate-x-1/2"></div>
+          
+          {/* Goals - visible goal posts */}
+          <div className="absolute top-0 left-1/2 w-12 h-1 bg-white/60 transform -translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-1/2 w-12 h-1 bg-white/60 transform -translate-x-1/2"></div>
+          
+          {/* Corner arcs */}
+          <div className="absolute top-0 left-0 w-4 h-4 border-b-2 border-r-2 border-white/40 rounded-br-lg"></div>
+          <div className="absolute top-0 right-0 w-4 h-4 border-b-2 border-l-2 border-white/40 rounded-bl-lg"></div>
+          <div className="absolute bottom-0 left-0 w-4 h-4 border-t-2 border-r-2 border-white/40 rounded-tr-lg"></div>
+          <div className="absolute bottom-0 right-0 w-4 h-4 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
         </div>
 
         {/* Players */}
