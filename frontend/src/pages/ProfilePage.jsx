@@ -503,6 +503,19 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+
+      {/* Team Preview Modal */}
+      {showTeamPreview && selectedTeam && (
+        <TeamPreviewModal
+          isOpen={showTeamPreview}
+          onClose={() => {
+            setShowTeamPreview(false);
+            setSelectedTeam(null);
+          }}
+          team={selectedTeam}
+          onPrivacyToggle={handleTeamPrivacyToggle}
+        />
+      )}
     </div>
   );
 };
