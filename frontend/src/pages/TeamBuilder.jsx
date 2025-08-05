@@ -8,6 +8,7 @@ import TacticsSelector from '../components/TacticsSelector';
 import TacticVisualizationModal from '../components/TacticVisualizationModal';
 import CoachSelector from '../components/CoachSelector';
 import SaveTeamModal from '../components/EnhancedSaveTeamModal';
+import LoadTeamModal from '../components/LoadTeamModal';
 import CharacterModal from '../components/CharacterModal';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
