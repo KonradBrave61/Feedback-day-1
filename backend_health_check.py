@@ -139,7 +139,7 @@ class BackendHealthChecker:
         
         # Test team creation
         test_team = {
-            "team_name": f"Health Check Team {datetime.now().strftime('%H%M%S')}",
+            "name": f"Health Check Team {datetime.now().strftime('%H%M%S')}",
             "formation": "4-3-3",
             "description": "Test team for health check",
             "is_public": False,
