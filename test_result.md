@@ -540,17 +540,41 @@ On the profile page after user log in he need to be able to access the team and 
         agent: "main"
         comment: "Enhanced radar chart emotes for better visibility and consistency. Updated stat icons: kick=⚽, control=🎯, technique=⭐, intelligence=🧠, pressure=🛡️, agility=⚡, physical=💪. Added background circles for better contrast, increased icon size to 14px, added text shadow, and improved overall visibility with better stroke widths and colors."
 
-  - task: "Support Page Dropdown Styling Fixes"
+  - task: "Profile Page Team Management Enhancements"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/SupportPage.jsx"
+    file: "/app/frontend/src/pages/ProfilePage.jsx, /app/frontend/src/components/TeamPreviewModal.jsx"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Fixed dropdown styling issues in SupportPage where text became unreadable after clicking. Enhanced SelectTrigger with focus states, added explicit text-white className to SelectValue, improved SelectContent background opacity to 0.95, added proper border styling, and enhanced SelectItem focus/hover states with focus:bg-blue-700 and focus:text-white for better readability."
+        comment: "Added comprehensive team management features to Profile page: 1) Enhanced team cards with clickable functionality and privacy toggle buttons 2) Created TeamPreviewModal with formation display, player details, bench, equipment, techniques 3) Added real-time privacy toggle (public↔private) with proper UI feedback 4) Team preview shows formation field with players, bench slots, detailed player information including equipment and techniques 5) Added visual indicators for team stats (likes, views, comments) and privacy status 6) Integrated with existing updateTeam API for privacy changes"
+
+  - task: "Team Builder Load Functionality" 
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/TeamBuilder.jsx, /app/frontend/src/components/LoadTeamModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented comprehensive Load Team functionality in Team Builder: 1) Created LoadTeamModal with 3 tabs: 'My Saved Teams', 'Community Teams', 'Import from URL' 2) Added Load Team button in Team Builder UI 3) Integration with loadSaveSlots API to show saved teams with preview 4) Integration with loadCommunityTeams API for browsing public teams 5) Added handleLoadTeam function to load team data and overwrite current team 6) Full support for loading formation, players, bench, equipment, techniques, tactics, and coach 7) Proper error handling and user feedback with toast notifications"
+
+  - task: "Team Sharing URL System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py, /app/frontend/src/contexts/AuthContext.jsx"
+    stuck_count: 0
+    priority: "high"  
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added comprehensive team sharing system: 1) Backend: Added GET /api/teams/{team_id}/public endpoint for unauthenticated public team access 2) Frontend: Added loadPublicTeamDetails function in AuthContext 3) LoadTeamModal 'Import from URL' tab supports both full URLs and team IDs 4) URL parsing extracts team ID from sharing URLs like '/team/{id}' 5) Fallback system: tries public endpoint first, then authenticated endpoint 6) Copy team URL functionality in community teams 7) Team sharing URLs increment view count and provide public access to team details"
 
 ## metadata:
   created_by: "main_agent"
