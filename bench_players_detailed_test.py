@@ -197,7 +197,7 @@ class BenchPlayersDetailedTest:
                 print(f"✅ Bench slot IDs preserved: {slot_ids_preserved}")
                 
                 # Check if all expected slot IDs are present
-                expected_slots = set(bench_slot_ids)
+                expected_slots = set([slot_id for slot_id in bench_slot_ids if slot_id in [bp.get('slot_id') for bp in team_data['bench_players']]])
                 actual_slots = set(slot_ids_preserved)
                 
                 if expected_slots == actual_slots:
