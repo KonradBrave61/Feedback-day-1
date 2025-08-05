@@ -102,7 +102,12 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
         teamId = teamUrl.split('/team/')[1].split(/[?#]/)[0];
       }
 
-      const result = await loadTeamDetails(teamId);
+      // Try loading as public team first (for sharing URLs), then fall back to authenticated
+      let result = await loadPublicTeamDetails(teamId);
+      if (!result.success && user) {
+        result = await loadTeamDetails(teamId);
+      }
+      
       if (result.success) {
         onLoadTeam(result.team);
         toast.success(`Loaded team from URL: ${result.team.name}`);
