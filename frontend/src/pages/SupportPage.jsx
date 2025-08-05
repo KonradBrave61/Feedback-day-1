@@ -377,18 +377,21 @@ const SupportPage = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Category</label>
                         <Select value={bugFormData.category} onValueChange={(value) => setBugFormData({ ...bugFormData, category: value })}>
-                          <SelectTrigger className="text-white border"
+                          <SelectTrigger className="text-white border focus:ring-2 focus:ring-blue-500"
                                         style={{ 
                                           backgroundColor: logoColors.blackAlpha(0.3),
                                           borderColor: logoColors.primaryBlueAlpha(0.3)
                                         }}>
-                            <SelectValue />
+                            <SelectValue className="text-white" />
                           </SelectTrigger>
-                          <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
-                            <SelectItem value="Gameplay Issues" className="text-white hover:bg-blue-800">Gameplay Issues</SelectItem>
-                            <SelectItem value="UI/UX Problems" className="text-white hover:bg-blue-800">UI/UX Problems</SelectItem>
-                            <SelectItem value="Performance" className="text-white hover:bg-blue-800">Performance</SelectItem>
-                            <SelectItem value="Data Loss" className="text-white hover:bg-blue-800">Data Loss</SelectItem>
+                          <SelectContent style={{ 
+                            backgroundColor: logoColors.blackAlpha(0.95),
+                            border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`
+                          }}>
+                            <SelectItem value="Gameplay Issues" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Gameplay Issues</SelectItem>
+                            <SelectItem value="UI/UX Problems" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">UI/UX Problems</SelectItem>
+                            <SelectItem value="Performance" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Performance</SelectItem>
+                            <SelectItem value="Data Loss" className="text-white hover:bg-blue-800 focus:bg-blue-700 focus:text-white">Data Loss</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
