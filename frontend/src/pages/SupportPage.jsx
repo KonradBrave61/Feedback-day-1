@@ -120,19 +120,54 @@ const SupportPage = () => {
                         backgroundColor: logoColors.blackAlpha(0.5),
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       }}>
-              <TabsTrigger value="overview" className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white">
+              <TabsTrigger 
+                value="overview" 
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                style={{
+                  '--active-bg': 'transparent',
+                  '--active-border': '1px solid white'
+                }}
+              >
                 Support Overview
               </TabsTrigger>
-              <TabsTrigger value="bug" className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white">
+              <TabsTrigger 
+                value="bug" 
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                style={{
+                  '--active-bg': 'transparent',
+                  '--active-border': '1px solid white'
+                }}
+              >
                 Report Bug
               </TabsTrigger>
-              <TabsTrigger value="account" className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white">
+              <TabsTrigger 
+                value="account" 
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                style={{
+                  '--active-bg': 'transparent',
+                  '--active-border': '1px solid white'
+                }}
+              >
                 Account Issues
               </TabsTrigger>
-              <TabsTrigger value="technical" className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white">
+              <TabsTrigger 
+                value="technical" 
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                style={{
+                  '--active-bg': 'transparent',
+                  '--active-border': '1px solid white'
+                }}
+              >
                 Technical Problems
               </TabsTrigger>
-              <TabsTrigger value="contact" className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white">
+              <TabsTrigger 
+                value="contact" 
+                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent data-[state=active]:!border data-[state=active]:!border-white"
+                style={{
+                  '--active-bg': 'transparent',
+                  '--active-border': '1px solid white'
+                }}
+              >
                 Contact Support
               </TabsTrigger>
             </TabsList>
