@@ -86,6 +86,18 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     }
   };
 
+  const handleEditInBuilder = () => {
+    // Store team data in localStorage for team builder to pick up
+    localStorage.setItem('loadTeamData', JSON.stringify({
+      teamId: team.id,
+      loadOnOpen: true
+    }));
+    
+    // Close modal and navigate to team builder
+    onClose();
+    navigate('/team-builder');
+  };
+
   const getPositionStyle = (position) => {
     const positionColors = {
       'GK': { backgroundColor: logoColors.primaryYellow, color: logoColors.black },
