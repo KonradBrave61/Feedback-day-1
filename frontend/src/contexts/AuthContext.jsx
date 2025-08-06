@@ -315,11 +315,8 @@ export const AuthProvider = ({ children }) => {
 
   const likeTeam = async (teamId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/like`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/like`, {
+        method: 'POST'
       });
 
       if (!response.ok) {
@@ -330,6 +327,9 @@ export const AuthProvider = ({ children }) => {
       return { success: true, liked: result.liked };
     } catch (error) {
       console.error('Like action error:', error);
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
+      }
       return { success: false, error: error.message };
     }
   };
