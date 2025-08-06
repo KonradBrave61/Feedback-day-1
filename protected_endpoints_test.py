@@ -108,7 +108,7 @@ def create_test_user_and_team():
             "specialties": ["Motivation", "Strategy"]
         },
         "description": "Test team for protected endpoints testing",
-        "is_public": False,
+        "is_public": True,
         "tags": ["test", "protected"],
         "save_slot": 1,
         "save_slot_name": "Protected Test Slot"
