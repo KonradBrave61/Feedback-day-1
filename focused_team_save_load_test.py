@@ -160,28 +160,32 @@ class FocusedTeamSaveLoadTest:
                 self.log_test("Formation Data Retrieval", False, f"Failed to get formations: {form_response.status_code}")
                 return False
             
-            # Get tactics
+            # Get tactics (full objects, not just IDs)
             tactic_response = requests.get(f"{API_URL}/teams/tactics/")
             if tactic_response.status_code == 200:
                 tactics = tactic_response.json()
                 if tactics:
-                    self.tactic_ids = [tactic["id"] for tactic in tactics[:2]]
+                    self.tactic_objects = tactics[:2]  # Store full objects
                     self.log_test("Tactics Data Retrieval", True, f"Retrieved {len(tactics)} tactics")
                 else:
+                    self.tactic_objects = []
                     self.log_test("Tactics Data Retrieval", False, "No tactics available")
             else:
+                self.tactic_objects = []
                 self.log_test("Tactics Data Retrieval", False, f"Failed to get tactics: {tactic_response.status_code}")
             
-            # Get coaches
+            # Get coaches (full object, not just ID)
             coach_response = requests.get(f"{API_URL}/teams/coaches/")
             if coach_response.status_code == 200:
                 coaches = coach_response.json()
                 if coaches:
-                    self.coach_id = coaches[0]["id"]
+                    self.coach_object = coaches[0]  # Store full object
                     self.log_test("Coach Data Retrieval", True, f"Retrieved {len(coaches)} coaches")
                 else:
+                    self.coach_object = None
                     self.log_test("Coach Data Retrieval", False, "No coaches available")
             else:
+                self.coach_object = None
                 self.log_test("Coach Data Retrieval", False, f"Failed to get coaches: {coach_response.status_code}")
             
             # Create comprehensive team with realistic data
