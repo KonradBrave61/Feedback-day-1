@@ -600,9 +600,9 @@ const TeamBuilder = () => {
         console.log('Loaded players:', Object.keys(newTeamPlayers).length);
       }
       
-      // Load bench players (could be 'bench' or 'bench_players' or inside team_data)
-      const benchArray = teamData.bench || teamData.bench_players || teamData.team_data?.bench || teamData.team_data?.bench_players || [];
-      console.log('Bench array from server:', benchArray);
+      // Load bench players - API returns 'bench_players' array according to backend testing
+      const benchArray = teamData.bench_players || teamData.bench || teamData.team_data?.bench_players || teamData.team_data?.bench || [];
+      console.log('Bench array from server (looking for bench_players first):', benchArray);
       if (benchArray && Array.isArray(benchArray) && benchArray.length > 0) {
         const newBenchPlayers = {};
         benchArray.forEach((playerData, index) => {
@@ -622,7 +622,7 @@ const TeamBuilder = () => {
                 userEquipment: playerData.user_equipment || playerData.userEquipment || {},
                 userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
               };
-              console.log('Loaded bench player:', baseCharacter.name, 'in slot:', slotId);
+              console.log('Loaded bench player:', baseCharacter.name, 'in slot:', slotId, 'with techniques:', playerData.user_hissatsu?.length || 0);
             } else {
               console.warn('Base character not found for bench player:', playerData.character_id);
             }
@@ -631,9 +631,9 @@ const TeamBuilder = () => {
           }
         });
         setBenchPlayers(newBenchPlayers);
-        console.log('Loaded bench players:', Object.keys(newBenchPlayers).length);
+        console.log('Loaded bench players (bench_players field):', Object.keys(newBenchPlayers).length);
       } else {
-        console.log('No bench data found or invalid bench array');
+        console.log('No bench_players data found - checking other fields');
         // Clear existing bench if no bench data
         setBenchPlayers({});
       }
