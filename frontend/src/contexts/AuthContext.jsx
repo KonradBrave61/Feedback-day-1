@@ -256,19 +256,8 @@ export const AuthProvider = ({ children }) => {
 
   const loadTeams = async () => {
     try {
-      const token = localStorage.getItem('authToken') || user?.token;
-      if (!token) {
-        console.error('LoadTeams: No authentication token found');
-        handleAuthenticationError('No authentication token found');
-        return { success: false, error: 'Session expired. Please log in again.' };
-      }
-
       console.log('LoadTeams: Fetching user teams...');
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams`);
 
       if (!response.ok) {
         const errorData = await response.text();
@@ -277,10 +266,6 @@ export const AuthProvider = ({ children }) => {
           statusText: response.statusText,
           data: errorData
         });
-        if (response.status === 401 || response.status === 403) {
-          handleAuthenticationError(`Authentication failed: ${response.status} ${response.statusText}`);
-          return { success: false, error: 'Session expired. Please log in again.' };
-        }
         throw new Error(`Failed to load teams: ${response.status} ${response.statusText}`);
       }
 
@@ -290,8 +275,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('LoadTeams: Full error details:', error);
       // Check if this is an authentication error
-      if (error.message.includes('Authentication failed') || error.message.includes('Session expired')) {
-        return { success: false, error: error.message };
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
       }
       return { success: false, error: error.message };
     }
