@@ -319,61 +319,66 @@ const SaveTeamModal = ({
               <div className="space-y-4">
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-semibold text-white mb-2">Choose Save Slot</h3>
-                  <p className="text-gray-400 text-sm">Select a slot to save your team or create a new one</p>
+                  <p className="text-gray-400 text-sm">Select an existing slot to overwrite or create a new slot</p>
                 </div>
 
-                {/* Existing Slots */}
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {saveSlots.map((slot) => (
-                    <div
-                      key={slot.slot_number}
-                      className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                        selectedSlot?.slot_number === slot.slot_number
-                          ? 'border-blue-400'
-                          : 'border hover:opacity-80'
-                      }`}
-                      style={selectedSlot?.slot_number === slot.slot_number ? {
-                        borderColor: logoColors.primaryBlue,
-                        backgroundColor: logoColors.primaryBlueAlpha(0.2)
-                      } : {
-                        borderColor: logoColors.primaryBlueAlpha(0.3)
-                      }}
-                      onClick={() => handleSlotSelection(slot)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Archive className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
-                          <span className="text-white font-medium">{slot.slot_name}</span>
-                          {slot.is_occupied && (
-                            <Badge variant="outline" className="text-xs border"
-                                   style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                              Occupied
-                            </Badge>
+                {/* Display existing save slots if any */}
+                {saveSlots && saveSlots.length > 0 && (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    <h4 className="text-sm font-medium text-gray-300 mb-2">Existing Save Slots:</h4>
+                    {saveSlots.map((slot) => (
+                      <div
+                        key={slot.slot_number}
+                        className={`p-3 border rounded-lg cursor-pointer transition-all hover:opacity-80 ${
+                          selectedSlot?.slot_number === slot.slot_number
+                            ? 'border-blue-400 bg-blue-400/20'
+                            : 'border hover:border-gray-400'
+                        }`}
+                        style={selectedSlot?.slot_number === slot.slot_number ? {
+                          borderColor: logoColors.primaryBlue,
+                          backgroundColor: logoColors.primaryBlueAlpha(0.2)
+                        } : {
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
+                        onClick={() => handleSlotSelection(slot)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Archive className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                            <span className="text-white font-medium">{slot.slot_name || `Slot ${slot.slot_number}`}</span>
+                            {slot.is_occupied && (
+                              <Badge variant="outline" className="text-xs border text-yellow-400 border-yellow-400/50">
+                                Occupied
+                              </Badge>
+                            )}
+                          </div>
+                          {slot.is_occupied && slot.team_name && (
+                            <div className="text-xs text-gray-400 max-w-32 truncate">
+                              {slot.team_name}
+                            </div>
                           )}
                         </div>
-                        {slot.is_occupied && (
-                          <div className="text-xs text-gray-400">
-                            {slot.team_name}
-                          </div>
-                        )}
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                )}
+
+                {/* Create New Slot Section */}
+                <div className="border-t pt-4" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                  <h4 className="text-sm font-medium text-gray-300 mb-3">Create New Slot:</h4>
+                  <Button
+                    onClick={handleCreateNewSlot}
+                    className="w-full text-white hover:opacity-80 mb-3"
+                    style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create New Save Slot
+                  </Button>
                 </div>
 
-                {/* Create New Slot Button - Moved below the slots */}
-                <Button
-                  onClick={handleCreateNewSlot}
-                  className="w-full text-white hover:opacity-80"
-                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create New Save Slot
-                </Button>
-
-                {/* New Slot Creation */}
+                {/* New Slot Creation Form */}
                 {isCreatingNewSlot && (
-                  <div className="space-y-2">
+                  <div className="space-y-2 p-3 rounded-lg border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.2) }}>
                     <Label htmlFor="newSlotName" className="text-white">New Slot Name</Label>
                     <Input
                       id="newSlotName"
@@ -386,14 +391,17 @@ const SaveTeamModal = ({
                         backgroundColor: logoColors.blackAlpha(0.3),
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       }}
+                      autoFocus
                     />
                   </div>
                 )}
 
                 {/* Selected Slot Name Edit */}
                 {selectedSlot && !isCreatingNewSlot && (
-                  <div className="space-y-2">
-                    <Label htmlFor="slotName" className="text-white">Slot Name</Label>
+                  <div className="space-y-2 p-3 rounded-lg border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <Label htmlFor="slotName" className="text-white">
+                      {selectedSlot.is_occupied ? 'Overwrite Slot Name:' : 'Edit Slot Name:'}
+                    </Label>
                     <Input
                       id="slotName"
                       type="text"
@@ -406,15 +414,25 @@ const SaveTeamModal = ({
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       }}
                     />
+                    {selectedSlot.is_occupied && (
+                      <p className="text-yellow-400 text-xs">
+                        Warning: This will overwrite the existing team "{selectedSlot.team_name}"
+                      </p>
+                    )}
                   </div>
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-4">
+                <div className="flex gap-2 pt-4 flex-shrink-0">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setShowSlotSelection(false)}
+                    onClick={() => {
+                      setShowSlotSelection(false);
+                      setIsCreatingNewSlot(false);
+                      setSelectedSlot(null);
+                      setNewSlotName('');
+                    }}
                     className="flex-1 text-white border hover:opacity-80"
                     style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
                   >
@@ -455,7 +473,7 @@ const SaveTeamModal = ({
                       ) : (
                         <>
                           <Save className="h-4 w-4 mr-2" />
-                          {selectedSlot.is_occupied ? 'Overwrite' : 'Save'}
+                          {selectedSlot.is_occupied ? 'Overwrite Slot' : 'Save to Slot'}
                         </>
                       )}
                     </Button>
