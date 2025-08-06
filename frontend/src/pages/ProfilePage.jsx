@@ -100,13 +100,12 @@ const ProfilePage = () => {
       const followersResult = await loadFollowers();
       console.log('ProfilePage: Followers result:', followersResult);
       
-      if (followersResult.success) {
-        setStats(prev => ({
-          ...prev,
-          followers: followersResult.followers.length,
-          following: followersResult.following.length
-        }));
-        console.log('ProfilePage: Successfully loaded followers data');
+      let followersCount = 0;
+      let followingCount = 0;
+      
+      if (followersResult.success && followersResult.followers) {
+        followersCount = followersResult.followers.length;
+        console.log('ProfilePage: Successfully loaded followers data:', followersCount);
       } else {
         console.error('ProfilePage: Failed to load followers:', followersResult.error);
         // Don't show error for followers as it's less critical
@@ -114,12 +113,19 @@ const ProfilePage = () => {
 
       // Load following data
       const followingResult = await loadFollowing();
-      if (followingResult.success) {
-        // Already handled above in followers result
-        console.log('ProfilePage: Following data loaded successfully');
+      if (followingResult.success && followingResult.following) {
+        followingCount = followingResult.following.length;
+        console.log('ProfilePage: Successfully loaded following data:', followingCount);
       } else {
         console.error('ProfilePage: Failed to load following:', followingResult.error);
       }
+      
+      // Update stats with both counts
+      setStats(prev => ({
+        ...prev,
+        followers: followersCount,
+        following: followingCount
+      }));
       
     } catch (error) {
       console.error('ProfilePage: Unexpected error in fetchUserData:', error);
