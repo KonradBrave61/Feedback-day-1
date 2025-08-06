@@ -246,11 +246,8 @@ export const AuthProvider = ({ children }) => {
 
   const handleAuthenticationError = (error) => {
     console.error('Authentication error detected:', error);
-    // Show user-friendly notification
-    toast.error('Your session has expired. Please log in again to continue.', {
-      duration: 4000,
-      position: 'top-center'
-    });
+    // Show user-friendly alert (since toast isn't available)
+    alert('Your session has expired. Please log in again to continue.');
     // Clear user session and redirect to login
     setUser(null);
     localStorage.removeItem('authToken');
