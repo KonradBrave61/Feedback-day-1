@@ -70,6 +70,14 @@ const ProfilePage = () => {
     fetchUserData();
   }, []);
 
+  // Add effect to watch for user becoming null (session expired)
+  useEffect(() => {
+    if (!user && !loading) {
+      console.log('ProfilePage: User session expired, redirecting to login');
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
+
   const fetchUserData = async () => {
     console.log('ProfilePage: Fetching user data...');
     
