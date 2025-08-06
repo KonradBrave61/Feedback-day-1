@@ -80,6 +80,32 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return footballNames[nameIndex];
   };
 
+  const getPlayerPosition = (player) => {
+    // If player has position already, use it
+    if (player.position) {
+      return player.position;
+    }
+    
+    // Try to find the character by character_id to get position
+    if (player.character_id) {
+      const character = mockCharacters.find(char => char.id === player.character_id || char.id === parseInt(player.character_id));
+      if (character && character.position) {
+        return character.position;
+      }
+    }
+    
+    // Try to find by player id as fallback
+    if (player.id) {
+      const character = mockCharacters.find(char => char.id === player.id || char.id === parseInt(player.id));
+      if (character && character.position) {
+        return character.position;
+      }
+    }
+    
+    // Default fallback
+    return 'FW';
+  };
+
   const handlePrivacyToggle = async () => {
     if (onPrivacyToggle) {
       await onPrivacyToggle(team.id, !team.is_public);
