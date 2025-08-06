@@ -31,6 +31,7 @@ export const logoColors = {
   primaryBlueAlpha: (alpha) => `rgba(30, 144, 255, ${alpha})`,
   secondaryBlueAlpha: (alpha) => `rgba(0, 191, 255, ${alpha})`,
   lightBlueAlpha: (alpha) => `rgba(135, 206, 235, ${alpha})`,
+  darkBlueAlpha: (alpha) => `rgba(0, 102, 204, ${alpha})`, // Alpha variant for darkBlue #0066CC
   yellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
   primaryYellowAlpha: (alpha) => `rgba(255, 215, 0, ${alpha})`,
   orangeAlpha: (alpha) => `rgba(255, 140, 0, ${alpha})`,
