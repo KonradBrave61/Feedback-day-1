@@ -77,8 +77,12 @@ const SaveTeamModal = ({
   const handleSlotSave = async (slotNumber, overwrite = false) => {
     setIsSaving(true);
     try {
+      console.log('HandleSlotSave: Starting save process', { slotNumber, overwrite, teamName: formData.name });
+      
       // First save the team
       const saveResult = await onSave(formData);
+      console.log('HandleSlotSave: Team save result', saveResult);
+      
       if (saveResult.success) {
         // Then save to slot
         const slotData = {
@@ -87,12 +91,22 @@ const SaveTeamModal = ({
           overwrite: overwrite
         };
         
-        await saveTeamToSlot(saveResult.team.id, slotData);
-        onClose();
+        console.log('HandleSlotSave: Saving to slot', slotData);
+        const slotResult = await saveTeamToSlot(saveResult.team.id, slotData);
+        
+        if (slotResult.success) {
+          console.log('HandleSlotSave: Successfully saved to slot');
+          toast.success(`Team saved to slot ${slotNumber} successfully!`);
+          onClose();
+        } else {
+          throw new Error(slotResult.error || 'Failed to save team to slot');
+        }
+      } else {
+        throw new Error(saveResult.error || 'Failed to save team');
       }
     } catch (error) {
-      console.error('Error saving team to slot:', error);
-      alert('Failed to save team to slot');
+      console.error('HandleSlotSave: Error saving team to slot:', error);
+      toast.error(`Failed to save team: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
