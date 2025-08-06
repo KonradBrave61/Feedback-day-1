@@ -814,15 +814,28 @@ LATEST CONTINUATION REQUEST FIXES:
 
 3. **Fixed TeamPreviewModal Bench Display**: Improved TeamPreviewModal.jsx to properly display bench players in the profile page team preview. Enhanced bench data detection to check multiple possible data structures (bench_players, bench, team_data.bench_players, team_data.bench). Added getPlayerPosition function to properly display bench player positions and badges ✅
 
+**ADDITIONAL PROFILE PAGE TEAM PREVIEW FIXES (Based on user feedback):**
+
+4. **Enhanced Bench Player Detection**: Updated TeamPreviewModal to prioritize 'bench_players' array based on backend API testing results. Added comprehensive debugging to track bench data loading and display. Fixed data extraction from API response wrapper structure ✅
+
+5. **Fixed Player Techniques Display**: Enhanced technique detection logic in TeamPreviewModal for both main team and bench players. Added fallback technique names and improved debugging for user_hissatsu array processing. Techniques now display properly with yellow badges ✅
+
+6. **Improved Team Loading Data Structure**: Updated handleLoadTeamFromProfile and handleLoadTeam functions to prioritize 'bench_players' field over 'bench' field based on backend API structure. Added enhanced logging to track bench player loading with technique counts ✅
+
 TECHNICAL IMPLEMENTATION DETAILS:
 - HelperPage tip cards: Added `select-text cursor-default` CSS classes to CardContent elements to prevent unwanted click interactions while allowing text selection
 - TeamBuilder bench loading: Improved slot_id handling using `playerData.slot_id || bench_${index} || index.toString()` for proper slot assignment
 - TeamPreviewModal: Enhanced bench data detection logic and added getPlayerPosition function for robust position display
-- Added comprehensive console logging for debugging bench loading issues
+- API Response Structure: Updated TeamPreviewModal to handle wrapped team data in API response (result.team?.team || result.team)
+- Technique Display: Enhanced technique detection with fallback names and improved debugging for user_hissatsu array
+- Bench Player Display: Added technique display for bench players in TeamPreviewModal with proper styling
+- Added comprehensive console logging for debugging bench loading and techniques display issues
 - Fixed character lookup logic using both direct ID match and parseInt for string IDs ✅
 
 CONTINUATION REQUEST FIXES COMPLETED:
 ✅ CLEAR BUTTON STYLING: Skipped as requested (nevermind)
 ✅ HELPER PAGE CLICKABLE ISSUE: Fixed - tip cards are no longer fully clickable but allow text selection 
 ✅ BENCH LOADING ISSUES: Fixed - bench players now load properly when loading teams from profile page and general team loading
-✅ TEAM PREVIEW BENCH DISPLAY: Fixed - bench players now display correctly in the TeamPreviewModal on profile page ✅
+✅ TEAM PREVIEW BENCH DISPLAY: Fixed - bench players now display correctly in the TeamPreviewModal on profile page
+✅ PROFILE PAGE BENCH SAVING/LOADING: Enhanced - bench players are now properly saved and loaded with correct API field prioritization
+✅ PROFILE PAGE TECHNIQUES DISPLAY: Fixed - player techniques now display properly in both main team and bench sections ✅
