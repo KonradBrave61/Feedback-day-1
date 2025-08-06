@@ -471,18 +471,8 @@ export const AuthProvider = ({ children }) => {
 
   const loadSaveSlots = async () => {
     try {
-      const token = localStorage.getItem('authToken') || user?.token;
-      if (!token) {
-        console.error('LoadSaveSlots: No authentication token found');
-        throw new Error('No authentication token found. Please log in again.');
-      }
-
       console.log('LoadSaveSlots: Fetching save slots...');
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`);
 
       if (!response.ok) {
         const errorData = await response.text();
@@ -491,9 +481,6 @@ export const AuthProvider = ({ children }) => {
           statusText: response.statusText,
           data: errorData
         });
-        if (response.status === 401 || response.status === 403) {
-          throw new Error('Authentication failed. Please log in again.');
-        }
         throw new Error(`Failed to load save slots: ${response.status} ${response.statusText}`);
       }
 
@@ -502,6 +489,9 @@ export const AuthProvider = ({ children }) => {
       return { success: true, saveSlots: data.save_slots || [] };
     } catch (error) {
       console.error('LoadSaveSlots: Full error details:', error);
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
+      }
       return { success: false, error: error.message };
     }
   };
