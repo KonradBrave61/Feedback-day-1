@@ -27,7 +27,11 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
         // Try to load detailed team data from API
         const result = await loadTeamDetails(team.id);
         if (result.success) {
-          setTeamDetails(result.team);
+          // According to backend testing, API response is wrapped in 'team' field
+          const teamData = result.team?.team || result.team;
+          console.log('TeamPreviewModal - Raw API response:', result);
+          console.log('TeamPreviewModal - Extracted team data:', teamData);
+          setTeamDetails(teamData);
         } else {
           // If API call fails, fall back to basic team data
           console.warn('Failed to load team details, using basic team data:', result.error);
