@@ -289,11 +289,6 @@ export const AuthProvider = ({ children }) => {
 
   const loadCommunityTeams = async (filters = {}) => {
     try {
-      const token = localStorage.getItem('authToken') || user?.token;
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
       const params = new URLSearchParams();
       if (filters.search) params.append('search', filters.search);
       if (filters.formation) params.append('formation', filters.formation);
@@ -301,11 +296,7 @@ export const AuthProvider = ({ children }) => {
       if (filters.limit) params.append('limit', filters.limit);
       if (filters.offset) params.append('offset', filters.offset);
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/teams?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/community/teams?${params}`);
 
       if (!response.ok) {
         throw new Error('Community teams load failed');
@@ -315,6 +306,9 @@ export const AuthProvider = ({ children }) => {
       return { success: true, teams };
     } catch (error) {
       console.error('Community teams load error:', error);
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
+      }
       return { success: false, error: error.message };
     }
   };
