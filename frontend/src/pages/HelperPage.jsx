@@ -78,6 +78,7 @@ const HelperPage = () => {
         {/* Main Content Tabs */}
         <Tabs defaultValue="guides" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-8"
+                    tabIndex={-1}
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.5),
                       borderColor: logoColors.primaryBlueAlpha(0.3)
