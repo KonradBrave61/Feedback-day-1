@@ -119,21 +119,31 @@ const TeamBuilder = () => {
       // Load bench players
       if (teamData.bench && Array.isArray(teamData.bench)) {
         const loadedBench = {};
-        teamData.bench.forEach(playerData => {
-          if (playerData && playerData.character_id && playerData.slot_id) {
+        teamData.bench.forEach((playerData, index) => {
+          if (playerData && playerData.character_id) {
+            // Use slot_id if available, otherwise generate based on index
+            const slotId = playerData.slot_id || `bench_${index}` || index.toString();
             const character = mockCharacters.find(c => c.id === playerData.character_id || c.id === parseInt(playerData.character_id));
             if (character) {
-              loadedBench[playerData.slot_id] = {
+              loadedBench[slotId] = {
                 ...character,
                 userLevel: playerData.user_level || 1,
                 userRarity: playerData.user_rarity || 'common',
                 userEquipment: playerData.user_equipment || {},
                 userHissatsu: playerData.user_hissatsu || []
               };
+              console.log('Loaded bench player:', character.name, 'in slot:', slotId);
+            } else {
+              console.warn('Character not found for bench player:', playerData.character_id);
             }
+          } else {
+            console.warn('Invalid bench player data:', playerData);
           }
         });
         setBenchPlayers(loadedBench);
+        console.log('Loaded bench players from profile:', Object.keys(loadedBench).length);
+      } else {
+        console.log('No bench data found in team data from profile');
       }
       
       // Load tactics
