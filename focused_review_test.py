@@ -294,8 +294,8 @@ def test_team_management_endpoints():
         response = requests.get(f"{API_URL}/save-slots", headers=headers, timeout=10)
         if response.status_code == 200:
             data = response.json()
-            if "slots" in data and len(data["slots"]) == 5:
-                print(f"✅ Save slots endpoint working: {len(data['slots'])} slots available")
+            if "save_slots" in data and len(data["save_slots"]) == 5:
+                print(f"✅ Save slots endpoint working: {len(data['save_slots'])} slots available")
             else:
                 print(f"⚠️ Save slots unexpected structure: {data}")
                 return False
