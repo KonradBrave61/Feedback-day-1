@@ -450,11 +450,11 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     <div className="flex-1">
                       <h5 className="text-white font-medium text-sm">{getPlayerName(player)}</h5>
                       <div className="text-xs text-gray-400">
-                        {player.position} • Level {player.user_level || player.userLevel || 1}
+                        {getPlayerPosition(player)} • Level {player.user_level || player.userLevel || 1}
                       </div>
                     </div>
-                    <Badge style={{ backgroundColor: getPositionStyle(player.position).backgroundColor }}>
-                      {player.position}
+                    <Badge style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+                      {getPlayerPosition(player)}
                     </Badge>
                   </div>
                 </CardContent>
