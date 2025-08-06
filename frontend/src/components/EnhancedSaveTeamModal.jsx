@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { X, Save, Lock, Globe, Tag, Plus, Archive, Edit2, Trash2 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
+import { toast } from 'sonner';
 
 const SaveTeamModal = ({ 
   isOpen, 
