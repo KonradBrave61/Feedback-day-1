@@ -109,7 +109,13 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
     
     # Most followed users
     pipeline = [
-        {"$project": {"username": 1, "profile_picture": 1, "coach_level": 1, "follower_count": {"$size": "$followers"}}},
+        {"$project": {
+            "_id": 0,  # Exclude ObjectId
+            "username": 1, 
+            "profile_picture": 1, 
+            "coach_level": 1, 
+            "follower_count": {"$size": "$followers"}
+        }},
         {"$sort": {"follower_count": -1}},
         {"$limit": 10}
     ]
