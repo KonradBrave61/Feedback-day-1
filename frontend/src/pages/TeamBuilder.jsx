@@ -1017,7 +1017,7 @@ const TeamBuilder = () => {
                   Save Team
                 </Button>
                 <Button
-                  className="w-full bg-red-800/40 border-red-400/30 hover:bg-red-700/60 text-white"
+                  className="w-full bg-red-900/60 border-red-500/40 hover:bg-red-800/80 text-white"
                   onClick={() => {
                     setTeamPlayers({});
                     setBenchPlayers({});
