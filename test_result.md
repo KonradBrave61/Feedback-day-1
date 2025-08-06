@@ -485,9 +485,9 @@ LATEST ISSUES FIXED:
 
   - task: "Fix Team Access Authentication Issues"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/contexts/AuthContext.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -503,6 +503,9 @@ LATEST ISSUES FIXED:
       - working: true
         agent: "testing"
         comment: "DETAILED TEAM DATA STRUCTURE ANALYSIS COMPLETED: Created comprehensive test team with bench players and techniques, saved it, then retrieved via GET /api/teams/{team_id}/details to examine exact data format. ✅ RESPONSE STRUCTURE: Team data is wrapped in 'team' key with additional metadata (is_liked, is_following, can_rate) ✅ BENCH PLAYERS STORAGE: Field name is 'bench_players' (array), each bench player has identical structure to main players including character_id, slot_id, user_level, user_rarity, user_equipment, user_hissatsu ✅ SLOT_ID PRESERVATION: Bench players maintain slot_id field (bench_1, bench_2, bench_3) for proper positioning ✅ PLAYER TECHNIQUES STORAGE: Field name is 'user_hissatsu' (array), each technique object contains id, name, type, element, power, description ✅ EQUIPMENT STRUCTURE: Field name is 'user_equipment' (dict) with keys boots/bracelets/pendants, each equipment item has id, name, stats object ✅ IDENTICAL STRUCTURE: Both main players and bench players have exactly the same field structure and data format. Backend API is returning complete, properly structured data - any frontend display issues are due to data processing logic, not API structure problems."
+      - working: false
+        agent: "testing"
+        comment: "🚨 CRITICAL TOKEN EXPIRATION ISSUE IDENTIFIED: Conducted comprehensive authentication and token expiration testing as requested in review. ROOT CAUSE FOUND: ✅ Backend authentication is working perfectly - all endpoints properly validate tokens and return correct error codes ✅ JWT tokens are correctly set to expire after exactly 30 minutes (ACCESS_TOKEN_EXPIRE_MINUTES = 30) ✅ When tokens expire, backend returns 401 'Could not validate credentials' for all protected endpoints including GET /api/teams ✅ This matches the user-reported issue: 'teams disappear after some time (likely 30 minutes)' 🔍 DETAILED FINDINGS: User can log in successfully and see teams initially with valid token. After exactly 30 minutes, token expires silently. Next API call to load teams returns 401 Unauthorized. Teams disappear from profile page and everywhere else because frontend likely doesn't handle 401 responses properly. 🛠️ FRONTEND ISSUE: The problem is NOT with backend APIs - they work correctly. The issue is that frontend doesn't detect 401 responses and redirect user to login. Frontend should implement proper 401 error handling and token refresh mechanism. TESTING COMPLETED: 7/7 authentication tests passed, all scenarios verified including valid tokens, expired tokens, invalid tokens, and missing tokens."
 
 ## frontend:
   - task: "Fix equipment saving and team stats calculation"
