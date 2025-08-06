@@ -565,25 +565,27 @@ export const AuthProvider = ({ children }) => {
 
   const loadTeamDetails = async (teamId) => {
     try {
-      const token = localStorage.getItem('authToken') || user?.token;
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/details`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      console.log('LoadTeamDetails: Fetching team details for ID:', teamId);
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/details`);
 
       if (!response.ok) {
-        throw new Error('Team details load failed');
+        const errorData = await response.text();
+        console.error('LoadTeamDetails: API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
+        throw new Error(`Failed to load team details: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
+      console.log('LoadTeamDetails: Successfully loaded team details');
       return { success: true, ...data };
     } catch (error) {
-      console.error('Team details load error:', error);
+      console.error('LoadTeamDetails: Full error details:', error);
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
+      }
       return { success: false, error: error.message };
     }
   };
