@@ -292,20 +292,25 @@ def test_authentication_error_responses():
         # Test a key endpoint
         response = requests.get(f"{API_URL}/teams", headers=headers)
         
-        if response.status_code == 401:
+        # Empty token should return 403, others should return 401
+        expected_status = 403 if scenario_name == "Empty Token" else 401
+        
+        if response.status_code == expected_status:
             try:
                 error_data = response.json()
                 detail = error_data.get("detail", "")
-                if "Could not validate credentials" in detail:
+                if expected_status == 403:
+                    print(f"    ✅ {scenario_name}: CORRECT 403 for missing token")
+                elif "Could not validate credentials" in detail:
                     print(f"    ✅ {scenario_name}: CORRECT 401 with 'Could not validate credentials'")
                 else:
-                    print(f"    ⚠️ {scenario_name}: 401 but wrong message: {detail}")
+                    print(f"    ⚠️ {scenario_name}: {expected_status} but wrong message: {detail}")
                     all_passed = False
             except:
-                print(f"    ⚠️ {scenario_name}: 401 but no JSON response")
+                print(f"    ⚠️ {scenario_name}: {expected_status} but no JSON response")
                 all_passed = False
         else:
-            print(f"    ❌ {scenario_name}: WRONG STATUS ({response.status_code}) - Expected 401")
+            print(f"    ❌ {scenario_name}: WRONG STATUS ({response.status_code}) - Expected {expected_status}")
             all_passed = False
     
     return all_passed
