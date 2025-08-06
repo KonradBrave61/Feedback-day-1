@@ -1,0 +1,108 @@
+{
+  "summary": {
+    "passed": 7,
+    "total": 7,
+    "success_rate": "100.0%"
+  },
+  "test_results": [
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "User registered successfully. Token expires in 30.0 minutes",
+      "timestamp": "2025-08-06T18:05:59.275939",
+      "response_data": {
+        "user_id": "d57368a8-d153-40a0-9332-1ab774acee3d",
+        "token_expiry": "2025-08-06T18:35:59"
+      }
+    },
+    {
+      "test": "Token Validation",
+      "success": true,
+      "details": "Token validation successful, user data retrieved",
+      "timestamp": "2025-08-06T18:05:59.302670",
+      "response_data": {
+        "user_id": "d57368a8-d153-40a0-9332-1ab774acee3d",
+        "username": "tokentestuser"
+      }
+    },
+    {
+      "test": "Team Loading (Valid Token)",
+      "success": true,
+      "details": "Teams loaded successfully. Found 0 teams",
+      "timestamp": "2025-08-06T18:05:59.323646",
+      "response_data": {
+        "team_count": 0
+      }
+    },
+    {
+      "test": "Token Expiration Timing",
+      "success": true,
+      "details": "Token expiration correctly set to 30 minutes. 30.0 minutes remaining",
+      "timestamp": "2025-08-06T18:05:59.324071",
+      "response_data": {
+        "issued_at": "2025-08-06T18:05:59",
+        "expires_at": "2025-08-06T18:35:59",
+        "expected_duration_minutes": 30,
+        "remaining_minutes": 29.994599083333334
+      }
+    },
+    {
+      "test": "Invalid Token Handling (/auth/me)",
+      "success": true,
+      "details": "Correctly returned 401 for invalid token",
+      "timestamp": "2025-08-06T18:05:59.382029",
+      "response_data": {
+        "status_code": 401
+      }
+    },
+    {
+      "test": "Invalid Token Handling (/teams)",
+      "success": true,
+      "details": "Correctly returned 401 for invalid token",
+      "timestamp": "2025-08-06T18:05:59.400812",
+      "response_data": {
+        "status_code": 401
+      }
+    },
+    {
+      "test": "No Token Handling (/auth/me)",
+      "success": true,
+      "details": "Correctly returned 403 for missing token",
+      "timestamp": "2025-08-06T18:05:59.424650",
+      "response_data": {
+        "status_code": 403
+      }
+    },
+    {
+      "test": "No Token Handling (/teams)",
+      "success": true,
+      "details": "Correctly returned 403 for missing token",
+      "timestamp": "2025-08-06T18:05:59.441297",
+      "response_data": {
+        "status_code": 403
+      }
+    },
+    {
+      "test": "Expired Token Handling (/auth/me)",
+      "success": true,
+      "details": "Correctly returned 401 for expired token",
+      "timestamp": "2025-08-06T18:05:59.462043",
+      "response_data": {
+        "status_code": 401,
+        "response": "{\"detail\":\"Could not validate credentials\"}"
+      }
+    },
+    {
+      "test": "Expired Token Handling (/teams)",
+      "success": true,
+      "details": "Correctly returned 401 for expired token",
+      "timestamp": "2025-08-06T18:05:59.482441",
+      "response_data": {
+        "status_code": 401,
+        "response": "{\"detail\":\"Could not validate credentials\"}"
+      }
+    }
+  ],
+  "backend_url": "https://1feb3704-93d7-44bd-a52e-719d55bb545a.preview.emergentagent.com/api",
+  "token_expiry_minutes": 30
+}
