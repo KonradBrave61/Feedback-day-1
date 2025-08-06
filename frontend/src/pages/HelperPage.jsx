@@ -310,7 +310,7 @@ const HelperPage = () => {
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
                     }}>
-                <CardContent className="p-6">
+                <CardContent className="p-6 select-text cursor-default">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" 
                          style={{ backgroundColor: logoColors.primaryYellow }}>
@@ -329,7 +329,7 @@ const HelperPage = () => {
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
                     }}>
-                <CardContent className="p-6">
+                <CardContent className="p-6 select-text cursor-default">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" 
                          style={{ backgroundColor: logoColors.primaryYellow }}>
@@ -348,7 +348,7 @@ const HelperPage = () => {
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
                     }}>
-                <CardContent className="p-6">
+                <CardContent className="p-6 select-text cursor-default">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" 
                          style={{ backgroundColor: logoColors.primaryYellow }}>
@@ -367,7 +367,7 @@ const HelperPage = () => {
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
                     }}>
-                <CardContent className="p-6">
+                <CardContent className="p-6 select-text cursor-default">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" 
                          style={{ backgroundColor: logoColors.primaryYellow }}>
