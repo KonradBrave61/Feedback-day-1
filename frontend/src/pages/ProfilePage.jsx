@@ -87,7 +87,16 @@ const ProfilePage = () => {
         console.log('ProfilePage: Successfully loaded teams:', teamsResult.teams.length);
       } else {
         console.error('ProfilePage: Failed to load teams:', teamsResult.error);
-        toast.error(`Failed to load teams: ${teamsResult.error || 'Unknown error'}`);
+        
+        // Check if this is an authentication error
+        if (teamsResult.authError && teamsResult.error && teamsResult.error.includes('Session expired')) {
+          toast.error('Your session has expired. Please log in again.');
+          setTimeout(() => navigate('/login'), 2000); // Redirect after 2 seconds
+          return; // Exit early to avoid loading other data
+        } else {
+          toast.error(`Failed to load teams: ${teamsResult.error || 'Unknown error'}`);
+        }
+        
         // Set empty array as fallback
         setTeams([]);
         setStats(prev => ({
