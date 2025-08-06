@@ -225,9 +225,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('authToken') || user?.token;
       if (!token) {
-        throw new Error('No authentication token found');
+        console.error('LoadTeams: No authentication token found');
+        throw new Error('No authentication token found. Please log in again.');
       }
 
+      console.log('LoadTeams: Fetching user teams...');
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -235,13 +237,23 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Teams load failed');
+        const errorData = await response.text();
+        console.error('LoadTeams: API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('Authentication failed. Please log in again.');
+        }
+        throw new Error(`Failed to load teams: ${response.status} ${response.statusText}`);
       }
 
       const teams = await response.json();
+      console.log('LoadTeams: Successfully loaded teams:', teams.length);
       return { success: true, teams };
     } catch (error) {
-      console.error('Teams load error:', error);
+      console.error('LoadTeams: Full error details:', error);
       return { success: false, error: error.message };
     }
   };
