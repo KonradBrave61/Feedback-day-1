@@ -342,36 +342,37 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                         )}
                       </div>
                       
-                      {/* Player Techniques - Replace Stats */}
-                      {((player.user_hissatsu && player.user_hissatsu.length > 0) ||
-                        (player.userHissatsu && player.userHissatsu.length > 0)) ? (
-                        <div className="mb-3">
-                          <div className="flex items-center gap-1 mb-2">
-                            <Zap className="h-3 w-3" style={{ color: logoColors.primaryYellow }} />
-                            <span className="text-xs font-medium text-gray-300">Techniques</span>
-                          </div>
-                          <div className="flex flex-wrap gap-1">
-                            {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
-                              <Badge key={techIndex} variant="outline" className="text-xs"
-                                     style={{ 
-                                       backgroundColor: logoColors.primaryYellowAlpha(0.1), 
-                                       color: logoColors.primaryYellow,
-                                       borderColor: logoColors.primaryYellow
-                                     }}>
-                                {technique.name || 'Technique'}
-                              </Badge>
-                            ))}
-                          </div>
+                      {/* Player Techniques - Enhanced Detection */}
+                      <div className="mb-3">
+                        <div className="flex items-center gap-1 mb-2">
+                          <Zap className="h-3 w-3" style={{ color: logoColors.primaryYellow }} />
+                          <span className="text-xs font-medium text-gray-300">Techniques</span>
                         </div>
-                      ) : (
-                        <div className="mb-3">
-                          <div className="flex items-center gap-1 mb-2">
-                            <Zap className="h-3 w-3" style={{ color: logoColors.primaryYellow }} />
-                            <span className="text-xs font-medium text-gray-300">Techniques</span>
-                          </div>
-                          <span className="text-xs text-gray-400">No techniques equipped</span>
-                        </div>
-                      )}
+                        {(() => {
+                          // Enhanced technique detection with debugging
+                          const techniques = player.user_hissatsu || player.userHissatsu || [];
+                          console.log('Player techniques for', getPlayerName(player), ':', techniques);
+                          
+                          if (techniques && techniques.length > 0) {
+                            return (
+                              <div className="flex flex-wrap gap-1">
+                                {techniques.map((technique, techIndex) => (
+                                  <Badge key={techIndex} variant="outline" className="text-xs"
+                                         style={{ 
+                                           backgroundColor: logoColors.primaryYellowAlpha(0.1), 
+                                           color: logoColors.primaryYellow,
+                                           borderColor: logoColors.primaryYellow
+                                         }}>
+                                    {technique.name || technique.technique_name || `Technique ${techIndex + 1}`}
+                                  </Badge>
+                                ))}
+                              </div>
+                            );
+                          } else {
+                            return <span className="text-xs text-gray-400">No techniques equipped</span>;
+                          }
+                        })()}
+                      </div>
                       
                       {/* Equipment */}
                       {((player.user_equipment && Object.keys(player.user_equipment).length > 0) ||
