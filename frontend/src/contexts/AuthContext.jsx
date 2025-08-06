@@ -336,11 +336,10 @@ export const AuthProvider = ({ children }) => {
 
   const commentOnTeam = async (teamId, content) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/comment`, {
+      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`,
         },
         body: JSON.stringify({ content }),
       });
@@ -353,6 +352,9 @@ export const AuthProvider = ({ children }) => {
       return { success: true, comment: result.comment };
     } catch (error) {
       console.error('Comment action error:', error);
+      if (error.message.includes('Session expired')) {
+        return { success: false, error: error.message, authError: true };
+      }
       return { success: false, error: error.message };
     }
   };
