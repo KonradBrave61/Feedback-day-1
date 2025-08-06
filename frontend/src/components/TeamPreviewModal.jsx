@@ -243,7 +243,21 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
   const renderPlayerDetails = () => {
     const players = teamDetails?.players || [];
-    const bench = teamDetails?.bench_players || teamDetails?.bench || [];
+    // Enhanced bench detection - try multiple possible fields and structures
+    let bench = [];
+    
+    if (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players)) {
+      bench = teamDetails.bench_players;
+    } else if (teamDetails?.bench && Array.isArray(teamDetails.bench)) {
+      bench = teamDetails.bench;
+    } else if (teamDetails?.team_data?.bench_players && Array.isArray(teamDetails.team_data.bench_players)) {
+      bench = teamDetails.team_data.bench_players;
+    } else if (teamDetails?.team_data?.bench && Array.isArray(teamDetails.team_data.bench)) {
+      bench = teamDetails.team_data.bench;
+    }
+    
+    console.log('TeamPreviewModal bench data:', bench);
+    console.log('TeamPreviewModal teamDetails:', teamDetails);
     
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
