@@ -442,35 +442,55 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             Bench ({bench.length}/5)
           </h3>
           <div className="space-y-3">
-            {bench.map((player, index) => (
-              <Card key={index} className="backdrop-blur-lg border" style={{ 
-                backgroundColor: logoColors.blackAlpha(0.3),
-                borderColor: logoColors.primaryBlueAlpha(0.1)
-              }}>
-                <CardContent className="p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
-                      {player.image ? (
-                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
-                          {getPlayerName(player).substring(0, 2)}
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h5 className="text-white font-medium text-sm">{getPlayerName(player)}</h5>
-                      <div className="text-xs text-gray-400">
-                        {getPlayerPosition(player)} • Level {player.user_level || player.userLevel || 1}
+            {bench.map((player, index) => {
+              console.log(`TeamPreviewModal - Rendering bench player ${index}:`, player);
+              console.log(`TeamPreviewModal - Bench player techniques:`, player.user_hissatsu || player.userHissatsu);
+              
+              return (
+                <Card key={index} className="backdrop-blur-lg border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.1)
+                }}>
+                  <CardContent className="p-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
+                        {player.image ? (
+                          <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
+                            {getPlayerName(player).substring(0, 2)}
+                          </div>
+                        )}
                       </div>
+                      <div className="flex-1">
+                        <h5 className="text-white font-medium text-sm">{getPlayerName(player)}</h5>
+                        <div className="text-xs text-gray-400">
+                          {getPlayerPosition(player)} • Level {player.user_level || player.userLevel || 1}
+                        </div>
+                        {/* Show techniques for bench players */}
+                        {((player.user_hissatsu && player.user_hissatsu.length > 0) ||
+                          (player.userHissatsu && player.userHissatsu.length > 0)) && (
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
+                              <span key={techIndex} className="text-xs px-1 py-0.5 rounded" 
+                                    style={{ 
+                                      backgroundColor: logoColors.primaryYellowAlpha(0.2), 
+                                      color: logoColors.primaryYellow 
+                                    }}>
+                                {technique.name || `Tech${techIndex + 1}`}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <Badge style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+                        {getPlayerPosition(player)}
+                      </Badge>
                     </div>
-                    <Badge style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
-                      {getPlayerPosition(player)}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
             
             {/* Empty bench slots */}
             {Array.from({ length: 5 - bench.length }, (_, index) => (
