@@ -221,6 +221,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const makeAuthenticatedRequest = async (url, options = {}) => {
+    const token = localStorage.getItem('authToken') || user?.token;
+    if (!token) {
+      handleAuthenticationError('No authentication token found');
+      throw new Error('Session expired. Please log in again.');
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      handleAuthenticationError(`Authentication failed: ${response.status} ${response.statusText}`);
+      throw new Error('Session expired. Please log in again.');
+    }
+
+    return response;
+  };
+
   const handleAuthenticationError = (error) => {
     console.error('Authentication error detected:', error);
     // Clear user session and redirect to login
