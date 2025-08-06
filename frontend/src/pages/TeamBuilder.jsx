@@ -116,10 +116,12 @@ const TeamBuilder = () => {
         setTeamPlayers(loadedPlayers);
       }
       
-      // Load bench players
-      if (teamData.bench && Array.isArray(teamData.bench)) {
+      // Load bench players - API returns 'bench_players' array according to backend testing
+      const benchArray = teamData.bench_players || teamData.bench || teamData.team_data?.bench_players || teamData.team_data?.bench || [];
+      console.log('Bench array from profile (looking for bench_players):', benchArray);
+      if (benchArray && Array.isArray(benchArray) && benchArray.length > 0) {
         const loadedBench = {};
-        teamData.bench.forEach((playerData, index) => {
+        benchArray.forEach((playerData, index) => {
           if (playerData && playerData.character_id) {
             // Use slot_id if available, otherwise generate based on index
             const slotId = playerData.slot_id || `bench_${index}` || index.toString();
@@ -132,7 +134,7 @@ const TeamBuilder = () => {
                 userEquipment: playerData.user_equipment || {},
                 userHissatsu: playerData.user_hissatsu || []
               };
-              console.log('Loaded bench player:', character.name, 'in slot:', slotId);
+              console.log('Loaded bench player from profile:', character.name, 'in slot:', slotId, 'with techniques:', playerData.user_hissatsu?.length || 0);
             } else {
               console.warn('Character not found for bench player:', playerData.character_id);
             }
@@ -141,9 +143,9 @@ const TeamBuilder = () => {
           }
         });
         setBenchPlayers(loadedBench);
-        console.log('Loaded bench players from profile:', Object.keys(loadedBench).length);
+        console.log('Loaded bench players from profile (bench_players field):', Object.keys(loadedBench).length);
       } else {
-        console.log('No bench data found in team data from profile');
+        console.log('No bench data found in team data from profile - checking for bench_players field');
       }
       
       // Load tactics
