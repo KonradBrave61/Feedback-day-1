@@ -221,12 +221,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleAuthenticationError = (error) => {
+    console.error('Authentication error detected:', error);
+    // Clear user session and redirect to login
+    setUser(null);
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    // We don't navigate here to avoid circular dependencies
+    // The UI will handle redirect when user becomes null
+  };
+
   const loadTeams = async () => {
     try {
       const token = localStorage.getItem('authToken') || user?.token;
       if (!token) {
         console.error('LoadTeams: No authentication token found');
-        throw new Error('No authentication token found. Please log in again.');
+        handleAuthenticationError('No authentication token found');
+        return { success: false, error: 'Session expired. Please log in again.' };
       }
 
       console.log('LoadTeams: Fetching user teams...');
@@ -244,7 +255,8 @@ export const AuthProvider = ({ children }) => {
           data: errorData
         });
         if (response.status === 401 || response.status === 403) {
-          throw new Error('Authentication failed. Please log in again.');
+          handleAuthenticationError(`Authentication failed: ${response.status} ${response.statusText}`);
+          return { success: false, error: 'Session expired. Please log in again.' };
         }
         throw new Error(`Failed to load teams: ${response.status} ${response.statusText}`);
       }
@@ -254,6 +266,10 @@ export const AuthProvider = ({ children }) => {
       return { success: true, teams };
     } catch (error) {
       console.error('LoadTeams: Full error details:', error);
+      // Check if this is an authentication error
+      if (error.message.includes('Authentication failed') || error.message.includes('Session expired')) {
+        return { success: false, error: error.message };
+      }
       return { success: false, error: error.message };
     }
   };
