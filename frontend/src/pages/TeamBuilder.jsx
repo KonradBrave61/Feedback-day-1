@@ -601,22 +601,26 @@ const TeamBuilder = () => {
       // Load bench players (could be 'bench' or 'bench_players' or inside team_data)
       const benchArray = teamData.bench || teamData.bench_players || teamData.team_data?.bench || teamData.team_data?.bench_players || [];
       console.log('Bench array from server:', benchArray);
-      if (benchArray && Array.isArray(benchArray)) {
+      if (benchArray && Array.isArray(benchArray) && benchArray.length > 0) {
         const newBenchPlayers = {};
         benchArray.forEach((playerData, index) => {
           if (playerData && playerData.character_id) {
-            // Use original slot_id if available, otherwise generate one
-            const slotId = playerData.slot_id || `bench_${index + 1}`;
+            // Use original slot_id if available, otherwise generate one based on index
+            const slotId = playerData.slot_id || `bench_${index}` || index.toString();
             // Find the base character data
-            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
+            const baseCharacter = mockCharacters.find(c => 
+              c.id === playerData.character_id || 
+              c.id === parseInt(playerData.character_id)
+            );
             if (baseCharacter) {
               newBenchPlayers[slotId] = {
                 ...baseCharacter,
-                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level,
-                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity,
+                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level || 1,
+                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity || 'common',
                 userEquipment: playerData.user_equipment || playerData.userEquipment || {},
                 userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
               };
+              console.log('Loaded bench player:', baseCharacter.name, 'in slot:', slotId);
             } else {
               console.warn('Base character not found for bench player:', playerData.character_id);
             }
@@ -628,6 +632,8 @@ const TeamBuilder = () => {
         console.log('Loaded bench players:', Object.keys(newBenchPlayers).length);
       } else {
         console.log('No bench data found or invalid bench array');
+        // Clear existing bench if no bench data
+        setBenchPlayers({});
       }
       
       // Load tactics (could be array of tactics or inside team_data)
