@@ -523,7 +523,7 @@ const ProfilePage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {teams.length > 0 ? (
+                {Array.isArray(teams) && teams.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {teams.map((team) => (
                       <div key={team.id} className="p-4 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity" style={{ 
