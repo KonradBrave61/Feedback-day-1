@@ -135,15 +135,15 @@ const SaveTeamModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="p-1 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="p-1 rounded-lg max-w-2xl w-full max-h-[95vh] overflow-hidden flex flex-col"
            style={{ background: logoColors.backgroundGradient }}>
-        <Card className="backdrop-blur-lg border text-white"
+        <Card className="backdrop-blur-lg border text-white flex-1 flex flex-col"
               style={{ 
                 backgroundColor: logoColors.blackAlpha(0.3),
                 borderColor: logoColors.primaryBlueAlpha(0.2)
               }}>
-          <CardHeader className="pb-4">
+          <CardHeader className="pb-4 flex-shrink-0">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Save className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
@@ -158,9 +158,14 @@ const SaveTeamModal = ({
                 <X className="h-4 w-4" />
               </Button>
             </div>
+            {!showSlotSelection && (
+              <p className="text-gray-400 text-sm mt-2">
+                Fill in your team details below to save your configuration
+              </p>
+            )}
           </CardHeader>
           
-          <CardContent>
+          <CardContent className="flex-1 overflow-y-auto">
             {!showSlotSelection ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Team Name */}
