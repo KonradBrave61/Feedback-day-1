@@ -130,8 +130,15 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('authToken') || user?.token;
       if (!token) {
-        throw new Error('No authentication token found');
+        console.error('SaveTeam: No authentication token found');
+        throw new Error('No authentication token found. Please log in again.');
       }
+
+      console.log('SaveTeam: Sending team data:', {
+        name: teamData.name,
+        playersCount: teamData.players?.length || 0,
+        benchCount: teamData.bench?.length || 0
+      });
 
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
         method: 'POST',
@@ -143,13 +150,20 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Team save failed');
+        const errorData = await response.text();
+        console.error('SaveTeam: API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
+        throw new Error(`Team save failed: ${response.status} ${response.statusText}`);
       }
 
       const savedTeam = await response.json();
+      console.log('SaveTeam: Successfully saved team:', savedTeam.id);
       return { success: true, team: savedTeam };
     } catch (error) {
-      console.error('Team save error:', error);
+      console.error('SaveTeam: Full error details:', error);
       return { success: false, error: error.message };
     }
   };
