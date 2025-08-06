@@ -449,9 +449,11 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('authToken') || user?.token;
       if (!token) {
-        throw new Error('No authentication token found');
+        console.error('LoadSaveSlots: No authentication token found');
+        throw new Error('No authentication token found. Please log in again.');
       }
 
+      console.log('LoadSaveSlots: Fetching save slots...');
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -459,13 +461,23 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Save slots load failed');
+        const errorData = await response.text();
+        console.error('LoadSaveSlots: API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('Authentication failed. Please log in again.');
+        }
+        throw new Error(`Failed to load save slots: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
-      return { success: true, saveSlots: data.save_slots };
+      console.log('LoadSaveSlots: Successfully loaded save slots:', data.save_slots?.length || 0);
+      return { success: true, saveSlots: data.save_slots || [] };
     } catch (error) {
-      console.error('Save slots load error:', error);
+      console.error('LoadSaveSlots: Full error details:', error);
       return { success: false, error: error.message };
     }
   };
