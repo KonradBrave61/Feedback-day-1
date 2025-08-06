@@ -273,21 +273,27 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
   const renderPlayerDetails = () => {
     const players = teamDetails?.players || [];
-    // Enhanced bench detection - try multiple possible fields and structures
+    // Enhanced bench detection with debugging - backend testing shows 'bench_players' field
     let bench = [];
+    
+    console.log('TeamPreviewModal - Full teamDetails object:', teamDetails);
     
     if (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players)) {
       bench = teamDetails.bench_players;
+      console.log('TeamPreviewModal - Found bench_players array:', bench);
     } else if (teamDetails?.bench && Array.isArray(teamDetails.bench)) {
       bench = teamDetails.bench;
+      console.log('TeamPreviewModal - Found bench array:', bench);
     } else if (teamDetails?.team_data?.bench_players && Array.isArray(teamDetails.team_data.bench_players)) {
       bench = teamDetails.team_data.bench_players;
+      console.log('TeamPreviewModal - Found team_data.bench_players array:', bench);
     } else if (teamDetails?.team_data?.bench && Array.isArray(teamDetails.team_data.bench)) {
       bench = teamDetails.team_data.bench;
+      console.log('TeamPreviewModal - Found team_data.bench array:', bench);
     }
     
-    console.log('TeamPreviewModal bench data:', bench);
-    console.log('TeamPreviewModal teamDetails:', teamDetails);
+    console.log('TeamPreviewModal - Final bench data:', bench);
+    console.log('TeamPreviewModal - Bench length:', bench.length);
     
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
