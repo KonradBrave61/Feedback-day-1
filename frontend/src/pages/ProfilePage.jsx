@@ -78,7 +78,7 @@ const ProfilePage = () => {
       const teamsResult = await loadTeams();
       console.log('ProfilePage: Teams result:', teamsResult);
       
-      if (teamsResult.success) {
+      if (teamsResult.success && teamsResult.teams && Array.isArray(teamsResult.teams)) {
         setTeams(teamsResult.teams);
         setStats(prev => ({
           ...prev,
@@ -87,7 +87,7 @@ const ProfilePage = () => {
         console.log('ProfilePage: Successfully loaded teams:', teamsResult.teams.length);
       } else {
         console.error('ProfilePage: Failed to load teams:', teamsResult.error);
-        toast.error(`Failed to load teams: ${teamsResult.error}`);
+        toast.error(`Failed to load teams: ${teamsResult.error || 'Unknown error'}`);
         // Set empty array as fallback
         setTeams([]);
         setStats(prev => ({
