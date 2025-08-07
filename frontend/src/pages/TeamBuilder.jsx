@@ -1109,7 +1109,7 @@ const TeamBuilder = () => {
                           {/* Coach Bonuses */}
                           <div className="mb-4">
                             <h4 className="text-sm font-medium text-gray-400 mb-2">Team Bonuses:</h4>
-                            <p className="text-sm text-gray-300">{coach.bonuses}</p>
+                            <p className="text-sm text-gray-300">{coach.bonuses.description}</p>
                           </div>
                           
                           {/* Stats/Experience */}
