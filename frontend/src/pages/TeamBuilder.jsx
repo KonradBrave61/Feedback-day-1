@@ -1178,23 +1178,23 @@ const TeamBuilder = () => {
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-gray-600/50">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowTacticsModal(false);
-                    setEditingPresetId(null);
-                  }}
-                  className="text-white border"
-                  style={{ 
-                    borderColor: logoColors.primaryBlueAlpha(0.6),
-                    backgroundColor: logoColors.blackAlpha(0.2)
-                  }}
-                >
-                  Close
-                </Button>
-                {!editingPresetId && (
+              {!editingPresetId && (
+                /* Action Buttons - Only show when not editing */
+                <div className="flex gap-3 pt-4 border-t border-gray-600/50">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowTacticsModal(false);
+                      setEditingPresetId(null);
+                    }}
+                    className="text-white border"
+                    style={{ 
+                      borderColor: logoColors.primaryBlueAlpha(0.6),
+                      backgroundColor: logoColors.blackAlpha(0.2)
+                    }}
+                  >
+                    Close
+                  </Button>
                   <Button
                     className="text-white"
                     style={{ background: logoColors.primaryYellow, color: logoColors.black }}
@@ -1207,8 +1207,8 @@ const TeamBuilder = () => {
                   >
                     Apply Current Preset
                   </Button>
-                )}
-              </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
