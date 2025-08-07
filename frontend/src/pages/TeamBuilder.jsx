@@ -670,14 +670,13 @@ const TeamBuilder = () => {
                   Coach
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="text-gray-400 text-sm mb-3">
+              <CardContent className="space-y-3">
+                <div className="text-white text-base font-medium text-center py-4">
                   {selectedCoach ? `${selectedCoach.name} selected` : 'No coach selected'}
                 </div>
                 
                 <Button 
-                  variant="outline"
-                  className="w-full text-white border hover:opacity-80"
+                  className="w-full text-white hover:opacity-80"
                   style={{ 
                     backgroundColor: logoColors.primaryBlue, 
                     borderColor: logoColors.primaryBlue,
