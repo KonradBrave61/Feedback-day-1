@@ -44,6 +44,13 @@ const TeamBuilder = () => {
   const [selectedTactics, setSelectedTactics] = useState([]);
   const [selectedCoach, setSelectedCoach] = useState(null);
   
+  // Preset management
+  const [tacticPresets, setTacticPresets] = useState({
+    1: { name: "Preset 1", tactics: [], isActive: true },
+    2: { name: "Preset 2", tactics: [], isActive: false }
+  });
+  const [currentPreset, setCurrentPreset] = useState(1);
+  
   // Team composition
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
