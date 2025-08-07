@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { showNotification } from '../components/Notification';
 
 const AuthContext = createContext();
 
@@ -246,8 +247,8 @@ export const AuthProvider = ({ children }) => {
 
   const handleAuthenticationError = (error) => {
     console.error('Authentication error detected:', error);
-    // Show user-friendly alert (since toast isn't available)
-    alert('Your session has expired. Please log in again to continue.');
+    // Show user-friendly on-site notification
+    showNotification('Your session has expired. Please log in again to continue.', 'warning');
     // Clear user session and redirect to login
     setUser(null);
     localStorage.removeItem('authToken');
