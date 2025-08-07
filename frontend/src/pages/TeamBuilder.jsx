@@ -1087,44 +1087,38 @@ const TeamBuilder = () => {
               ) : (
                 /* Editing Mode - Tactics Selection */
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold text-white">Edit Preset {editingPresetId}</h3>
-                      <p className="text-sm text-gray-400">Select up to 3 tactics for this preset</p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingPresetId(null)}
-                      className="text-gray-400"
-                    >
-                      Back
-                    </Button>
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold text-white mb-2">Edit Preset {editingPresetId}</h3>
+                    <p className="text-gray-300">Select up to 3 tactics for this preset</p>
                   </div>
 
-                  {/* Current Preset Tactics */}
-                  <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
-                    <h4 className="text-lg font-medium text-white mb-3">Selected Tactics ({tacticPresets[editingPresetId]?.tactics?.length || 0}/3)</h4>
-                    <div className="grid grid-cols-3 gap-3">
+                  {/* Selected Tactics Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-xl font-semibold text-white">Selected Tactics ({(tacticPresets[editingPresetId]?.tactics?.length || 0)}/3)</h4>
+                    <div className="grid grid-cols-3 gap-4">
                       {[0,1,2].map((slotIndex) => {
                         const tactic = tacticPresets[editingPresetId]?.tactics?.[slotIndex];
                         return (
                           <div
                             key={slotIndex}
-                            className="bg-blue-800/40 rounded-lg p-4 text-center border border-blue-500/20 min-h-[80px] flex items-center justify-center"
+                            className={`relative rounded-lg p-6 text-center border-2 min-h-[120px] flex flex-col items-center justify-center ${
+                              tactic 
+                                ? 'border-yellow-400 bg-gradient-to-br from-yellow-900/20 to-orange-900/20' 
+                                : 'border-gray-500/50 bg-gray-800/20 border-dashed'
+                            }`}
                           >
                             {tactic ? (
-                              <div className="text-white">
-                                <div className="text-sm font-medium">{tactic.name}</div>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="mt-2 text-xs text-red-400 border-red-400/50 hover:bg-red-500/20"
+                              <>
+                                <img src={tactic.icon} alt={tactic.name} className="w-12 h-12 mb-2" />
+                                <div className="text-white font-semibold text-sm mb-1">{tactic.name}</div>
+                                <div className="text-xs text-gray-300">{tactic.effect}</div>
+                                <button
+                                  className="absolute top-2 right-2 w-6 h-6 bg-red-500/80 hover:bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold"
                                   onClick={() => removeTacticFromPreset(editingPresetId, slotIndex)}
                                 >
-                                  Remove
-                                </Button>
-                              </div>
+                                  ×
+                                </button>
+                              </>
                             ) : (
                               <div className="text-gray-400 text-sm">Empty Slot</div>
                             )}
@@ -1134,28 +1128,52 @@ const TeamBuilder = () => {
                     </div>
                   </div>
 
-                  {/* Available Tactics */}
-                  <div className="bg-gray-900/30 rounded-lg p-4 border border-gray-500/20">
-                    <h4 className="text-lg font-medium text-white mb-3">Available Tactics</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                  {/* Available Tactics Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-xl font-semibold text-white">Available Tactics</h4>
+                    <div className="grid grid-cols-3 gap-4 max-h-80 overflow-y-auto">
                       {mockTactics.filter(tactic => 
                         !(tacticPresets[editingPresetId]?.tactics || []).some(selectedTactic => selectedTactic.id === tactic.id)
                       ).map((tactic) => (
                         <div
                           key={tactic.id}
-                          className="bg-gray-800/40 rounded-lg p-3 border border-gray-500/20 hover:border-blue-400/50 cursor-pointer transition-all"
+                          className="relative rounded-lg p-6 text-center border border-gray-500/30 bg-gray-800/30 hover:border-blue-400/50 hover:bg-blue-900/20 cursor-pointer transition-all duration-200 min-h-[120px] flex flex-col items-center justify-center"
                           onClick={() => addTacticToPreset(editingPresetId, tactic)}
                         >
-                          <div className="flex items-center gap-3">
-                            <img src={tactic.icon} alt={tactic.name} className="w-8 h-8" />
-                            <div>
-                              <div className="text-sm font-medium text-white">{tactic.name}</div>
-                              <div className="text-xs text-gray-400">{tactic.description}</div>
-                            </div>
-                          </div>
+                          <img src={tactic.icon} alt={tactic.name} className="w-12 h-12 mb-2" />
+                          <div className="text-white font-semibold text-sm mb-1">{tactic.name}</div>
+                          <div className="text-xs text-gray-300">{tactic.effect}</div>
+                          {(tacticPresets[editingPresetId]?.tactics?.length || 0) < 3 && (
+                            <div className="absolute inset-0 rounded-lg border-2 border-dashed border-transparent hover:border-blue-400/50"></div>
+                          )}
                         </div>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-center gap-4 pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setEditingPresetId(null)}
+                      className="px-8 py-3 text-white border"
+                      style={{ 
+                        borderColor: logoColors.primaryBlueAlpha(0.6),
+                        backgroundColor: logoColors.blackAlpha(0.3)
+                      }}
+                    >
+                      ✕ Cancel
+                    </Button>
+                    <Button
+                      className="px-8 py-3 text-black font-semibold"
+                      style={{ background: logoColors.primaryYellow }}
+                      onClick={() => {
+                        toast.success(`Preset ${editingPresetId} saved successfully!`);
+                        setEditingPresetId(null);
+                      }}
+                    >
+                      💾 Save Preset
+                    </Button>
                   </div>
                 </div>
               )}
