@@ -488,6 +488,8 @@ const TeamBuilder = () => {
     setSelectedTactics(tactics);
     toast.success(`Selected ${tactics.length} tactics: ${tactics.map(t => t.name).join(', ')}`);
   };
+
+  const handleClearAll = () => {
     setTeamPlayers({});
     setBenchPlayers({});
     setSelectedTactics([]);
