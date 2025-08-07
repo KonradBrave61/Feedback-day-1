@@ -27,7 +27,7 @@ import CharacterModal from '../components/CharacterModal';
 import EnhancedSaveTeamModal from '../components/EnhancedSaveTeamModal';
 import LoadTeamModal from '../components/LoadTeamModal';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'sonner';
+import TacticVisualizationModal from '../components/TacticVisualizationModal';
 
 const TeamBuilder = () => {
   const { user, saveTeam } = useAuth();
