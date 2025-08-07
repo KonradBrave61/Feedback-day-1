@@ -11,6 +11,7 @@ import { Separator } from '../components/ui/separator';
 import { 
   Plus, 
   Users, 
+  User,
   Trophy, 
   Target, 
   Settings,
@@ -19,7 +20,10 @@ import {
   RotateCcw,
   Upload,
   Check,
-  X
+  X,
+  Zap,
+  Eye,
+  Settings2
 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
 import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
