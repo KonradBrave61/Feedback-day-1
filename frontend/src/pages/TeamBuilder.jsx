@@ -979,6 +979,16 @@ const TeamBuilder = () => {
           </Card>
         </div>
       )}
+
+      {/* Tactical Visualization Modal */}
+      {showTacticVisualizationModal && (
+        <TacticVisualizationModal
+          isOpen={showTacticVisualizationModal}
+          onClose={() => setShowTacticVisualizationModal(false)}
+          onTacticSelect={handleTacticVisualizationSelect}
+          selectedTactics={selectedTactics}
+        />
+      )}
     </div>
   );
 };
