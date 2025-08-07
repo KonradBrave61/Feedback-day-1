@@ -594,7 +594,7 @@ const TeamBuilder = () => {
                   }}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
+                  <Zap className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
                   Tactics Presets
                 </CardTitle>
               </CardHeader>
@@ -618,6 +618,7 @@ const TeamBuilder = () => {
                     setShowTacticVisualizationModal(true);
                   }}
                 >
+                  <Eye className="h-4 w-4 mr-2" />
                   Tactical Visualization
                 </Button>
                 <Button 
@@ -633,6 +634,7 @@ const TeamBuilder = () => {
                     setShowTacticsModal(true);
                   }}
                 >
+                  <Settings2 className="h-4 w-4 mr-2" />
                   Manage Presets
                 </Button>
               </CardContent>
