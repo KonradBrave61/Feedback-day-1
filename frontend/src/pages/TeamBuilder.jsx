@@ -606,12 +606,23 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="text-gray-400 text-sm mb-3">
-                  {selectedTactics.length > 0 ? 
-                    selectedTactics.map(t => t.name).join(', ') : 
-                    'No tactics selected'
-                  }
+                {/* Selected Tactics Display */}
+                <div className="space-y-2 mb-3">
+                  {selectedTactics.length > 0 ? (
+                    selectedTactics.map(tactic => (
+                      <div 
+                        key={tactic.id}
+                        className="bg-blue-800/40 rounded-lg p-3 border border-blue-500/30"
+                      >
+                        <div className="text-white font-medium">{tactic.name}</div>
+                        <div className="text-blue-300 text-sm">{tactic.effect}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-sm">No tactics selected</div>
+                  )}
                 </div>
+                
                 <Button 
                   variant="outline"
                   className="w-full text-white border hover:opacity-80"
@@ -641,7 +652,7 @@ const TeamBuilder = () => {
                     setShowTacticsModal(true);
                   }}
                 >
-                  <Settings2 className="h-4 w-4 mr-2" />
+                  <Eye className="h-4 w-4 mr-2" />
                   Manage Presets
                 </Button>
               </CardContent>
