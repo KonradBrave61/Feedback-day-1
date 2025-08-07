@@ -30,11 +30,12 @@ import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import FormationField from '../components/FormationField';
 import PlayerSearch from '../components/PlayerSearch';
 import CharacterModal from '../components/CharacterModal';
+import TacticVisualizationModal from '../components/TacticVisualizationModal';
+import CoachSelector from '../components/CoachSelector';
+import { toast } from 'sonner';
 import EnhancedSaveTeamModal from '../components/EnhancedSaveTeamModal';
 import LoadTeamModal from '../components/LoadTeamModal';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'sonner';
-import TacticVisualizationModal from '../components/TacticVisualizationModal';
 
 const TeamBuilder = () => {
   const { user, saveTeam } = useAuth();
