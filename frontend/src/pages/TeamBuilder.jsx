@@ -526,6 +526,15 @@ const TeamBuilder = () => {
     }
   };
 
+  const handlePresetsUpdate = (updatedPresets, newCurrentPreset) => {
+    setTacticPresets(updatedPresets);
+    setCurrentPreset(newCurrentPreset);
+  };
+
+  const handleTacticSelect = (tactics) => {
+    setSelectedTactics(tactics);
+  };
+
   // Handle tactic selection from visualization modal
   const handleTacticVisualizationSelect = (tactics) => {
     setSelectedTactics(tactics);
