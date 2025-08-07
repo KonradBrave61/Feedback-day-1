@@ -697,7 +697,7 @@ const TeamBuilder = () => {
                     
                     {/* Coach Description */}
                     <div className="text-gray-400 text-sm">
-                      {selectedCoach.description || "Increases team's offensive capabilities"}
+                      {selectedCoach.bonuses?.description || "Increases team's capabilities"}
                     </div>
                     
                     {/* Coach Specialties */}
