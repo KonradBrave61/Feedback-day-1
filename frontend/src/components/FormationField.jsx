@@ -6,7 +6,7 @@ import { Card, CardContent } from './ui/card';
 import { Plus, X, Settings } from 'lucide-react';
 import { logoColors } from '../styles/colors';
 
-const FormationField = ({ formation, teamPlayers, benchPlayers, onAddPlayer, onRemovePlayer, onMovePlayer, onEditPlayer, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench }) => {
+const FormationField = ({ formation, players, benchPlayers, onAddPlayer, onRemovePlayer, onMovePlayer, onEditPlayer, onAddBenchPlayer, onRemoveBenchPlayer, onMoveToBench, onMoveFromBench }) => {
   const getPositionColor = (position) => {
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
