@@ -352,23 +352,27 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                      style={{ background: logoColors.backgroundGradient }}>
         <DialogHeader className="relative">
           {/* Navigation Arrows */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute left-0 top-0 text-white hover:bg-blue-700/30"
-            onClick={() => navigateCharacter('prev')}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute right-0 top-0 text-white hover:bg-blue-700/30"
-            onClick={() => navigateCharacter('next')}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          {allCharacters && allCharacters.length > 1 && (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute left-0 top-0 text-white hover:bg-blue-700/30"
+                onClick={() => navigateCharacter('prev')}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 text-white hover:bg-blue-700/30"
+                onClick={() => navigateCharacter('next')}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </>
+          )}
 
           {/* Character Header */}
           <div className={`${getRarityColor(userRarity)} rounded-lg p-4 mt-8`}>
