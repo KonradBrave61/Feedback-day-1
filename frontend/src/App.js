@@ -39,6 +39,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
+            <Notification />
             <Toaster />
           </BrowserRouter>
         </AuthProvider>
