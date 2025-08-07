@@ -1,555 +1,397 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { mockCharacters, mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import Navigation from '../components/Navigation';
-import FormationField, { BenchSlot } from '../components/FormationField';
-import PlayerSearch from '../components/PlayerSearch';
-import TacticsSelector from '../components/TacticsSelector';
-import TacticVisualizationModal from '../components/TacticVisualizationModal';
-import CoachSelector from '../components/CoachSelector';
-import SaveTeamModal from '../components/EnhancedSaveTeamModal';
-import LoadTeamModal from '../components/LoadTeamModal';
-import CharacterModal from '../components/CharacterModal';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Users, Trophy, Target, Shield, Zap, UserCheck, Plus, X, Save, Download } from 'lucide-react';
-import { logoColors, componentColors } from '../styles/colors';
+import { Separator } from '../components/ui/separator';
+import { 
+  Plus, 
+  Users, 
+  Trophy, 
+  Target, 
+  Settings,
+  Save,
+  Trash2,
+  RotateCcw,
+  Upload
+} from 'lucide-react';
+import { logoColors } from '../styles/colors';
+import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
+import FormationField from '../components/FormationField';
+import PlayerSearch from '../components/PlayerSearch';
+import CharacterModal from '../components/CharacterModal';
+import EnhancedSaveTeamModal from '../components/EnhancedSaveTeamModal';
+import LoadTeamModal from '../components/LoadTeamModal';
+import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 
 const TeamBuilder = () => {
-  const { saveTeam, loadTeamDetails } = useAuth();
+  const { user, saveTeam } = useAuth();
+  
+  // Formation and tactical setup
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
+  const [selectedTactics, setSelectedTactics] = useState([]);
+  const [selectedCoach, setSelectedCoach] = useState(null);
+  
+  // Team composition
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
-  const [selectedTactics, setSelectedTactics] = useState([]);
-  const [tacticsPresets, setTacticsPresets] = useState({
-    1: { name: 'Preset 1', tactics: [] },
-    2: { name: 'Preset 2', tactics: [] }
-  });
-  const [currentTacticsPreset, setCurrentTacticsPreset] = useState(1);
-  const [selectedCoach, setSelectedCoach] = useState(null);
+  
+  // Modal states
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
-  const [showTacticsSelector, setShowTacticsSelector] = useState(false);
-  const [showTacticVisualization, setShowTacticVisualization] = useState(false);
-  const [showCoachSelector, setShowCoachSelector] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [isBenchSelection, setIsBenchSelection] = useState(false);
-  const [selectedBenchSlot, setSelectedBenchSlot] = useState(null);
-  const [showSaveTeamModal, setShowSaveTeamModal] = useState(false);
-  const [showLoadTeamModal, setShowLoadTeamModal] = useState(false);
+  const [showTeamBuilderSearch, setShowTeamBuilderSearch] = useState(false);
   const [showCharacterModal, setShowCharacterModal] = useState(false);
-  const [selectedCharacterForModal, setSelectedCharacterForModal] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  
+  // Current editing context
+  const [editingPosition, setEditingPosition] = useState(null);
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [isProcessingPlayer, setIsProcessingPlayer] = useState(false);
-  
-  // Add team building mode state
-  const [teamBuildingMode, setTeamBuildingMode] = useState(false);
-
-  // Check for team data to load from Profile page
-  useEffect(() => {
-    const loadTeamDataFromStorage = async () => {
-      const loadTeamData = localStorage.getItem('loadTeamData');
-      if (loadTeamData) {
-        try {
-          const data = JSON.parse(loadTeamData);
-          if (data.loadOnOpen && data.teamId) {
-            // Clear the localStorage data
-            localStorage.removeItem('loadTeamData');
-            
-            // Load the team details
-            const result = await loadTeamDetails(data.teamId);
-            if (result.success) {
-              await handleLoadTeamFromProfile(result.team);
-              toast.success('Team loaded successfully!');
-            } else {
-              toast.error('Failed to load team details');
-            }
-          }
-        } catch (error) {
-          console.error('Error loading team from storage:', error);
-          localStorage.removeItem('loadTeamData');
-        }
-      }
-    };
-
-    loadTeamDataFromStorage();
-  }, []);
-
-  // Handle loading team from Profile page
-  const handleLoadTeamFromProfile = async (teamData) => {
-    try {
-      console.log('Loading team from profile:', teamData);
-      
-      // Clear current team
-      setTeamPlayers({});
-      setBenchPlayers({});
-      setSelectedTactics([]);
-      setSelectedCoach(null);
-      
-      // Load formation
-      if (teamData.formation) {
-        const formation = mockFormations.find(f => f.id === teamData.formation || f.name === teamData.formation);
-        if (formation) {
-          setSelectedFormation(formation);
-        }
-      }
-      
-      // Load players
-      if (teamData.players && Array.isArray(teamData.players)) {
-        const loadedPlayers = {};
-        teamData.players.forEach(playerData => {
-          if (playerData && playerData.character_id && playerData.position_id) {
-            const character = mockCharacters.find(c => c.id === playerData.character_id || c.id === parseInt(playerData.character_id));
-            if (character) {
-              loadedPlayers[playerData.position_id] = {
-                ...character,
-                userLevel: playerData.user_level || 1,
-                userRarity: playerData.user_rarity || 'common',
-                userEquipment: playerData.user_equipment || {},
-                userHissatsu: playerData.user_hissatsu || []
-              };
-            }
-          }
-        });
-        setTeamPlayers(loadedPlayers);
-      }
-      
-      // Load bench players - API returns 'bench_players' array according to backend testing
-      const benchArray = teamData.bench_players || teamData.bench || teamData.team_data?.bench_players || teamData.team_data?.bench || [];
-      console.log('Bench array from profile (looking for bench_players):', benchArray);
-      if (benchArray && Array.isArray(benchArray) && benchArray.length > 0) {
-        const loadedBench = {};
-        benchArray.forEach((playerData, index) => {
-          if (playerData && playerData.character_id) {
-            // Use slot_id if available, otherwise generate based on index
-            const slotId = playerData.slot_id || `bench_${index}` || index.toString();
-            const character = mockCharacters.find(c => c.id === playerData.character_id || c.id === parseInt(playerData.character_id));
-            if (character) {
-              loadedBench[slotId] = {
-                ...character,
-                userLevel: playerData.user_level || 1,
-                userRarity: playerData.user_rarity || 'common',
-                userEquipment: playerData.user_equipment || {},
-                userHissatsu: playerData.user_hissatsu || []
-              };
-              console.log('Loaded bench player from profile:', character.name, 'in slot:', slotId, 'with techniques:', playerData.user_hissatsu?.length || 0);
-            } else {
-              console.warn('Character not found for bench player:', playerData.character_id);
-            }
-          } else {
-            console.warn('Invalid bench player data:', playerData);
-          }
-        });
-        setBenchPlayers(loadedBench);
-        console.log('Loaded bench players from profile (bench_players field):', Object.keys(loadedBench).length);
-      } else {
-        console.log('No bench data found in team data from profile - checking for bench_players field');
-      }
-      
-      // Load tactics
-      if (teamData.tactics && Array.isArray(teamData.tactics)) {
-        const loadedTactics = [];
-        teamData.tactics.forEach(tacticData => {
-          if (tacticData && typeof tacticData === 'object') {
-            const tactic = mockTactics.find(t => t.id === tacticData.id || t.name === tacticData.name);
-            if (tactic) {
-              loadedTactics.push(tactic);
-            }
-          }
-        });
-        setSelectedTactics(loadedTactics);
-      }
-      
-      // Load coach
-      if (teamData.coach) {
-        const coach = mockCoaches.find(c => c.id === teamData.coach.id || c.name === teamData.coach.name);
-        if (coach) {
-          setSelectedCoach(coach);
-        }
-      }
-      
-    } catch (error) {
-      console.error('Error loading team from profile:', error);
-      toast.error('Failed to load team from profile');
-    }
-  };
-
-  // Handle team built from enhanced Browse Players
-  const handleTeamBuilt = (builtTeam) => {
-    // Apply the built team to the current team state
-    setTeamPlayers(builtTeam.players);
-    setBenchPlayers(builtTeam.bench);
-    setTeamBuildingMode(false);
-  };
-
-  // Get currently selected player IDs for all interfaces
-  const getCurrentlySelectedPlayerIds = () => {
-    return [...Object.values(teamPlayers).filter(p => p && p.id).map(p => p.id), ...Object.values(benchPlayers).filter(p => p && p.id).map(p => p.id)];
-  };
-
-  const handleFormationChange = (formationId) => {
-    const formation = mockFormations.find(f => f.id === parseInt(formationId));
-    const oldFormation = selectedFormation;
-    setSelectedFormation(formation);
-    
-    // Preserve players that can still fit in the new formation
-    if (oldFormation && formation) {
-      setTeamPlayers(prev => {
-        const newTeamPlayers = {};
-        const newFormationPositions = formation.positions;
-        const playersToRelocate = [];
-        
-        // First pass: Keep players whose exact position exists in the new formation
-        Object.entries(prev).forEach(([positionId, player]) => {
-          const existsInNewFormation = newFormationPositions.some(pos => pos.id === positionId);
-          if (existsInNewFormation) {
-            newTeamPlayers[positionId] = player;
-          } else {
-            playersToRelocate.push(player);
-          }
-        });
-        
-        // Second pass: Move displaced players to same position type or closest available
-        playersToRelocate.forEach(player => {
-          const oldPosition = oldFormation.positions.find(pos => prev[pos.id] && prev[pos.id].id === player.id);
-          if (!oldPosition) return;
-          
-          // Try to find same position type in new formation
-          const samePositionTypeSlots = newFormationPositions.filter(pos => 
-            pos.position === oldPosition.position && !newTeamPlayers[pos.id]
-          );
-          
-          if (samePositionTypeSlots.length > 0) {
-            // Place in same position type
-            newTeamPlayers[samePositionTypeSlots[0].id] = player;
-          } else {
-            // Find closest available position by priority: same line, then any available
-            const availableSlots = newFormationPositions.filter(pos => !newTeamPlayers[pos.id]);
-            if (availableSlots.length > 0) {
-              // Priority order for position placement
-              const positionPriority = {
-                'GK': ['GK', 'DF', 'MF', 'FW'],
-                'DF': ['DF', 'MF', 'GK', 'FW'], 
-                'MF': ['MF', 'DF', 'FW', 'GK'],
-                'FW': ['FW', 'MF', 'DF', 'GK']
-              };
-              
-              const playerPositionPriority = positionPriority[oldPosition.position] || ['GK', 'DF', 'MF', 'FW'];
-              
-              // Find best available slot based on priority
-              let placedPlayer = false;
-              for (const preferredPos of playerPositionPriority) {
-                const matchingSlot = availableSlots.find(slot => slot.position === preferredPos);
-                if (matchingSlot) {
-                  newTeamPlayers[matchingSlot.id] = player;
-                  placedPlayer = true;
-                  break;
-                }
-              }
-              
-              // If still not placed, use first available slot
-              if (!placedPlayer && availableSlots.length > 0) {
-                newTeamPlayers[availableSlots[0].id] = player;
-              }
-            }
-          }
-        });
-        
-        return newTeamPlayers;
-      });
-    }
-  };
-
-  const handleAddPlayer = (positionId) => {
-    setSelectedPosition(positionId);
-    setShowPlayerSearch(true);
-  };
-
-  // Check if a player is already selected in team or bench
-  const isPlayerAlreadySelected = (playerId) => {
-    // Check team players
-    const teamPlayerIds = Object.values(teamPlayers).map(p => p.id);
-    // Check bench players
-    const benchPlayerIds = Object.values(benchPlayers).map(p => p.id);
-    return teamPlayerIds.includes(playerId) || benchPlayerIds.includes(playerId);
-  };
 
   const handlePlayerSelect = (player) => {
     // Check if player is already selected
     if (isPlayerAlreadySelected(player.id)) {
-      alert('This player is already in your team or on the bench!');
+      toast.warning('This player is already in your team or on the bench!');
       return;
     }
     
-    // Instead of direct selection, open character modal
-    setSelectedCharacterForModal(player);
-    setEditingPlayer(null); // This is for new player selection
-    setShowPlayerSearch(false);
-    setShowCharacterModal(true);
-  };
-
-  const handleEditPlayer = (player) => {
-    // Add null safety check
-    if (!player || !player.id) return;
-    
-    // Check if the player is on the bench
-    const isPlayerOnBench = Object.values(benchPlayers).some(benchPlayer => benchPlayer && benchPlayer.id === player.id);
-    
-    // Set the player for editing
-    setSelectedCharacterForModal(player);
+    // Open character modal for configuration
     setEditingPlayer(player);
-    setIsBenchSelection(isPlayerOnBench); // Set bench selection flag if player is on bench
     setShowCharacterModal(true);
+    setShowPlayerSearch(false);
   };
 
-  const handleCharacterModalConfirm = (character, userLevel, userRarity, equipment, hissatsu) => {
-    // Prevent double processing
-    if (isProcessingPlayer) {
-      return;
+  // Helper function to get currently selected player IDs
+  const getCurrentlySelectedPlayerIds = () => {
+    if (!teamPlayers || !benchPlayers) return [];
+    
+    const teamPlayerIds = Object.values(teamPlayers)
+      .filter(player => player && player.id)
+      .map(player => player.id);
+    
+    const benchPlayerIds = Object.values(benchPlayers)
+      .filter(player => player && player.id)
+      .map(player => player.id);
+    
+    return [...teamPlayerIds, ...benchPlayerIds];
+  };
+
+  const handleQuickTeamBuilder = (builtTeam) => {
+    if (builtTeam.players) {
+      setTeamPlayers(builtTeam.players);
     }
-
-    setIsProcessingPlayer(true);
-
-    // Create enhanced player object with user customizations
-    const enhancedPlayer = {
-      ...character,
-      userLevel: userLevel,
-      userRarity: userRarity,
-      userEquipment: equipment,
-      userHissatsu: hissatsu
-    };
-
-    if (editingPlayer) {
-      // Update existing player
-      if (isBenchSelection) {
-        setBenchPlayers(prev => {
-          const newBench = { ...prev };
-          // Find which bench slot has this player
-          const benchSlot = Object.keys(prev).find(slot => prev[slot] && prev[slot].id === editingPlayer.id);
-          if (benchSlot) {
-            newBench[benchSlot] = enhancedPlayer;
-          }
-          setIsProcessingPlayer(false);
-          return newBench;
-        });
-      } else {
-        setTeamPlayers(prev => {
-          const newTeam = { ...prev };
-          // Find which position has this player
-          const position = Object.keys(prev).find(pos => prev[pos] && prev[pos].id === editingPlayer.id);
-          if (position) {
-            newTeam[position] = enhancedPlayer;
-          }
-          setIsProcessingPlayer(false);
-          return newTeam;
-        });
-      }
-    } else {
-      // Add new player - double check for duplicates
-      const currentTeamPlayerIds = Object.values(teamPlayers).map(p => p.id);
-      const currentBenchPlayerIds = Object.values(benchPlayers).map(p => p.id);
-      
-      if (currentTeamPlayerIds.includes(character.id) || currentBenchPlayerIds.includes(character.id)) {
-        alert('This player is already in your team or on the bench!');
-        setIsProcessingPlayer(false);
-        return;
-      }
-
-      if (isBenchSelection) {
-        if (selectedBenchSlot !== null) {
-          // Specific bench slot selected
-          setBenchPlayers(prev => {
-            setIsProcessingPlayer(false);
-            return {
-              ...prev,
-              [selectedBenchSlot]: enhancedPlayer
-            };
-          });
-        } else {
-          // Find first available bench slot
-          setBenchPlayers(prev => {
-            const newBench = { ...prev };
-            for (let i = 0; i < 5; i++) {
-              if (!newBench[i]) {
-                newBench[i] = enhancedPlayer;
-                break;
-              }
-            }
-            setIsProcessingPlayer(false);
-            return newBench;
-          });
-        }
-        setIsBenchSelection(false);
-        setSelectedBenchSlot(null);
-      } else if (selectedPosition) {
-        // Specific position selected
-        setTeamPlayers(prev => {
-          setIsProcessingPlayer(false);
-          return {
-            ...prev,
-            [selectedPosition]: enhancedPlayer
-          };
-        });
-      } else {
-        // No specific position - user needs to select during modal or find best fit
-        // For now, we'll alert user to select a specific position
-        alert('Please select a specific position on the field or use the position-specific add buttons.');
-        setIsProcessingPlayer(false);
-        return;
-      }
+    if (builtTeam.bench) {
+      setBenchPlayers(builtTeam.bench);
     }
     
-    setShowCharacterModal(false);
-    setSelectedCharacterForModal(null);
-    setSelectedPosition(null);
-    setEditingPlayer(null);
+    const totalPlayers = Object.keys(builtTeam.players || {}).length + Object.keys(builtTeam.bench || {}).length;
+    toast.success(`Team applied successfully! Added ${totalPlayers} players to your squad.`);
   };
 
-  const handleAddBenchPlayer = (slotIndex) => {
-    setSelectedBenchSlot(slotIndex);
-    setIsBenchSelection(true);
+  // Check if a player is already selected in team or bench
+  const isPlayerAlreadySelected = (playerId) => {
+    if (!playerId) return false;
+    return getCurrentlySelectedPlayerIds().includes(playerId);
+  };
+
+  const handleAddPlayer = (positionId) => {
+    setEditingPosition(positionId);
     setShowPlayerSearch(true);
   };
 
-  const handleRemoveBenchPlayer = (slotIndex) => {
-    setBenchPlayers(prev => {
-      const newBench = { ...prev };
-      delete newBench[slotIndex];
-      return newBench;
-    });
+  const handleEditPlayer = (player) => {
+    // Check if it's a bench player
+    const benchSlot = Object.keys(benchPlayers).find(slot => benchPlayers[slot] && benchPlayers[slot].id === player.id);
+    
+    if (benchSlot !== undefined) {
+      // Bench player editing
+      setEditingPlayer(player);
+      setEditingPosition(`bench_${benchSlot}`);
+    } else {
+      // Regular field player editing
+      setEditingPlayer(player);
+      setEditingPosition(null);
+    }
+    
+    setShowCharacterModal(true);
   };
 
   const handleRemovePlayer = (positionId) => {
-    setTeamPlayers(prev => {
-      const newTeam = { ...prev };
-      delete newTeam[positionId];
-      return newTeam;
-    });
-  };
-
-  const handleMovePlayer = (fromPosition, toPosition) => {
-    setTeamPlayers(prev => {
-      const newTeam = { ...prev };
-      const playerToMove = newTeam[fromPosition];
-      const playerAtDestination = newTeam[toPosition];
-      
-      // Swap players or move to empty position
-      if (playerAtDestination) {
-        newTeam[fromPosition] = playerAtDestination;
-      } else {
-        delete newTeam[fromPosition];
-      }
-      newTeam[toPosition] = playerToMove;
-      
-      return newTeam;
-    });
-  };
-
-  // Move player from formation to bench
-  const handleMoveToBench = (fromPosition, toBenchSlot) => {
-    const playerToMove = teamPlayers[fromPosition];
-    if (!playerToMove) return;
-
-    // Remove from formation
-    setTeamPlayers(prev => {
-      const newTeam = { ...prev };
-      delete newTeam[fromPosition];
-      return newTeam;
-    });
-
-    // Add to bench (replace if slot is occupied)
-    setBenchPlayers(prev => ({
-      ...prev,
-      [toBenchSlot]: playerToMove
-    }));
-  };
-
-  // Move player from bench to formation
-  const handleMoveFromBench = (fromBenchSlot, toPosition, isSwap = false) => {
-    const playerToMove = benchPlayers[fromBenchSlot];
-    if (!playerToMove) return;
-
-    if (isSwap && teamPlayers[toPosition]) {
-      // Swap players between bench and formation
-      const formationPlayer = teamPlayers[toPosition];
-      
-      setTeamPlayers(prev => ({
-        ...prev,
-        [toPosition]: playerToMove
-      }));
-      
-      setBenchPlayers(prev => ({
-        ...prev,
-        [fromBenchSlot]: formationPlayer
-      }));
-    } else {
-      // Simple move from bench to formation
-      setTeamPlayers(prev => ({
-        ...prev,
-        [toPosition]: playerToMove
-      }));
-
+    if (positionId.startsWith('bench_')) {
+      const benchSlot = positionId.replace('bench_', '');
       setBenchPlayers(prev => {
         const newBench = { ...prev };
-        delete newBench[fromBenchSlot];
+        delete newBench[benchSlot];
         return newBench;
+      });
+    } else {
+      setTeamPlayers(prev => {
+        const newTeam = { ...prev };
+        delete newTeam[positionId];
+        return newTeam;
       });
     }
   };
 
-  const handleTacticsSelect = (tactics) => {
-    setSelectedTactics(tactics);
+  const handleCharacterModalSave = (character, userLevel, userRarity, equipment, hissatsu) => {
+    setIsProcessingPlayer(true);
+
+    // Create enhanced player with user configurations
+    const enhancedPlayer = {
+      ...character,
+      userLevel,
+      userRarity,
+      userEquipment: equipment,
+      userHissatsu: hissatsu
+    };
+
+    // Double-check for duplicates before saving
+    const currentPlayerIds = getCurrentlySelectedPlayerIds();
+    const currentBenchPlayerIds = Object.values(benchPlayers).map(p => p.id);
+    const currentTeamPlayerIds = Object.values(teamPlayers).map(p => p.id);
+    
+    if (currentTeamPlayerIds.includes(character.id) || currentBenchPlayerIds.includes(character.id)) {
+      toast.warning('This player is already in your team or on the bench!');
+      setIsProcessingPlayer(false);
+      return;
+    }
+
+    if (editingPosition) {
+      if (editingPosition.startsWith('bench_')) {
+        // Handle bench player
+        const benchSlot = editingPosition.replace('bench_', '');
+        setBenchPlayers(prev => ({
+          ...prev,
+          [benchSlot]: enhancedPlayer
+        }));
+      } else {
+        // Handle field position
+        setTeamPlayers(prev => ({
+          ...prev,
+          [editingPosition]: enhancedPlayer
+        }));
+      }
+    } else if (selectedFormation) {
+      // Auto-assign to best available position
+      const assignedPosition = autoAssignPosition(character);
+      
+      if (assignedPosition) {
+        setTeamPlayers(prev => ({
+          ...prev,
+          [assignedPosition]: enhancedPlayer
+        }));
+      } else {
+        // Try to add to bench - find first available slot
+        let foundBenchSlot = false;
+        for (let i = 0; i < 5; i++) {
+          if (!benchPlayers[i]) {
+            setBenchPlayers(prev => ({
+              ...prev,
+              [i]: enhancedPlayer
+            }));
+            foundBenchSlot = true;
+            break;
+          }
+        }
+        
+        if (!foundBenchSlot) {
+          toast.error('Please select a specific position on the field or use the position-specific add buttons.');
+          setIsProcessingPlayer(false);
+          return;
+        }
+      }
+    } else {
+      // No specific position - user needs to select during modal or find best fit
+      // For now, we'll show message to select a specific position
+      toast.warning('Please select a specific position on the field or use the position-specific add buttons.');
+      setIsProcessingPlayer(false);
+      return;
+    }
+
+    // Reset states
+    setShowCharacterModal(false);
+    setEditingPlayer(null);
+    setEditingPosition(null);
+    setIsProcessingPlayer(false);
   };
 
-  const handleTacticsPresetUpdate = (presets, currentPreset) => {
-    setTacticsPresets(presets);
-    setCurrentTacticsPreset(currentPreset);
+  // Auto-assign player to best position
+  const autoAssignPosition = (player) => {
+    if (!selectedFormation) return null;
+
+    // First, try to find an empty position that matches the player's position
+    const matchingPositions = selectedFormation.positions.filter(
+      pos => pos.position === player.position && !teamPlayers[pos.id]
+    );
+
+    if (matchingPositions.length > 0) {
+      return matchingPositions[0].id;
+    }
+
+    // If no exact position match available, try ANY available formation position
+    const anyAvailablePositions = selectedFormation.positions.filter(
+      pos => !teamPlayers[pos.id]
+    );
+
+    if (anyAvailablePositions.length > 0) {
+      return anyAvailablePositions[0].id;
+    }
+
+    return null; // All positions filled
   };
 
-  const handleCoachSelect = (coach) => {
-    setSelectedCoach(coach);
+  const handleFormationChange = (formation) => {
+    if (!selectedFormation) {
+      setSelectedFormation(formation);
+      return;
+    }
+
+    // When changing formations, keep players that can fit in new formation
+    const newTeamPlayers = {};
+    
+    // Try to preserve as many players as possible
+    const newPositions = formation.positions;
+    const currentPlayers = Object.entries(teamPlayers);
+    
+    // First, try to place players in matching positions
+    currentPlayers.forEach(([oldPositionId, player]) => {
+      if (!player) return;
+      
+      const oldPosition = selectedFormation.positions.find(p => p.id === oldPositionId);
+      if (!oldPosition) return;
+      
+      // Try to find a matching position in new formation
+      const matchingNewPosition = newPositions.find(
+        pos => pos.position === oldPosition.position && !newTeamPlayers[pos.id]
+      );
+      
+      if (matchingNewPosition) {
+        newTeamPlayers[matchingNewPosition.id] = player;
+      }
+    });
+    
+    // Then, try to fit remaining players in any available spots
+    currentPlayers.forEach(([oldPositionId, player]) => {
+      if (!player) return;
+      
+      // Skip if player is already placed
+      if (Object.values(newTeamPlayers).some(p => p?.id === player.id)) return;
+      
+      // Find any available position
+      const availablePosition = newPositions.find(pos => !newTeamPlayers[pos.id]);
+      if (availablePosition) {
+        newTeamPlayers[availablePosition.id] = player;
+      }
+    });
+    
+    setTeamPlayers(newTeamPlayers);
+    setSelectedFormation(formation);
+  };
+
+  const handleTacticToggle = (tactic) => {
+    setSelectedTactics(prev => {
+      const isSelected = prev.some(t => t.id === tactic.id);
+      if (isSelected) {
+        return prev.filter(t => t.id !== tactic.id);
+      } else {
+        // Limit to 2 tactics
+        if (prev.length >= 2) {
+          toast.warning('You can only select up to 2 tactics at a time.');
+          return prev;
+        }
+        return [...prev, tactic];
+      }
+    });
+  };
+
+  const getTeamStats = () => {
+    const players = Object.values(teamPlayers).filter(p => p);
+    if (players.length === 0) return { total: 0, average: 0, breakdown: {} };
+
+    const stats = {
+      kick: 0,
+      control: 0,
+      technique: 0,
+      intelligence: 0,
+      pressure: 0,
+      agility: 0,
+      physical: 0
+    };
+
+    let totalPlayers = 0;
+
+    players.forEach(player => {
+      // Base stats from player level and rarity
+      const baseStats = player.calculatedStats || player.stats || {};
+      
+      // Equipment bonuses
+      let equipmentBonus = {};
+      if (player.userEquipment) {
+        Object.values(player.userEquipment).forEach(equipment => {
+          if (equipment && equipment.stats) {
+            Object.entries(equipment.stats).forEach(([stat, value]) => {
+              equipmentBonus[stat] = (equipmentBonus[stat] || 0) + value;
+            });
+          }
+        });
+      }
+
+      // Add to team totals
+      Object.keys(stats).forEach(stat => {
+        const baseStat = baseStats[stat] || 0;
+        const equipBonus = equipmentBonus[stat] || 0;
+        stats[stat] += baseStat + equipBonus;
+      });
+
+      totalPlayers++;
+    });
+
+    const total = Object.values(stats).reduce((sum, val) => sum + val, 0);
+    const average = totalPlayers > 0 ? Math.round(total / totalPlayers / 7) : 0;
+
+    return { total, average, breakdown: stats, playerCount: totalPlayers };
   };
 
   const handleSaveTeam = async (teamData) => {
     try {
-      const teamPayload = {
-        name: teamData.name,
-        description: teamData.description,
-        is_public: teamData.is_public,
-        tags: teamData.tags,
-        formation: selectedFormation.name,
-        players: Object.entries(teamPlayers).map(([positionId, player]) => ({
-          position_id: positionId,
-          character_id: player.id,
-          user_level: player.userLevel || player.level || 1,
-          user_rarity: player.userRarity || player.rarity || 'common',
-          user_equipment: player.userEquipment || {},
-          user_hissatsu: player.userHissatsu || []
-        })),
-        bench: Object.entries(benchPlayers).map(([slotId, player]) => ({
-          slot_id: slotId,
-          character_id: player.id,
-          user_level: player.userLevel || player.level || 1,
-          user_rarity: player.userRarity || player.rarity || 'common',
-          user_equipment: player.userEquipment || {},
-          user_hissatsu: player.userHissatsu || []
-        })),
-        tactics: selectedTactics,
-        coach: selectedCoach
+      // Prepare team data for saving
+      const saveData = {
+        ...teamData,
+        formation_id: selectedFormation?.id,
+        formation_name: selectedFormation?.name,
+        players: Object.entries(teamPlayers)
+          .filter(([_, player]) => player)
+          .map(([positionId, player]) => ({
+            character_id: player.id,
+            position_id: positionId,
+            user_level: player.userLevel || player.baseLevel || 1,
+            user_rarity: player.userRarity || player.baseRarity || 1,
+            user_equipment: player.userEquipment || {},
+            user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
+          })),
+        bench_players: Object.entries(benchPlayers)
+          .filter(([_, player]) => player)
+          .map(([slot, player]) => ({
+            character_id: player.id,
+            slot_id: `bench_${slot}`,
+            user_level: player.userLevel || player.baseLevel || 1,
+            user_rarity: player.userRarity || player.baseRarity || 1,
+            user_equipment: player.userEquipment || {},
+            user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
+          })),
+        tactics: selectedTactics.map(t => ({ id: t.id, name: t.name })),
+        coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null
       };
 
-      const result = await saveTeam(teamPayload);
-      if (result.success) {
-        setShowSaveTeamModal(false);
-        // You could show a success toast here
-        return result;
-      } else {
-        throw new Error(result.error || 'Failed to save team');
-      }
+      const result = await saveTeam(saveData);
+      return { success: true, team: result.team };
     } catch (error) {
-      console.error('Error saving team:', error);
+      console.error('Error in handleSaveTeam:', error);
       throw error;
     }
   };
@@ -558,191 +400,92 @@ const TeamBuilder = () => {
     try {
       console.log('Loading team data:', teamData);
       
-      // Clear current team
-      setTeamPlayers({});
-      setBenchPlayers({});
-      setSelectedTactics([]);
-      setSelectedCoach(null);
-      setSelectedFormation(null);
-      
-      // Load formation if available
-      if (teamData.formation) {
-        const formation = mockFormations.find(f => f.id === teamData.formation || f.name === teamData.formation);
+      // Load formation
+      if (teamData.formation_id) {
+        const formation = mockFormations.find(f => f.id === teamData.formation_id);
         if (formation) {
           setSelectedFormation(formation);
-          console.log('Loaded formation:', formation.name);
         }
       }
       
-      // Load players from the correct field (could be 'players' or 'team_data')
-      const playersArray = teamData.players || teamData.team_data?.players || [];
-      if (playersArray && Array.isArray(playersArray)) {
+      // Load tactics
+      if (teamData.tactics && Array.isArray(teamData.tactics)) {
+        const tacticObjects = teamData.tactics.map(tacticData => {
+          if (typeof tacticData === 'object' && tacticData.id) {
+            return mockTactics.find(t => t.id === tacticData.id);
+          }
+          return mockTactics.find(t => t.id === tacticData);
+        }).filter(Boolean);
+        setSelectedTactics(tacticObjects);
+      }
+      
+      // Load coach
+      if (teamData.coach && teamData.coach.id) {
+        const coach = mockCoaches.find(c => c.id === teamData.coach.id);
+        if (coach) {
+          setSelectedCoach(coach);
+        }
+      }
+      
+      // Load main team players
+      if (teamData.players && Array.isArray(teamData.players)) {
         const newTeamPlayers = {};
-        playersArray.forEach((playerData) => {
-          if (playerData && playerData.character_id) {
-            // Use the position_id from the data or generate one
-            const positionId = playerData.position_id || `position_${Object.keys(newTeamPlayers).length + 1}`;
-            
-            // Find the base character data
-            const baseCharacter = mockCharacters.find(c => c.id === playerData.character_id);
-            if (baseCharacter) {
-              newTeamPlayers[positionId] = {
-                ...baseCharacter,
-                userLevel: playerData.user_level || baseCharacter.level,
-                userRarity: playerData.user_rarity || baseCharacter.rarity,
-                userEquipment: playerData.user_equipment || {},
-                userHissatsu: playerData.user_hissatsu || []
-              };
-            }
+        teamData.players.forEach(playerData => {
+          if (playerData.character_id && playerData.position_id) {
+            // Create player object with loaded configuration
+            const enhancedPlayer = {
+              id: playerData.character_id,
+              userLevel: playerData.user_level,
+              userRarity: playerData.user_rarity,
+              userEquipment: playerData.user_equipment || {},
+              userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
+              // Add other character data here - you may need to fetch full character data
+              name: playerData.name || `Player ${playerData.character_id}`,
+              position: playerData.position || 'MF',
+              element: playerData.element || 'Wind'
+            };
+            newTeamPlayers[playerData.position_id] = enhancedPlayer;
           }
         });
         setTeamPlayers(newTeamPlayers);
-        console.log('Loaded players:', Object.keys(newTeamPlayers).length);
       }
       
-      // Load bench players - API returns 'bench_players' array according to backend testing
-      const benchArray = teamData.bench_players || teamData.bench || teamData.team_data?.bench_players || teamData.team_data?.bench || [];
-      console.log('Bench array from server (looking for bench_players first):', benchArray);
-      if (benchArray && Array.isArray(benchArray) && benchArray.length > 0) {
+      // Load bench players
+      if (teamData.bench_players && Array.isArray(teamData.bench_players)) {
         const newBenchPlayers = {};
-        benchArray.forEach((playerData, index) => {
-          if (playerData && playerData.character_id) {
-            // Use original slot_id if available, otherwise generate one based on index
-            const slotId = playerData.slot_id || `bench_${index}` || index.toString();
-            // Find the base character data
-            const baseCharacter = mockCharacters.find(c => 
-              c.id === playerData.character_id || 
-              c.id === parseInt(playerData.character_id)
-            );
-            if (baseCharacter) {
-              newBenchPlayers[slotId] = {
-                ...baseCharacter,
-                userLevel: playerData.user_level || playerData.userLevel || baseCharacter.level || 1,
-                userRarity: playerData.user_rarity || playerData.userRarity || baseCharacter.rarity || 'common',
-                userEquipment: playerData.user_equipment || playerData.userEquipment || {},
-                userHissatsu: playerData.user_hissatsu || playerData.userHissatsu || []
-              };
-              console.log('Loaded bench player:', baseCharacter.name, 'in slot:', slotId, 'with techniques:', playerData.user_hissatsu?.length || 0);
-            } else {
-              console.warn('Base character not found for bench player:', playerData.character_id);
-            }
-          } else {
-            console.warn('Invalid bench player data:', playerData);
+        teamData.bench_players.forEach(playerData => {
+          if (playerData.character_id && playerData.slot_id) {
+            const slotIndex = playerData.slot_id.replace('bench_', '');
+            const enhancedPlayer = {
+              id: playerData.character_id,
+              userLevel: playerData.user_level,
+              userRarity: playerData.user_rarity,
+              userEquipment: playerData.user_equipment || {},
+              userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
+              name: playerData.name || `Player ${playerData.character_id}`,
+              position: playerData.position || 'MF',
+              element: playerData.element || 'Wind'
+            };
+            newBenchPlayers[slotIndex] = enhancedPlayer;
           }
         });
         setBenchPlayers(newBenchPlayers);
-        console.log('Loaded bench players (bench_players field):', Object.keys(newBenchPlayers).length);
-      } else {
-        console.log('No bench_players data found - checking other fields');
-        // Clear existing bench if no bench data
-        setBenchPlayers({});
-      }
-      
-      // Load tactics (could be array of tactics or inside team_data)
-      const tacticsArray = teamData.tactics || teamData.team_data?.tactics || [];
-      if (tacticsArray && Array.isArray(tacticsArray) && tacticsArray.length > 0) {
-        // Load tactics into selectedTactics array
-        const loadedTactics = [];
-        tacticsArray.forEach(tacticData => {
-          // Add null check for tacticData
-          if (tacticData && typeof tacticData === 'object') {
-            // Find matching tactic from mockTactics
-            const tactic = mockTactics.find(t => 
-              (tacticData.id && t.id === tacticData.id) || 
-              (tacticData.name && t.name === tacticData.name)
-            );
-            if (tactic) {
-              loadedTactics.push(tactic);
-            }
-          } else if (typeof tacticData === 'string') {
-            // Handle case where tacticData is just a string name
-            const tactic = mockTactics.find(t => t.name === tacticData);
-            if (tactic) {
-              loadedTactics.push(tactic);
-            }
-          }
-        });
-        setSelectedTactics(loadedTactics);
-        console.log('Loaded tactics:', loadedTactics.map(t => t.name).join(', '));
-        
-        // Also update the tactics presets
-        if (loadedTactics.length > 0) {
-          const updatedPresets = { ...tacticsPresets };
-          updatedPresets[currentTacticsPreset].tactics = loadedTactics;
-          setTacticsPresets(updatedPresets);
-        }
-      }
-      
-      // Load coach (could be coach object or inside team_data)
-      const coachData = teamData.coach || teamData.team_data?.coach;
-      if (coachData) {
-        // Add null check for coachData
-        if (typeof coachData === 'object' && coachData !== null) {
-          // Find matching coach from mockCoaches
-          const coach = mockCoaches.find(c => 
-            (coachData.id && c.id === coachData.id) || 
-            (coachData.name && c.name === coachData.name)
-          );
-          if (coach) {
-            setSelectedCoach(coach);
-            console.log('Loaded coach:', coach.name);
-          }
-        } else if (typeof coachData === 'string') {
-          // Handle case where coachData is just a string name
-          const coach = mockCoaches.find(c => c.name === coachData);
-          if (coach) {
-            setSelectedCoach(coach);
-            console.log('Loaded coach:', coach.name);
-          }
-        }
       }
       
       toast.success('Team loaded successfully!');
-      
     } catch (error) {
       console.error('Error loading team:', error);
-      toast.error('Failed to load team data');
+      toast.error('Failed to load team');
     }
   };
 
-  const getTeamStats = () => {
-    const players = Object.values(teamPlayers);
-    if (players.length === 0) return null;
-
-    const totalStats = players.reduce((acc, player) => {
-      // Add base stats
-      Object.keys(player.baseStats).forEach(stat => {
-        acc[stat] = (acc[stat] || 0) + player.baseStats[stat].main;
-      });
-      
-      // Add equipment bonuses if player has userEquipment
-      if (player.userEquipment) {
-        Object.values(player.userEquipment).forEach(equipment => {
-          if (equipment && equipment.stats) {
-            Object.keys(equipment.stats).forEach(stat => {
-              acc[stat] = (acc[stat] || 0) + equipment.stats[stat];
-            });
-          }
-        });
-      }
-      
-      return acc;
-    }, {});
-
-    // Apply coach bonuses
-    if (selectedCoach) {
-      Object.keys(selectedCoach.bonuses.teamStats).forEach(stat => {
-        if (totalStats[stat]) {
-          totalStats[stat] += selectedCoach.bonuses.teamStats[stat];
-        }
-      });
-    }
-
-    return {
-      ...totalStats,
-      playerCount: players.length,
-      avgLevel: Math.round(players.reduce((acc, player) => acc + player.baseLevel, 0) / players.length)
-    };
+  const handleClearAll = () => {
+    setTeamPlayers({});
+    setBenchPlayers({});
+    setSelectedTactics([]);
+    setSelectedCoach(null);
+    setSelectedFormation(mockFormations[0]); // Reset to default formation instead of null
+    toast.success('Team cleared successfully!');
   };
 
   const teamStats = getTeamStats();
@@ -751,481 +494,442 @@ const TeamBuilder = () => {
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-white mb-4 bg-clip-text text-transparent" 
-              style={{ background: logoColors.yellowOrangeGradient, WebkitBackgroundClip: 'text' }}>
-            Team Builder
-          </h1>
-          <p className="text-xl text-gray-300">
-            Build your ultimate Inazuma Eleven team
-          </p>
+      <div className="container mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-white mb-2">Team Builder</h1>
+          <p className="text-gray-300">Create and customize your ultimate team</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Panel - Formation & Controls */}
+          {/* Left Panel - Controls */}
           <div className="lg:col-span-1 space-y-4">
             {/* Quick Actions */}
-            <Card className="backdrop-blur-lg text-white border" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Settings className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                   Quick Actions
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Button
-                    className="w-full text-black font-bold hover:opacity-80"
-                    style={{ background: logoColors.yellowOrangeGradient }}
-                    onClick={() => {
-                      setTeamBuildingMode(true);
-                      setSelectedPosition(null);
-                      setIsBenchSelection(false);
-                      setShowPlayerSearch(true);
-                    }}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Quick Team Builder
-                  </Button>
-                </div>
+              <CardContent className="space-y-2">
+                <Button 
+                  className="w-full text-white hover:opacity-80"
+                  style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
+                  onClick={() => setShowTeamBuilderSearch(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Quick Team Builder
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                  onClick={() => setShowLoadModal(true)}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Load Team
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                  onClick={() => setShowSaveModal(true)}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Team
+                </Button>
+                
+                <Button 
+                  variant="outline"
+                  className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
+                  onClick={handleClearAll}
+                  disabled={!selectedFormation}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear All
+                </Button>
               </CardContent>
             </Card>
 
             {/* Formation Selection */}
-            <Card className="backdrop-blur-lg text-white border" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Formation
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Select value={selectedFormation?.id?.toString() || ''} onValueChange={handleFormationChange}>
-                  <SelectTrigger className="text-white border" style={{ 
-                    backgroundColor: logoColors.blackAlpha(0.3),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}>
-                    <SelectValue />
+                <Select 
+                  value={selectedFormation?.id.toString() || ''} 
+                  onValueChange={(value) => {
+                    const formation = mockFormations.find(f => f.id.toString() === value);
+                    if (formation) handleFormationChange(formation);
+                  }}
+                >
+                  <SelectTrigger className="text-white border"
+                                style={{ 
+                                  backgroundColor: logoColors.blackAlpha(0.3),
+                                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                                }}>
+                    <SelectValue placeholder="Select Formation" />
                   </SelectTrigger>
-                  <SelectContent style={{ 
-                    backgroundColor: logoColors.blackAlpha(0.9),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}>
+                  <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
                     {mockFormations.map(formation => (
                       <SelectItem 
                         key={formation.id} 
                         value={formation.id.toString()} 
-                        className="text-white hover:opacity-80"
-                        style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
+                        className="text-white hover:bg-blue-800"
                       >
                         {formation.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {selectedFormation && (
+                  <p className="text-sm text-gray-400 mt-2">
+                    {selectedFormation.description}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Team Statistics */}
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Trophy className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+                  Team Stats
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Players:</span>
+                    <span className="text-white">{teamStats.playerCount}/11</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Bench:</span>
+                    <span className="text-white">{Object.keys(benchPlayers).length}/5</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Avg Rating:</span>
+                    <span style={{ color: logoColors.primaryYellow }}>{teamStats.average}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Total Stats:</span>
+                    <span style={{ color: logoColors.primaryBlue }}>{teamStats.total}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Center Panel - Formation Field */}
+          <div className="lg:col-span-2">
+            {selectedFormation ? (
+              <FormationField
+                formation={selectedFormation}
+                players={teamPlayers}
+                benchPlayers={benchPlayers}
+                onAddPlayer={handleAddPlayer}
+                onEditPlayer={handleEditPlayer}
+                onRemovePlayer={handleRemovePlayer}
+                selectedTactics={selectedTactics}
+                selectedCoach={selectedCoach}
+              />
+            ) : (
+              <Card className="backdrop-blur-lg text-white border h-[600px] flex items-center justify-center"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.3),
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
+                <div className="text-center">
+                  <Target className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+                  <p className="text-gray-400">Select a formation to start building your team</p>
+                  <Button 
+                    className="mt-4 text-white hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
+                    onClick={() => setSelectedFormation(mockFormations[0])}
+                  >
+                    Choose Default Formation
+                  </Button>
+                </div>
+              </Card>
+            )}
+          </div>
+
+          {/* Right Panel - Bench */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* Bench */}
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="h-5 w-5" style={{ color: logoColors.lightBlue }} />
+                  Bench ({Object.keys(benchPlayers).length}/5)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {Array.from({ length: 5 }, (_, index) => {
+                    const player = benchPlayers[index];
+                    return (
+                      <div key={index} className="flex items-center gap-3">
+                        {player ? (
+                          <>
+                            <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center text-xs font-bold"
+                                 style={{
+                                   backgroundColor: logoColors.lightBlue,
+                                   borderColor: logoColors.primaryBlue,
+                                   color: logoColors.white
+                                 }}>
+                              {player.name.charAt(0)}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium text-white">{player.name}</p>
+                              <p className="text-xs text-gray-400">{player.position} • {player.element}</p>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-8 h-8 p-0 text-gray-400 hover:text-white"
+                              onClick={() => handleEditPlayer(player)}
+                            >
+                              <Settings className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-8 h-8 p-0 text-red-400 hover:text-red-300"
+                              onClick={() => handleRemovePlayer(`bench_${index}`)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-12 h-12 rounded-full border-2 border-dashed border-gray-500 flex items-center justify-center">
+                              <Plus className="h-6 w-6 text-gray-500" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-gray-500">Empty slot</p>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-8 h-8 p-0 text-gray-500 hover:text-white"
+                              onClick={() => {
+                                setEditingPosition(`bench_${index}`);
+                                setShowPlayerSearch(true);
+                              }}
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </CardContent>
             </Card>
 
             {/* Tactics Selection */}
-            <Card className="backdrop-blur-lg text-white border" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
-                  Tactics Presets
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
+                  Tactics ({selectedTactics.length}/2)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 mb-4">
-                  {selectedTactics.length > 0 ? (
-                    selectedTactics.map((tactic, index) => (
-                      <div key={index} className="p-2 rounded-lg border" style={{ 
-                        backgroundColor: logoColors.primaryBlueAlpha(0.2),
-                        borderColor: logoColors.primaryBlueAlpha(0.3)
-                      }}>
-                        <div className="font-medium text-sm">{tactic.name}</div>
-                        <div className="text-xs text-gray-300">{tactic.effect}</div>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {mockTactics.map(tactic => {
+                    const isSelected = selectedTactics.some(t => t.id === tactic.id);
+                    return (
+                      <div
+                        key={tactic.id}
+                        className={`p-2 rounded border cursor-pointer transition-all hover:opacity-80 ${
+                          isSelected ? 'border-orange-400 bg-orange-400/20' : 'border-gray-600 hover:border-gray-400'
+                        }`}
+                        onClick={() => handleTacticToggle(tactic)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-sm text-white">{tactic.name}</p>
+                            <p className="text-xs text-gray-400">{tactic.effect}</p>
+                          </div>
+                          <div className="text-lg">{tactic.icon}</div>
+                        </div>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-gray-400 text-sm">No tactics selected</div>
-                  )}
+                    );
+                  })}
                 </div>
-                <Button
-                  className="w-full text-white border hover:opacity-80 mb-2"
-                  style={{ 
-                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}
-                  onClick={() => setShowTacticVisualization(true)}
-                >
-                  <Target className="h-4 w-4 mr-2" />
-                  Tactical Visualization
-                </Button>
-                <Button
-                  className="w-full text-white border hover:opacity-80"
-                  style={{ 
-                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}
-                  onClick={() => setShowTacticsSelector(true)}
-                >
-                  <Target className="h-4 w-4 mr-2" />
-                  Manage Presets
-                </Button>
               </CardContent>
             </Card>
 
             {/* Coach Selection */}
-            <Card className="backdrop-blur-lg text-white border" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <UserCheck className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Coach
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedCoach ? (
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={selectedCoach.portrait}
-                        alt={selectedCoach.name}
-                        className="w-12 h-12 rounded-full"
-                      />
-                      <div>
-                        <div className="font-medium">{selectedCoach.name}</div>
-                        <div className="text-sm text-gray-300">{selectedCoach.title}</div>
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      {selectedCoach.bonuses.description}
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedCoach.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="outline" className="text-xs text-white" 
-                               style={{ 
-                                 borderColor: logoColors.primaryBlueAlpha(0.3),
-                                 backgroundColor: logoColors.primaryBlueAlpha(0.3)
-                               }}>
-                          {specialty}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-gray-400 text-sm mb-4">No coach selected</div>
-                )}
-                <Button
-                  className="w-full text-white border hover:opacity-80"
-                  style={{ 
-                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}
-                  onClick={() => setShowCoachSelector(true)}
-                >
-                  <UserCheck className="h-4 w-4 mr-2" />
-                  Select Coach
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Team Stats */}
-            {teamStats && (
-              <Card className="backdrop-blur-lg text-white border" style={{ 
-                backgroundColor: logoColors.blackAlpha(0.3),
-                borderColor: logoColors.primaryBlueAlpha(0.2)
-              }}>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
-                    Team Stats
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-300">Players:</span>
-                      <Badge variant="outline" className="text-white" 
-                             style={{ 
-                               borderColor: logoColors.primaryBlueAlpha(0.3),
-                               backgroundColor: logoColors.primaryBlueAlpha(0.3)
-                             }}>
-                        {teamStats.playerCount}/11
-                      </Badge>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
+                           style={{
+                             backgroundColor: logoColors.primaryYellow,
+                             borderColor: logoColors.primaryOrange,
+                             color: logoColors.black
+                           }}>
+                        👨‍💼
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-white">{selectedCoach.name}</p>
+                        <p className="text-xs text-gray-400">{selectedCoach.title}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-8 h-8 p-0 text-red-400 hover:text-red-300"
+                        onClick={() => setSelectedCoach(null)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-300">Avg Level:</span>
-                      <Badge variant="outline" className="text-black font-bold" 
-                             style={{ 
-                               borderColor: logoColors.primaryYellow,
-                               backgroundColor: logoColors.primaryYellow
-                             }}>
-                        {teamStats.avgLevel}
-                      </Badge>
-                    </div>
-                    {selectedCoach && (
-                      <div className="text-xs text-orange-400">
-                        Coach bonuses applied
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Kick:</span>
-                        <span className="text-red-400">{teamStats.kick}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Control:</span>
-                        <span className="text-orange-400">{teamStats.control}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Technique:</span>
-                        <span className="text-yellow-400">{teamStats.technique}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Intelligence:</span>
-                        <span style={{ color: logoColors.lightBlue }}>{teamStats.intelligence}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Pressure:</span>
-                        <span className="text-purple-400">{teamStats.pressure}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Agility:</span>
-                        <span style={{ color: logoColors.secondaryBlue }}>{teamStats.agility}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Physical:</span>
-                        <span className="text-gray-400">{teamStats.physical}</span>
-                      </div>
+                    <div className="text-xs text-gray-300">
+                      <p className="mb-1"><span className="text-gray-400">Specialty:</span> {selectedCoach.specialties}</p>
+                      <p><span className="text-gray-400">Bonuses:</span> {selectedCoach.bonuses}</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Team Actions */}
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardContent className="p-4 space-y-2">
-                <Button
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                  onClick={() => setShowLoadTeamModal(true)}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Load Team
-                </Button>
-                <Button
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white"
-                  onClick={() => setShowSaveTeamModal(true)}
-                  disabled={Object.keys(teamPlayers).length === 0}
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Team
-                </Button>
-                <Button
-                  className="w-full bg-red-900/60 border-red-500/40 hover:bg-red-800/80 text-white"
-                  onClick={() => {
-                    setTeamPlayers({});
-                    setBenchPlayers({});
-                  }}
-                  disabled={Object.keys(teamPlayers).length === 0 && Object.keys(benchPlayers).length === 0}
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Clear Team
-                </Button>
-                <Button
-                  className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-black hover:text-white"
-                  onClick={() => {
-                    // Clear all players and bench
-                    setTeamPlayers({});
-                    setBenchPlayers({});
-                    // Clear tactics and reset tactics presets
-                    setSelectedTactics([]);
-                    setTacticsPresets({
-                      1: { name: 'Preset 1', tactics: [] },
-                      2: { name: 'Preset 2', tactics: [] }
-                    });
-                    setCurrentTacticsPreset(1);
-                    // Clear coach but reset formation to default instead of null
-                    setSelectedCoach(null);
-                    setSelectedFormation(mockFormations[0]); // Reset to first formation instead of null
-                    toast.success('All team data cleared!');
-                  }}
-                  disabled={
-                    Object.keys(teamPlayers).length === 0 && 
-                    Object.keys(benchPlayers).length === 0 && 
-                    selectedTactics.length === 0 && 
-                    !selectedCoach
-                  }
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Clear All
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Middle Panel - Formation Field */}
-          <div className="lg:col-span-2">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-400" />
-                  {selectedFormation?.name || 'No Formation Selected'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedFormation ? (
-                  <FormationField
-                    formation={selectedFormation}
-                    teamPlayers={teamPlayers}
-                    benchPlayers={benchPlayers}
-                    onAddPlayer={handleAddPlayer}
-                    onRemovePlayer={handleRemovePlayer}
-                    onMovePlayer={handleMovePlayer}
-                    onEditPlayer={handleEditPlayer}
-                    onAddBenchPlayer={handleAddBenchPlayer}
-                    onRemoveBenchPlayer={handleRemoveBenchPlayer}
-                    onMoveToBench={handleMoveToBench}
-                    onMoveFromBench={handleMoveFromBench}
-                  />
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="text-gray-400 mb-4">Please select a formation to start building your team</div>
-                    <Button
-                      onClick={() => setSelectedFormation(mockFormations[0])}
-                      className="text-black font-bold hover:opacity-80"
-                      style={{ background: logoColors.yellowOrangeGradient }}
+                  <div className="space-y-3">
+                    <p className="text-gray-500 text-sm mb-3">No coach selected</p>
+                    <Select 
+                      value="" 
+                      onValueChange={(value) => {
+                        const coach = mockCoaches.find(c => c.id.toString() === value);
+                        if (coach) setSelectedCoach(coach);
+                      }}
                     >
-                      Select Formation
-                    </Button>
+                      <SelectTrigger className="text-white border"
+                                    style={{ 
+                                      backgroundColor: logoColors.blackAlpha(0.3),
+                                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                                    }}>
+                        <SelectValue placeholder="Select Coach" />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
+                        {mockCoaches.map(coach => (
+                          <SelectItem 
+                            key={coach.id} 
+                            value={coach.id.toString()} 
+                            className="text-white hover:bg-blue-800"
+                          >
+                            {coach.name} - {coach.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right Panel - Bench */}
-          <div className="lg:col-span-1">
-            <Card className="bg-black/30 backdrop-blur-lg border-orange-400/20 text-white h-[600px] w-20 mt-16">
-              <CardHeader className="p-2 pb-1">
-                <CardTitle className="flex items-center gap-1 text-xs">
-                  <Users className="h-3 w-3 text-orange-400" />
-                  <span className="text-xs">({Object.keys(benchPlayers).length}/5)</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="h-[calc(100%-2.5rem)] p-2">
-                <div className="h-full flex flex-col justify-between">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <BenchSlot
-                      key={index}
-                      slotIndex={index}
-                      player={benchPlayers[index]}
-                      onAddBenchPlayer={handleAddBenchPlayer}
-                      onRemoveBenchPlayer={handleRemoveBenchPlayer}
-                      onMoveToBench={handleMoveToBench}
-                      onMoveFromBench={handleMoveFromBench}
-                      onEditPlayer={handleEditPlayer}
-                    />
-                  ))}
-                </div>
               </CardContent>
             </Card>
           </div>
         </div>
-
-        {/* Modals */}
-        {showPlayerSearch && (
-          <PlayerSearch
-            isOpen={showPlayerSearch}
-            onClose={() => {
-              setShowPlayerSearch(false);
-              setTeamBuildingMode(false);
-            }}
-            onPlayerSelect={handlePlayerSelect}
-            position={selectedPosition}
-            selectedPlayerIds={getCurrentlySelectedPlayerIds()}
-            teamBuildingMode={teamBuildingMode}
-            currentFormation={selectedFormation}
-            onTeamBuilt={handleTeamBuilt}
-            currentTeamPlayers={teamPlayers}
-            currentBenchPlayers={benchPlayers}
-          />
-        )}
-
-        {showTacticsSelector && (
-          <TacticsSelector
-            isOpen={showTacticsSelector}
-            onClose={() => setShowTacticsSelector(false)}
-            onTacticSelect={handleTacticsSelect}
-            selectedTactics={selectedTactics}
-            presets={tacticsPresets}
-            currentPreset={currentTacticsPreset}
-            onPresetsUpdate={handleTacticsPresetUpdate}
-          />
-        )}
-
-        {showTacticVisualization && (
-          <TacticVisualizationModal
-            isOpen={showTacticVisualization}
-            onClose={() => setShowTacticVisualization(false)}
-            onTacticSelect={handleTacticsSelect}
-            selectedTactics={selectedTactics}
-          />
-        )}
-
-        {showCoachSelector && (
-          <CoachSelector
-            isOpen={showCoachSelector}
-            onClose={() => setShowCoachSelector(false)}
-            onCoachSelect={handleCoachSelect}
-            selectedCoach={selectedCoach}
-          />
-        )}
-
-        {showSaveTeamModal && (
-          <SaveTeamModal
-            isOpen={showSaveTeamModal}
-            onClose={() => setShowSaveTeamModal(false)}
-            onSave={handleSaveTeam}
-          />
-        )}
-
-        {showLoadTeamModal && (
-          <LoadTeamModal
-            isOpen={showLoadTeamModal}
-            onClose={() => setShowLoadTeamModal(false)}
-            onLoadTeam={handleLoadTeam}
-          />
-        )}
-
-        {showCharacterModal && selectedCharacterForModal && (
-          <CharacterModal
-            character={selectedCharacterForModal}
-            isOpen={showCharacterModal}
-            onClose={() => {
-              setShowCharacterModal(false);
-              setSelectedCharacterForModal(null);
-              setEditingPlayer(null);
-            }}
-            allCharacters={mockCharacters}
-            onAddToTeam={handleCharacterModalConfirm}
-            teamBuildingMode={false}
-          />
-        )}
       </div>
+
+      {/* Modals */}
+      {showPlayerSearch && (
+        <PlayerSearch
+          isOpen={showPlayerSearch}
+          onClose={() => {
+            setShowPlayerSearch(false);
+            setEditingPosition(null);
+          }}
+          onPlayerSelect={handlePlayerSelect}
+          position={editingPosition}
+          selectedPlayerIds={getCurrentlySelectedPlayerIds()}
+        />
+      )}
+
+      {showTeamBuilderSearch && (
+        <PlayerSearch
+          isOpen={showTeamBuilderSearch}
+          onClose={() => setShowTeamBuilderSearch(false)}
+          teamBuildingMode={true}
+          currentFormation={selectedFormation}
+          onTeamBuilt={handleQuickTeamBuilder}
+          currentTeamPlayers={teamPlayers}
+          currentBenchPlayers={benchPlayers}
+        />
+      )}
+
+      {showCharacterModal && editingPlayer && (
+        <CharacterModal
+          character={editingPlayer}
+          isOpen={showCharacterModal}
+          onClose={() => {
+            setShowCharacterModal(false);
+            setEditingPlayer(null);
+            setEditingPosition(null);
+          }}
+          onAddToTeam={handleCharacterModalSave}
+        />
+      )}
+
+      {showSaveModal && (
+        <EnhancedSaveTeamModal
+          isOpen={showSaveModal}
+          onClose={() => setShowSaveModal(false)}
+          onSave={handleSaveTeam}
+          teamData={{
+            formation: selectedFormation?.name,
+            players: Object.keys(teamPlayers).length,
+            bench: Object.keys(benchPlayers).length,
+            tactics: selectedTactics.length
+          }}
+        />
+      )}
+
+      {showLoadModal && (
+        <LoadTeamModal
+          isOpen={showLoadModal}
+          onClose={() => setShowLoadModal(false)}
+          onLoadTeam={handleLoadTeam}
+        />
+      )}
     </div>
   );
 };

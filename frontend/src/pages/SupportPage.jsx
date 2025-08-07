@@ -20,6 +20,7 @@ import {
   Send
 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
+import { toast } from 'sonner';
 
 const SupportPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -41,79 +42,36 @@ const SupportPage = () => {
 
   const handleBugSubmit = (e) => {
     e.preventDefault();
-    alert('Bug report submitted successfully!');
+    toast.success('Bug report submitted successfully!', {
+      description: 'We\'ll review your report and get back to you soon.'
+    });
     setBugFormData({ title: '', category: 'Gameplay Issues', priority: 'Medium', description: '', reproducible: false });
   };
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
-    alert('Message sent successfully!');
+    toast.success('Message sent successfully!', {
+      description: 'Our support team will respond within 24 hours.'
+    });
     setContactFormData({ name: '', email: '', category: 'General Question', subject: '', message: '' });
   };
 
   return (
     <div className="min-h-screen" 
          style={{ 
-           background: logoColors.backgroundGradient,
-           userSelect: 'none',
-           WebkitUserSelect: 'none',
-           MozUserSelect: 'none',
-           msUserSelect: 'none',
-           WebkitTouchCallout: 'none'
-         }}
-         onSelectStart={(e) => e.preventDefault()}
-         onDragStart={(e) => e.preventDefault()}
-         onMouseDown={(e) => {
-           // Allow clicks on buttons, forms, and interactive elements
-           if (e.target.closest('button') || 
-               e.target.closest('[role="tab"]') ||
-               e.target.closest('div[style*="cursor-pointer"]') ||
-               ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(e.target.tagName)) {
-             return; // Allow normal behavior for interactive elements
-           }
-           e.preventDefault(); // Prevent text selection for other elements
+           background: logoColors.backgroundGradient
          }}>
       <Navigation />
       
-      <div className="container mx-auto px-4 py-8" 
-           style={{ 
-             userSelect: 'none',
-             WebkitUserSelect: 'none',
-             MozUserSelect: 'none',
-             msUserSelect: 'none'
-           }}>
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8" 
-             style={{ 
-               userSelect: 'none',
-               WebkitUserSelect: 'none',
-               MozUserSelect: 'none',
-               msUserSelect: 'none'
-             }}>
-          <h1 className="text-4xl font-bold text-white mb-4" 
-              style={{ 
-                userSelect: 'none',
-                WebkitUserSelect: 'none',
-                MozUserSelect: 'none',
-                msUserSelect: 'none'
-              }}>Technical Support</h1>
-          <p className="text-gray-300 text-lg" 
-             style={{ 
-               userSelect: 'none',
-               WebkitUserSelect: 'none',
-               MozUserSelect: 'none',
-               msUserSelect: 'none'
-             }}>Get help with technical issues and account problems</p>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-4">Technical Support</h1>
+          <p className="text-gray-300 text-lg">Get help with technical issues and account problems</p>
         </div>
 
         {/* Main Content */}
-        <div className="max-w-6xl mx-auto" 
-             style={{ 
-               userSelect: 'none',
-               WebkitUserSelect: 'none',
-               MozUserSelect: 'none',
-               msUserSelect: 'none'
-             }}>
+        <div className="max-w-6xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mb-8"
                       style={{ 
@@ -122,46 +80,31 @@ const SupportPage = () => {
                       }}>
               <TabsTrigger 
                 value="overview" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
-                style={{
-                  '--active-bg': 'transparent'
-                }}
+                className="text-white data-[state=active]:text-white data-[state=active]:bg-blue-600/40 hover:bg-blue-600/20"
               >
                 Support Overview
               </TabsTrigger>
               <TabsTrigger 
                 value="bug" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
-                style={{
-                  '--active-bg': 'transparent'
-                }}
+                className="text-white data-[state=active]:text-white data-[state=active]:bg-blue-600/40 hover:bg-blue-600/20"
               >
                 Report Bug
               </TabsTrigger>
               <TabsTrigger 
                 value="account" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
-                style={{
-                  '--active-bg': 'transparent'
-                }}
+                className="text-white data-[state=active]:text-white data-[state=active]:bg-blue-600/40 hover:bg-blue-600/20"
               >
                 Account Issues
               </TabsTrigger>
               <TabsTrigger 
                 value="technical" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
-                style={{
-                  '--active-bg': 'transparent'
-                }}
+                className="text-white data-[state=active]:text-white data-[state=active]:bg-blue-600/40 hover:bg-blue-600/20"
               >
                 Technical Problems
               </TabsTrigger>
               <TabsTrigger 
                 value="contact" 
-                className="text-white data-[state=active]:text-white data-[state=active]:!bg-transparent"
-                style={{
-                  '--active-bg': 'transparent'
-                }}
+                className="text-white data-[state=active]:text-white data-[state=active]:bg-blue-600/40 hover:bg-blue-600/20"
               >
                 Contact Support
               </TabsTrigger>
@@ -169,32 +112,22 @@ const SupportPage = () => {
 
             {/* Support Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-6 mb-8" style={{ userSelect: 'none' }}>
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {/* Report a Bug */}
                 <div 
-                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-white border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
-                    borderColor: logoColors.primaryBlueAlpha(0.2),
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    msUserSelect: 'none',
-                    WebkitTouchCallout: 'none',
-                    WebkitTapHighlightColor: 'transparent'
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
                   }}
                   onClick={() => setActiveTab('bug')}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onSelectStart={(e) => e.preventDefault()}
-                  onDragStart={(e) => e.preventDefault()}
-                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6" style={{ userSelect: 'none' }}>
-                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
                       <Bug className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Report a Bug</h3>
+                      <h3 className="font-semibold text-lg text-black">Report a Bug</h3>
                     </div>
-                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
+                    <p className="text-black font-medium text-sm">
                       Found a problem? Help us fix it by reporting bugs and issues.
                     </p>
                   </div>
@@ -202,29 +135,19 @@ const SupportPage = () => {
 
                 {/* Account Issues */}
                 <div 
-                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-white border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
-                    borderColor: logoColors.primaryBlueAlpha(0.2),
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    msUserSelect: 'none',
-                    WebkitTouchCallout: 'none',
-                    WebkitTapHighlightColor: 'transparent'
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
                   }}
                   onClick={() => setActiveTab('account')}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onSelectStart={(e) => e.preventDefault()}
-                  onDragStart={(e) => e.preventDefault()}
-                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6" style={{ userSelect: 'none' }}>
-                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
                       <User className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Account Issues</h3>
+                      <h3 className="font-semibold text-lg text-black">Account Issues</h3>
                     </div>
-                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
+                    <p className="text-black font-medium text-sm">
                       Problems with login, profile, or account settings.
                     </p>
                   </div>
@@ -232,29 +155,19 @@ const SupportPage = () => {
 
                 {/* Technical Problems */}
                 <div 
-                  className="backdrop-blur-lg text-black hover:text-black border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
+                  className="backdrop-blur-lg text-white border rounded-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-in-out"
                   style={{ 
                     background: logoColors.yellowOrangeGradient,
-                    borderColor: logoColors.primaryBlueAlpha(0.2),
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    msUserSelect: 'none',
-                    WebkitTouchCallout: 'none',
-                    WebkitTapHighlightColor: 'transparent'
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
                   }}
                   onClick={() => setActiveTab('technical')}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onSelectStart={(e) => e.preventDefault()}
-                  onDragStart={(e) => e.preventDefault()}
-                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="p-6" style={{ userSelect: 'none' }}>
-                    <div className="flex items-center gap-3 mb-4" style={{ userSelect: 'none' }}>
+                  <div className="p-6">
+                    <div className="flex items-center gap-3 mb-4">
                       <Settings className="h-6 w-6" style={{ color: logoColors.black }} />
-                      <h3 className="font-semibold text-lg hover:text-black" style={{ userSelect: 'none', color: logoColors.black }}>Technical Problems</h3>
+                      <h3 className="font-semibold text-lg text-black">Technical Problems</h3>
                     </div>
-                    <p className="text-black hover:text-black font-medium text-sm" style={{ userSelect: 'none', color: logoColors.black }}>
+                    <p className="text-black font-medium text-sm">
                       Performance issues, loading problems, or browser compatibility.
                     </p>
                   </div>
@@ -262,83 +175,61 @@ const SupportPage = () => {
               </div>
 
               {/* Known Issues */}
-              <Card className="backdrop-blur-lg text-white border select-none"
+              <Card className="backdrop-blur-lg text-white border"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
-                      borderColor: logoColors.primaryBlueAlpha(0.2),
-                      userSelect: 'none',
-                      WebkitUserSelect: 'none',
-                      MozUserSelect: 'none',
-                      msUserSelect: 'none'
-                    }}
-                    onSelectStart={(e) => e.preventDefault()}
-                    onDragStart={(e) => e.preventDefault()}
-                    onMouseDown={(e) => e.preventDefault()}>
-                <CardHeader style={{ userSelect: 'none' }}>
-                  <CardTitle className="flex items-center gap-2 select-none" style={{ userSelect: 'none' }}>
+                      borderColor: logoColors.primaryBlueAlpha(0.2)
+                    }}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                     Known Issues
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4" style={{ userSelect: 'none' }}>
-                  <div className="p-4 rounded-lg border border-yellow-500/20 select-none" 
-                       style={{ 
-                         backgroundColor: logoColors.blackAlpha(0.2),
-                         userSelect: 'none'
-                       }}
-                       onSelectStart={(e) => e.preventDefault()}
-                       onDragStart={(e) => e.preventDefault()}>
-                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
-                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
+                <CardContent className="space-y-4">
+                  <div className="p-4 rounded-lg border border-yellow-500/20" 
+                       style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-yellow-400" />
-                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Team Formation Not Saving</span>
+                        <span className="font-medium">Team Formation Not Saving</span>
                       </div>
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 select-none">
+                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
                         Investigating
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Some users report formations reset after browser refresh</p>
-                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Use explicit save button before closing browser</p>
+                    <p className="text-sm text-gray-300 mb-2">Some users report formations reset after browser refresh</p>
+                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Use explicit save button before closing browser</p>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-green-500/20 select-none" 
-                       style={{ 
-                         backgroundColor: logoColors.blackAlpha(0.2),
-                         userSelect: 'none'
-                       }}
-                       onSelectStart={(e) => e.preventDefault()}
-                       onDragStart={(e) => e.preventDefault()}>
-                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
-                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
+                  <div className="p-4 rounded-lg border border-green-500/20" 
+                       style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
                         <CheckCircle className="h-4 w-4 text-green-400" />
-                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Constellation Pulls Loading Slowly</span>
+                        <span className="font-medium">Constellation Pulls Loading Slowly</span>
                       </div>
-                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30 select-none">
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
                         Fixed
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Fixed in latest update - clear browser cache if still experiencing issues</p>
-                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Refresh page if pull takes more than 10 seconds</p>
+                    <p className="text-sm text-gray-300 mb-2">Fixed in latest update - clear browser cache if still experiencing issues</p>
+                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Refresh page if pull takes more than 10 seconds</p>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-orange-500/20 select-none" 
-                       style={{ 
-                         backgroundColor: logoColors.blackAlpha(0.2),
-                         userSelect: 'none'
-                       }}
-                       onSelectStart={(e) => e.preventDefault()}
-                       onDragStart={(e) => e.preventDefault()}>
-                    <div className="flex items-center justify-between mb-2" style={{ userSelect: 'none' }}>
-                      <div className="flex items-center gap-2" style={{ userSelect: 'none' }}>
+                  <div className="p-4 rounded-lg border border-orange-500/20" 
+                       style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
                         <AlertTriangle className="h-4 w-4 text-orange-400" />
-                        <span className="font-medium select-none" style={{ userSelect: 'none' }}>Equipment Stats Not Displaying</span>
+                        <span className="font-medium">Equipment Stats Not Displaying</span>
                       </div>
-                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 select-none">
+                      <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">
                         Monitoring
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2 select-none" style={{ userSelect: 'none' }}>Rare cases where equipment bonuses don't show in team stats</p>
-                    <p className="text-xs text-blue-300 select-none" style={{ userSelect: 'none' }}><strong>Workaround:</strong> Re-equip items or refresh the Team Builder page</p>
+                    <p className="text-sm text-gray-300 mb-2">Rare cases where equipment bonuses don't show in team stats</p>
+                    <p className="text-xs text-blue-300"><strong>Workaround:</strong> Re-equip items or refresh the Team Builder page</p>
                   </div>
                 </CardContent>
               </Card>
