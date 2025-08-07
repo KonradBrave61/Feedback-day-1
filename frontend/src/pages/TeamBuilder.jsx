@@ -806,11 +806,11 @@ const TeamBuilder = () => {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Users className="h-5 w-5" style={{ color: logoColors.lightBlue }} />
-                  ({Object.keys(benchPlayers).filter(key => benchPlayers[key]).length}/5)
+                  Bench ({Object.keys(benchPlayers).filter(key => benchPlayers[key]).length}/5)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {Array.from({ length: 5 }, (_, index) => {
                     const player = benchPlayers[index];
                     return (
@@ -821,13 +821,18 @@ const TeamBuilder = () => {
                           </div>
                         ) : (
                           <div 
-                            className="w-full h-12 border-2 border-dashed border-gray-500 rounded-lg flex items-center justify-center cursor-pointer hover:border-gray-400"
+                            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
                             onClick={() => {
                               setEditingPosition(`bench_${index}`);
                               setShowPlayerSearch(true);
                             }}
                           >
-                            <Plus className="h-6 w-6 text-gray-500" />
+                            {/* Dashed circular border with plus inside */}
+                            <div className="w-12 h-12 border-2 border-dashed border-gray-400 rounded-full flex items-center justify-center">
+                              <Plus className="h-6 w-6 text-gray-400" />
+                            </div>
+                            {/* Empty slot text without extra plus */}
+                            <span className="text-gray-400 text-sm">Empty slot</span>
                           </div>
                         )}
                       </div>
