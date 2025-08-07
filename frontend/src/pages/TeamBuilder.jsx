@@ -1020,55 +1020,171 @@ const TeamBuilder = () => {
         </div>
       )}
 
-      {/* Coach Selection Modal */}
+      {/* Enhanced Coach Selection Modal */}
       {showCoachModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto backdrop-blur-lg text-white border"
+          <Card className="w-full max-w-4xl max-h-[85vh] overflow-y-auto backdrop-blur-lg text-white border"
                 style={{ 
-                  backgroundColor: logoColors.blackAlpha(0.9),
-                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                  backgroundColor: logoColors.blackAlpha(0.95),
+                  borderColor: logoColors.primaryBlueAlpha(0.4)
                 }}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Select Coach</span>
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center justify-between text-xl">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg" style={{ backgroundColor: logoColors.primaryYellow }}>
+                    <Users className="h-6 w-6" style={{ color: logoColors.black }} />
+                  </div>
+                  <span>Select Team Coach</span>
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowCoachModal(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white hover:bg-red-500/20"
                 >
                   ✕
                 </Button>
               </CardTitle>
+              <p className="text-sm text-gray-400 mt-2">
+                Choose a coach who will provide strategic bonuses and guidance to your team during matches.
+              </p>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {mockCoaches.map(coach => (
-                  <div
-                    key={coach.id}
-                    className="p-3 rounded border cursor-pointer transition-all hover:border-gray-400 border-gray-600"
-                    onClick={() => {
-                      setSelectedCoach(coach);
-                      setShowCoachModal(false);
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
-                           style={{
-                             backgroundColor: logoColors.primaryYellow,
-                             borderColor: logoColors.primaryOrange,
-                             color: logoColors.black
-                           }}>
-                        👨‍💼
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-white">{coach.name}</p>
-                        <p className="text-sm text-gray-400">{coach.title}</p>
-                        <p className="text-xs text-gray-500">{coach.specialties}</p>
+              <div className="grid grid-cols-1 gap-4">
+                {mockCoaches.map((coach, index) => {
+                  const isSelected = selectedCoach && selectedCoach.id === coach.id;
+                  return (
+                    <div
+                      key={coach.id}
+                      className={`p-6 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.01] ${
+                        isSelected 
+                          ? 'border-yellow-400 bg-yellow-400/20 shadow-lg shadow-yellow-400/30' 
+                          : 'border-gray-600 hover:border-gray-400 hover:bg-gray-800/30'
+                      }`}
+                      onClick={() => {
+                        setSelectedCoach(coach);
+                        setShowCoachModal(false);
+                        toast.success(`Coach ${coach.name} selected!`);
+                      }}
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Coach Avatar */}
+                        <div className={`w-16 h-16 rounded-full border-4 flex items-center justify-center text-2xl flex-shrink-0 ${
+                          isSelected 
+                            ? 'border-yellow-400 bg-yellow-400 text-black' 
+                            : 'border-gray-500 bg-gray-700'
+                        }`}>
+                          {index === 0 && '👨‍💼'} {/* Mark Evans Sr. */}
+                          {index === 1 && '🧑‍🏫'} {/* Ray Dark */}
+                          {index === 2 && '👴'} {/* Hibiki Seigou */}
+                        </div>
+                        
+                        {/* Coach Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-2">
+                            <div>
+                              <h3 className="font-bold text-white text-xl">{coach.name}</h3>
+                              <p className="text-lg" style={{ color: logoColors.lightBlue }}>{coach.title}</p>
+                            </div>
+                            {isSelected && (
+                              <div className="flex items-center gap-2">
+                                <Check className="h-6 w-6 text-yellow-400" />
+                                <span className="text-sm text-yellow-400 font-bold">SELECTED</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Specialties */}
+                          <div className="mb-4">
+                            <h4 className="text-sm font-medium text-gray-400 mb-2">Specialties:</h4>
+                            <p className="text-sm text-gray-300">{coach.specialties}</p>
+                          </div>
+                          
+                          {/* Coach Bonuses */}
+                          <div className="mb-4">
+                            <h4 className="text-sm font-medium text-gray-400 mb-2">Team Bonuses:</h4>
+                            <p className="text-sm text-gray-300">{coach.bonuses}</p>
+                          </div>
+                          
+                          {/* Stats/Experience */}
+                          <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-600/50">
+                            <div className="text-center">
+                              <div className="text-lg font-bold text-white">
+                                {index === 0 && '15'}{index === 1 && '22'}{index === 2 && '30'}
+                              </div>
+                              <div className="text-xs text-gray-400">Years Experience</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-lg font-bold" style={{ color: logoColors.primaryYellow }}>
+                                {index === 0 && '8.5'}{index === 1 && '9.2'}{index === 2 && '9.7'}
+                              </div>
+                              <div className="text-xs text-gray-400">Rating</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-lg font-bold" style={{ color: logoColors.lightBlue }}>
+                                {index === 0 && '12'}{index === 1 && '18'}{index === 2 && '25'}
+                              </div>
+                              <div className="text-xs text-gray-400">Trophies Won</div>
+                            </div>
+                          </div>
+                          
+                          {/* Coach Description */}
+                          <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: logoColors.blackAlpha(0.4) }}>
+                            <p className="text-xs text-gray-300 leading-relaxed">
+                              {index === 0 && "A veteran coach with extensive experience in offensive strategies. Mark specializes in developing young talent and maximizing team chemistry through spirit-building exercises."}
+                              {index === 1 && "A tactical mastermind who excels at reading opponents and adapting strategies mid-game. Ray's analytical approach has led many teams to victory through superior positioning and mental preparation."}
+                              {index === 2 && "A legendary figure in football coaching with decades of experience. Hibiki focuses on physical conditioning and technique mastery, creating well-rounded players who excel under pressure."}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex gap-3 mt-6 pt-4 border-t border-gray-600/50">
+                {selectedCoach && (
+                  <Button
+                    onClick={() => setShowCoachModal(false)}
+                    className="flex-1 text-white"
+                    style={{ 
+                      background: logoColors.primaryYellow,
+                      color: logoColors.black
+                    }}
+                  >
+                    <Check className="h-4 w-4 mr-2" />
+                    Confirm Selection: {selectedCoach.name}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedCoach(null);
+                    toast.info('Coach selection cleared');
+                  }}
+                  className="text-white border"
+                  style={{ 
+                    borderColor: logoColors.primaryBlueAlpha(0.6),
+                    backgroundColor: logoColors.blackAlpha(0.2)
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear Selection
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCoachModal(false)}
+                  className="text-white border"
+                  style={{ 
+                    borderColor: logoColors.primaryBlueAlpha(0.6),
+                    backgroundColor: logoColors.blackAlpha(0.2)
+                  }}
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Cancel
+                </Button>
               </div>
             </CardContent>
           </Card>
