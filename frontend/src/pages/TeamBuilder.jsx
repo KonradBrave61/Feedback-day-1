@@ -514,10 +514,6 @@ const TeamBuilder = () => {
     setCurrentPreset(newCurrentPreset);
   };
 
-  const handleTacticSelect = (tactics) => {
-    setSelectedTactics(tactics);
-  };
-
   // Handle tactic selection from visualization modal
   const handleTacticVisualizationSelect = (tactics) => {
     setSelectedTactics(tactics);
