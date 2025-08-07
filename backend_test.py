@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://f0292a78-5343-4819-be10-287dc0d2a7a4.preview.emergentagent.com/api"
+BACKEND_URL = "https://24c25e45-8c4c-4876-851b-f721d4d6e698.preview.emergentagent.com/api"
 
 class TeamBuilderAPITester:
     def __init__(self):
