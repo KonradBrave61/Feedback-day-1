@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Use the production URL from frontend/.env
-BASE_URL = "https://01bf6366-9f0d-44fc-907a-cf902a6b65b3.preview.emergentagent.com"
+BASE_URL = "https://3dc3f1d7-3374-48d2-9755-e377ea87ad81.preview.emergentagent.com"
 API_BASE = f"{BASE_URL}/api"
 
 class BackendHealthChecker:
