@@ -602,8 +602,8 @@ const TeamBuilder = () => {
                     color: 'white'
                   }}
                   onClick={() => {
-                    // Tactical Visualization functionality
-                    toast.info('Opening tactical visualization...');
+                    // Open the Tactical Visualization Modal
+                    setShowTacticVisualizationModal(true);
                   }}
                 >
                   Tactical Visualization
