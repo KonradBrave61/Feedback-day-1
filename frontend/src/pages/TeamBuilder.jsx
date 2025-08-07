@@ -64,7 +64,6 @@ const TeamBuilder = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showTacticsModal, setShowTacticsModal] = useState(false);
-  const [editingPresetId, setEditingPresetId] = useState(null); // Add editing mode state
   
   // Helper functions for preset management
   const addTacticToPreset = (presetId, tactic) => {
