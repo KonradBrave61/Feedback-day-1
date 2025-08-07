@@ -724,11 +724,7 @@ const TeamBuilder = () => {
             {/* Action Buttons */}
             <div className="space-y-2">
               <Button 
-                className="w-full text-white hover:opacity-80"
-                style={{ 
-                  backgroundColor: logoColors.primaryBlue, 
-                  color: 'white'
-                }}
+                className="w-full bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 text-white border hover:opacity-80"
                 onClick={() => setShowLoadModal(true)}
               >
                 <Upload className="h-4 w-4 mr-2" />
@@ -736,11 +732,7 @@ const TeamBuilder = () => {
               </Button>
               
               <Button 
-                className="w-full text-white hover:opacity-80"
-                style={{ 
-                  backgroundColor: logoColors.primaryBlue, 
-                  color: 'white'
-                }}
+                className="w-full bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 text-white border hover:opacity-80"
                 onClick={() => setShowSaveModal(true)}
                 disabled={Object.values(teamPlayers).filter(p => p).length === 0}
               >
@@ -749,11 +741,7 @@ const TeamBuilder = () => {
               </Button>
               
               <Button 
-                className="w-full hover:opacity-80"
-                style={{ 
-                  backgroundColor: Object.values(teamPlayers).filter(p => p).length > 0 ? logoColors.primaryBlue : '#374151',
-                  color: 'white'
-                }}
+                className="w-full bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 text-white border hover:opacity-80 disabled:pointer-events-none disabled:opacity-50"
                 onClick={handleClearAll}
                 disabled={Object.values(teamPlayers).filter(p => p).length === 0 && Object.values(benchPlayers).filter(p => p).length === 0}
               >
@@ -762,11 +750,7 @@ const TeamBuilder = () => {
               </Button>
               
               <Button 
-                className="w-full hover:opacity-80"
-                style={{ 
-                  backgroundColor: Object.values(teamPlayers).filter(p => p).length > 0 || Object.values(benchPlayers).filter(p => p).length > 0 ? logoColors.primaryBlue : '#374151',
-                  color: 'white'
-                }}
+                className="w-full bg-primary shadow hover:bg-primary/90 h-9 px-4 py-2 text-white border hover:opacity-80 disabled:pointer-events-none disabled:opacity-50"
                 onClick={handleClearAll}
                 disabled={Object.values(teamPlayers).filter(p => p).length === 0 && Object.values(benchPlayers).filter(p => p).length === 0 && !selectedCoach && selectedTactics.length === 0}
               >
