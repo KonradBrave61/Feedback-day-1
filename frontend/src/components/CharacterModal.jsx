@@ -11,7 +11,7 @@ import { logoColors } from '../styles/colors';
 
 const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam, teamBuildingMode = false, pendingPosition = null, pendingIsBench = false }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
-    allCharacters.findIndex(c => c.id === character.id)
+    allCharacters && character ? allCharacters.findIndex(c => c.id === character.id) : 0
   );
   // Initialize with saved values if they exist, otherwise use base values
   const [userLevel, setUserLevel] = useState(character.userLevel || character.baseLevel);
