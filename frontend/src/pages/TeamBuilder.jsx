@@ -66,6 +66,15 @@ const TeamBuilder = () => {
   const [showTacticsModal, setShowTacticsModal] = useState(false);
   
   // Helper functions for preset management
+  const handlePresetsUpdate = (updatedPresets, newCurrentPreset) => {
+    setTacticPresets(updatedPresets);
+    setCurrentPreset(newCurrentPreset);
+  };
+
+  const handleTacticSelect = (tactics) => {
+    setSelectedTactics(tactics);
+  };
+
   const [showCoachModal, setShowCoachModal] = useState(false);
   const [showTacticVisualizationModal, setShowTacticVisualizationModal] = useState(false);
   
