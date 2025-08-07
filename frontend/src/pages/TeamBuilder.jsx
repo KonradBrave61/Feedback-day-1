@@ -63,6 +63,34 @@ const TeamBuilder = () => {
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showTacticsModal, setShowTacticsModal] = useState(false);
   const [editingPresetId, setEditingPresetId] = useState(null); // Add editing mode state
+  
+  // Helper functions for preset management
+  const addTacticToPreset = (presetId, tactic) => {
+    if ((tacticPresets[presetId]?.tactics?.length || 0) >= 3) {
+      toast.error("Preset can only have 3 tactics maximum");
+      return;
+    }
+    
+    setTacticPresets(prev => ({
+      ...prev,
+      [presetId]: {
+        ...prev[presetId],
+        tactics: [...(prev[presetId]?.tactics || []), tactic]
+      }
+    }));
+    toast.success(`Added ${tactic.name} to Preset ${presetId}`);
+  };
+
+  const removeTacticFromPreset = (presetId, slotIndex) => {
+    setTacticPresets(prev => ({
+      ...prev,
+      [presetId]: {
+        ...prev[presetId],
+        tactics: prev[presetId]?.tactics?.filter((_, index) => index !== slotIndex) || []
+      }
+    }));
+    toast.success(`Removed tactic from Preset ${presetId}`);
+  };
   const [showCoachModal, setShowCoachModal] = useState(false);
   const [showTacticVisualizationModal, setShowTacticVisualizationModal] = useState(false);
   
