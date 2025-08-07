@@ -49,7 +49,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const [showHissatsuList, setShowHissatsuList] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const currentCharacter = allCharacters[currentCharacterIndex];
+  const currentCharacter = allCharacters && allCharacters[currentCharacterIndex] ? allCharacters[currentCharacterIndex] : character;
   const calculatedStats = calculateStats(currentCharacter, selectedEquipment, userLevel, userRarity);
 
   const getPositionColor = (position) => {
