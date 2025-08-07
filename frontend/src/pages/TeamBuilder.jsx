@@ -760,7 +760,7 @@ const TeamBuilder = () => {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Users className="h-5 w-5" style={{ color: logoColors.lightBlue }} />
-                  (0/5)
+                  ({Object.keys(benchPlayers).filter(key => benchPlayers[key]).length}/5)
                 </CardTitle>
               </CardHeader>
               <CardContent>
