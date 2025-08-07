@@ -671,9 +671,44 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="text-gray-400 text-sm mb-3">
-                  {selectedCoach ? selectedCoach.name : 'No coach selected'}
-                </div>
+                {selectedCoach ? (
+                  <div className="mb-3">
+                    {/* Coach Details */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white text-sm font-bold">
+                        {selectedCoach.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="text-white font-medium">{selectedCoach.name}</div>
+                        <div className="text-blue-300 text-sm">{selectedCoach.title}</div>
+                      </div>
+                    </div>
+                    
+                    {/* Bonuses Description */}
+                    <div className="text-gray-300 text-sm mb-3">
+                      {selectedCoach.bonuses.description}
+                    </div>
+                    
+                    {/* Specialties */}
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {selectedCoach.specialties.map((specialty, index) => (
+                        <Badge 
+                          key={index}
+                          className="text-xs px-2 py-1"
+                          style={{ 
+                            backgroundColor: logoColors.primaryBlue, 
+                            color: 'white' 
+                          }}
+                        >
+                          {specialty}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-400 text-sm mb-3">No coach selected</div>
+                )}
+                
                 <Button 
                   variant="outline"
                   className="w-full text-white border hover:opacity-80"
