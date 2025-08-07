@@ -17,6 +17,7 @@ import Dashboard from "./pages/Dashboard";
 import CommunityHub from "./pages/CommunityHub";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
+import Notification from "./components/Notification";
 
 function App() {
   return (
