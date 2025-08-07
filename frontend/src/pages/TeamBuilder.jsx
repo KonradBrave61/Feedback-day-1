@@ -850,6 +850,110 @@ const TeamBuilder = () => {
           onLoadTeam={handleLoadTeam}
         />
       )}
+
+      {/* Tactics Selection Modal */}
+      {showTacticsModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto backdrop-blur-lg text-white border"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.9),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Manage Tactics Presets ({selectedTactics.length}/2)</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowTacticsModal(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  ✕
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {mockTactics.map(tactic => {
+                  const isSelected = selectedTactics.some(t => t.id === tactic.id);
+                  return (
+                    <div
+                      key={tactic.id}
+                      className={`p-3 rounded border cursor-pointer transition-all hover:opacity-80 ${
+                        isSelected ? 'border-orange-400 bg-orange-400/20' : 'border-gray-600 hover:border-gray-400'
+                      }`}
+                      onClick={() => handleTacticToggle(tactic)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-white">{tactic.name}</p>
+                          <p className="text-sm text-gray-400">{tactic.effect}</p>
+                        </div>
+                        <div className="text-2xl">{tactic.icon}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Coach Selection Modal */}
+      {showCoachModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto backdrop-blur-lg text-white border"
+                style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.9),
+                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                }}>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Select Coach</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowCoachModal(false)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  ✕
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {mockCoaches.map(coach => (
+                  <div
+                    key={coach.id}
+                    className="p-3 rounded border cursor-pointer transition-all hover:border-gray-400 border-gray-600"
+                    onClick={() => {
+                      setSelectedCoach(coach);
+                      setShowCoachModal(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
+                           style={{
+                             backgroundColor: logoColors.primaryYellow,
+                             borderColor: logoColors.primaryOrange,
+                             color: logoColors.black
+                           }}>
+                        👨‍💼
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-white">{coach.name}</p>
+                        <p className="text-sm text-gray-400">{coach.title}</p>
+                        <p className="text-xs text-gray-500">{coach.specialties}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
