@@ -708,41 +708,50 @@ const TeamBuilder = () => {
 
           {/* Center Panel - Formation Field */}
           <div className="lg:col-span-2">
-            {selectedFormation ? (
-              <FormationField
-                formation={selectedFormation}
-                players={teamPlayers}
-                benchPlayers={benchPlayers}
-                onAddPlayer={handleAddPlayer}
-                onEditPlayer={handleEditPlayer}
-                onRemovePlayer={handleRemovePlayer}
-                selectedTactics={selectedTactics}
-                selectedCoach={selectedCoach}
-              />
-            ) : (
-              <Card className="backdrop-blur-lg text-white border h-[600px] flex items-center justify-center"
-                    style={{ 
-                      backgroundColor: logoColors.blackAlpha(0.3),
-                      borderColor: logoColors.primaryBlueAlpha(0.2)
-                    }}>
-                <div className="text-center">
-                  <Target className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
-                  <p className="text-gray-400">Select a formation to start building your team</p>
-                  <Button 
-                    className="mt-4 text-white hover:opacity-80"
-                    style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
-                    onClick={() => setSelectedFormation(mockFormations[0])}
-                  >
-                    Choose Default Formation
-                  </Button>
-                </div>
-              </Card>
-            )}
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
+                  {selectedFormation ? selectedFormation.name : 'Select Formation'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                {selectedFormation ? (
+                  <FormationField
+                    formation={selectedFormation}
+                    players={teamPlayers}
+                    benchPlayers={benchPlayers}
+                    onAddPlayer={handleAddPlayer}
+                    onEditPlayer={handleEditPlayer}
+                    onRemovePlayer={handleRemovePlayer}
+                    selectedTactics={selectedTactics}
+                    selectedCoach={selectedCoach}
+                  />
+                ) : (
+                  <div className="h-[600px] flex items-center justify-center">
+                    <div className="text-center">
+                      <Target className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
+                      <p className="text-gray-400">Select a formation to start building your team</p>
+                      <Button 
+                        className="mt-4 text-white hover:opacity-80"
+                        style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
+                        onClick={() => setSelectedFormation(mockFormations[0])}
+                      >
+                        Choose Default Formation
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Right Panel - Bench */}
-          <div className="lg:col-span-1 space-y-4">
-            {/* Bench */}
+          <div className="lg:col-span-1">
             <Card className="backdrop-blur-lg text-white border"
                   style={{ 
                     backgroundColor: logoColors.blackAlpha(0.3),
@@ -751,185 +760,30 @@ const TeamBuilder = () => {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Users className="h-5 w-5" style={{ color: logoColors.lightBlue }} />
-                  Bench ({Object.keys(benchPlayers).length}/5)
+                  (0/5)
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {Array.from({ length: 5 }, (_, index) => {
-                    const player = benchPlayers[index];
-                    return (
-                      <div key={index} className="flex items-center gap-3">
-                        {player ? (
-                          <>
-                            <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center text-xs font-bold"
-                                 style={{
-                                   backgroundColor: logoColors.lightBlue,
-                                   borderColor: logoColors.primaryBlue,
-                                   color: logoColors.white
-                                 }}>
-                              {player.name.charAt(0)}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium text-white">{player.name}</p>
-                              <p className="text-xs text-gray-400">{player.position} • {player.element}</p>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-8 h-8 p-0 text-gray-400 hover:text-white"
-                              onClick={() => handleEditPlayer(player)}
-                            >
-                              <Settings className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-8 h-8 p-0 text-red-400 hover:text-red-300"
-                              onClick={() => handleRemovePlayer(`bench_${index}`)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="w-12 h-12 rounded-full border-2 border-dashed border-gray-500 flex items-center justify-center">
-                              <Plus className="h-6 w-6 text-gray-500" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-gray-500">Empty slot</p>
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-8 h-8 p-0 text-gray-500 hover:text-white"
-                              onClick={() => {
-                                setEditingPosition(`bench_${index}`);
-                                setShowPlayerSearch(true);
-                              }}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Tactics Selection */}
-            <Card className="backdrop-blur-lg text-white border"
-                  style={{ 
-                    backgroundColor: logoColors.blackAlpha(0.3),
-                    borderColor: logoColors.primaryBlueAlpha(0.2)
-                  }}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
-                  Tactics ({selectedTactics.length}/2)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {mockTactics.map(tactic => {
-                    const isSelected = selectedTactics.some(t => t.id === tactic.id);
-                    return (
-                      <div
-                        key={tactic.id}
-                        className={`p-2 rounded border cursor-pointer transition-all hover:opacity-80 ${
-                          isSelected ? 'border-orange-400 bg-orange-400/20' : 'border-gray-600 hover:border-gray-400'
-                        }`}
-                        onClick={() => handleTacticToggle(tactic)}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-sm text-white">{tactic.name}</p>
-                            <p className="text-xs text-gray-400">{tactic.effect}</p>
-                          </div>
-                          <div className="text-lg">{tactic.icon}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Coach Selection */}
-            <Card className="backdrop-blur-lg text-white border"
-                  style={{ 
-                    backgroundColor: logoColors.blackAlpha(0.3),
-                    borderColor: logoColors.primaryBlueAlpha(0.2)
-                  }}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
-                  Coach
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedCoach ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
-                           style={{
-                             backgroundColor: logoColors.primaryYellow,
-                             borderColor: logoColors.primaryOrange,
-                             color: logoColors.black
-                           }}>
-                        👨‍💼
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-white">{selectedCoach.name}</p>
-                        <p className="text-xs text-gray-400">{selectedCoach.title}</p>
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <div key={index} className="relative">
+                      <div className="w-full h-16 border-2 border-dashed border-gray-500 rounded-lg flex items-center justify-center">
+                        <Plus className="h-8 w-8 text-gray-500" />
                       </div>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="w-8 h-8 p-0 text-red-400 hover:text-red-300"
-                        onClick={() => setSelectedCoach(null)}
+                        className="absolute top-1 right-1 w-6 h-6 p-0 text-gray-500 hover:text-white"
+                        onClick={() => {
+                          setEditingPosition(`bench_${index}`);
+                          setShowPlayerSearch(true);
+                        }}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Plus className="h-4 w-4" />
                       </Button>
                     </div>
-                    <div className="text-xs text-gray-300">
-                      <p className="mb-1"><span className="text-gray-400">Specialty:</span> {selectedCoach.specialties}</p>
-                      <p><span className="text-gray-400">Bonuses:</span> {selectedCoach.bonuses}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-gray-500 text-sm mb-3">No coach selected</p>
-                    <Select 
-                      value="" 
-                      onValueChange={(value) => {
-                        const coach = mockCoaches.find(c => c.id.toString() === value);
-                        if (coach) setSelectedCoach(coach);
-                      }}
-                    >
-                      <SelectTrigger className="text-white border"
-                                    style={{ 
-                                      backgroundColor: logoColors.blackAlpha(0.3),
-                                      borderColor: logoColors.primaryBlueAlpha(0.3)
-                                    }}>
-                        <SelectValue placeholder="Select Coach" />
-                      </SelectTrigger>
-                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9) }}>
-                        {mockCoaches.map(coach => (
-                          <SelectItem 
-                            key={coach.id} 
-                            value={coach.id.toString()} 
-                            className="text-white hover:bg-blue-800"
-                          >
-                            {coach.name} - {coach.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>
