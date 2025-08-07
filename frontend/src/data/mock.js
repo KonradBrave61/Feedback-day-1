@@ -170,15 +170,15 @@ export const mockHissatsu = [
 ];
 
 export const mockTactics = [
-  { id: 1, name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal", effect: "DF +100%", icon: "/api/placeholder/40/40" },
-  { id: 2, name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP +10%", icon: "/api/placeholder/40/40" },
-  { id: 3, name: "Mount Fuji", description: "Immovable mountain defense", effect: "Physical +15%", icon: "/api/placeholder/40/40" },
-  { id: 4, name: "Waxing Moon", description: "Crescent moon slicing technique", effect: "Technique +20%", icon: "/api/placeholder/40/40" },
-  { id: 5, name: "Diamond Defense", description: "Unbreakable formation", effect: "Team DF +50%", icon: "/api/placeholder/40/40" },
-  { id: 6, name: "Bond Protocol", description: "Team synchronization boost", effect: "Control +25%", icon: "/api/placeholder/40/40" },
-  { id: 7, name: "Bull Horns", description: "Charging attack formation", effect: "Shot +40%", icon: "/api/placeholder/40/40" },
-  { id: 8, name: "Claymore", description: "Devastating single strike", effect: "Kick +60%", icon: "/api/placeholder/40/40" },
-  { id: 9, name: "Three-Pronged Attack", description: "Triple threat offensive", effect: "Team AT +35%", icon: "/api/placeholder/40/40" }
+  { id: 1, name: "Flame Fortress", description: "Conjure a wall of blazing flame in front of the goal", effect: "DF +100%", icon: "🔥" },
+  { id: 2, name: "Sideline Spears", description: "Lightning-fast spear attacks from the sidelines", effect: "KP +10%", icon: "⚡" },
+  { id: 3, name: "Mount Fuji", description: "Immovable mountain defense", effect: "Physical +15%", icon: "🏔️" },
+  { id: 4, name: "Waxing Moon", description: "Crescent moon slicing technique", effect: "Technique +20%", icon: "🌙" },
+  { id: 5, name: "Diamond Defense", description: "Unbreakable formation", effect: "Team DF +50%", icon: "💎" },
+  { id: 6, name: "Bond Protocol", description: "Team synchronization boost", effect: "Control +25%", icon: "🤝" },
+  { id: 7, name: "Bull Horns", description: "Charging attack formation", effect: "Shot +40%", icon: "🐂" },
+  { id: 8, name: "Claymore", description: "Devastating single strike", effect: "Kick +60%", icon: "⚔️" },
+  { id: 9, name: "Three-Pronged Attack", description: "Triple threat offensive", effect: "Team AT +35%", icon: "🔱" }
 ];
 
 export const mockEquipment = {
