@@ -816,8 +816,29 @@ const TeamBuilder = () => {
                     return (
                       <div key={index} className="relative">
                         {player ? (
-                          <div className="w-full h-12 border-2 border-blue-400 bg-blue-400/20 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-medium text-sm">{player.name}</span>
+                          <div className="relative group">
+                            <div 
+                              className="w-full h-12 border-2 border-blue-400 bg-blue-400/20 rounded-lg flex items-center justify-center cursor-pointer hover:bg-blue-400/30 transition-colors"
+                              onClick={() => handleEditPlayer(player)}
+                            >
+                              <span className="text-white font-medium text-sm">{player.name}</span>
+                            </div>
+                            {/* Edit button that appears on hover */}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="absolute -top-1 -right-1 w-6 h-6 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                              style={{ 
+                                backgroundColor: logoColors.primaryBlueAlpha(0.8), 
+                                color: logoColors.white 
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditPlayer(player);
+                              }}
+                            >
+                              <Settings className="h-3 w-3" />
+                            </Button>
                           </div>
                         ) : (
                           <div 
