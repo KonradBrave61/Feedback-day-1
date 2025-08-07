@@ -50,6 +50,7 @@ const TeamBuilder = () => {
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showTacticsModal, setShowTacticsModal] = useState(false);
   const [showCoachModal, setShowCoachModal] = useState(false);
+  const [showTacticVisualizationModal, setShowTacticVisualizationModal] = useState(false);
   
   // Current editing context
   const [editingPosition, setEditingPosition] = useState(null);
