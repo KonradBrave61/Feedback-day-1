@@ -53,7 +53,7 @@ const SaveTeamModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      alert('Please enter a team name');
+      toast.error('Please enter a team name');
       return;
     }
 
@@ -62,10 +62,11 @@ const SaveTeamModal = ({
       setIsSaving(true);
       try {
         await onSave(formData);
+        toast.success('Team updated successfully!');
         onClose();
       } catch (error) {
         console.error('Error saving team:', error);
-        alert('Failed to save team');
+        toast.error('Failed to save team');
       } finally {
         setIsSaving(false);
       }

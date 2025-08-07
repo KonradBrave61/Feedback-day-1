@@ -8,6 +8,7 @@ import { Switch } from './ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { X, Save, Lock, Globe, Tag } from 'lucide-react';
+import { toast } from 'sonner';
 
 const SaveTeamModal = ({ 
   isOpen, 
@@ -29,17 +30,18 @@ const SaveTeamModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      alert('Please enter a team name');
+      toast.error('Please enter a team name');
       return;
     }
 
     setIsSaving(true);
     try {
       await onSave(formData);
+      toast.success('Team saved successfully!');
       onClose();
     } catch (error) {
       console.error('Error saving team:', error);
-      alert('Failed to save team');
+      toast.error('Failed to save team');
     } finally {
       setIsSaving(false);
     }

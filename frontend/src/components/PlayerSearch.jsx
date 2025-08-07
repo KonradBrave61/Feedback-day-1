@@ -10,6 +10,7 @@ import { mockCharacters, mockFormations } from '../data/mock';
 import CharacterCard from './CharacterCard';
 import CharacterModal from './CharacterModal';
 import { logoColors } from '../styles/colors';
+import { toast } from 'sonner';
 
 const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlayerIds = [], teamBuildingMode = false, currentFormation = null, onTeamBuilt, currentTeamPlayers = {}, currentBenchPlayers = {} }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -245,7 +246,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
         
         if (!foundBenchSlot) {
           // Team is completely full - all formation spots and bench spots are occupied
-          alert('Team is completely full! All 11 formation positions and 5 bench slots are occupied.');
+          toast.error('Team is completely full! All 11 formation positions and 5 bench slots are occupied.');
           setIsProcessingPlayer(false);
           return prev;
         }
@@ -654,7 +655,7 @@ const PlayerSearch = ({ isOpen, onClose, onPlayerSelect, position, selectedPlaye
                 
                 <Button
                   variant="outline"
-                  className="w-full bg-red-900/60 border-red-500/40 hover:bg-red-800/80 text-white"
+                  className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
                   onClick={handleClearTeam}
                 >
                   Clear Team
