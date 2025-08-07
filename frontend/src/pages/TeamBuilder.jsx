@@ -648,7 +648,7 @@ const TeamBuilder = () => {
                   }}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Users className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+                  <User className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
                   Coach
                 </CardTitle>
               </CardHeader>
@@ -668,7 +668,7 @@ const TeamBuilder = () => {
                     setShowCoachModal(true);
                   }}
                 >
-                  <Users className="h-4 w-4 mr-2" />
+                  <User className="h-4 w-4 mr-2" />
                   Select Coach
                 </Button>
               </CardContent>
