@@ -17,7 +17,9 @@ import {
   Save,
   Trash2,
   RotateCcw,
-  Upload
+  Upload,
+  Check,
+  X
 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
 import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
