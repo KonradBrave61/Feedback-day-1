@@ -645,7 +645,7 @@ const TeamBuilder = () => {
             {selectedFormation ? (
               <FormationField
                 formation={selectedFormation}
-                teamPlayers={teamPlayers}
+                players={teamPlayers}
                 benchPlayers={benchPlayers}
                 onAddPlayer={handleAddPlayer}
                 onEditPlayer={handleEditPlayer}
