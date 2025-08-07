@@ -525,36 +525,6 @@ const TeamBuilder = () => {
                   <Plus className="h-4 w-4 mr-2" />
                   Quick Team Builder
                 </Button>
-                
-                <Button 
-                  variant="outline"
-                  className="w-full text-white border hover:opacity-80"
-                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
-                  onClick={() => setShowLoadModal(true)}
-                >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Load Team
-                </Button>
-                
-                <Button 
-                  variant="outline"
-                  className="w-full text-white border hover:opacity-80"
-                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
-                  onClick={() => setShowSaveModal(true)}
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Team
-                </Button>
-                
-                <Button 
-                  variant="outline"
-                  className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
-                  onClick={handleClearAll}
-                  disabled={!selectedFormation}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Clear All
-                </Button>
               </CardContent>
             </Card>
 
@@ -597,15 +567,10 @@ const TeamBuilder = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                {selectedFormation && (
-                  <p className="text-sm text-gray-400 mt-2">
-                    {selectedFormation.description}
-                  </p>
-                )}
               </CardContent>
             </Card>
 
-            {/* Team Statistics */}
+            {/* Tactics Presets */}
             <Card className="backdrop-blur-lg text-white border"
                   style={{ 
                     backgroundColor: logoColors.blackAlpha(0.3),
@@ -613,31 +578,130 @@ const TeamBuilder = () => {
                   }}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Trophy className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
-                  Team Stats
+                  <Target className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
+                  Tactics Presets
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Players:</span>
-                    <span className="text-white">{teamStats.playerCount}/11</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Bench:</span>
-                    <span className="text-white">{Object.keys(benchPlayers).length}/5</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Avg Rating:</span>
-                    <span style={{ color: logoColors.primaryYellow }}>{teamStats.average}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Total Stats:</span>
-                    <span style={{ color: logoColors.primaryBlue }}>{teamStats.total}</span>
-                  </div>
+              <CardContent className="space-y-2">
+                <div className="text-gray-400 text-sm mb-3">
+                  {selectedTactics.length > 0 ? 
+                    selectedTactics.map(t => t.name).join(', ') : 
+                    'No tactics selected'
+                  }
                 </div>
+                <Button 
+                  variant="outline"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlue, 
+                    borderColor: logoColors.primaryBlue,
+                    color: 'white'
+                  }}
+                  onClick={() => {
+                    // Tactical Visualization functionality
+                    toast.info('Opening tactical visualization...');
+                  }}
+                >
+                  Tactical Visualization
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlue, 
+                    borderColor: logoColors.primaryBlue,
+                    color: 'white'
+                  }}
+                  onClick={() => {
+                    // Manage Presets functionality - show tactics selection
+                    setShowTacticsModal(true);
+                  }}
+                >
+                  Manage Presets
+                </Button>
               </CardContent>
             </Card>
+
+            {/* Coach Selection */}
+            <Card className="backdrop-blur-lg text-white border"
+                  style={{ 
+                    backgroundColor: logoColors.blackAlpha(0.3),
+                    borderColor: logoColors.primaryBlueAlpha(0.2)
+                  }}>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Users className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
+                  Coach
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="text-gray-400 text-sm mb-3">
+                  {selectedCoach ? selectedCoach.name : 'No coach selected'}
+                </div>
+                <Button 
+                  variant="outline"
+                  className="w-full text-white border hover:opacity-80"
+                  style={{ 
+                    backgroundColor: logoColors.primaryBlue, 
+                    borderColor: logoColors.primaryBlue,
+                    color: 'white'
+                  }}
+                  onClick={() => {
+                    setShowCoachModal(true);
+                  }}
+                >
+                  <Users className="h-4 w-4 mr-2" />
+                  Select Coach
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Action Buttons */}
+            <div className="space-y-2">
+              <Button 
+                className="w-full text-white hover:opacity-80"
+                style={{ 
+                  backgroundColor: logoColors.primaryBlue, 
+                  color: 'white'
+                }}
+                onClick={() => setShowLoadModal(true)}
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Load Team
+              </Button>
+              
+              <Button 
+                className="w-full text-white hover:opacity-80"
+                style={{ 
+                  backgroundColor: '#dc2626', 
+                  color: 'white'
+                }}
+                onClick={() => setShowSaveModal(true)}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Save Team
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
+                onClick={handleClearAll}
+                disabled={!selectedFormation}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Clear Team
+              </Button>
+              
+              <Button 
+                variant="outline"
+                className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
+                onClick={handleClearAll}
+                disabled={!selectedFormation}
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Clear All
+              </Button>
+            </div>
           </div>
 
           {/* Center Panel - Formation Field */}
