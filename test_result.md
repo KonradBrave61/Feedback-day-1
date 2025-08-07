@@ -223,7 +223,7 @@ LATEST ISSUES FIXED:
     status_history:
       - working: true
         agent: "testing"
-        comment: "REVIEW REQUEST TESTING COMPLETED: Equipment System APIs fully verified and working perfectly. ✅ GET /api/equipment (equipment endpoints for player configuration) - Successfully retrieves 16 equipment items with proper data structure. ✅ Category filtering functional - Tested all categories (Boots, Bracelet, Pendant, Special) with 4 items each. ✅ Rarity filtering working - All rarities (Common, Rare, Epic, Legendary) return 4 items each correctly. ✅ Individual equipment details working - Equipment items include stat bonuses (e.g., Omega Boots with 2 stat bonuses) for player configuration. ✅ Equipment data properly structured for frontend player configuration interface. All equipment APIs are operational and ready for team building integration."
+        comment: "TEAM BUILDER REVIEW REQUEST TESTING COMPLETED: Equipment System APIs fully verified and working perfectly after UI changes. ✅ GET /api/equipment (equipment endpoints for player configuration) - Successfully retrieves 16 equipment items with proper data structure. ✅ Category filtering functional - Tested all categories (Boots, Bracelet, Pendant, Special) with 4 items each. ✅ Rarity filtering working - All rarities (Common, Rare, Epic, Legendary) return 4 items each correctly. ✅ Individual equipment details working - Equipment items include stat bonuses (e.g., Omega Boots with proper stats) for player configuration. ✅ Equipment data properly structured for frontend player configuration interface. All equipment APIs are operational and ready for team building integration after UI changes."
 
   - task: "Formation and Tactics API endpoints"
     implemented: true
