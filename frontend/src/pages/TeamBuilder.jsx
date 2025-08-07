@@ -905,7 +905,7 @@ const TeamBuilder = () => {
       <TacticsSelector
         isOpen={showTacticsModal}
         onClose={() => setShowTacticsModal(false)}
-        onTacticSelect={handleTacticSelect}
+        onTacticSelect={handleTacticVisualizationSelect}
         selectedTactics={selectedTactics}
         presets={tacticPresets}
         currentPreset={currentPreset}
