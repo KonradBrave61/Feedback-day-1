@@ -215,7 +215,7 @@ const FormationField = ({ formation, players, benchPlayers, onAddPlayer, onRemov
       <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md rounded-lg p-2">
         <div className="text-white font-bold text-sm">{formation.name}</div>
         <div className="text-gray-300 text-xs">
-          {Object.keys(teamPlayers).length}/11 players
+          {Object.keys(players).length}/11 players
         </div>
       </div>
     </div>
