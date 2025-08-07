@@ -710,36 +710,37 @@ const TeamBuilder = () => {
               <Button 
                 className="w-full text-white hover:opacity-80"
                 style={{ 
-                  backgroundColor: '#8B4513', 
+                  backgroundColor: logoColors.primaryBlue, 
                   color: 'white'
                 }}
                 onClick={() => setShowSaveModal(true)}
+                disabled={Object.values(teamPlayers).filter(p => p).length === 0}
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save Team
               </Button>
               
               <Button 
-                className="w-full text-white hover:opacity-80"
+                className="w-full hover:opacity-80"
                 style={{ 
-                  backgroundColor: '#374151', 
+                  backgroundColor: Object.values(teamPlayers).filter(p => p).length > 0 ? logoColors.primaryBlue : '#374151',
                   color: 'white'
                 }}
                 onClick={handleClearAll}
-                disabled={!selectedFormation}
+                disabled={Object.values(teamPlayers).filter(p => p).length === 0 && Object.values(benchPlayers).filter(p => p).length === 0}
               >
                 <X className="h-4 w-4 mr-2" />
                 Clear Team
               </Button>
               
               <Button 
-                className="w-full text-white hover:opacity-80"
+                className="w-full hover:opacity-80"
                 style={{ 
-                  backgroundColor: '#374151', 
+                  backgroundColor: Object.values(teamPlayers).filter(p => p).length > 0 || Object.values(benchPlayers).filter(p => p).length > 0 ? logoColors.primaryBlue : '#374151',
                   color: 'white'
                 }}
                 onClick={handleClearAll}
-                disabled={!selectedFormation}
+                disabled={Object.values(teamPlayers).filter(p => p).length === 0 && Object.values(benchPlayers).filter(p => p).length === 0 && !selectedCoach && selectedTactics.length === 0}
               >
                 <X className="h-4 w-4 mr-2" />
                 Clear All
