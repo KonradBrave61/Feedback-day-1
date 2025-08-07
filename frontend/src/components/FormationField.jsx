@@ -207,7 +207,7 @@ const FormationField = ({ formation, players, benchPlayers, onAddPlayer, onRemov
         <PlayerSlot
           key={position.id}
           position={position}
-          player={teamPlayers[position.id]}
+          player={players[position.id]}
         />
       ))}
 
