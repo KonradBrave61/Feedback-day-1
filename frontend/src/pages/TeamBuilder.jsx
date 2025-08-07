@@ -701,11 +701,10 @@ const TeamBuilder = () => {
                 </div>
                 
                 <Button 
-                  className="w-full text-white hover:opacity-80"
+                  className="w-full text-white border hover:opacity-80"
                   style={{ 
-                    backgroundColor: logoColors.primaryBlue, 
-                    borderColor: logoColors.primaryBlue,
-                    color: 'white'
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
                   }}
                   onClick={() => {
                     setShowCoachModal(true);
