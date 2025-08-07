@@ -680,9 +680,47 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="text-white text-base font-medium text-center py-4">
-                  {selectedCoach ? `${selectedCoach.name} selected` : 'No coach selected'}
-                </div>
+                {selectedCoach ? (
+                  <div className="space-y-3">
+                    {/* Coach Portrait and Info */}
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={selectedCoach.portrait} 
+                        alt={selectedCoach.name}
+                        className="w-12 h-12 rounded-lg"
+                      />
+                      <div>
+                        <div className="text-white font-medium">{selectedCoach.name}</div>
+                        <div className="text-gray-300 text-sm">{selectedCoach.title}</div>
+                      </div>
+                    </div>
+                    
+                    {/* Coach Description */}
+                    <div className="text-gray-400 text-sm">
+                      {selectedCoach.description || "Increases team's offensive capabilities"}
+                    </div>
+                    
+                    {/* Coach Specialties */}
+                    <div className="flex flex-wrap gap-2">
+                      {selectedCoach.specialties && selectedCoach.specialties.map((specialty, index) => (
+                        <div 
+                          key={index}
+                          className="px-3 py-1 rounded-lg text-xs font-medium"
+                          style={{ 
+                            backgroundColor: logoColors.primaryBlueAlpha(0.3),
+                            color: logoColors.white
+                          }}
+                        >
+                          {specialty}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-400 text-sm text-center py-4">
+                    No coach selected
+                  </div>
+                )}
                 
                 <Button 
                   className="w-full text-white border hover:opacity-80"
