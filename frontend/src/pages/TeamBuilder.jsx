@@ -483,7 +483,11 @@ const TeamBuilder = () => {
     }
   };
 
-  const handleClearAll = () => {
+  // Handle tactic selection from visualization modal
+  const handleTacticVisualizationSelect = (tactics) => {
+    setSelectedTactics(tactics);
+    toast.success(`Selected ${tactics.length} tactics: ${tactics.map(t => t.name).join(', ')}`);
+  };
     setTeamPlayers({});
     setBenchPlayers({});
     setSelectedTactics([]);
