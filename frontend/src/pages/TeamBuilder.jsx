@@ -777,25 +777,29 @@ const TeamBuilder = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <div key={index} className="relative">
-                      <div className="w-full h-16 border-2 border-dashed border-gray-500 rounded-lg flex items-center justify-center">
-                        <Plus className="h-8 w-8 text-gray-500" />
+                <div className="space-y-2">
+                  {Array.from({ length: 5 }, (_, index) => {
+                    const player = benchPlayers[index];
+                    return (
+                      <div key={index} className="relative">
+                        {player ? (
+                          <div className="w-full h-12 border-2 border-blue-400 bg-blue-400/20 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-medium text-sm">{player.name}</span>
+                          </div>
+                        ) : (
+                          <div 
+                            className="w-full h-12 border-2 border-dashed border-gray-500 rounded-lg flex items-center justify-center cursor-pointer hover:border-gray-400"
+                            onClick={() => {
+                              setEditingPosition(`bench_${index}`);
+                              setShowPlayerSearch(true);
+                            }}
+                          >
+                            <Plus className="h-6 w-6 text-gray-500" />
+                          </div>
+                        )}
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="absolute top-1 right-1 w-6 h-6 p-0 text-gray-500 hover:text-white"
-                        onClick={() => {
-                          setEditingPosition(`bench_${index}`);
-                          setShowPlayerSearch(true);
-                        }}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
