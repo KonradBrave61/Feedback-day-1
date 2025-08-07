@@ -106,6 +106,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   };
 
   const navigateCharacter = (direction) => {
+    if (!allCharacters || allCharacters.length === 0) {
+      return; // Don't navigate if no characters available
+    }
+    
     const newIndex = direction === 'next' 
       ? (currentCharacterIndex + 1) % allCharacters.length
       : (currentCharacterIndex - 1 + allCharacters.length) % allCharacters.length;
