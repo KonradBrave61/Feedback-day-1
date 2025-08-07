@@ -13,7 +13,7 @@ import os
 from typing import Dict, Any, Optional
 
 # Configuration
-BACKEND_URL = "https://91e82dd4-1305-4249-9ac3-7b3339eaf47b.preview.emergentagent.com/api"
+BACKEND_URL = "https://aace9d63-b578-4669-8384-efc5f209f62e.preview.emergentagent.com/api"
 SECRET_KEY = "your-secret-key-here-change-in-production"  # From auth.py
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # From auth.py
