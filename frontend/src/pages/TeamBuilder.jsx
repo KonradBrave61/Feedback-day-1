@@ -653,35 +653,31 @@ const TeamBuilder = () => {
                 </div>
                 
                 <Button 
-                  variant="outline"
-                  className="w-full text-white border hover:opacity-80"
+                  className="w-full text-white border hover:opacity-80 mb-2"
                   style={{ 
-                    backgroundColor: logoColors.primaryBlue, 
-                    borderColor: logoColors.primaryBlue,
-                    color: 'white'
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
                   }}
                   onClick={() => {
                     // Open the Tactical Visualization Modal
                     setShowTacticVisualizationModal(true);
                   }}
                 >
-                  <Eye className="h-4 w-4 mr-2" />
+                  <Target className="h-4 w-4 mr-2" />
                   Tactical Visualization
                 </Button>
                 <Button 
-                  variant="outline"
                   className="w-full text-white border hover:opacity-80"
                   style={{ 
-                    backgroundColor: logoColors.primaryBlue, 
-                    borderColor: logoColors.primaryBlue,
-                    color: 'white'
+                    backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                    borderColor: logoColors.primaryBlueAlpha(0.3)
                   }}
                   onClick={() => {
                     // Manage Presets functionality - show tactics selection
                     setShowTacticsModal(true);
                   }}
                 >
-                  <Eye className="h-4 w-4 mr-2" />
+                  <Target className="h-4 w-4 mr-2" />
                   Manage Presets
                 </Button>
               </CardContent>
