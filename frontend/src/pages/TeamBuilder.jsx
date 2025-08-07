@@ -32,6 +32,7 @@ import PlayerSearch from '../components/PlayerSearch';
 import CharacterModal from '../components/CharacterModal';
 import TacticVisualizationModal from '../components/TacticVisualizationModal';
 import CoachSelector from '../components/CoachSelector';
+import TacticsSelector from '../components/TacticsSelector';
 import { toast } from 'sonner';
 import EnhancedSaveTeamModal from '../components/EnhancedSaveTeamModal';
 import LoadTeamModal from '../components/LoadTeamModal';
