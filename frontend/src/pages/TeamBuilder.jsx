@@ -812,7 +812,7 @@ const TeamBuilder = () => {
                   {selectedFormation ? selectedFormation.name : 'Select Formation'}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
+              <CardContent className="p-4">
                 {selectedFormation ? (
                   <FormationField
                     formation={selectedFormation}
@@ -841,19 +841,6 @@ const TeamBuilder = () => {
                 )}
               </CardContent>
             </Card>
-            
-            {/* Player Count Display - Like Target */}
-            <div className="mt-4 text-center">
-              <p className="text-white font-medium text-lg">
-                {selectedFormation ? selectedFormation.name : '4-4-2 Diamond'}
-              </p>
-              <p className="text-gray-400 text-sm mt-1">
-                {teamStats.playerCount}/11 players
-              </p>
-              <p className="text-gray-500 text-xs">
-                ({Object.keys(benchPlayers).filter(key => benchPlayers[key]).length}/5)
-              </p>
-            </div>
           </div>
 
           {/* Right Panel - Bench */}
