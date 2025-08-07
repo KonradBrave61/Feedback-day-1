@@ -876,49 +876,142 @@ const TeamBuilder = () => {
         />
       )}
 
-      {/* Tactics Selection Modal */}
+      {/* Enhanced Tactics Selection Modal */}
       {showTacticsModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Card className="w-full max-w-2xl max-h-[80vh] overflow-y-auto backdrop-blur-lg text-white border"
+          <Card className="w-full max-w-4xl max-h-[85vh] overflow-y-auto backdrop-blur-lg text-white border"
                 style={{ 
-                  backgroundColor: logoColors.blackAlpha(0.9),
-                  borderColor: logoColors.primaryBlueAlpha(0.3)
+                  backgroundColor: logoColors.blackAlpha(0.95),
+                  borderColor: logoColors.primaryBlueAlpha(0.4)
                 }}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Manage Tactics Presets ({selectedTactics.length}/2)</span>
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center justify-between text-xl">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg" style={{ backgroundColor: logoColors.primaryOrange }}>
+                    <Target className="h-6 w-6" />
+                  </div>
+                  <span>Manage Tactics Presets ({selectedTactics.length}/2)</span>
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowTacticsModal(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white hover:bg-red-500/20"
                 >
                   ✕
                 </Button>
               </CardTitle>
+              <p className="text-sm text-gray-400 mt-2">
+                Select up to 2 tactical presets to enhance your team's performance during matches.
+              </p>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {mockTactics.map(tactic => {
                   const isSelected = selectedTactics.some(t => t.id === tactic.id);
                   return (
                     <div
                       key={tactic.id}
-                      className={`p-3 rounded border cursor-pointer transition-all hover:opacity-80 ${
-                        isSelected ? 'border-orange-400 bg-orange-400/20' : 'border-gray-600 hover:border-gray-400'
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
+                        isSelected 
+                          ? 'border-orange-400 bg-orange-400/20 shadow-lg shadow-orange-400/30' 
+                          : 'border-gray-600 hover:border-gray-400 hover:bg-gray-800/30'
                       }`}
                       onClick={() => handleTacticToggle(tactic)}
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium text-white">{tactic.name}</p>
-                          <p className="text-sm text-gray-400">{tactic.effect}</p>
+                      <div className="flex items-start gap-3">
+                        <div className={`p-3 rounded-lg flex-shrink-0 ${
+                          isSelected 
+                            ? 'bg-orange-500 text-white' 
+                            : 'bg-gray-700 text-gray-300'
+                        }`}>
+                          <div className="text-2xl">{tactic.icon}</div>
                         </div>
-                        <div className="text-2xl">{tactic.icon}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-bold text-white text-lg">{tactic.name}</h3>
+                            {isSelected && (
+                              <div className="flex items-center gap-1">
+                                <Check className="h-5 w-5 text-orange-400" />
+                                <span className="text-xs text-orange-400 font-medium">SELECTED</span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-300 mb-3">{tactic.effect}</p>
+                          {tactic.description && (
+                            <p className="text-xs text-gray-400 leading-relaxed">
+                              {tactic.description}
+                            </p>
+                          )}
+                          
+                          {/* Tactic Stats */}
+                          <div className="mt-3 pt-3 border-t border-gray-600/50">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-gray-400">Duration:</span>
+                              <span className="text-white font-medium">
+                                {tactic.name === 'Flame Fortress' && '45 seconds'}
+                                {tactic.name === 'Mount Fuji' && '60 seconds'}
+                                {tactic.name === 'Sideline Spears' && '30 seconds'}
+                                {tactic.name === 'Diamond Defense' && '50 seconds'}
+                                {tactic.name === 'Waxing Moon' && '40 seconds'}
+                                {tactic.name === 'Bond Protocol' && '35 seconds'}
+                                {tactic.name === 'Bull Horns' && '25 seconds'}
+                                {tactic.name === 'Claymore' && '20 seconds'}
+                                {tactic.name === 'Three-Pronged Attack' && '55 seconds'}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between text-xs mt-1">
+                              <span className="text-gray-400">Cooldown:</span>
+                              <span className="text-white font-medium">2 minutes</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   );
                 })}
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex gap-3 mt-6 pt-4 border-t border-gray-600/50">
+                <Button
+                  onClick={() => setShowTacticsModal(false)}
+                  className="flex-1 text-white"
+                  style={{ 
+                    background: logoColors.primaryBlue,
+                    color: 'white'
+                  }}
+                >
+                  <Check className="h-4 w-4 mr-2" />
+                  Apply Selection ({selectedTactics.length}/2)
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedTactics([]);
+                    toast.info('Tactics cleared');
+                  }}
+                  className="text-white border"
+                  style={{ 
+                    borderColor: logoColors.primaryBlueAlpha(0.6),
+                    backgroundColor: logoColors.blackAlpha(0.2)
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Clear All
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowTacticsModal(false)}
+                  className="text-white border"
+                  style={{ 
+                    borderColor: logoColors.primaryBlueAlpha(0.6),
+                    backgroundColor: logoColors.blackAlpha(0.2)
+                  }}
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Cancel
+                </Button>
               </div>
             </CardContent>
           </Card>
