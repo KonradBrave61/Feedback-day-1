@@ -991,6 +991,7 @@ const TeamBuilder = () => {
                           borderColor: logoColors.primaryYellow,
                           color: logoColors.primaryYellow
                         }}
+                        onClick={() => setEditingPresetId(2)}
                       >
                         Edit
                       </Button>
