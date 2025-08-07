@@ -744,7 +744,7 @@ const TeamBuilder = () => {
               <Button 
                 className="w-full text-white hover:opacity-80"
                 style={{ 
-                  backgroundColor: '#dc2626', 
+                  backgroundColor: '#8B4513', 
                   color: 'white'
                 }}
                 onClick={() => setShowSaveModal(true)}
@@ -754,22 +754,28 @@ const TeamBuilder = () => {
               </Button>
               
               <Button 
-                variant="outline"
-                className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
+                className="w-full text-white hover:opacity-80"
+                style={{ 
+                  backgroundColor: '#374151', 
+                  color: 'white'
+                }}
                 onClick={handleClearAll}
                 disabled={!selectedFormation}
               >
-                <Trash2 className="h-4 w-4 mr-2" />
+                <X className="h-4 w-4 mr-2" />
                 Clear Team
               </Button>
               
               <Button 
-                variant="outline"
-                className="w-full bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-white hover:text-white"
+                className="w-full text-white hover:opacity-80"
+                style={{ 
+                  backgroundColor: '#374151', 
+                  color: 'white'
+                }}
                 onClick={handleClearAll}
                 disabled={!selectedFormation}
               >
-                <RotateCcw className="h-4 w-4 mr-2" />
+                <X className="h-4 w-4 mr-2" />
                 Clear All
               </Button>
             </div>
