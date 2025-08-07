@@ -935,111 +935,211 @@ const TeamBuilder = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Preset Slots */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                {/* Preset 1 */}
-                <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">Preset 1</h3>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm" 
-                        variant="outline"
-                        className="text-xs px-3 py-1"
-                        style={{ 
-                          borderColor: logoColors.primaryYellow,
-                          color: logoColors.primaryYellow
-                        }}
-                        onClick={() => setEditingPresetId(1)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="text-xs px-3 py-1 text-white"
-                        style={{ backgroundColor: logoColors.primaryBlue }}
-                        onClick={() => setCurrentPreset(1)}
-                      >
-                        {currentPreset === 1 ? 'Active' : 'Apply'}
-                      </Button>
+              {!editingPresetId ? (
+                <>
+                  {/* Preset Slots */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    {/* Preset 1 */}
+                    <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-white">Preset 1</h3>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm" 
+                            variant="outline"
+                            className="text-xs px-3 py-1"
+                            style={{ 
+                              borderColor: logoColors.primaryYellow,
+                              color: logoColors.primaryYellow
+                            }}
+                            onClick={() => setEditingPresetId(1)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="text-xs px-3 py-1 text-white"
+                            style={{ backgroundColor: logoColors.primaryBlue }}
+                            onClick={() => setCurrentPreset(1)}
+                          >
+                            {currentPreset === 1 ? 'Active' : 'Apply'}
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Preset 1 Slots */}
+                      <div className="grid grid-cols-3 gap-2">
+                        {(tacticPresets[1]?.tactics || []).concat(Array(3 - (tacticPresets[1]?.tactics?.length || 0))).map((tactic, index) => (
+                          <div 
+                            key={index}
+                            className="bg-blue-800/40 rounded p-3 text-center text-sm border border-blue-500/20"
+                          >
+                            {tactic ? (
+                              <div className="text-white">
+                                <div className="text-xs font-medium">{tactic.name}</div>
+                              </div>
+                            ) : (
+                              <div className="text-gray-400">Empty</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Preset 2 */}
+                    <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-white">Preset 2</h3>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm" 
+                            variant="outline"
+                            className="text-xs px-3 py-1"
+                            style={{ 
+                              borderColor: logoColors.primaryYellow,
+                              color: logoColors.primaryYellow
+                            }}
+                            onClick={() => setEditingPresetId(2)}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            className="text-xs px-3 py-1 text-white"
+                            style={{ backgroundColor: logoColors.primaryBlue }}
+                            onClick={() => setCurrentPreset(2)}
+                          >
+                            {currentPreset === 2 ? 'Active' : 'Apply'}
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Preset 2 Slots */}
+                      <div className="grid grid-cols-3 gap-2">
+                        {(tacticPresets[2]?.tactics || []).concat(Array(3 - (tacticPresets[2]?.tactics?.length || 0))).map((tactic, index) => (
+                          <div 
+                            key={index}
+                            className="bg-blue-800/40 rounded p-3 text-center text-sm border border-blue-500/20"
+                          >
+                            {tactic ? (
+                              <div className="text-white">
+                                <div className="text-xs font-medium">{tactic.name}</div>
+                              </div>
+                            ) : (
+                              <div className="text-gray-400">Empty</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Preset 1 Slots */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1,2,3].map(slot => (
-                      <div 
-                        key={slot}
-                        className="bg-blue-800/40 rounded p-3 text-center text-sm text-gray-400 border border-blue-500/20"
-                      >
-                        Empty
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Preset 2 */}
-                <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">Preset 2</h3>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm" 
-                        variant="outline"
-                        className="text-xs px-3 py-1"
-                        style={{ 
-                          borderColor: logoColors.primaryYellow,
-                          color: logoColors.primaryYellow
-                        }}
-                        onClick={() => setEditingPresetId(2)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="text-xs px-3 py-1 text-white"
-                        style={{ backgroundColor: logoColors.primaryBlue }}
-                        onClick={() => setCurrentPreset(2)}
-                      >
-                        {currentPreset === 2 ? 'Active' : 'Apply'}
-                      </Button>
+                  {/* Currently Active Section */}
+                  <div className="bg-blue-900/40 rounded-lg p-4 border border-blue-500/30 mb-6">
+                    <h3 className="text-lg font-semibold text-white mb-4">Currently Active: Preset {currentPreset}</h3>
+                    <div className="grid grid-cols-3 gap-4">
+                      {(tacticPresets[currentPreset]?.tactics || []).concat(Array(3 - (tacticPresets[currentPreset]?.tactics?.length || 0))).map((tactic, index) => (
+                        <div 
+                          key={index}
+                          className="bg-blue-800/50 rounded-lg p-4 text-center border border-blue-500/20"
+                        >
+                          {tactic ? (
+                            <div className="text-white">
+                              <div className="text-sm font-medium">{tactic.name}</div>
+                              <div className="text-xs text-gray-300">{tactic.type}</div>
+                            </div>
+                          ) : (
+                            <div className="text-sm text-gray-400">Empty Slot</div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  
-                  {/* Preset 2 Slots */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1,2,3].map(slot => (
-                      <div 
-                        key={slot}
-                        className="bg-blue-800/40 rounded p-3 text-center text-sm text-gray-400 border border-blue-500/20"
-                      >
-                        Empty
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Currently Active Section */}
-              <div className="bg-blue-900/40 rounded-lg p-4 border border-blue-500/30 mb-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Currently Active: Preset {currentPreset}</h3>
-                <div className="grid grid-cols-3 gap-4">
-                  {[1,2,3].map(slot => (
-                    <div 
-                      key={slot}
-                      className="bg-blue-800/50 rounded-lg p-4 text-center border border-blue-500/20"
+                </>
+              ) : (
+                /* Editing Mode - Tactics Selection */
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">Edit Preset {editingPresetId}</h3>
+                      <p className="text-sm text-gray-400">Select up to 3 tactics for this preset</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditingPresetId(null)}
+                      className="text-gray-400"
                     >
-                      <div className="text-sm text-gray-400">Empty Slot</div>
+                      Back
+                    </Button>
+                  </div>
+
+                  {/* Current Preset Tactics */}
+                  <div className="bg-blue-900/30 rounded-lg p-4 border border-blue-500/20">
+                    <h4 className="text-lg font-medium text-white mb-3">Selected Tactics ({tacticPresets[editingPresetId]?.tactics?.length || 0}/3)</h4>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[0,1,2].map((slotIndex) => {
+                        const tactic = tacticPresets[editingPresetId]?.tactics?.[slotIndex];
+                        return (
+                          <div
+                            key={slotIndex}
+                            className="bg-blue-800/40 rounded-lg p-4 text-center border border-blue-500/20 min-h-[80px] flex items-center justify-center"
+                          >
+                            {tactic ? (
+                              <div className="text-white">
+                                <div className="text-sm font-medium">{tactic.name}</div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="mt-2 text-xs text-red-400 border-red-400/50 hover:bg-red-500/20"
+                                  onClick={() => removeTacticFromPreset(editingPresetId, slotIndex)}
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="text-gray-400 text-sm">Empty Slot</div>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Available Tactics */}
+                  <div className="bg-gray-900/30 rounded-lg p-4 border border-gray-500/20">
+                    <h4 className="text-lg font-medium text-white mb-3">Available Tactics</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                      {mockTactics.filter(tactic => 
+                        !(tacticPresets[editingPresetId]?.tactics || []).some(selectedTactic => selectedTactic.id === tactic.id)
+                      ).map((tactic) => (
+                        <div
+                          key={tactic.id}
+                          className="bg-gray-800/40 rounded-lg p-3 border border-gray-500/20 hover:border-blue-400/50 cursor-pointer transition-all"
+                          onClick={() => addTacticToPreset(editingPresetId, tactic)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <img src={tactic.icon} alt={tactic.name} className="w-8 h-8" />
+                            <div>
+                              <div className="text-sm font-medium text-white">{tactic.name}</div>
+                              <div className="text-xs text-gray-400">{tactic.description}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Action Buttons */}
               <div className="flex gap-3 pt-4 border-t border-gray-600/50">
                 <Button
                   variant="outline"
-                  onClick={() => setShowTacticsModal(false)}
+                  onClick={() => {
+                    setShowTacticsModal(false);
+                    setEditingPresetId(null);
+                  }}
                   className="text-white border"
                   style={{ 
                     borderColor: logoColors.primaryBlueAlpha(0.6),
@@ -1048,12 +1148,20 @@ const TeamBuilder = () => {
                 >
                   Close
                 </Button>
-                <Button
-                  className="text-white"
-                  style={{ background: logoColors.primaryYellow, color: logoColors.black }}
-                >
-                  Apply Current Preset
-                </Button>
+                {!editingPresetId && (
+                  <Button
+                    className="text-white"
+                    style={{ background: logoColors.primaryYellow, color: logoColors.black }}
+                    onClick={() => {
+                      // Apply selected tactics from current preset
+                      setSelectedTactics(tacticPresets[currentPreset]?.tactics || []);
+                      toast.success(`Applied Preset ${currentPreset} tactics`);
+                      setShowTacticsModal(false);
+                    }}
+                  >
+                    Apply Current Preset
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
