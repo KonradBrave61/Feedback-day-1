@@ -45,7 +45,7 @@ const FormationField = ({ formation, players, benchPlayers, onAddPlayer, onRemov
         if (draggedItem.fromPosition !== position.id) {
           if (draggedItem.fromType === 'bench') {
             // Moving from bench to formation
-            onMoveFromBench(draggedItem.fromPosition, position.id);
+            onMoveFromBench && onMoveFromBench(draggedItem.fromPosition, position.id, isOccupied);
           } else {
             // Moving within formation
             onMovePlayer(draggedItem.fromPosition, position.id);
