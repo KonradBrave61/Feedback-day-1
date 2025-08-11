@@ -463,11 +463,9 @@ const TeamBuilder = () => {
       }
       
       // Load coach
-      if (teamData.coach && teamData.coach.id) {
-        const coach = mockCoaches.find(c => c.id === teamData.coach.id);
-        if (coach) {
-          setSelectedCoach(coach);
-        }
+      if (teamData.coach) {
+        const coachObj = teamData.coach.id ? mockCoaches.find(c => c.id === teamData.coach.id) : null;
+        setSelectedCoach(coachObj || teamData.coach);
       }
       
       // Load main team players
