@@ -14,8 +14,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     allCharacters && character ? allCharacters.findIndex(c => c.id === character.id) : 0
   );
   // Initialize with saved values if they exist, otherwise use base values
-  const [userLevel, setUserLevel] = useState(character.userLevel || character.baseLevel);
-  const [userRarity, setUserRarity] = useState(character.userRarity || character.baseRarity);
+  const [userLevel, setUserLevel] = useState(character.userLevel || character.baseLevel || 1);
+  const [userRarity, setUserRarity] = useState(character.userRarity || character.baseRarity || 'Common');
   const [selectedEquipment, setSelectedEquipment] = useState({
     boots: character.userEquipment?.boots || null,
     bracelets: character.userEquipment?.bracelets || null,
