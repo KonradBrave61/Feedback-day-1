@@ -539,6 +539,40 @@ const TeamBuilder = () => {
 
   const teamStats = getTeamStats();
 
+  // Auto-load team if redirected from Profile/Preview
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('loadTeamData');
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.loadOnOpen || !parsed.teamId) return;
+
+      // Clear the flag immediately to avoid loops
+      localStorage.removeItem('loadTeamData');
+
+      // Fetch full team details via AuthContext
+      (async () => {
+        try {
+          const result = await loadTeamDetails(parsed.teamId);
+          if (result?.success && (result.team || result.team_data || result.id)) {
+            const wrapped = result.team?.team || result.team || result.team_data || result;
+            // Call existing handler to map into UI
+            handleLoadTeam(wrapped);
+            toast.success('Team loaded into builder');
+          } else {
+            toast.error(result?.error || 'Failed to load team details');
+          }
+        } catch (e) {
+          console.error('Auto-load team failed:', e);
+          toast.error('Failed to load team into builder');
+        }
+      })();
+    } catch (e) {
+      console.error('Invalid loadTeamData in localStorage', e);
+      localStorage.removeItem('loadTeamData');
+    }
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
