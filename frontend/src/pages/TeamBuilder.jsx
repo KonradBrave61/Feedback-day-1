@@ -169,6 +169,74 @@ const TeamBuilder = () => {
       });
     }
   };
+  // Move player within formation (swap or move)
+  const handleMovePlayer = (fromPositionId, toPositionId) => {
+    if (!fromPositionId || !toPositionId || fromPositionId === toPositionId) return;
+    const fromPlayer = teamPlayers[fromPositionId];
+    const toPlayer = teamPlayers[toPositionId];
+    if (!fromPlayer) return;
+
+    const updated = { ...teamPlayers };
+    updated[toPositionId] = fromPlayer;
+    if (toPlayer) {
+      // swap
+      updated[fromPositionId] = toPlayer;
+    } else {
+      delete updated[fromPositionId];
+    }
+    setTeamPlayers(updated);
+  };
+
+  // Move player from bench to field (optionally swap with existing field player)
+  const handleMoveFromBench = (benchIndex, toPositionId, swap = false) => {
+    const index = typeof benchIndex === 'string' ? parseInt(benchIndex, 10) : benchIndex;
+    const benchPlayer = benchPlayers[index];
+    if (!benchPlayer || !toPositionId) return;
+
+    const fieldPlayer = teamPlayers[toPositionId];
+
+    // Update field
+    setTeamPlayers({
+      ...teamPlayers,
+      [toPositionId]: benchPlayer,
+    });
+
+    // Update bench
+    if (swap && fieldPlayer) {
+      setBenchPlayers({
+        ...benchPlayers,
+        [index]: fieldPlayer,
+      });
+    } else {
+      const newBench = { ...benchPlayers };
+      delete newBench[index];
+      setBenchPlayers(newBench);
+    }
+  };
+
+  // Move player from field to bench (optionally swap with existing bench player)
+  const handleMoveToBench = (fromPositionId, benchIndex, swap = false) => {
+    const index = typeof benchIndex === 'string' ? parseInt(benchIndex, 10) : benchIndex;
+    const fromPlayer = teamPlayers[fromPositionId];
+    if (!fromPlayer) return;
+
+    const benchPlayer = benchPlayers[index];
+
+    // Update bench
+    const newBench = { ...benchPlayers };
+    newBench[index] = fromPlayer;
+    setBenchPlayers(newBench);
+
+    // Update field
+    const newTeam = { ...teamPlayers };
+    if (swap && benchPlayer) {
+      newTeam[fromPositionId] = benchPlayer;
+    } else {
+      delete newTeam[fromPositionId];
+    }
+    setTeamPlayers(newTeam);
+  };
+
 
   const handleCharacterModalSave = (character, userLevel, userRarity, equipment, hissatsu) => {
     setIsProcessingPlayer(true);
