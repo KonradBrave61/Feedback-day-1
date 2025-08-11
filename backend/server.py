@@ -5,9 +5,22 @@ from database import init_database
 app = FastAPI(title="Inazuma Eleven API", version="1.0.0")
 
 # Add CORS middleware
+# Tight CORS: allow only the frontend origin from env if provided, else fallback to preview host
+import os
+FRONTEND_URL = os.environ.get('FRONTEND_URL') or os.environ.get('REACT_APP_FRONTEND_URL')
+ALLOWED_ORIGINS = []
+# If a specific frontend URL is not set, we can derive from the backend's known preview domain by allowing the preview host itself
+# For safety, also allow the public preview frontend domain used in this environment if any is known via env.
+if FRONTEND_URL:
+    ALLOWED_ORIGINS = [FRONTEND_URL]
+else:
+    # As a safe default in this environment, allow the origin of the configured frontend if accessible via window.location at runtime.
+    # We cannot access it here server-side; keep empty to force strict mode and rely on same-origin.
+    ALLOWED_ORIGINS = []
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
