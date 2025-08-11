@@ -182,15 +182,18 @@ const TeamBuilder = () => {
       userHissatsu: hissatsu
     };
 
-    // Double-check for duplicates before saving
-    const currentPlayerIds = getCurrentlySelectedPlayerIds();
-    const currentBenchPlayerIds = Object.values(benchPlayers).map(p => p.id);
-    const currentTeamPlayerIds = Object.values(teamPlayers).map(p => p.id);
-    
-    if (currentTeamPlayerIds.includes(character.id) || currentBenchPlayerIds.includes(character.id)) {
-      toast.warning('This player is already in your team or on the bench!');
-      setIsProcessingPlayer(false);
-      return;
+    // If we are editing an existing player in-place, do NOT block by duplicate check
+    const isEditingInPlace = Boolean(editingPosition);
+
+    if (!isEditingInPlace) {
+      // Double-check for duplicates before saving when adding a NEW player
+      const currentBenchPlayerIds = Object.values(benchPlayers).filter(Boolean).map(p => p.id);
+      const currentTeamPlayerIds = Object.values(teamPlayers).filter(Boolean).map(p => p.id);
+      if (currentTeamPlayerIds.includes(character.id) || currentBenchPlayerIds.includes(character.id)) {
+        toast.warning('This player is already in your team or on the bench!');
+        setIsProcessingPlayer(false);
+        return;
+      }
     }
 
     if (editingPosition) {
