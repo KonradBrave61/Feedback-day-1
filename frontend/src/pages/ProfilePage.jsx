@@ -301,8 +301,15 @@ const ProfilePage = () => {
                         setTimeout(async () => {
                           try {
                             // Attempt to load teams which should 401 and trigger the session-expired popup
-                            await loadTeams();
-                          } catch (_) {}
+                            const r = await loadTeams();
+                            // If for any reason it did not trigger (e.g., caching), force-notify
+                            if (!r || (!r.success && !r.authError)) {
+                              showSessionExpiredNotification();
+                            }
+                          } catch (_) {
+                            // Force notification fallback
+                            showSessionExpiredNotification();
+                          }
                         }, 50);
                       } catch (e) {}
                     }}
