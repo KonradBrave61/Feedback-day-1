@@ -15,7 +15,8 @@ const LoginPage = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    rememberMe: true
   });
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
