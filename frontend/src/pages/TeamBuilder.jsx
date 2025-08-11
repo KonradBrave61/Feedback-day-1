@@ -197,15 +197,14 @@ const TeamBuilder = () => {
     }
 
     if (editingPosition) {
+      // Update in place (field or bench) without duplicate checks
       if (editingPosition.startsWith('bench_')) {
-        // Handle bench player
         const benchSlot = editingPosition.replace('bench_', '');
         setBenchPlayers(prev => ({
           ...prev,
           [benchSlot]: enhancedPlayer
         }));
       } else {
-        // Handle field position
         setTeamPlayers(prev => ({
           ...prev,
           [editingPosition]: enhancedPlayer
