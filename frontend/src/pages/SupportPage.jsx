@@ -440,7 +440,7 @@ const SupportPage = () => {
 
             {/* Account Issues Tab */}
             <TabsContent value="account" className="space-y-6">
-              <Card className="backdrop-blur-lg text-white border"
+              <Card className="backdrop-blur-lg text-white border-0"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
