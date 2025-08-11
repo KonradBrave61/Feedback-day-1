@@ -285,43 +285,6 @@ const ProfilePage = () => {
           <h1 className="text-4xl font-bold text-white mb-2">
             Coach Profile
           </h1>
-            {/* Dev-only: Simulate Session Expiry */}
-            {process.env.NODE_ENV !== 'production' && (
-              <Card className="mt-6 backdrop-blur-lg text-white border" style={{ 
-                backgroundColor: logoColors.blackAlpha(0.3),
-                borderColor: logoColors.primaryBlueAlpha(0.2)
-              }}>
-                <CardContent className="p-4">
-                  <Button
-                    onClick={() => {
-                      try {
-                        // Set an invalid token to force a 401 on the next protected request
-                        localStorage.setItem('authToken', 'invalid-token');
-                        // Small delay to ensure storage is updated before the call
-                        setTimeout(async () => {
-                          try {
-                            // Attempt to load teams which should 401 and trigger the session-expired popup
-                            const r = await loadTeams();
-                            // If for any reason it did not trigger (e.g., caching), force-notify
-                            if (!r || (!r.success && !r.authError)) {
-                              showSessionExpiredNotification();
-                            }
-                          } catch (_) {
-                            // Force notification fallback
-                            showSessionExpiredNotification();
-                          }
-                        }, 50);
-                      } catch (e) {}
-                    }}
-                    className="w-full text-black font-bold hover:opacity-80"
-                    style={{ background: logoColors.yellowOrangeGradient }}
-                  >
-                    Simulate Session Expiry
-                  </Button>
-                  <p className="text-xs mt-2 text-gray-300">Dev-only: clears token and triggers the session-expired popup.</p>
-                </CardContent>
-              </Card>
-            )}
 
           <p className="text-gray-300">Manage your Inazuma Eleven journey</p>
         </div>
