@@ -455,9 +455,9 @@ const TeamBuilder = () => {
       if (teamData.tactics && Array.isArray(teamData.tactics)) {
         const tacticObjects = teamData.tactics.map(tacticData => {
           if (typeof tacticData === 'object' && tacticData.id) {
-            return mockTactics.find(t => t.id === tacticData.id);
+            return mockTactics.find(t => t.id === tacticData.id) || tacticData;
           }
-          return mockTactics.find(t => t.id === tacticData);
+          return mockTactics.find(t => t.id === tacticData) || null;
         }).filter(Boolean);
         setSelectedTactics(tacticObjects);
       }
