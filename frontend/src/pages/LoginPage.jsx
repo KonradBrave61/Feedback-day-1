@@ -207,10 +207,21 @@ const LoginPage = () => {
                 </div>
               )}
 
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    checked={formData.rememberMe}
+                    onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                  />
+                  Remember me
+                </label>
+              </div>
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full text-black font-bold hover:opacity-80 disabled:opacity-50"
+                className="w-full text-black font-bold hover:opacity-80 disabled:opacity-50 mt-2"
                 style={{ background: logoColors.yellowOrangeGradient }}
               >
                 {loading ? (
