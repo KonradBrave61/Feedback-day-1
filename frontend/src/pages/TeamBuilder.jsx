@@ -498,8 +498,8 @@ const TeamBuilder = () => {
             const slotIndex = playerData.slot_id.replace('bench_', '');
             const enhancedPlayer = {
               id: playerData.character_id,
-              userLevel: playerData.user_level,
-              userRarity: playerData.user_rarity,
+              userLevel: playerData.user_level || 1,
+              userRarity: playerData.user_rarity || 'Common',
               userEquipment: playerData.user_equipment || {},
               userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
               name: playerData.name || `Player ${playerData.character_id}`,
