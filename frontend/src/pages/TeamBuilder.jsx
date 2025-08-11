@@ -1083,11 +1083,22 @@ const TeamBuilder = () => {
                     return (
                       <div key={index} className="relative">
                         {player ? (
-                          <div className="relative group">
-                            <div 
-                              className="w-full rounded-lg border border-blue-500/30 bg-blue-800/20 hover:bg-blue-800/30 p-2 flex items-center gap-3 cursor-pointer transition-colors"
-                              onClick={() => handleEditPlayer(player)}
-                            >
+                          <BenchRow index={index} player={player} />
+                        ) : (
+                          <div 
+                            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => {
+                              setEditingPosition(`bench_${index}`);
+                              setShowPlayerSearch(true);
+                            }}
+                          >
+                            {/* Dashed circular border with plus inside */}
+                            <div className="w-12 h-12 border-2 border-dashed border-gray-400 rounded-full flex items-center justify-center">
+                              <Plus className="h-6 w-6 text-gray-400" />
+                            </div>
+                            {/* Empty slot text without extra plus */}
+                            <span className="text-gray-400 text-sm">Empty slot</span>
+                          </div
                               {/* Smooth circle avatar */}
                               <div className="w-10 h-10 rounded-full overflow-hidden ring-1 ring-blue-400/40 flex items-center justify-center bg-blue-900/40">
                                 {player.portrait ? (
