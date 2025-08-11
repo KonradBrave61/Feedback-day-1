@@ -44,7 +44,7 @@ const HelperPage = () => {
         </div>
 
         {/* Language Selection */}
-        <Card className="backdrop-blur-lg border mb-8"
+        <Card className="backdrop-blur-lg border-0 mb-8"
               style={{ 
                 backgroundColor: logoColors.blackAlpha(0.3),
                 borderColor: logoColors.primaryBlueAlpha(0.2)
