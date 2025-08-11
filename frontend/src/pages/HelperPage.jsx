@@ -131,7 +131,7 @@ const HelperPage = () => {
             {/* Expandable Guide Sections */}
             <div className="space-y-4">
               {/* Team Building Fundamentals */}
-              <Card className="backdrop-blur-lg text-white border"
+              <Card className="backdrop-blur-lg text-white border-0"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
