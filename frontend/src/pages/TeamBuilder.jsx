@@ -444,11 +444,11 @@ const TeamBuilder = () => {
       console.log('Loading team data:', teamData);
       
       // Load formation
-      if (teamData.formation_id) {
-        const formation = mockFormations.find(f => f.id === teamData.formation_id);
-        if (formation) {
-          setSelectedFormation(formation);
-        }
+      // Handle both 'formation_id' (older) and 'formation' (current backend) keys
+      const formationIdOrName = teamData.formation_id || teamData.formation;
+      if (formationIdOrName) {
+        const formation = mockFormations.find(f => f.id === formationIdOrName || f.name === formationIdOrName);
+        if (formation) setSelectedFormation(formation);
       }
       
       // Load tactics
