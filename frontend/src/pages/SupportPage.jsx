@@ -568,7 +568,7 @@ const SupportPage = () => {
                         <Input
                           value={contactFormData.name}
                           onChange={(e) => setContactFormData({ ...contactFormData, name: e.target.value })}
-                          className="bg-black/20 border-gray-600 text-white"
+                          className="bg-black/20 border-gray-600 text-white focus:ring-0 focus:outline-none"
                           placeholder="Your name"
                           required
                         />
