@@ -579,7 +579,7 @@ const SupportPage = () => {
                           type="email"
                           value={contactFormData.email}
                           onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
-                          className="bg-black/20 border-gray-600 text-white"
+                          className="bg-black/20 border-gray-600 text-white focus:ring-0 focus:outline-none"
                           placeholder="your.email@example.com"
                           required
                         />
