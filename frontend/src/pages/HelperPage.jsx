@@ -306,7 +306,7 @@ const HelperPage = () => {
 
             {/* Strategy Cards Grid */}
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="backdrop-blur-lg text-white border"
+              <Card className="backdrop-blur-lg text-white border-0"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
