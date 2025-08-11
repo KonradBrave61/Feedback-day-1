@@ -476,11 +476,10 @@ const TeamBuilder = () => {
             // Create player object with loaded configuration
             const enhancedPlayer = {
               id: playerData.character_id,
-              userLevel: playerData.user_level,
-              userRarity: playerData.user_rarity,
+              userLevel: playerData.user_level || 1,
+              userRarity: playerData.user_rarity || 'Common',
               userEquipment: playerData.user_equipment || {},
               userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
-              // Add other character data here - you may need to fetch full character data
               name: playerData.name || `Player ${playerData.character_id}`,
               position: playerData.position || 'MF',
               element: playerData.element || 'Wind'
