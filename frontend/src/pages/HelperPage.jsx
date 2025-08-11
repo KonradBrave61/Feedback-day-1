@@ -405,7 +405,7 @@ const HelperPage = () => {
                   answer: "Yes! You can switch between different saved formations at any time during team management."
                 }
               ].map((faq, index) => (
-                <Card key={index} className="backdrop-blur-lg text-white border"
+                <Card key={index} className="backdrop-blur-lg text-white border-0"
                       style={{ 
                         backgroundColor: logoColors.blackAlpha(0.3),
                         borderColor: logoColors.primaryBlueAlpha(0.2)
