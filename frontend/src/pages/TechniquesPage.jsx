@@ -72,7 +72,7 @@ const TechniquesPage = () => {
   const getBackendUrl = () => {
     // In production, use the environment variable from .env file
     // process.env.REACT_APP_BACKEND_URL is available in React apps
-    return process.env.REACT_APP_BACKEND_URL || 'https://24c25e45-8c4c-4876-851b-f721d4d6e698.preview.emergentagent.com';
+    return process.env.REACT_APP_BACKEND_URL || 'https://6bc31e7a-a173-4a83-b3c7-ffd6909a7a3b.preview.emergentagent.com';
   };
 
   const fetchTechniques = async () => {
