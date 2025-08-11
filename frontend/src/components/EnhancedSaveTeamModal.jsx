@@ -85,7 +85,7 @@ const SaveTeamModal = ({
       const saveResult = await onSave(formData);
       console.log('HandleSlotSave: Team save result', saveResult);
       
-      if (saveResult.success) {
+      if (saveResult.success && saveResult.team && saveResult.team.id) {
         // Then save to slot
         const slotData = {
           slot_number: slotNumber,
