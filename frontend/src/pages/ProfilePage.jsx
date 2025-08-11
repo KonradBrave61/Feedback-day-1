@@ -294,12 +294,12 @@ const ProfilePage = () => {
                   <Button
                     onClick={() => {
                       try {
-                        // Clear token and force an authenticated action to trigger the handler
-                        localStorage.removeItem('authToken');
-                        // Small delay to ensure state reflects the change and popup shows
+                        // Set an invalid token to force a 401 on the next protected request
+                        localStorage.setItem('authToken', 'invalid-token');
+                        // Small delay to ensure storage is updated before the call
                         setTimeout(async () => {
                           try {
-                            // Attempt to load teams which will 401 and trigger popup
+                            // Attempt to load teams which should 401 and trigger the session-expired popup
                             await loadTeams();
                           } catch (_) {}
                         }, 50);
