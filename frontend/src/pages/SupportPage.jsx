@@ -654,7 +654,7 @@ const SupportPage = () => {
                       <Input
                         value={contactFormData.subject}
                         onChange={(e) => setContactFormData({ ...contactFormData, subject: e.target.value })}
-                        className="bg-black/20 border-gray-600 text-white"
+                        className="bg-black/20 border-gray-600 text-white focus:ring-0 focus:outline-none"
                         placeholder="Brief subject line"
                         required
                       />
