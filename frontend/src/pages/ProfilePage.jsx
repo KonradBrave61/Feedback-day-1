@@ -98,8 +98,8 @@ const ProfilePage = () => {
         
         // Check if this is an authentication error
         if (teamsResult.authError && teamsResult.error && teamsResult.error.includes('Session expired')) {
-          toast.error('Your session has expired. Please log in again.');
-          setTimeout(() => navigate('/login'), 2000); // Redirect after 2 seconds
+          // Silent redirect without popup, as requested
+          navigate('/login');
           return; // Exit early to avoid loading other data
         } else {
           toast.error(`Failed to load teams: ${teamsResult.error || 'Unknown error'}`);
