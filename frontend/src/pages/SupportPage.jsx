@@ -288,7 +288,7 @@ const SupportPage = () => {
                       <Input
                         value={bugFormData.title}
                         onChange={(e) => setBugFormData({ ...bugFormData, title: e.target.value })}
-                        className="bg-black/20 border-gray-600 text-white"
+                        className="bg-black/20 border-gray-600 text-white focus:ring-0 focus:outline-none"
                         placeholder="Brief description of the bug"
                         required
                       />
