@@ -235,7 +235,7 @@ const SupportPage = () => {
               </Card>
 
               {/* Get in Touch */}
-              <Card className="backdrop-blur-lg text-white border"
+              <Card className="backdrop-blur-lg text-white border-0"
                     style={{ 
                       backgroundColor: logoColors.blackAlpha(0.3),
                       borderColor: logoColors.primaryBlueAlpha(0.2)
