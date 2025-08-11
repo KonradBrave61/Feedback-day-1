@@ -241,7 +241,7 @@ const BenchSlot = ({ slotIndex, player, onAddBenchPlayer, onRemoveBenchPlayer, o
       if (draggedItem.fromPosition !== slotIndex) {
         if (draggedItem.fromType === 'formation') {
           // Moving from formation to bench
-          onMoveToBench(draggedItem.fromPosition, slotIndex);
+          onMoveToBench && onMoveToBench(draggedItem.fromPosition, slotIndex, !!player);
         } else {
           // Moving within bench (swap)
           if (player) {
