@@ -1098,8 +1098,7 @@ const TeamBuilder = () => {
                             </div>
                             {/* Empty slot text without extra plus */}
                             <span className="text-gray-400 text-sm">Empty slot</span>
-                          </div
-                              {/* Smooth circle avatar */}
+                          </div>
                               <div className="w-10 h-10 rounded-full overflow-hidden ring-1 ring-blue-400/40 flex items-center justify-center bg-blue-900/40">
                                 {player.portrait ? (
                                   <img src={player.portrait} alt={player.name} className="w-full h-full object-cover" />
