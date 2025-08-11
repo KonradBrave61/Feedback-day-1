@@ -20,7 +20,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://b3e3436d-c812-4c23-b551-100bb3ccca03.preview.emergentagent.com/api"
+BACKEND_URL = "https://d478745b-543f-4982-ad9d-bddedcd64a1b.preview.emergentagent.com/api"
 
 class TeamDataStructureAnalyzer:
     def __init__(self):
