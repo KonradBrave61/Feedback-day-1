@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { showNotification } from '../components/Notification';
+import { showNotification, showSessionExpiredNotification } from '../components/Notification';
 
 const AuthContext = createContext();
 
@@ -248,13 +248,13 @@ export const AuthProvider = ({ children }) => {
 
   const handleAuthenticationError = (error) => {
     console.error('Authentication error detected:', error);
-    // Quietly clear session and redirect to login without a popup toast
-    // (requested: remove session expiry popup)
-    // Clear user session and redirect to login
+    // Show a high-priority sticky popup on the side for session expiry
+    showSessionExpiredNotification();
+    // Clear user session
     setUser(null);
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
-    // The UI will handle redirect when user becomes null
+    // The UI will handle redirect when user becomes null (e.g., ProfilePage watches user state)
   };
 
   const loadTeams = async () => {
