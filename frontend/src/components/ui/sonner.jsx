@@ -10,7 +10,10 @@ const Toaster = ({
     <Sonner
       theme={theme}
       className="toaster group"
+      position="top-center"
+      richColors
       toastOptions={{
+        duration: 2500,
         classNames: {
           toast:
             "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
