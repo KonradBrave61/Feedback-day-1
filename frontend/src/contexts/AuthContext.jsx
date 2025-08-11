@@ -161,8 +161,9 @@ export const AuthProvider = ({ children }) => {
       }
 
       const savedTeam = await response.json();
-      console.log('SaveTeam: Successfully saved team:', savedTeam.id);
-      return { success: true, team: savedTeam };
+      const teamObject = savedTeam?.team || savedTeam;
+      console.log('SaveTeam: Successfully saved team:', teamObject?.id);
+      return { success: true, team: teamObject };
     } catch (error) {
       console.error('SaveTeam: Full error details:', error);
       return { success: false, error: error.message };
