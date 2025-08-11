@@ -442,7 +442,7 @@ const HelperPage = () => {
 
           {/* Community Forum Tab */}
           <TabsContent value="forum" className="space-y-4">
-            <Card className="backdrop-blur-lg text-white border text-center"
+            <Card className="backdrop-blur-lg text-white border-0 text-center"
                   style={{ 
                     backgroundColor: logoColors.blackAlpha(0.3),
                     borderColor: logoColors.primaryBlueAlpha(0.2)
