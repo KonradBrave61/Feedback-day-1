@@ -135,19 +135,21 @@ const TeamBuilder = () => {
   };
 
   const handleEditPlayer = (player) => {
-    // Check if it's a bench player
+    // Detect if it's a bench player first
     const benchSlot = Object.keys(benchPlayers).find(slot => benchPlayers[slot] && benchPlayers[slot].id === player.id);
-    
+
     if (benchSlot !== undefined) {
       // Bench player editing
       setEditingPlayer(player);
       setEditingPosition(`bench_${benchSlot}`);
     } else {
-      // Regular field player editing
+      // Regular field player editing — find the positionId this player currently occupies
+      const positionId = Object.keys(teamPlayers).find(posId => teamPlayers[posId] && teamPlayers[posId].id === player.id);
       setEditingPlayer(player);
-      setEditingPosition(null);
+      // If found, set to that position so we update in place; otherwise null
+      setEditingPosition(positionId || null);
     }
-    
+
     setShowCharacterModal(true);
   };
 
