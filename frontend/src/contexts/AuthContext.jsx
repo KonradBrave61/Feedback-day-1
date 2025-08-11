@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = true) => {
     try {
       const response = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
