@@ -284,6 +284,37 @@ const ProfilePage = () => {
           <h1 className="text-4xl font-bold text-white mb-2">
             Coach Profile
           </h1>
+            {/* Dev-only: Simulate Session Expiry */}
+            {process.env.NODE_ENV !== 'production' && (
+              <Card className="mt-6 backdrop-blur-lg text-white border" style={{ 
+                backgroundColor: logoColors.blackAlpha(0.3),
+                borderColor: logoColors.primaryBlueAlpha(0.2)
+              }}>
+                <CardContent className="p-4">
+                  <Button
+                    onClick={() => {
+                      try {
+                        // Clear token and force an authenticated action to trigger the handler
+                        localStorage.removeItem('authToken');
+                        // Small delay to ensure state reflects the change and popup shows
+                        setTimeout(async () => {
+                          try {
+                            // Attempt to load teams which will 401 and trigger popup
+                            await loadTeams();
+                          } catch (_) {}
+                        }, 50);
+                      } catch (e) {}
+                    }}
+                    className="w-full text-black font-bold hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient }}
+                  >
+                    Simulate Session Expiry
+                  </Button>
+                  <p className="text-xs mt-2 text-gray-300">Dev-only: clears token and triggers the session-expired popup.</p>
+                </CardContent>
+              </Card>
+            )}
+
           <p className="text-gray-300">Manage your Inazuma Eleven journey</p>
         </div>
 
