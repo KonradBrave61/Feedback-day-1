@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { showNotification, showSessionExpiredNotification } from '../components/Notification';
 
 const AuthContext = createContext();
@@ -11,27 +11,92 @@ export const useAuth = () => {
   return context;
 };
 
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const refreshTimerRef = useRef(null);
+
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
+  const scheduleProactiveRefresh = (accessToken) => {
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+      refreshTimerRef.current = null;
+    }
+    const payload = parseJwt(accessToken);
+    if (!payload || !payload.exp) return;
+    const expMs = payload.exp * 1000;
+    // Refresh 5 minutes before expiry, but not sooner than in 15 seconds
+    const refreshAt = Math.max(15000, expMs - Date.now() - 5 * 60 * 1000);
+    refreshTimerRef.current = setTimeout(async () => {
+      try {
+        const ok = await refreshAccessToken();
+        if (ok) {
+          // Reschedule with new token
+          const newToken = localStorage.getItem('authToken');
+          if (newToken) scheduleProactiveRefresh(newToken);
+        }
+      } catch (e) {
+        // Fail silently; request path will handle auth errors
+      }
+    }, refreshAt);
+  };
 
   useEffect(() => {
-    // Check if user is logged in on app start
+    // Load user from storage
     const storedToken = localStorage.getItem('authToken');
     const storedUser = localStorage.getItem('user');
     if (storedToken && storedUser) {
-      setUser({ ...JSON.parse(storedUser), token: storedToken });
+      const u = { ...JSON.parse(storedUser), token: storedToken };
+      setUser(u);
+      scheduleProactiveRefresh(storedToken);
     }
     setLoading(false);
+
+    return () => {
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
+    };
   }, []);
+
+  const refreshAccessToken = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/api/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (data && data.access_token) {
+        localStorage.setItem('authToken', data.access_token);
+        setUser(prev => prev ? { ...prev, token: data.access_token } : prev);
+        scheduleProactiveRefresh(data.access_token);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  };
 
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
+      const response = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
 
@@ -44,6 +109,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userWithToken);
       localStorage.setItem('authToken', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      scheduleProactiveRefresh(data.access_token);
       return { success: true, user: userWithToken };
     } catch (error) {
       console.error('Login error:', error);
@@ -65,11 +131,10 @@ export const AuthProvider = ({ children }) => {
         kizuna_stars: 50
       };
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
+      const response = await fetch(`${backendUrl}/api/auth/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(userData),
       });
 
@@ -83,6 +148,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userWithToken);
       localStorage.setItem('authToken', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      scheduleProactiveRefresh(data.access_token);
       return { success: true, user: userWithToken };
     } catch (error) {
       console.error('Registration error:', error);
@@ -90,7 +156,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch(`${backendUrl}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+    } catch (_) {}
+    if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
     setUser(null);
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
@@ -103,7 +173,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/profile`, {
+      const response = await fetch(`${backendUrl}/api/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -127,6 +197,47 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Core fetch with silent refresh + retry
+  const makeAuthenticatedRequest = async (url, options = {}) => {
+    const attempt = async () => {
+      const token = localStorage.getItem('authToken') || user?.token;
+      if (!token) {
+        handleAuthenticationError('No authentication token found');
+        throw new Error('Session expired. Please log in again.');
+      }
+      return await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${token}`,
+        },
+        // Keep default credentials for same-origin; no cookie needed except for refresh
+      });
+    };
+
+    let response = await attempt();
+    if (response.status === 401 || response.status === 403) {
+      // Try to refresh once silently
+      const refreshed = await refreshAccessToken();
+      if (refreshed) {
+        response = await attempt();
+      }
+      if (response.status === 401 || response.status === 403) {
+        handleAuthenticationError(`Authentication failed: ${response.status} ${response.statusText}`);
+        throw new Error('Session expired. Please log in again.');
+      }
+    }
+    return response;
+  };
+
+  const handleAuthenticationError = (error) => {
+    console.error('Authentication error detected:', error);
+    showSessionExpiredNotification();
+    setUser(null);
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+  };
+
   const saveTeam = async (teamData) => {
     try {
       const token = localStorage.getItem('authToken') || user?.token;
@@ -135,13 +246,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('No authentication token found. Please log in again.');
       }
 
-      console.log('SaveTeam: Sending team data:', {
-        name: teamData.name,
-        playersCount: teamData.players?.length || 0,
-        benchCount: teamData.bench?.length || 0
-      });
-
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams`, {
+      const response = await fetch(`${backendUrl}/api/teams`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +267,6 @@ export const AuthProvider = ({ children }) => {
 
       const savedTeam = await response.json();
       const teamObject = savedTeam?.team || savedTeam;
-      console.log('SaveTeam: Successfully saved team:', teamObject?.id);
       return { success: true, team: teamObject };
     } catch (error) {
       console.error('SaveTeam: Full error details:', error);
@@ -177,7 +281,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}`, {
+      const response = await fetch(`${backendUrl}/api/teams/${teamId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +309,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}`, {
+      const response = await fetch(`${backendUrl}/api/teams/${teamId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -223,45 +327,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const makeAuthenticatedRequest = async (url, options = {}) => {
-    const token = localStorage.getItem('authToken') || user?.token;
-    if (!token) {
-      handleAuthenticationError('No authentication token found');
-      throw new Error('Session expired. Please log in again.');
-    }
-
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 401 || response.status === 403) {
-      handleAuthenticationError(`Authentication failed: ${response.status} ${response.statusText}`);
-      throw new Error('Session expired. Please log in again.');
-    }
-
-    return response;
-  };
-
-  const handleAuthenticationError = (error) => {
-    console.error('Authentication error detected:', error);
-    // Show a high-priority sticky popup on the side for session expiry
-    showSessionExpiredNotification();
-    // Clear user session
-    setUser(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    // The UI will handle redirect when user becomes null (e.g., ProfilePage watches user state)
-  };
-
   const loadTeams = async () => {
     try {
-      console.log('LoadTeams: Fetching user teams...');
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams`);
-
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams`);
       if (!response.ok) {
         const errorData = await response.text();
         console.error('LoadTeams: API error response:', {
@@ -271,13 +339,10 @@ export const AuthProvider = ({ children }) => {
         });
         throw new Error(`Failed to load teams: ${response.status} ${response.statusText}`);
       }
-
       const teams = await response.json();
-      console.log('LoadTeams: Successfully loaded teams:', teams.length);
       return { success: true, teams };
     } catch (error) {
       console.error('LoadTeams: Full error details:', error);
-      // Check if this is an authentication error
       if (error.message.includes('Session expired')) {
         return { success: false, error: error.message, authError: true };
       }
@@ -294,12 +359,10 @@ export const AuthProvider = ({ children }) => {
       if (filters.limit) params.append('limit', filters.limit);
       if (filters.offset) params.append('offset', filters.offset);
 
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/community/teams?${params}`);
-
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/community/teams?${params}`);
       if (!response.ok) {
         throw new Error('Community teams load failed');
       }
-
       const teams = await response.json();
       return { success: true, teams };
     } catch (error) {
@@ -313,14 +376,10 @@ export const AuthProvider = ({ children }) => {
 
   const likeTeam = async (teamId) => {
     try {
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/like`, {
-        method: 'POST'
-      });
-
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/${teamId}/like`, { method: 'POST' });
       if (!response.ok) {
         throw new Error('Like action failed');
       }
-
       const result = await response.json();
       return { success: true, liked: result.liked };
     } catch (error) {
@@ -334,18 +393,14 @@ export const AuthProvider = ({ children }) => {
 
   const commentOnTeam = async (teamId, content) => {
     try {
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/comment`, {
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/${teamId}/comment`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content }),
       });
-
       if (!response.ok) {
         throw new Error('Comment action failed');
       }
-
       const result = await response.json();
       return { success: true, comment: result.comment };
     } catch (error) {
@@ -359,7 +414,7 @@ export const AuthProvider = ({ children }) => {
 
   const followUser = async (userId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/follow`, {
+      const response = await fetch(`${backendUrl}/api/community/follow`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -367,11 +422,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ user_id: userId }),
       });
-
       if (!response.ok) {
         throw new Error('Follow action failed');
       }
-
       const result = await response.json();
       return { success: true, following: result.following };
     } catch (error) {
@@ -382,16 +435,12 @@ export const AuthProvider = ({ children }) => {
 
   const loadFeaturedContent = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/featured`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+      const response = await fetch(`${backendUrl}/api/community/featured`, {
+        headers: { 'Authorization': `Bearer ${user.token}` },
       });
-
       if (!response.ok) {
         throw new Error('Featured content load failed');
       }
-
       const data = await response.json();
       return { success: true, ...data };
     } catch (error) {
@@ -402,16 +451,12 @@ export const AuthProvider = ({ children }) => {
 
   const loadCommunityStats = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/community/stats`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+      const response = await fetch(`${backendUrl}/api/community/stats`, {
+        headers: { 'Authorization': `Bearer ${user.token}` },
       });
-
       if (!response.ok) {
         throw new Error('Community stats load failed');
       }
-
       const data = await response.json();
       return { success: true, stats: data };
     } catch (error) {
@@ -422,20 +467,13 @@ export const AuthProvider = ({ children }) => {
 
   const loadFollowers = async (userId = null) => {
     try {
-      const endpoint = userId 
-        ? `/api/community/users/${userId}/followers` 
-        : `/api/community/followers`;
-      
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+      const endpoint = userId ? `/api/community/users/${userId}/followers` : `/api/community/followers`;
+      const response = await fetch(`${backendUrl}${endpoint}`, {
+        headers: { 'Authorization': `Bearer ${user.token}` },
       });
-
       if (!response.ok) {
         throw new Error('Followers load failed');
       }
-
       const data = await response.json();
       return { success: true, followers: data.followers };
     } catch (error) {
@@ -446,20 +484,13 @@ export const AuthProvider = ({ children }) => {
 
   const loadFollowing = async (userId = null) => {
     try {
-      const endpoint = userId 
-        ? `/api/community/users/${userId}/following` 
-        : `/api/community/following`;
-      
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+      const endpoint = userId ? `/api/community/users/${userId}/following` : `/api/community/following`;
+      const response = await fetch(`${backendUrl}${endpoint}`, {
+        headers: { 'Authorization': `Bearer ${user.token}` },
       });
-
       if (!response.ok) {
         throw new Error('Following load failed');
       }
-
       const data = await response.json();
       return { success: true, following: data.following };
     } catch (error) {
@@ -470,9 +501,7 @@ export const AuthProvider = ({ children }) => {
 
   const loadSaveSlots = async () => {
     try {
-      console.log('LoadSaveSlots: Fetching save slots...');
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`);
-
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/save-slots`);
       if (!response.ok) {
         const errorData = await response.text();
         console.error('LoadSaveSlots: API error response:', {
@@ -482,9 +511,7 @@ export const AuthProvider = ({ children }) => {
         });
         throw new Error(`Failed to load save slots: ${response.status} ${response.statusText}`);
       }
-
       const data = await response.json();
-      console.log('LoadSaveSlots: Successfully loaded save slots:', data.save_slots?.length || 0);
       return { success: true, saveSlots: data.save_slots || [] };
     } catch (error) {
       console.error('LoadSaveSlots: Full error details:', error);
@@ -497,7 +524,7 @@ export const AuthProvider = ({ children }) => {
 
   const createSaveSlot = async (slotData) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots`, {
+      const response = await fetch(`${backendUrl}/api/save-slots`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -505,11 +532,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(slotData),
       });
-
       if (!response.ok) {
         throw new Error('Save slot creation failed');
       }
-
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
@@ -520,17 +545,13 @@ export const AuthProvider = ({ children }) => {
 
   const clearSaveSlot = async (slotNumber) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/save-slots/${slotNumber}`, {
+      const response = await fetch(`${backendUrl}/api/save-slots/${slotNumber}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${user.token}`,
-        },
+        headers: { 'Authorization': `Bearer ${user.token}` },
       });
-
       if (!response.ok) {
         throw new Error('Save slot clearing failed');
       }
-
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
@@ -541,7 +562,7 @@ export const AuthProvider = ({ children }) => {
 
   const rateTeam = async (teamId, ratingData) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/rate`, {
+      const response = await fetch(`${backendUrl}/api/teams/${teamId}/rate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -549,11 +570,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(ratingData),
       });
-
       if (!response.ok) {
         throw new Error('Team rating failed');
       }
-
       const data = await response.json();
       return { success: true, rating: data.rating };
     } catch (error) {
@@ -564,9 +583,7 @@ export const AuthProvider = ({ children }) => {
 
   const loadTeamDetails = async (teamId) => {
     try {
-      console.log('LoadTeamDetails: Fetching team details for ID:', teamId);
-      const response = await makeAuthenticatedRequest(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/details`);
-
+      const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/${teamId}/details`);
       if (!response.ok) {
         const errorData = await response.text();
         console.error('LoadTeamDetails: API error response:', {
@@ -576,9 +593,7 @@ export const AuthProvider = ({ children }) => {
         });
         throw new Error(`Failed to load team details: ${response.status} ${response.statusText}`);
       }
-
       const data = await response.json();
-      console.log('LoadTeamDetails: Successfully loaded team details');
       return { success: true, ...data };
     } catch (error) {
       console.error('LoadTeamDetails: Full error details:', error);
@@ -591,12 +606,10 @@ export const AuthProvider = ({ children }) => {
 
   const loadPublicTeamDetails = async (teamId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/public`);
-
+      const response = await fetch(`${backendUrl}/api/teams/${teamId}/public`);
       if (!response.ok) {
         throw new Error('Public team details load failed');
       }
-
       const data = await response.json();
       return { success: true, ...data };
     } catch (error) {
@@ -607,7 +620,7 @@ export const AuthProvider = ({ children }) => {
 
   const saveTeamToSlot = async (teamId, slotData) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/teams/${teamId}/save-to-slot`, {
+      const response = await fetch(`${backendUrl}/api/teams/${teamId}/save-to-slot`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -615,11 +628,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(slotData),
       });
-
       if (!response.ok) {
         throw new Error('Team save to slot failed');
       }
-
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
