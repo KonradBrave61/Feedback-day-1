@@ -30,8 +30,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   // Update state when character changes (for editing different players)
   useEffect(() => {
     if (character) {
-      setUserLevel(character.userLevel || character.baseLevel);
-      setUserRarity(character.userRarity || character.baseRarity);
+      setUserLevel(character.userLevel || character.baseLevel || 1);
+      setUserRarity(character.userRarity || character.baseRarity || 'Common');
       setSelectedEquipment({
         boots: character.userEquipment?.boots || null,
         bracelets: character.userEquipment?.bracelets || null,
