@@ -393,13 +393,12 @@ const TeamBuilder = () => {
 
   const handleSaveTeam = async (teamData) => {
     try {
-      // Prepare team data for saving
+      // Prepare team data for saving (align with backend TeamCreate)
       const saveData = {
         ...teamData,
-        formation_id: selectedFormation?.id,
-        formation_name: selectedFormation?.name,
+        formation: (selectedFormation?.id ?? selectedFormation?.name ?? '').toString(),
         players: Object.entries(teamPlayers)
-          .filter(([_, player]) => player)
+          .filter(([_, player]) => !!player)
           .map(([positionId, player]) => ({
             character_id: player.id,
             position_id: positionId,
@@ -409,7 +408,7 @@ const TeamBuilder = () => {
             user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
           })),
         bench_players: Object.entries(benchPlayers)
-          .filter(([_, player]) => player)
+          .filter(([_, player]) => !!player)
           .map(([slot, player]) => ({
             character_id: player.id,
             slot_id: `bench_${slot}`,
@@ -423,6 +422,9 @@ const TeamBuilder = () => {
       };
 
       const result = await saveTeam(saveData);
+      if (!result?.success || !result?.team || !result?.team?.id) {
+        throw new Error(result?.error || 'Team save failed');
+      }
       return { success: true, team: result.team };
     } catch (error) {
       console.error('Error in handleSaveTeam:', error);
