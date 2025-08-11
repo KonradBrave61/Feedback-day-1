@@ -37,7 +37,6 @@ import { toast } from 'sonner';
 import EnhancedSaveTeamModal from '../components/EnhancedSaveTeamModal';
 import LoadTeamModal from '../components/LoadTeamModal';
 import { useAuth } from '../contexts/AuthContext';
-import { useEffect } from 'react';
 
 const TeamBuilder = () => {
   const { user, saveTeam } = useAuth();
