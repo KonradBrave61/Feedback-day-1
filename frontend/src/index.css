@@ -122,10 +122,13 @@ a .text-white:active {
 }
 
 /* Outline and focus fixes */
-*:focus,
-*:focus-visible {
-    outline: 2px solid rgba(255, 215, 0, 0.8) !important;
-    outline-offset: 2px !important;
+/* Restrict visible focus styling to interactive controls and remove heavy yellow outlines */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: none !important; /* rely on component-level subtle rings */
     color: inherit !important;
 }
 
