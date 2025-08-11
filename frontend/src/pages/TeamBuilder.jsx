@@ -421,6 +421,13 @@ const TeamBuilder = () => {
         coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null
       };
 
+      // Validate payload quickly to avoid undefined access
+      const anyUndefinedId = saveData.players.some(p => !p.character_id || !p.position_id) ||
+                             saveData.bench_players.some(p => !p.character_id || !p.slot_id);
+      if (anyUndefinedId) {
+        throw new Error('Invalid team data: some players are missing required IDs');
+      }
+
       const result = await saveTeam(saveData);
       if (!result?.success || !result?.team || !result?.team?.id) {
         throw new Error(result?.error || 'Team save failed');
