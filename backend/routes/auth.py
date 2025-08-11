@@ -232,7 +232,9 @@ async def login(user_credentials: UserLogin, response: Response):
     access_token = create_access_token(
         data={"sub": user_doc["id"]}, expires_delta=access_token_expires
     )
-    refresh_token, jti, exp = create_refresh_token(user_doc["id"])
+    # Remember me controls refresh token lifetime
+    refresh_lifetime = timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS if (user_credentials.remember_me is None or user_credentials.remember_me) else 7)
+    refresh_token, jti, exp = create_refresh_token(user_doc["id"], expires_delta=refresh_lifetime)
     await store_refresh_token(jti, user_doc["id"], exp)
     set_refresh_cookie(response, refresh_token)
     
