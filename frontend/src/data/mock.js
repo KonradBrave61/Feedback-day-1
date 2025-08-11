@@ -356,45 +356,61 @@ export const searchCharacters = (query) => {
   );
 };
 
-// Helper function to calculate stats with equipment bonuses
+// Default stat template used when loaded players lack baseStats
+export const getDefaultBaseStats = () => ({
+  kick: { main: 50, secondary: 100 },
+  control: { main: 50, secondary: 100 },
+  technique: { main: 50, secondary: 100 },
+  intelligence: { main: 50, secondary: 100 },
+  pressure: { main: 50, secondary: 100 },
+  agility: { main: 50, secondary: 100 },
+  physical: { main: 50, secondary: 100 }
+});
+
+// Helper function to calculate stats with equipment bonuses (robust to missing fields)
 export const calculateStats = (character, equipment, userLevel = 1, userRarity = 'Common') => {
-  const baseStats = JSON.parse(JSON.stringify(character.baseStats)); // Deep copy
-  
+  const safeCharacter = character || {};
+  const baseStatsSource = safeCharacter.baseStats && typeof safeCharacter.baseStats === 'object'
+    ? safeCharacter.baseStats
+    : getDefaultBaseStats();
+
+  // Shallow copy is enough for our numeric structure
+  const baseStats = { ...baseStatsSource };
+
   // Calculate level difference and apply 4 stats per level
-  const levelDifference = userLevel - character.baseLevel;
+  const baseLevel = Number.isFinite(safeCharacter.baseLevel) ? safeCharacter.baseLevel : 1;
+  const levelDifference = (Number.isFinite(userLevel) ? userLevel : 1) - baseLevel;
   const levelModifier = levelDifference * 4;
   
   // Calculate rarity difference and apply 10 stats per rarity
   const rarityValues = { 'Common': 0, 'Rare': 1, 'Epic': 2, 'Legendary': 3 };
-  const currentRarityValue = rarityValues[character.baseRarity] || 0;
-  const userRarityValue = rarityValues[userRarity] || 0;
+  const currentRarityValue = rarityValues[safeCharacter.baseRarity] ?? 0;
+  const userRarityValue = rarityValues[userRarity] ?? 0;
   const rarityDifference = userRarityValue - currentRarityValue;
   const rarityModifier = rarityDifference * 10;
   
-  // Store base values (with level and rarity modifiers) before equipment
+  // Ensure all expected stat keys exist
+  const statKeys = ['kick','control','technique','intelligence','pressure','agility','physical'];
   const adjustedBaseStats = {};
-  Object.keys(baseStats).forEach(stat => {
-    const adjustedMain = Math.max(1, baseStats[stat].main + levelModifier + rarityModifier);
-    const adjustedSecondary = Math.max(1, baseStats[stat].secondary + levelModifier + rarityModifier);
-    adjustedBaseStats[stat] = {
-      main: adjustedMain,
-      secondary: adjustedSecondary
-    };
+  statKeys.forEach(stat => {
+    const src = baseStats[stat] || { main: 50, secondary: 100 };
+    const adjustedMain = Math.max(1, (src.main || 0) + levelModifier + rarityModifier);
+    const adjustedSecondary = Math.max(1, (src.secondary || 0) + levelModifier + rarityModifier);
+    adjustedBaseStats[stat] = { main: adjustedMain, secondary: adjustedSecondary };
   });
   
   // Calculate equipment bonuses
   const equipmentBonuses = {};
-  Object.keys(baseStats).forEach(stat => {
-    equipmentBonuses[stat] = 0;
-  });
+  statKeys.forEach(stat => { equipmentBonuses[stat] = 0; });
   
-  if (equipment) {
+  if (equipment && typeof equipment === 'object') {
     Object.keys(equipment).forEach(slot => {
       const item = equipment[slot];
-      if (item && item.stats) {
+      if (item && item.stats && typeof item.stats === 'object') {
         Object.keys(item.stats).forEach(stat => {
           if (equipmentBonuses[stat] !== undefined) {
-            equipmentBonuses[stat] += item.stats[stat];
+            const bonus = Number(item.stats[stat]) || 0;
+            equipmentBonuses[stat] += bonus;
           }
         });
       }
@@ -403,7 +419,7 @@ export const calculateStats = (character, equipment, userLevel = 1, userRarity =
   
   // Calculate final stats with equipment bonuses
   const finalStats = {};
-  Object.keys(baseStats).forEach(stat => {
+  statKeys.forEach(stat => {
     finalStats[stat] = {
       main: adjustedBaseStats[stat].main + equipmentBonuses[stat],
       secondary: adjustedBaseStats[stat].secondary + equipmentBonuses[stat],
