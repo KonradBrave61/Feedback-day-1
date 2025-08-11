@@ -42,7 +42,7 @@ const LoginPage = () => {
     try {
       let result;
       if (isLogin) {
-        result = await login(formData.email, formData.password);
+        result = await login(formData.email, formData.password, formData.rememberMe);
       } else {
         result = await register(formData.username, formData.email, formData.password);
       }
