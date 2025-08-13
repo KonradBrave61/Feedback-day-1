@@ -103,6 +103,6 @@
       }
     }
   ],
-  "backend_url": "https://d478745b-543f-4982-ad9d-bddedcd64a1b.preview.emergentagent.com/api",
+  "backend_url": "https://roster-transfer-fix.preview.emergentagent.com/api",
   "token_expiry_minutes": 30
 }

@@ -10,7 +10,7 @@ import sys
 import os
 
 # Get backend URL from environment
-BACKEND_URL = "https://d478745b-543f-4982-ad9d-bddedcd64a1b.preview.emergentagent.com"
+BACKEND_URL = "https://roster-transfer-fix.preview.emergentagent.com"
 
 def test_placeholder_endpoint():
     """Test the new placeholder image endpoint"""
