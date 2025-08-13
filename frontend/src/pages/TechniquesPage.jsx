@@ -567,14 +567,16 @@ const TechniquesPage = () => {
                       {Object.keys(selectedTechnique.stat_requirements || {}).length > 0 && (
                         <div>
                           <div className="text-gray-400 text-xs mb-2">Stat Requirements</div>
-                          <div className="space-y-1">
+                          <UnorderedList>
                             {Object.entries(selectedTechnique.stat_requirements).map(([stat, value]) => (
-                              <div key={stat} className="flex justify-between text-sm">
-                                <span className="text-gray-300 capitalize">{stat}</span>
-                                <span className="text-white font-semibold">{value}+</span>
-                              </div>
+                              <ListItem key={stat}>
+                                <div className="flex w-full justify-between text-sm">
+                                  <span className="text-gray-300 capitalize">{stat}</span>
+                                  <span className="text-white font-semibold">{value}+</span>
+                                </div>
+                              </ListItem>
                             ))}
-                          </div>
+                          </UnorderedList>
                         </div>
                       )}
 
