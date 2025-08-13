@@ -724,7 +724,7 @@ const TeamBuilder = () => {
               id: playerData.character_id,
               userLevel: playerData.user_level ?? base?.baseLevel ?? 1,
               userRarity: playerData.user_rarity ?? base?.baseRarity ?? 'Common',
-              userEquipment: playerData.user_equipment || {},
+              userEquipment: playerData.user_equipment || { boots: null, bracelets: null, pendants: null, special: null },
               userHissatsu: {
                 preset1: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(0, 3) : (hissatsuRaw?.preset1 || []),
                 preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || [])
