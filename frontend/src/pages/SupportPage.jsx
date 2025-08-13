@@ -534,12 +534,12 @@ const SupportPage = () => {
                   <div>
                     <h3 className="font-semibold mb-3">Browser Compatibility</h3>
                     <p className="text-gray-300 mb-3">Supported browsers:</p>
-                    <ul className="space-y-2 text-sm text-gray-300 ml-4">
+                    <UnorderedList>
                       <li>• Chrome 90+ (Recommended)</li>
                       <li>• Firefox 88+</li>
                       <li>• Safari 14+</li>
                       <li>• Edge 90+</li>
-                    </ul>
+                    </UnorderedList>
                     <p className="text-sm text-yellow-300 mt-3">Note: Internet Explorer is not supported.</p>
                   </div>
                 </CardContent>
