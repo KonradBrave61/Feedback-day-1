@@ -346,22 +346,19 @@ const TechniquesPage = () => {
 
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Rarity</label>
-                    <select
-                      value={filters.rarity}
-                      onChange={(e) => handleFilterChange('rarity', e.target.value)}
-                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
-                      style={{
-                        backgroundColor: logoColors.blackAlpha(0.5),
-                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
-                        '--tw-ring-color': logoColors.secondaryBlue
-                      }}
-                    >
-                      <option value="">All Rarities</option>
-                      <option value="Common">Common</option>
-                      <option value="Rare">Rare</option>
-                      <option value="Epic">Epic</option>
-                      <option value="Legendary">Legendary</option>
-                    </select>
+                    <Select value={filters.rarity} onValueChange={(v) => handleFilterChange('rarity', v)}>
+                      <SelectTrigger className="text-white border"
+                        style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectValue placeholder="All Rarities" />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Rarities</SelectItem>
+                        <SelectItem value="Common" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Common</SelectItem>
+                        <SelectItem value="Rare" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Rare</SelectItem>
+                        <SelectItem value="Epic" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Epic</SelectItem>
+                        <SelectItem value="Legendary" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Legendary</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
