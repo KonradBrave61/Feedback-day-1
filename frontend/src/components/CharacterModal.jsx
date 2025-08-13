@@ -775,7 +775,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {mockHissatsu.map((hissatsu) => {
                   const currentPreset = `preset${activePreset}`;
-                  const isUsedInPreset = selectedHissatsu[currentPreset].some(h => h && h.id === hissatsu.id);
+                  const isUsedInPreset = (selectedHissatsu?.[currentPreset] || []).some(h => h && h.id === hissatsu.id);
                   
                   return (
                     <div
