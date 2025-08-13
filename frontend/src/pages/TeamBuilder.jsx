@@ -185,57 +185,7 @@ const TeamBuilder = () => {
     setShowPlayerSearch(true);
   };
 
-  // Draggable bench row (for moving bench -> field)
-  const BenchRow = ({ index, player }) => {
-    const [{ isDragging }, drag] = useDrag({
-      type: 'PLAYER',
-      item: { player, fromPosition: index, fromType: 'bench' },
-      collect: (monitor) => ({ isDragging: monitor.isDragging() }),
-      canDrag: !!player,
-    });
-
-    return (
-      <div ref={drag} className={`relative group ${isDragging ? 'opacity-50' : ''}`}>
-        <div
-          className="w-full rounded-lg border border-blue-500/30 bg-blue-800/20 hover:bg-blue-800/30 p-2 flex items-center gap-3 cursor-pointer transition-colors"
-          onClick={() => handleEditPlayer(player)}
-        >
-          <div className="w-10 h-10 rounded-full overflow-hidden ring-1 ring-blue-400/40 flex items-center justify-center bg-blue-900/40">
-            {player?.portrait ? (
-              <img src={player.portrait} alt={player.name} className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-white text-sm font-bold">{player?.name ? player.name.charAt(0) : 'P'}</span>
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="text-sm text-white font-medium truncate">{player?.name}</div>
-            <div className="text-xs text-gray-300 truncate">{player?.element || '—'} • {player?.position || '—'}</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-7 h-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ backgroundColor: logoColors.primaryBlueAlpha(0.6), color: logoColors.white }}
-              onClick={(e) => { e.stopPropagation(); handleEditPlayer(player); }}
-              title="Edit"
-            >
-              <Settings className="h-3 w-3" />
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              className="w-7 h-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={(e) => { e.stopPropagation(); handleRemoveBenchPlayer(index); }}
-              title="Remove from bench"
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // Removed BenchRow in favor of shared BenchSlot from FormationField for consistent drag-and-drop behavior
 
   // Move player within formation (swap or move)
   const handleMovePlayer = (fromPositionId, toPositionId) => {
