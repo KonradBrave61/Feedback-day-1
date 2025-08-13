@@ -168,6 +168,9 @@ const TeamBuilder = () => {
         delete newTeam[positionId];
         return newTeam;
       });
+    }
+  };
+
   // Bench helpers
   const handleRemoveBenchPlayer = (index) => {
     setBenchPlayers(prev => {
