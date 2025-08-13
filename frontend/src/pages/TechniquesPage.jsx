@@ -311,7 +311,7 @@ const TechniquesPage = () => {
 
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Category</label>
-                    <Select value={filters.category} onValueChange={(v) => handleFilterChange('category', v)}>
+                    <Select value={filters.category || undefined} onValueChange={(v) => handleFilterChange('category', v === 'all' ? '' : v)}>
                       <SelectTrigger className="text-white border"
                         style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                         <SelectValue placeholder="All Categories" />
