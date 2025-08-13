@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
 import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
-import FormationField from '../components/FormationField';
+import FormationField, { BenchSlot } from '../components/FormationField';
 import { useDrag, useDrop } from 'react-dnd';
 import PlayerSearch from '../components/PlayerSearch';
 import CharacterModal from '../components/CharacterModal';
