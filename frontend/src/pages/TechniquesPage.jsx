@@ -3,6 +3,7 @@ import Navigation from '../components/Navigation';
 import { Search, Filter, Star, Zap, Shield, Target, Eye, Book, Award } from 'lucide-react';
 import { logoColors } from '../styles/colors';
 import { UnorderedList, ListItem } from '../components/ui/list';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
 const TechniquesPage = () => {
   const [techniques, setTechniques] = useState([]);
