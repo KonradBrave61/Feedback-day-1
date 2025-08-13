@@ -480,10 +480,10 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Account Security</h3>
                     <p className="text-gray-300 mb-3">Keep your account safe:</p>
                     <UnorderedList>
-                      <li>• Use a strong, unique password</li>
-                      <li>• Don't share your login details</li>
-                      <li>• Log out when using shared computers</li>
-                      <li>• Contact support immediately if you suspect unauthorized access</li>
+                      <ListItem>Use a strong, unique password</ListItem>
+                      <ListItem>Don't share your login details</ListItem>
+                      <ListItem>Log out when using shared computers</ListItem>
+                      <ListItem>Contact support immediately if you suspect unauthorized access</ListItem>
                     </UnorderedList>
                   </div>
                 </CardContent>
