@@ -295,21 +295,18 @@ const TechniquesPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Technique Type</label>
-                    <select
-                      value={filters.technique_type}
-                      onChange={(e) => handleFilterChange('technique_type', e.target.value)}
-                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
-                      style={{
-                        backgroundColor: logoColors.blackAlpha(0.5),
-                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
-                        '--tw-ring-color': logoColors.secondaryBlue
-                      }}
-                    >
-                      <option value="">All Types</option>
-                      <option value="avatar">Avatar</option>
-                      <option value="totem">Totem</option>
-                      <option value="mix-max">Mix-Max</option>
-                    </select>
+                    <Select value={filters.technique_type} onValueChange={(v) => handleFilterChange('technique_type', v)}>
+                      <SelectTrigger className="text-white border"
+                        style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectValue placeholder="All Types" />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Types</SelectItem>
+                        <SelectItem value="avatar" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Avatar</SelectItem>
+                        <SelectItem value="totem" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Totem</SelectItem>
+                        <SelectItem value="mix-max" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Mix-Max</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
