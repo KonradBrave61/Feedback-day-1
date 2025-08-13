@@ -456,7 +456,7 @@ const SupportPage = () => {
                   <div>
                     <h3 className="font-semibold mb-3">Can't Login?</h3>
                     <p className="text-gray-300 mb-3">Try these steps:</p>
-                    <ul className="space-y-2 text-sm text-gray-300 ml-4">
+                    <UnorderedList>
                       <li>• Check your username and password spelling</li>
                       <li>• Clear browser cache and cookies</li>
                       <li>• Try a different browser or incognito mode</li>
