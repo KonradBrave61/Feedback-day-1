@@ -83,11 +83,7 @@ const HelperPage = () => {
                       backgroundColor: logoColors.blackAlpha(0.5),
                       borderColor: logoColors.primaryBlueAlpha(0.3)
                     }}>
-            <TabsTrigger value="guides" className="text-white data-[state=active]:text-black"
-                         style={{ 
-                           background: 'transparent',
-                           '&[data-state=active]': { background: logoColors.primaryBlue }
-                         }}>
+            <TabsTrigger value="guides" className="text-white border border-transparent rounded-md hover:border-blue-400/40 data-[state=active]:bg-blue-500 data-[state=active]:text-black data-[state=active]:border-blue-400">
               Game Guides
             </TabsTrigger>
             <TabsTrigger value="tips" className="text-white data-[state=active]:text-black"
