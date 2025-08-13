@@ -535,10 +535,10 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Browser Compatibility</h3>
                     <p className="text-gray-300 mb-3">Supported browsers:</p>
                     <UnorderedList>
-                      <li>• Chrome 90+ (Recommended)</li>
-                      <li>• Firefox 88+</li>
-                      <li>• Safari 14+</li>
-                      <li>• Edge 90+</li>
+                      <ListItem>Chrome 90+ (Recommended)</ListItem>
+                      <ListItem>Firefox 88+</ListItem>
+                      <ListItem>Safari 14+</ListItem>
+                      <ListItem>Edge 90+</ListItem>
                     </UnorderedList>
                     <p className="text-sm text-yellow-300 mt-3">Note: Internet Explorer is not supported.</p>
                   </div>
