@@ -509,11 +509,11 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Performance Issues</h3>
                     <p className="text-gray-300 mb-3">If the game runs slowly:</p>
                     <UnorderedList>
-                      <li>• Close other browser tabs and applications</li>
-                      <li>• Clear browser cache (Ctrl+Shift+Delete)</li>
-                      <li>• Update your browser to the latest version</li>
-                      <li>• Check your internet connection speed</li>
-                      <li>• Disable browser extensions temporarily</li>
+                      <ListItem>Close other browser tabs and applications</ListItem>
+                      <ListItem>Clear browser cache (Ctrl+Shift+Delete)</ListItem>
+                      <ListItem>Update your browser to the latest version</ListItem>
+                      <ListItem>Check your internet connection speed</ListItem>
+                      <ListItem>Disable browser extensions temporarily</ListItem>
                     </UnorderedList>
                   </div>
 
