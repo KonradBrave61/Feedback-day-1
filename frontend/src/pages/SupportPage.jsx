@@ -457,10 +457,10 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Can't Login?</h3>
                     <p className="text-gray-300 mb-3">Try these steps:</p>
                     <UnorderedList>
-                      <li>• Check your username and password spelling</li>
-                      <li>• Clear browser cache and cookies</li>
-                      <li>• Try a different browser or incognito mode</li>
-                      <li>• Check if Caps Lock is on</li>
+                      <ListItem>Check your username and password spelling</ListItem>
+                      <ListItem>Clear browser cache and cookies</ListItem>
+                      <ListItem>Try a different browser or incognito mode</ListItem>
+                      <ListItem>Check if Caps Lock is on</ListItem>
                     </UnorderedList>
                   </div>
 
