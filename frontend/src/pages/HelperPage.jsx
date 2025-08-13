@@ -92,11 +92,7 @@ const HelperPage = () => {
             <TabsTrigger value="faq" className="text-white border border-transparent rounded-md hover:border-blue-400/40 data-[state=active]:bg-blue-500 data-[state=active]:text-black data-[state=active]:border-blue-400">
               FAQ
             </TabsTrigger>
-            <TabsTrigger value="forum" className="text-white data-[state=active]:text-black"
-                         style={{ 
-                           background: 'transparent',
-                           '&[data-state=active]': { background: logoColors.primaryBlue }
-                         }}>
+            <TabsTrigger value="forum" className="text-white border border-transparent rounded-md hover:border-blue-400/40 data-[state=active]:bg-blue-500 data-[state=active]:text-black data-[state=active]:border-blue-400">
               Community Forum
             </TabsTrigger>
           </TabsList>
