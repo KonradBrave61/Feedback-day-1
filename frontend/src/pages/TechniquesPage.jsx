@@ -317,11 +317,11 @@ const TechniquesPage = () => {
                         <SelectValue placeholder="All Categories" />
                       </SelectTrigger>
                       <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Categories</SelectItem>
-                        <SelectItem value="Shot" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Shot</SelectItem>
-                        <SelectItem value="Dribble" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Dribble</SelectItem>
-                        <SelectItem value="Block" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Block</SelectItem>
-                        <SelectItem value="Save" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Save</SelectItem>
+                        <SelectItem value="" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Categories</SelectItem>
+                        <SelectItem value="Shot" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Shot</SelectItem>
+                        <SelectItem value="Dribble" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Dribble</SelectItem>
+                        <SelectItem value="Block" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Block</SelectItem>
+                        <SelectItem value="Save" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Save</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
