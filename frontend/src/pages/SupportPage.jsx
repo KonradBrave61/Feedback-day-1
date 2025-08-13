@@ -469,9 +469,9 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Profile Issues</h3>
                     <p className="text-gray-300 mb-3">Common profile problems:</p>
                     <UnorderedList>
-                      <li>• Profile picture not updating - try refreshing the page</li>
-                      <li>• Stats not saving - ensure you click Save after changes</li>
-                      <li>• Teams not showing - check if they're set to public</li>
+                      <ListItem>Profile picture not updating - try refreshing the page</ListItem>
+                      <ListItem>Stats not saving - ensure you click Save after changes</ListItem>
+                      <ListItem>Teams not showing - check if they're set to public</ListItem>
                     </UnorderedList>
                   </div>
 
