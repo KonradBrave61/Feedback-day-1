@@ -1033,24 +1033,18 @@ const TeamBuilder = () => {
                     const player = benchPlayers[index];
                     return (
                       <div key={index} className="relative">
-                        {player ? (
-                          <BenchRow index={index} player={player} />
-                        ) : (
-                          <div 
-                            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() => {
-                              setEditingPosition(`bench_${index}`);
-                              setShowPlayerSearch(true);
-                            }}
-                          >
-                            {/* Dashed circular border with plus inside */}
-                            <div className="w-12 h-12 border-2 border-dashed border-gray-400 rounded-full flex items-center justify-center">
-                              <Plus className="h-6 w-6 text-gray-400" />
-                            </div>
-                            {/* Empty slot text without extra plus */}
-                            <span className="text-gray-400 text-sm">Empty slot</span>
-                          </div>
-                        )}
+                        <BenchSlot
+                          slotIndex={index}
+                          player={player}
+                          onAddBenchPlayer={(i) => {
+                            setEditingPosition(`bench_${i}`);
+                            setShowPlayerSearch(true);
+                          }}
+                          onRemoveBenchPlayer={(i) => handleRemoveBenchPlayer(i)}
+                          onMoveToBench={(fromPos, toIndex, swap) => handleMoveToBench(fromPos, toIndex, swap)}
+                          onMoveFromBench={(fromIndex, toIndex, swap) => handleMoveFromBench(fromIndex, toIndex, swap)}
+                          onEditPlayer={handleEditPlayer}
+                        />
                       </div>
                     );
                   })}
