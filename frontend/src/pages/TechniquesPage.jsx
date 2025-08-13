@@ -328,7 +328,7 @@ const TechniquesPage = () => {
 
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Element</label>
-                    <Select value={filters.element} onValueChange={(v) => handleFilterChange('element', v)}>
+                    <Select value={filters.element || undefined} onValueChange={(v) => handleFilterChange('element', v === 'all' ? '' : v)}>
                       <SelectTrigger className="text-white border"
                         style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
                         <SelectValue placeholder="All Elements" />
