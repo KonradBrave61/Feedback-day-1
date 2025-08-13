@@ -1148,18 +1148,11 @@ const TeamBuilder = () => {
                     const player = benchPlayers[index];
                     return (
                       <div key={index} className="relative">
-                        <BenchSlot
-                          slotIndex={index}
-                          player={player}
-                          onAddBenchPlayer={(i) => {
-                            setEditingPosition(`bench_${i}`);
-                            setShowPlayerSearch(true);
-                          }}
-                          onRemoveBenchPlayer={(i) => handleRemoveBenchPlayer(i)}
-                          onMoveToBench={(fromPos, toIndex, swap) => handleMoveToBench(fromPos, toIndex, swap)}
-                          onMoveFromBench={(fromIndex, toIndex, swap) => handleMoveFromBench(fromIndex, toIndex, swap)}
-                          onEditPlayer={handleEditPlayer}
-                        />
+                        {player ? (
+                          <BenchRow index={index} player={player} />
+                        ) : (
+                          <EmptyBenchSlot index={index} />
+                        )}
                       </div>
                     );
                   })}
