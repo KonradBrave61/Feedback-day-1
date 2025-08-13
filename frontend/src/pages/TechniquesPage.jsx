@@ -328,23 +328,20 @@ const TechniquesPage = () => {
 
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Element</label>
-                    <select
-                      value={filters.element}
-                      onChange={(e) => handleFilterChange('element', e.target.value)}
-                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
-                      style={{
-                        backgroundColor: logoColors.blackAlpha(0.5),
-                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
-                        '--tw-ring-color': logoColors.secondaryBlue
-                      }}
-                    >
-                      <option value="">All Elements</option>
-                      <option value="fire">Fire</option>
-                      <option value="earth">Earth</option>
-                      <option value="wind">Wind</option>
-                      <option value="wood">Wood</option>
-                      <option value="void">Void</option>
-                    </select>
+                    <Select value={filters.element} onValueChange={(v) => handleFilterChange('element', v)}>
+                      <SelectTrigger className="text-white border"
+                        style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectValue placeholder="All Elements" />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Elements</SelectItem>
+                        <SelectItem value="fire" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Fire</SelectItem>
+                        <SelectItem value="earth" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Earth</SelectItem>
+                        <SelectItem value="wind" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wind</SelectItem>
+                        <SelectItem value="wood" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wood</SelectItem>
+                        <SelectItem value="void" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Void</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
