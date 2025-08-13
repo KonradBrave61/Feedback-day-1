@@ -11,6 +11,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { logoColors } from '../styles/colors';
+import { UnorderedList, ListItem } from '../components/ui/list';
 
 const HelperPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('us');
@@ -142,11 +143,13 @@ const HelperPage = () => {
                   </button>
                   {expandedSection === 'team-building' && (
                     <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                      <div className="pt-4 space-y-3 text-gray-300 text-sm">
-                        <p>• Understanding player positions and their roles on the field</p>
-                        <p>• Choosing the right formation for your playstyle</p>
-                        <p>• Balancing offensive and defensive capabilities</p>
-                        <p>• Player chemistry and elemental synergies</p>
+                      <div className="pt-4">
+                        <UnorderedList>
+                          <ListItem>Understanding player positions and their roles on the field</ListItem>
+                          <ListItem>Choosing the right formation for your playstyle</ListItem>
+                          <ListItem>Balancing offensive and defensive capabilities</ListItem>
+                          <ListItem>Player chemistry and elemental synergies</ListItem>
+                        </UnorderedList>
                       </div>
                     </div>
                   )}
@@ -181,11 +184,13 @@ const HelperPage = () => {
                   </button>
                   {expandedSection === 'formation' && (
                     <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                      <div className="pt-4 space-y-3 text-gray-300 text-sm">
-                        <p>• 4-4-2: Balanced formation for beginners</p>
-                        <p>• 3-5-2: Midfield control and possession</p>
-                        <p>• 4-3-3: Aggressive attacking formation</p>
-                        <p>• 5-3-2: Defensive stability and counter-attacks</p>
+                      <div className="pt-4">
+                        <UnorderedList>
+                          <ListItem>4-4-2: Balanced formation for beginners</ListItem>
+                          <ListItem>3-5-2: Midfield control and possession</ListItem>
+                          <ListItem>4-3-3: Aggressive attacking formation</ListItem>
+                          <ListItem>5-3-2: Defensive stability and counter-attacks</ListItem>
+                        </UnorderedList>
                       </div>
                     </div>
                   )}
@@ -220,12 +225,14 @@ const HelperPage = () => {
                   </button>
                   {expandedSection === 'stats' && (
                     <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                      <div className="pt-4 space-y-3 text-gray-300 text-sm">
-                        <p>• Kick: Shooting power and accuracy</p>
-                        <p>• Dribble: Ball control and agility</p>
-                        <p>• Block: Defensive capabilities</p>
-                        <p>• Catch: Goalkeeping ability</p>
-                        <p>• Speed: Movement and positioning</p>
+                      <div className="pt-4">
+                        <UnorderedList>
+                          <ListItem>Kick: Shooting power and accuracy</ListItem>
+                          <ListItem>Dribble: Ball control and agility</ListItem>
+                          <ListItem>Block: Defensive capabilities</ListItem>
+                          <ListItem>Catch: Goalkeeping ability</ListItem>
+                          <ListItem>Speed: Movement and positioning</ListItem>
+                        </UnorderedList>
                       </div>
                     </div>
                   )}
@@ -260,11 +267,13 @@ const HelperPage = () => {
                   </button>
                   {expandedSection === 'equipment' && (
                     <div className="px-6 pb-6 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                      <div className="pt-4 space-y-3 text-gray-300 text-sm">
-                        <p>• Boots: Increase speed and kicking power</p>
-                        <p>• Bracelets: Boost dribbling and technique</p>
-                        <p>• Pendants: Enhance defensive stats</p>
-                        <p>• Special items: Unique bonuses and effects</p>
+                      <div className="pt-4">
+                        <UnorderedList>
+                          <ListItem>Boots: Increase speed and kicking power</ListItem>
+                          <ListItem>Bracelets: Boost dribbling and technique</ListItem>
+                          <ListItem>Pendants: Enhance defensive stats</ListItem>
+                          <ListItem>Special items: Unique bonuses and effects</ListItem>
+                        </UnorderedList>
                       </div>
                     </div>
                   )}

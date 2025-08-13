@@ -1,340 +1,100 @@
-import React, { useState, useEffect } from 'react';
-import { X, Users, Search, Download, ExternalLink, Copy } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
+import { Card } from './ui/card';
+import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
-import { logoColors } from '../styles/colors';
+import { Download, Globe, Save, Search, Users, X } from 'lucide-react';
+import { UnorderedList, ListItem } from './ui/list';
 
 const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
-  const { user, loadSaveSlots, loadCommunityTeams, loadTeamDetails, loadPublicTeamDetails } = useAuth();
+  const { loadSaveSlots, loadCommunityTeams, loadTeamDetails, user } = useAuth();
   const [activeTab, setActiveTab] = useState('saved');
+  const [isLoading, setIsLoading] = useState(false);
   const [savedTeams, setSavedTeams] = useState([]);
   const [communityTeams, setCommunityTeams] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [teamUrl, setTeamUrl] = useState('');
 
   useEffect(() => {
-    if (isOpen) {
-      fetchSavedTeams();
-      fetchCommunityTeams();
-    }
-  }, [isOpen]);
-
-  const fetchSavedTeams = async () => {
-    setLoading(true);
-    try {
-      console.log('Fetching saved teams...');
-      const result = await loadSaveSlots();
-      console.log('Save slots result:', result);
-      
-      if (result.success) {
-        console.log('Save slots data:', result.saveSlots);
-        // Filter out empty slots and get occupied slots with team data
-        const occupiedSlots = result.saveSlots.filter(slot => slot.is_occupied && slot.team_id);
-        console.log('Occupied slots:', occupiedSlots);
-        setSavedTeams(occupiedSlots);
-      } else {
-        console.error('Failed to load save slots:', result.error);
-        toast.error(result.error || 'Failed to load saved teams');
+    if (!isOpen) return;
+    // Load saved teams
+    const fetchTeams = async () => {
+      try {
+        setIsLoading(true);
+        const slots = await loadSaveSlots();
+        const occupied = (slots || []).filter((s) => s.is_occupied);
+        setSavedTeams(occupied);
+      } catch (e) {
+        console.error('Failed to load save slots', e);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load saved teams:', error);
-      toast.error('Failed to load saved teams');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchCommunityTeams = async () => {
-    setLoading(true);
-    try {
-      const result = await loadCommunityTeams({ 
-        search: searchQuery,
-        limit: 20 
-      });
-      if (result.success) {
-        setCommunityTeams(result.teams);
-      }
-    } catch (error) {
-      toast.error('Failed to load community teams');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearchCommunity = async () => {
-    await fetchCommunityTeams();
-  };
+    };
+    fetchTeams();
+  }, [isOpen, loadSaveSlots]);
 
   const handleLoadSavedTeam = async (slot) => {
+    if (!slot?.team_id) return;
     try {
-      if (slot.team_id) {
-        setLoading(true);
-        const teamDetails = await loadTeamDetails(slot.team_id);
-        if (teamDetails.success) {
-          onLoadTeam(teamDetails.team);
-          toast.success(`Loaded team: ${slot.team_name}`);
-          onClose();
-        } else {
-          toast.error('Failed to load team details');
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load saved team:', error);
-      toast.error('Failed to load saved team');
+      setIsLoading(true);
+      const teamWrap = await loadTeamDetails(slot.team_id);
+      const team = teamWrap?.team || teamWrap; // backend returns { team: {...} }
+      if (!team) throw new Error('Invalid team data');
+      onLoadTeam(team);
+      toast.success(`Loaded team: ${team.name || slot.team_name}`);
+      onClose();
+    } catch (e) {
+      console.error('Failed to load team', e);
+      toast.error('Failed to load team');
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLoadCommunityTeam = async (team) => {
-    try {
-      const result = await loadTeamDetails(team.id);
-      if (result.success) {
-        onLoadTeam(result.team);
-        toast.success(`Loaded team: ${team.name}`);
-        onClose();
-      } else {
-        toast.error('Failed to load community team');
-      }
-    } catch (error) {
-      toast.error('Failed to load community team');
+      setIsLoading(false);
     }
   };
 
   const handleLoadFromUrl = async () => {
-    if (!teamUrl.trim()) {
-      toast.error('Please enter a team URL');
-      return;
-    }
-
     try {
-      // Extract team ID from URL if it's a full URL, otherwise treat as team ID
-      let teamId = teamUrl.trim();
-      if (teamUrl.includes('/team/')) {
-        teamId = teamUrl.split('/team/')[1].split(/[?#]/)[0];
-      }
-
-      // Try loading as public team first (for sharing URLs), then fall back to authenticated
-      let result = await loadPublicTeamDetails(teamId);
-      if (!result.success && user) {
-        result = await loadTeamDetails(teamId);
-      }
-      
-      if (result.success) {
-        onLoadTeam(result.team);
-        toast.success(`Loaded team from URL: ${result.team.name}`);
-        onClose();
-      } else {
-        toast.error('Team not found or not accessible');
-      }
-    } catch (error) {
-      toast.error('Invalid team URL or ID');
+      const id = (teamUrl || '').trim().split('/').filter(Boolean).pop();
+      if (!id) return;
+      setIsLoading(true);
+      const teamWrap = await loadTeamDetails(id);
+      const team = teamWrap?.team || teamWrap;
+      if (!team) throw new Error('Invalid team data');
+      onLoadTeam(team);
+      toast.success(`Loaded team from URL: ${team.name || id}`);
+      onClose();
+    } catch (e) {
+      console.error('Failed to load team from URL', e);
+      toast.error('Failed to load team from URL');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const copyTeamUrl = (team) => {
-    const url = `${window.location.origin}/team/${team.id}`;
-    navigator.clipboard.writeText(url);
-    toast.success('Team URL copied to clipboard!');
-  };
+  const filteredCommunity = useMemo(() => {
+    if (!searchQuery) return communityTeams;
+    return communityTeams.filter((t) =>
+      (t.name || '').toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [communityTeams, searchQuery]);
 
-  const renderSavedTeams = () => (
-    <div className="space-y-4">
-      {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <div className="w-8 h-8 rounded-full mx-auto animate-spin border-4 border-t-transparent" 
-               style={{ borderColor: logoColors.primaryBlue, borderTopColor: 'transparent' }} />
-          <p className="text-gray-300 ml-3">Loading saved teams...</p>
-        </div>
-      ) : savedTeams.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto">
-          {savedTeams.map((slot) => (
-            <Card key={slot.slot_number} className="backdrop-blur-lg text-white border hover:opacity-80 cursor-pointer" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-bold text-white mb-1">{slot.team_name}</h3>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Slot {slot.slot_number}
-                    </p>
-                    <p className="text-xs text-gray-400">
-                      {slot.created_at && `Saved ${new Date(slot.created_at).toLocaleDateString()}`}
-                      {slot.updated_at && ` • Updated ${new Date(slot.updated_at).toLocaleDateString()}`}
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => handleLoadSavedTeam(slot)}
-                    className="text-black font-bold hover:opacity-80"
-                    style={{ background: logoColors.yellowOrangeGradient }}
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Load
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <Users className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
-          <h3 className="text-lg font-bold text-white mb-2">No Saved Teams</h3>
-          <p className="text-gray-300">Create and save teams in the Team Builder to see them here.</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderCommunityTeams = () => (
-    <div className="space-y-4">
-      {/* Search */}
-      <div className="flex gap-2">
-        <Input
-          placeholder="Search community teams..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSearchCommunity()}
-          className="text-white border"
-          style={{ 
-            backgroundColor: logoColors.blackAlpha(0.5),
-            borderColor: logoColors.primaryBlueAlpha(0.3)
-          }}
-        />
-        <Button
-          onClick={handleSearchCommunity}
-          className="text-white"
-          style={{ backgroundColor: logoColors.primaryBlueAlpha(0.4) }}
-        >
-          <Search className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <div className="w-8 h-8 rounded-full mx-auto animate-spin border-4 border-t-transparent" 
-               style={{ borderColor: logoColors.primaryBlue, borderTopColor: 'transparent' }} />
-          <p className="text-gray-300 ml-3">Loading community teams...</p>
-        </div>
-      ) : communityTeams.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto">
-          {communityTeams.map((team) => (
-            <Card key={team.id} className="backdrop-blur-lg text-white border hover:opacity-80" style={{ 
-              backgroundColor: logoColors.blackAlpha(0.3),
-              borderColor: logoColors.primaryBlueAlpha(0.2)
-            }}>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-bold text-white mb-1">{team.name}</h3>
-                    <p className="text-sm text-gray-300 mb-1">
-                      by {team.author_username || 'Unknown'}
-                    </p>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Formation: {team.formation || 'Unknown'}
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-gray-400">
-                      <span>❤️ {team.likes || 0}</span>
-                      <span>👁️ {team.views || 0}</span>
-                      <Badge className="text-xs" style={{ 
-                        backgroundColor: logoColors.primaryBlueAlpha(0.2),
-                        color: logoColors.white
-                      }}>
-                        Public
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      onClick={() => handleLoadCommunityTeam(team)}
-                      className="text-black font-bold hover:opacity-80"
-                      style={{ background: logoColors.yellowOrangeGradient }}
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Load
-                    </Button>
-                    <Button
-                      onClick={() => copyTeamUrl(team)}
-                      size="sm"
-                      className="text-white"
-                      style={{ backgroundColor: logoColors.primaryBlueAlpha(0.4) }}
-                    >
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <Search className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
-          <h3 className="text-lg font-bold text-white mb-2">No Teams Found</h3>
-          <p className="text-gray-300">Try different search terms or browse all teams.</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderUrlImport = () => (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <ExternalLink className="h-12 w-12 mx-auto mb-4" style={{ color: logoColors.primaryBlue }} />
-        <h3 className="text-lg font-bold text-white mb-2">Import Team from URL</h3>
-        <p className="text-gray-300 text-sm">
-          Enter a team sharing URL or team ID to load someone's team
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <label className="text-sm font-medium text-white mb-2 block">Team URL or ID</label>
-          <Input
-            placeholder="https://example.com/team/12345 or just 12345"
-            value={teamUrl}
-            onChange={(e) => setTeamUrl(e.target.value)}
-            className="text-white border"
-            style={{ 
-              backgroundColor: logoColors.blackAlpha(0.5),
-              borderColor: logoColors.primaryBlueAlpha(0.3)
-            }}
-          />
-        </div>
-        
-        <Button
-          onClick={handleLoadFromUrl}
-          disabled={!teamUrl.trim()}
-          className="w-full text-black font-bold hover:opacity-80 disabled:opacity-50"
-          style={{ background: logoColors.yellowOrangeGradient }}
-        >
-          <Download className="h-4 w-4 mr-2" />
-          Load Team from URL
-        </Button>
-
-        <div className="mt-6 p-4 rounded border" style={{ 
-          backgroundColor: logoColors.blackAlpha(0.3),
-          borderColor: logoColors.primaryBlueAlpha(0.2)
-        }}>
-          <h4 className="text-sm font-bold text-white mb-2">How to get team URLs:</h4>
-          <ul className="text-xs text-gray-300 space-y-1">
-            <li>• Browse teams in the Community Hub</li>
-            <li>• Click the copy button (📋) on any team card</li>
-            <li>• Share the URL with friends</li>
-            <li>• Use the team ID from the URL</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    if (activeTab !== 'community' || !isOpen) return;
+    const load = async () => {
+      setIsLoading(true);
+      try {
+        const res = await loadCommunityTeams({ limit: 20 });
+        setCommunityTeams(res?.teams || res || []);
+      } catch (e) {
+        console.error('Failed to load community teams', e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    load();
+  }, [activeTab, isOpen, loadCommunityTeams]);
 
   if (!isOpen) return null;
 
@@ -384,16 +144,103 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="saved" className="mt-0">
-              {renderSavedTeams()}
+            {/* Saved */}
+            <TabsContent value="saved">
+              <div className="grid md:grid-cols-2 gap-4">
+                {isLoading ? (
+                  <p className="text-gray-300">Loading...</p>
+                ) : savedTeams.length === 0 ? (
+                  <Card className="p-6 text-gray-300" style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    No saved teams found. Save a team first from Team Builder.
+                  </Card>
+                ) : (
+                  savedTeams.map((slot) => (
+                    <Card key={slot.slot_id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <h4 className="text-white font-semibold">{slot.team_name || 'Saved Team'}</h4>
+                          <p className="text-xs text-gray-400">Slot: {slot.slot_name || slot.slot_id}</p>
+                        </div>
+                        <Button onClick={() => handleLoadSavedTeam(slot)} className="text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
+                          <Save className="h-4 w-4 mr-2" /> Apply
+                        </Button>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
             </TabsContent>
 
-            <TabsContent value="community" className="mt-0">
-              {renderCommunityTeams()}
+            {/* Community */}
+            <TabsContent value="community">
+              <div className="flex items-center gap-2 mb-4">
+                <Search className="h-4 w-4 text-gray-400" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search community teams..."
+                  className="bg-black/20 border-gray-600 text-white"
+                  style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                />
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                {filteredCommunity.map((t) => (
+                  <Card key={t.id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-white font-semibold">{t.name}</h4>
+                        <p className="text-xs text-gray-400">By {t.user?.username || 'Unknown'}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-gray-400" />
+                        <span className="text-xs text-gray-400">{t.likes || 0} likes</span>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
-            <TabsContent value="url" className="mt-0">
-              {renderUrlImport()}
+            {/* URL */}
+            <TabsContent value="url">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-white mb-2 block">Team URL or ID</label>
+                  <Input
+                    placeholder="https://example.com/team/12345 or just 12345"
+                    value={teamUrl}
+                    onChange={(e) => setTeamUrl(e.target.value)}
+                    className="text-white border"
+                    style={{ 
+                      backgroundColor: logoColors.blackAlpha(0.5),
+                      borderColor: logoColors.primaryBlueAlpha(0.3)
+                    }}
+                  />
+                </div>
+                
+                <Button
+                  onClick={handleLoadFromUrl}
+                  disabled={!teamUrl.trim()}
+                  className="w-full text-black font-bold hover:opacity-80 disabled:opacity-50"
+                  style={{ background: logoColors.yellowOrangeGradient }}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Load Team from URL
+                </Button>
+
+                <div className="mt-6 p-4 rounded border" style={{ 
+                  backgroundColor: logoColors.blackAlpha(0.3),
+                  borderColor: logoColors.primaryBlueAlpha(0.2)
+                }}>
+                  <h4 className="text-sm font-bold text-white mb-2">How to get team URLs:</h4>
+                  <UnorderedList className="text-xs space-y-1">
+                    <ListItem>Browse teams in the Community Hub</ListItem>
+                    <ListItem>Click the copy button (📋) on any team card</ListItem>
+                    <ListItem>Share the URL with friends</ListItem>
+                    <ListItem>Use the team ID from the URL</ListItem>
+                  </UnorderedList>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
