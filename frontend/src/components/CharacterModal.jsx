@@ -50,7 +50,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const currentCharacter = allCharacters && allCharacters[currentCharacterIndex] ? allCharacters[currentCharacterIndex] : character;
-  const calculatedStats = calculateStats(currentCharacter, selectedEquipment, userLevel, userRarity);
+  const calculatedStats = calculateStats(currentCharacter || {}, selectedEquipment || {}, userLevel, userRarity);
 
   const getPositionColor = (position) => {
     switch (position) {
