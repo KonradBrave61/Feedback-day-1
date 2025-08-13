@@ -240,7 +240,7 @@ const HelperPage = () => {
                     }}>
                 <CardContent className="p-0">
                   <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
+                    className={`w-full p-6 text-left flex items-center justify-between transition-colors rounded-md border ${expandedSection === 'equipment' ? 'bg-white/5 border-blue-400/40' : 'hover:bg-white/5 border-transparent'}`}
                     onClick={() => toggleSection('equipment')}
                   >
                     <div className="flex items-center gap-4">
