@@ -301,7 +301,7 @@ const TechniquesPage = () => {
                         <SelectValue placeholder="All Types" />
                       </SelectTrigger>
                       <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                        <SelectItem value="" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Types</SelectItem>
+                        <SelectItem value="all" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Types</SelectItem>
                         <SelectItem value="avatar" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Avatar</SelectItem>
                         <SelectItem value="totem" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Totem</SelectItem>
                         <SelectItem value="mix-max" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Mix-Max</SelectItem>
