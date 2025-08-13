@@ -10,12 +10,8 @@ export const showNotification = (message, type = 'info', options = {}) => {
 };
 
 export const showSessionExpiredNotification = () => {
-  // High-priority, sticky, de-duplicated notification
-  showNotification('Your session ended. Please sign in again.', 'warning', {
-    sticky: true,
-    key: 'session-expired',
-    priority: 'high',
-  });
+  // Disabled per request: no popup on session expiration
+  return;
 };
 
 const Notification = () => {
