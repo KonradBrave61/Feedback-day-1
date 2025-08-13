@@ -674,16 +674,33 @@ const TeamBuilder = () => {
         const newTeamPlayers = {};
         teamData.players.forEach(playerData => {
           if (playerData.character_id && playerData.position_id) {
-            // Create player object with loaded configuration
+            // Find base character to merge canonical data (portrait, nickname, position, element)
+            const base = mockCharacters.find(c => c.id === playerData.character_id);
+            // Normalize techniques: backend may send array or {preset1,preset2}
+            const hissatsuRaw = playerData.user_hissatsu;
+            const normalizedHissatsu = Array.isArray(hissatsuRaw)
+              ? hissatsuRaw
+              : (hissatsuRaw?.preset1 || []).concat(hissatsuRaw?.preset2 || []);
             const enhancedPlayer = {
               id: playerData.character_id,
-              userLevel: playerData.user_level || 1,
-              userRarity: playerData.user_rarity || 'Common',
+              // show configured stats
+              userLevel: playerData.user_level ?? base?.baseLevel ?? 1,
+              userRarity: playerData.user_rarity ?? base?.baseRarity ?? 'Common',
               userEquipment: playerData.user_equipment || {},
-              userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
-              name: playerData.name || `Player ${playerData.character_id}`,
-              position: playerData.position || 'MF',
-              element: playerData.element || 'Wind'
+              // keep both merged array and separate presets for editors
+              userHissatsu: {
+                preset1: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(0, 3) : (hissatsuRaw?.preset1 || []),
+                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || [])
+              },
+              // display helpers
+              name: base?.name || playerData.name || `Player ${playerData.character_id}`,
+              nickname: base?.nickname || playerData.nickname || base?.name || `P${playerData.character_id}`,
+              portrait: base?.portrait || playerData.portrait,
+              position: base?.position || playerData.position || 'MF',
+              element: base?.element || playerData.element || 'Wind',
+              baseLevel: base?.baseLevel || playerData.base_level || 1,
+              baseRarity: base?.baseRarity || playerData.base_rarity || 'Common',
+              stats: base?.stats || playerData.stats || {}
             };
             newTeamPlayers[playerData.position_id] = enhancedPlayer;
           }
