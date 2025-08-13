@@ -714,15 +714,28 @@ const TeamBuilder = () => {
         teamData.bench_players.forEach(playerData => {
           if (playerData.character_id && playerData.slot_id) {
             const slotIndex = playerData.slot_id.replace('bench_', '');
+            const base = mockCharacters.find(c => c.id === playerData.character_id);
+            const hissatsuRaw = playerData.user_hissatsu;
+            const normalizedHissatsu = Array.isArray(hissatsuRaw)
+              ? hissatsuRaw
+              : (hissatsuRaw?.preset1 || []).concat(hissatsuRaw?.preset2 || []);
             const enhancedPlayer = {
               id: playerData.character_id,
-              userLevel: playerData.user_level || 1,
-              userRarity: playerData.user_rarity || 'Common',
+              userLevel: playerData.user_level ?? base?.baseLevel ?? 1,
+              userRarity: playerData.user_rarity ?? base?.baseRarity ?? 'Common',
               userEquipment: playerData.user_equipment || {},
-              userHissatsu: playerData.user_hissatsu || { preset1: [], preset2: [] },
-              name: playerData.name || `Player ${playerData.character_id}`,
-              position: playerData.position || 'MF',
-              element: playerData.element || 'Wind'
+              userHissatsu: {
+                preset1: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(0, 3) : (hissatsuRaw?.preset1 || []),
+                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || [])
+              },
+              name: base?.name || playerData.name || `Player ${playerData.character_id}`,
+              nickname: base?.nickname || playerData.nickname || base?.name || `P${playerData.character_id}`,
+              portrait: base?.portrait || playerData.portrait,
+              position: base?.position || playerData.position || 'MF',
+              element: base?.element || playerData.element || 'Wind',
+              baseLevel: base?.baseLevel || playerData.base_level || 1,
+              baseRarity: base?.baseRarity || playerData.base_rarity || 'Common',
+              stats: base?.stats || playerData.stats || {}
             };
             newBenchPlayers[slotIndex] = enhancedPlayer;
           }
