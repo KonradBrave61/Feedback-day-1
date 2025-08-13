@@ -522,11 +522,11 @@ const SupportPage = () => {
                     <h3 className="font-semibold mb-3">Loading Problems</h3>
                     <p className="text-gray-300 mb-3">If pages won't load:</p>
                     <UnorderedList>
-                      <li>• Refresh the page (F5 or Ctrl+R)</li>
-                      <li>• Hard refresh (Ctrl+F5)</li>
-                      <li>• Check your firewall/antivirus settings</li>
-                      <li>• Try a different DNS server (8.8.8.8 or 1.1.1.1)</li>
-                      <li>• Restart your router</li>
+                      <ListItem>Refresh the page (F5 or Ctrl+R)</ListItem>
+                      <ListItem>Hard refresh (Ctrl+F5)</ListItem>
+                      <ListItem>Check your firewall/antivirus settings</ListItem>
+                      <ListItem>Try a different DNS server (8.8.8.8 or 1.1.1.1)</ListItem>
+                      <ListItem>Restart your router</ListItem>
                     </UnorderedList>
                   </div>
 
