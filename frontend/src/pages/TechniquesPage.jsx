@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import { Search, Filter, Star, Zap, Shield, Target, Eye, Book, Award } from 'lucide-react';
 import { logoColors } from '../styles/colors';
+import { UnorderedList, ListItem } from '../components/ui/list';
 
 const TechniquesPage = () => {
   const [techniques, setTechniques] = useState([]);
