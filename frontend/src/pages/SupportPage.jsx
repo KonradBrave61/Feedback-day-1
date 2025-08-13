@@ -461,7 +461,7 @@ const SupportPage = () => {
                       <li>• Clear browser cache and cookies</li>
                       <li>• Try a different browser or incognito mode</li>
                       <li>• Check if Caps Lock is on</li>
-                    </ul>
+                    </UnorderedList>
                   </div>
 
                   {/* Profile Issues */}
