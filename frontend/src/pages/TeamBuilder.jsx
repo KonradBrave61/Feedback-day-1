@@ -185,7 +185,106 @@ const TeamBuilder = () => {
     setShowPlayerSearch(true);
   };
 
-  // Removed BenchRow in favor of shared BenchSlot from FormationField for consistent drag-and-drop behavior
+  // Bench row with drag + drop, preserves original design but allows dropping from formation and bench
+  const BenchRow = ({ index, player }) => {
+    const [{ isDragging }, drag] = useDrag({
+      type: 'PLAYER',
+      item: { player, fromPosition: index, fromType: 'bench' },
+      collect: (monitor) => ({ isDragging: monitor.isDragging() }),
+      canDrag: !!player,
+    });
+
+    const [{ isOver }, drop] = useDrop({
+      accept: 'PLAYER',
+      drop: (draggedItem) => {
+        if (draggedItem.fromType === 'formation') {
+          // Move formation player to this bench index (swap if occupied)
+          handleMoveToBench(draggedItem.fromPosition, index, !!player);
+        } else if (draggedItem.fromType === 'bench' && draggedItem.fromPosition !== index) {
+          // Move/swap within bench
+          handleMoveBenchToBench(draggedItem.fromPosition, index);
+        }
+      },
+      collect: (monitor) => ({ isOver: monitor.isOver() }),
+    });
+
+    const attachDragDrop = (el) => {
+      drag(drop(el));
+    };
+
+    return (
+      <div ref={attachDragDrop} className={`relative group ${isDragging ? 'opacity-50' : ''}`}>
+        <div
+          className={`w-full rounded-lg border ${isOver ? 'border-blue-400' : 'border-blue-500/30'} bg-blue-800/20 hover:bg-blue-800/30 p-2 flex items-center gap-3 cursor-pointer transition-colors`}
+          onClick={() => handleEditPlayer(player)}
+        >
+          <div className="w-10 h-10 rounded-full overflow-hidden ring-1 ring-blue-400/40 flex items-center justify-center bg-blue-900/40">
+            {player?.portrait ? (
+              <img src={player.portrait} alt={player.name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-white text-sm font-bold">{player?.name ? player.name.charAt(0) : 'P'}</span>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm text-white font-medium truncate">{player?.name}</div>
+            <div className="text-xs text-gray-300 truncate">{player?.element || '—'} • {player?.position || '—'}</div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-7 h-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ backgroundColor: logoColors.primaryBlueAlpha(0.6), color: logoColors.white }}
+              onClick={(e) => { e.stopPropagation(); handleEditPlayer(player); }}
+              title="Edit"
+            >
+              <Settings className="h-3 w-3" />
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="w-7 h-7 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={(e) => { e.stopPropagation(); handleRemoveBenchPlayer(index); }}
+              title="Remove from bench"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Empty bench slot – drop target for formation and bench players
+  const EmptyBenchSlot = ({ index }) => {
+    const [{ isOver }, drop] = useDrop({
+      accept: 'PLAYER',
+      drop: (draggedItem) => {
+        if (draggedItem.fromType === 'formation') {
+          handleMoveToBench(draggedItem.fromPosition, index, false);
+        } else if (draggedItem.fromType === 'bench' && draggedItem.fromPosition !== index) {
+          handleMoveBenchToBench(draggedItem.fromPosition, index);
+        }
+      },
+      collect: (monitor) => ({ isOver: monitor.isOver() }),
+    });
+
+    return (
+      <div 
+        ref={drop}
+        className={`flex items-center gap-3 cursor-pointer transition-opacity ${isOver ? 'opacity-90' : 'hover:opacity-80'}`}
+        onClick={() => {
+          setEditingPosition(`bench_${index}`);
+          setShowPlayerSearch(true);
+        }}
+      >
+        <div className={`w-12 h-12 border-2 border-dashed ${isOver ? 'border-blue-400' : 'border-gray-400'} rounded-full flex items-center justify-center`}>
+          <Plus className="h-6 w-6 text-gray-400" />
+        </div>
+        <span className="text-gray-400 text-sm">Empty slot</span>
+      </div>
+    );
+  };
 
   // Move player within formation (swap or move)
   const handleMovePlayer = (fromPositionId, toPositionId) => {
