@@ -22,10 +22,20 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     pendants: character.userEquipment?.pendants || null,
     special: character.userEquipment?.special || null
   });
-  const [selectedHissatsu, setSelectedHissatsu] = useState({
-    preset1: character.userHissatsu?.preset1 || character.hissatsu?.slice(0, 3) || [],
-    preset2: character.userHissatsu?.preset2 || character.hissatsu?.slice(3, 6) || []
-  });
+  const normalizePresets = (char) => {
+    const raw = char?.userHissatsu || char?.user_hissatsu || null;
+    if (Array.isArray(raw)) {
+      return {
+        preset1: raw.slice(0, 3),
+        preset2: raw.slice(3, 6)
+      };
+    }
+    return {
+      preset1: raw?.preset1 || char?.hissatsu?.slice(0, 3) || [],
+      preset2: raw?.preset2 || char?.hissatsu?.slice(3, 6) || []
+    };
+  };
+  const [selectedHissatsu, setSelectedHissatsu] = useState(normalizePresets(character));
 
   // Update state when character changes (for editing different players)
   useEffect(() => {
