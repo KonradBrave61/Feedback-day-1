@@ -311,22 +311,19 @@ const TechniquesPage = () => {
 
                   <div>
                     <label className="block text-white text-sm font-medium mb-2">Category</label>
-                    <select
-                      value={filters.category}
-                      onChange={(e) => handleFilterChange('category', e.target.value)}
-                      className="w-full rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2"
-                      style={{
-                        backgroundColor: logoColors.blackAlpha(0.5),
-                        border: `1px solid ${logoColors.primaryBlueAlpha(0.3)}`,
-                        '--tw-ring-color': logoColors.secondaryBlue
-                      }}
-                    >
-                      <option value="">All Categories</option>
-                      <option value="Shot">Shot</option>
-                      <option value="Dribble">Dribble</option>
-                      <option value="Block">Block</option>
-                      <option value="Save">Save</option>
-                    </select>
+                    <Select value={filters.category} onValueChange={(v) => handleFilterChange('category', v)}>
+                      <SelectTrigger className="text-white border"
+                        style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectValue placeholder="All Categories" />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Categories</SelectItem>
+                        <SelectItem value="Shot" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Shot</SelectItem>
+                        <SelectItem value="Dribble" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Dribble</SelectItem>
+                        <SelectItem value="Block" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Block</SelectItem>
+                        <SelectItem value="Save" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Save</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
