@@ -237,8 +237,6 @@ const TeamBuilder = () => {
     );
   };
 
-    }
-  };
   // Move player within formation (swap or move)
   const handleMovePlayer = (fromPositionId, toPositionId) => {
     if (!fromPositionId || !toPositionId || fromPositionId === toPositionId) return;
