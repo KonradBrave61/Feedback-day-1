@@ -28,6 +28,7 @@ import {
 import { logoColors } from '../styles/colors';
 import { mockFormations, mockTactics, mockCoaches } from '../data/mock';
 import FormationField from '../components/FormationField';
+// Drag and Drop hooks are already available in this file's scope because FormationField uses react-dnd in App provider
 import { useDrag, useDrop } from 'react-dnd';
 import PlayerSearch from '../components/PlayerSearch';
 import CharacterModal from '../components/CharacterModal';
