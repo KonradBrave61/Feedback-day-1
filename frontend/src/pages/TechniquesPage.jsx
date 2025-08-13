@@ -547,7 +547,13 @@ const TechniquesPage = () => {
                       {selectedTechnique.allowed_positions?.length > 0 && (
                         <div>
                           <div className="text-gray-400 text-xs mb-1">Position Restriction</div>
-                          <div className="text-white font-semibold">{selectedTechnique.allowed_positions.join(', ')}</div>
+                          <UnorderedList>
+                            {selectedTechnique.allowed_positions.map((pos) => (
+                              <ListItem key={pos}>
+                                <span className="capitalize">{pos}</span>
+                              </ListItem>
+                            ))}
+                          </UnorderedList>
                         </div>
                       )}
 
