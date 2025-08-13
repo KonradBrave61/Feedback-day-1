@@ -630,7 +630,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               <div className="space-y-3">
                 {[0, 1, 2].map(slotIndex => {
                   const currentPreset = `preset${activePreset}`;
-                  const technique = selectedHissatsu[currentPreset][slotIndex];
+                  const technique = (selectedHissatsu?.[currentPreset] || [null, null, null])[slotIndex];
                   
                   return (
                     <div
