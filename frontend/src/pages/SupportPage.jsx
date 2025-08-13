@@ -468,11 +468,11 @@ const SupportPage = () => {
                   <div>
                     <h3 className="font-semibold mb-3">Profile Issues</h3>
                     <p className="text-gray-300 mb-3">Common profile problems:</p>
-                    <ul className="space-y-2 text-sm text-gray-300 ml-4">
+                    <UnorderedList>
                       <li>• Profile picture not updating - try refreshing the page</li>
                       <li>• Stats not saving - ensure you click Save after changes</li>
                       <li>• Teams not showing - check if they're set to public</li>
-                    </ul>
+                    </UnorderedList>
                   </div>
 
                   {/* Account Security */}
