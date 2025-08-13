@@ -9,9 +9,12 @@ export const showNotification = (message, type = 'info', options = {}) => {
   }
 };
 
+import { toast } from 'sonner';
 export const showSessionExpiredNotification = () => {
-  // Disabled per request: no popup on session expiration
-  return;
+  // Use subtle toast like Quick Team Builder full-team message
+  toast.error('Session expired. Please sign in again.', {
+    duration: 2500,
+  });
 };
 
 const Notification = () => {
