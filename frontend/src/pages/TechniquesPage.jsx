@@ -352,11 +352,11 @@ const TechniquesPage = () => {
                         <SelectValue placeholder="All Rarities" />
                       </SelectTrigger>
                       <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Rarities</SelectItem>
-                        <SelectItem value="Common" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Common</SelectItem>
-                        <SelectItem value="Rare" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Rare</SelectItem>
-                        <SelectItem value="Epic" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Epic</SelectItem>
-                        <SelectItem value="Legendary" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Legendary</SelectItem>
+                        <SelectItem value="" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Rarities</SelectItem>
+                        <SelectItem value="Common" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Common</SelectItem>
+                        <SelectItem value="Rare" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Rare</SelectItem>
+                        <SelectItem value="Epic" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Epic</SelectItem>
+                        <SelectItem value="Legendary" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Legendary</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
