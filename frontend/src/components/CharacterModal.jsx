@@ -48,10 +48,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
         pendants: character.userEquipment?.pendants || null,
         special: character.userEquipment?.special || null
       });
-      setSelectedHissatsu({
-        preset1: character.userHissatsu?.preset1 || character.hissatsu?.slice(0, 3) || [],
-        preset2: character.userHissatsu?.preset2 || character.hissatsu?.slice(3, 6) || []
-      });
+      setSelectedHissatsu(normalizePresets(character));
     }
   }, [character, isOpen]);
   const [activePreset, setActivePreset] = useState(1);
