@@ -583,14 +583,16 @@ const TechniquesPage = () => {
                       {Object.keys(selectedTechnique.stat_bonuses || {}).length > 0 && (
                         <div>
                           <div className="text-gray-400 text-xs mb-2">Stat Bonuses</div>
-                          <div className="space-y-1">
+                          <UnorderedList>
                             {Object.entries(selectedTechnique.stat_bonuses).map(([stat, value]) => (
-                              <div key={stat} className="flex justify-between text-sm">
-                                <span className="text-gray-300 capitalize">{stat}</span>
-                                <span style={{ color: logoColors.lightBlue }} className="font-semibold">+{value}</span>
-                              </div>
+                              <ListItem key={stat}>
+                                <div className="flex w-full justify-between text-sm">
+                                  <span className="text-gray-300 capitalize">{stat}</span>
+                                  <span style={{ color: logoColors.lightBlue }} className="font-semibold">+{value}</span>
+                                </div>
+                              </ListItem>
                             ))}
-                          </div>
+                          </UnorderedList>
                         </div>
                       )}
 
