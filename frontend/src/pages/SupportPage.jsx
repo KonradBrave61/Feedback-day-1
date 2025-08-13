@@ -508,13 +508,13 @@ const SupportPage = () => {
                   <div>
                     <h3 className="font-semibold mb-3">Performance Issues</h3>
                     <p className="text-gray-300 mb-3">If the game runs slowly:</p>
-                    <ul className="space-y-2 text-sm text-gray-300 ml-4">
+                    <UnorderedList>
                       <li>• Close other browser tabs and applications</li>
                       <li>• Clear browser cache (Ctrl+Shift+Delete)</li>
                       <li>• Update your browser to the latest version</li>
                       <li>• Check your internet connection speed</li>
                       <li>• Disable browser extensions temporarily</li>
-                    </ul>
+                    </UnorderedList>
                   </div>
 
                   {/* Loading Problems */}
