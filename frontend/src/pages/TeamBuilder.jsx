@@ -303,6 +303,21 @@ const TeamBuilder = () => {
     }
     setTeamPlayers(updated);
   };
+  // Move or swap bench-to-bench
+  const handleMoveBenchToBench = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex) return;
+    const fromPlayer = benchPlayers[fromIndex];
+    const toPlayer = benchPlayers[toIndex];
+    const newBench = { ...benchPlayers };
+    newBench[toIndex] = fromPlayer;
+    if (toPlayer) {
+      newBench[fromIndex] = toPlayer;
+    } else {
+      delete newBench[fromIndex];
+    }
+    setBenchPlayers(newBench);
+  };
+
 
   // Move player from bench to field (optionally swap with existing field player)
   const handleMoveFromBench = (benchIndex, toPositionId, swap = false) => {
