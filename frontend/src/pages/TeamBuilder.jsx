@@ -640,12 +640,13 @@ const TeamBuilder = () => {
     }
   };
 
-  const handleLoadTeam = (teamData) => {
+  const handleLoadTeam = (incoming) => {
     try {
-      console.log('Loading team data:', teamData);
+      // Unwrap common backend shapes
+      const teamData = incoming?.team?.team || incoming?.team || incoming?.team_data || incoming;
+      console.log('Loading team data (normalized):', teamData);
       
       // Load formation
-      // Handle both 'formation_id' (older) and 'formation' (current backend) keys
       const formationIdOrName = teamData.formation_id || teamData.formation;
       if (formationIdOrName) {
         const formation = mockFormations.find(f => f.id === formationIdOrName || f.name === formationIdOrName);
