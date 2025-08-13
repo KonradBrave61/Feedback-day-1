@@ -334,12 +334,12 @@ const TechniquesPage = () => {
                         <SelectValue placeholder="All Elements" />
                       </SelectTrigger>
                       <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                        <SelectItem value="" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Elements</SelectItem>
-                        <SelectItem value="fire" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Fire</SelectItem>
-                        <SelectItem value="earth" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Earth</SelectItem>
-                        <SelectItem value="wind" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wind</SelectItem>
-                        <SelectItem value="wood" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wood</SelectItem>
-                        <SelectItem value="void" className="text-white" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Void</SelectItem>
+                        <SelectItem value="" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>All Elements</SelectItem>
+                        <SelectItem value="fire" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Fire</SelectItem>
+                        <SelectItem value="earth" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Earth</SelectItem>
+                        <SelectItem value="wind" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wind</SelectItem>
+                        <SelectItem value="wood" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Wood</SelectItem>
+                        <SelectItem value="void" className="text-white hover:opacity-80 focus:bg-transparent data-[highlighted]:bg-transparent" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}>Void</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
