@@ -562,7 +562,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               <h4 className="text-lg font-bold mb-4">TEAM PASSIVES</h4>
               
               <div className="space-y-3">
-                {currentCharacter.teamPassives.map((passive, index) => (
+                {(currentCharacter.teamPassives || []).map((passive, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <img src={passive.icon} alt={passive.name} className="w-6 h-6 mt-1" />
                     <div>
