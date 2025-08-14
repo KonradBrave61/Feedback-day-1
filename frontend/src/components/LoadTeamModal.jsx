@@ -25,7 +25,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
       try {
         setIsLoading(true);
         const slots = await loadSaveSlots();
-        const occupied = (slots || []).filter((s) => s.is_occupied);
+        const occupied = (slots?.saveSlots || []).filter((s) => s.is_occupied);
         setSavedTeams(occupied);
       } catch (e) {
         console.error('Failed to load save slots', e);
