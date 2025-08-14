@@ -10,7 +10,7 @@ import sys
 import os
 
 # Get backend URL from environment
-BACKEND_URL = "https://zero-action.preview.emergentagent.com"
+BACKEND_URL = "https://unruffled-hodgkin.preview.emergentagent.com"
 
 def test_placeholder_endpoint():
     """Test the new placeholder image endpoint"""
