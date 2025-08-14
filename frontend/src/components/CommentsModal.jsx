@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { X, MessageSquare, Send } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
@@ -12,6 +12,8 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const teamTitle = useMemo(() => team?.name || team?.team_name || 'Team', [team]);
+
   useEffect(() => {
     if (!isOpen || !team?.id) return;
     (async () => {
@@ -19,10 +21,14 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
       try {
         const res = await loadTeamDetails(team.id);
         const teamData = res?.team?.team || res?.team || res;
-        const list = teamData?.comments || [];
-        setComments(list);
+        let list = teamData?.comments || [];
+        // Normalize comments if backend returned an object or dict
+        if (!Array.isArray(list)) {
+          list = Object.values(list);
+        }
+        setComments(Array.isArray(list) ? list : []);
       } catch (e) {
-        // ignore
+        setComments([]);
       } finally {
         setLoading(false);
       }
@@ -51,7 +57,7 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
-                Comments · {team?.name || 'Team'}
+                Comments · {teamTitle}
               </CardTitle>
               <Button variant="ghost" size="sm" className="text-white hover:opacity-80" onClick={onClose}>
                 <X className="h-4 w-4" />
@@ -66,16 +72,16 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
                 <div className="p-6 text-center text-gray-300">No comments yet. Be the first to comment!</div>
               ) : (
                 comments.map((c) => (
-                  <div key={c.id} className="p-4 flex gap-3">
+                  <div key={c.id || `${c.username}-${c.created_at}`} className="p-4 flex gap-3">
                     <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gray-600/40 flex items-center justify-center text-sm font-bold">
                       {(c.username || 'U')[0]}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-semibold text-white">{c.username || 'User'}</span>
-                        <span className="text-gray-400">{new Date(c.created_at).toLocaleString()}</span>
+                        <span className="font-semibold text-white truncate">{c.username || 'User'}</span>
+                        <span className="text-gray-400 truncate">{new Date(c.created_at).toLocaleString()}</span>
                       </div>
-                      <div className="text-gray-200 mt-1 whitespace-pre-wrap">{c.content}</div>
+                      <div className="text-gray-200 mt-1 whitespace-pre-wrap break-words">{String(c.content || '')}</div>
                     </div>
                   </div>
                 ))
