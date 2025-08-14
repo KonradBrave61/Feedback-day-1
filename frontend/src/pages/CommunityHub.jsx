@@ -1,60 +1,57 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navigation from '../components/Navigation';
 import TeamCard from '../components/TeamCard';
+import TeamPreviewModal from '../components/TeamPreviewModal';
+import CommentsModal from '../components/CommentsModal';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { 
   Search, 
   TrendingUp, 
-  Clock, 
   Star, 
   Users, 
   Trophy, 
   Heart,
-  MessageSquare,
-  Eye,
-  Filter,
   Globe,
   UserPlus,
-  Award
 } from 'lucide-react';
-import { logoColors, componentColors } from '../styles/colors';
+import { logoColors } from '../styles/colors';
 
 const CommunityHub = () => {
-  const { user, loadCommunityTeams, loadCommunityStats } = useAuth();
+  const navigate = useNavigate();
+  const { user, loadCommunityTeams, loadCommunityStats, likeTeam, loadTeamDetails, viewTeam } = useAuth();
   const [teams, setTeams] = useState([]);
   const [stats, setStats] = useState({
-    totalTeams: 0,
     totalUsers: 0,
+    totalTeams: 0,
+    totalPublicTeams: 0,
     totalLikes: 0,
-    popularFormations: []
+    totalViews: 0,
   });
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('recent');
+  const [sortBy, setSortBy] = useState('created_at');
   const [filterBy, setFilterBy] = useState('all');
 
-  const sortOptions = [
-    { value: 'recent', label: 'Most Recent' },
-    { value: 'popular', label: 'Most Popular' },
-    { value: 'liked', label: 'Most Liked' },
-    { value: 'viewed', label: 'Most Viewed' },
-    { value: 'rated', label: 'Highest Rated' }
-  ];
+  // Modals
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
-  const filterOptions = [
-    { value: 'all', label: 'All Teams' },
-    { value: 'public', label: 'Public Only' },
-    { value: 'featured', label: 'Featured Teams' },
-    { value: 'recent', label: 'Recent Teams' }
+  const sortOptions = [
+    { value: 'created_at', label: 'Most Recent' },
+    { value: 'likes', label: 'Most Liked' },
+    { value: 'views', label: 'Most Viewed' },
+    { value: 'rating', label: 'Highest Rated' }
   ];
 
   useEffect(() => {
     fetchCommunityData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, filterBy, searchQuery]);
 
   const fetchCommunityData = async () => {
@@ -63,16 +60,21 @@ const CommunityHub = () => {
       const teamsResult = await loadCommunityTeams({
         search: searchQuery,
         sort_by: sortBy,
-        filter_by: filterBy
       });
-      
       if (teamsResult.success) {
         setTeams(teamsResult.teams);
       }
 
       const statsResult = await loadCommunityStats();
       if (statsResult.success) {
-        setStats(statsResult.stats);
+        const s = statsResult.stats || statsResult; // backend returns snake_case keys
+        setStats({
+          totalUsers: s.total_users ?? 0,
+          totalTeams: s.total_teams ?? 0,
+          totalPublicTeams: s.total_public_teams ?? 0,
+          totalLikes: s.total_likes ?? 0,
+          totalViews: s.total_views ?? 0,
+        });
       }
     } catch (error) {
       console.error('Failed to load community data:', error);
@@ -81,10 +83,47 @@ const CommunityHub = () => {
     }
   };
 
+  const handleLike = async (teamId) => {
+    // Optimistic toggle
+    setTeams((prev) => prev.map((t) => {
+      if (t.id !== teamId) return t;
+      const liked = !t.__liked; // local marker
+      return { ...t, __liked: liked, likes: (t.likes || 0) + (liked ? 1 : -1) };
+    }));
+
+    const res = await likeTeam(teamId);
+    if (!res?.success) {
+      // revert on failure
+      setTeams((prev) => prev.map((t) => {
+        if (t.id !== teamId) return t;
+        const liked = !t.__liked; // revert
+        return { ...t, __liked: liked, likes: (t.likes || 0) + (liked ? 1 : -1) };
+      }));
+    }
+  };
+
+  const handleComment = (teamId) => {
+    const team = teams.find((t) => t.id === teamId);
+    setSelectedTeam(team);
+    setCommentsOpen(true);
+  };
+
+  const handleView = async (teamId) => {
+    const team = teams.find((t) => t.id === teamId);
+    setSelectedTeam(team);
+    setPreviewOpen(true);
+    // Optimistic + backend increment
+    setTeams((prev) => prev.map((t) => t.id === teamId ? { ...t, views: (t.views || 0) + 1 } : t));
+    try {
+      // Try dedicated view endpoint if available
+      if (viewTeam) await viewTeam(teamId);
+      else await loadTeamDetails(teamId); // this will increment for non-owners
+    } catch (_) {}
+  };
+
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
-      
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -98,7 +137,7 @@ const CommunityHub = () => {
         </div>
 
         {/* Community Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <Card className="backdrop-blur-lg text-white border text-center" style={{ 
             backgroundColor: logoColors.blackAlpha(0.3),
             borderColor: logoColors.primaryBlueAlpha(0.2)
@@ -138,8 +177,19 @@ const CommunityHub = () => {
           }}>
             <CardContent className="p-6">
               <Star className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.secondaryBlue }} />
-              <div className="text-2xl font-bold text-white">{stats.averageRating || '4.5'}</div>
-              <div className="text-sm text-gray-300">Avg Rating</div>
+              <div className="text-2xl font-bold text-white">{(teams[0]?.rating ?? 4.5).toFixed ? (teams[0]?.rating ?? 4.5).toFixed(1) : teams[0]?.rating || '4.5'}</div>
+              <div className="text-sm text-gray-300">Sample Rating</div>
+            </CardContent>
+          </Card>
+
+          <Card className="backdrop-blur-lg text-white border text-center" style={{ 
+            backgroundColor: logoColors.blackAlpha(0.3),
+            borderColor: logoColors.primaryBlueAlpha(0.2)
+          }}>
+            <CardContent className="p-6">
+              <TrendingUp className="h-8 w-8 mx-auto mb-2" style={{ color: logoColors.primaryYellow }} />
+              <div className="text-2xl font-bold text-white">{stats.totalViews}</div>
+              <div className="text-sm text-gray-300">Total Views</div>
             </CardContent>
           </Card>
         </div>
@@ -151,7 +201,6 @@ const CommunityHub = () => {
         }}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
               Search & Filters
             </CardTitle>
           </CardHeader>
@@ -198,36 +247,14 @@ const CommunityHub = () => {
                 </SelectContent>
               </Select>
 
-              {/* Filter By */}
-              <Select value={filterBy} onValueChange={setFilterBy}>
-                <SelectTrigger className="text-white border" style={{ 
-                  backgroundColor: logoColors.blackAlpha(0.5),
-                  borderColor: logoColors.primaryBlueAlpha(0.3)
-                }}>
-                  <SelectValue placeholder="Filter by" />
-                </SelectTrigger>
-                <SelectContent style={{ 
-                  backgroundColor: logoColors.blackAlpha(0.9),
-                  borderColor: logoColors.primaryBlueAlpha(0.3)
-                }}>
-                  {filterOptions.map(option => (
-                    <SelectItem 
-                      key={option.value} 
-                      value={option.value}
-                      className="text-white hover:opacity-80"
-                      style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1) }}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {/* Spacer for future filter */}
+              <div />
 
               {/* Clear Filters */}
               <Button
                 onClick={() => {
                   setSearchQuery('');
-                  setSortBy('recent');
+                  setSortBy('created_at');
                   setFilterBy('all');
                 }}
                 className="text-white border hover:opacity-80"
@@ -257,9 +284,9 @@ const CommunityHub = () => {
                 team={team}
                 showAuthor={true}
                 showStats={true}
-                onLike={() => {}}
-                onComment={() => {}}
-                onView={() => {}}
+                onLike={handleLike}
+                onComment={handleComment}
+                onView={handleView}
               />
             ))}
           </div>
@@ -271,7 +298,7 @@ const CommunityHub = () => {
             <Button
               onClick={() => {
                 setSearchQuery('');
-                setSortBy('recent');
+                setSortBy('created_at');
                 setFilterBy('all');
               }}
               className="text-black font-bold hover:opacity-80"
@@ -280,42 +307,6 @@ const CommunityHub = () => {
               Reset Filters
             </Button>
           </div>
-        )}
-
-        {/* Popular Formations */}
-        {stats.popularFormations && stats.popularFormations.length > 0 && (
-          <Card className="mt-8 backdrop-blur-lg text-white border" style={{ 
-            backgroundColor: logoColors.blackAlpha(0.3),
-            borderColor: logoColors.primaryBlueAlpha(0.2)
-          }}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" style={{ color: logoColors.primaryYellow }} />
-                Popular Formations
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {stats.popularFormations.map((formation, index) => (
-                  <div key={index} className="p-4 rounded-lg border" style={{ 
-                    backgroundColor: logoColors.blackAlpha(0.3),
-                    borderColor: logoColors.primaryBlueAlpha(0.3)
-                  }}>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center" 
-                           style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
-                        <Trophy className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
-                      </div>
-                      <div>
-                        <div className="font-bold text-white">{formation.name}</div>
-                        <div className="text-sm text-gray-300">{formation.usage_count} teams</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         )}
 
         {/* Community Actions */}
@@ -334,7 +325,6 @@ const CommunityHub = () => {
                 className="text-black font-bold hover:opacity-80"
                 style={{ background: logoColors.yellowOrangeGradient }}
               >
-                <Users className="h-4 w-4 mr-2" />
                 Create Team
               </Button>
               {!user && (
@@ -346,7 +336,6 @@ const CommunityHub = () => {
                     borderColor: logoColors.primaryBlueAlpha(0.3)
                   }}
                 >
-                  <UserPlus className="h-4 w-4 mr-2" />
                   Join Now
                 </Button>
               )}
@@ -354,6 +343,20 @@ const CommunityHub = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modals */}
+      <TeamPreviewModal
+        isOpen={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        team={selectedTeam}
+        onPrivacyToggle={null}
+      />
+
+      <CommentsModal
+        isOpen={commentsOpen}
+        onClose={() => setCommentsOpen(false)}
+        team={selectedTeam}
+      />
     </div>
   );
 };

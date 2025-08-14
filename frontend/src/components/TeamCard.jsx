@@ -7,11 +7,9 @@ import {
   MessageSquare, 
   Eye, 
   Star, 
-  Users, 
   Calendar,
-  Trophy
 } from 'lucide-react';
-import { logoColors, componentColors } from '../styles/colors';
+import { logoColors } from '../styles/colors';
 
 const TeamCard = ({ 
   team, 
@@ -22,11 +20,15 @@ const TeamCard = ({
   onView 
 }) => {
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (_) {
+      return '';
+    }
   };
 
   const handleLike = () => {
@@ -40,6 +42,10 @@ const TeamCard = ({
   const handleView = () => {
     if (onView) onView(team.id);
   };
+
+  // Rating mapping
+  const averageRating = team?.rating ?? team?.detailed_rating?.average_rating;
+  const totalRatings = team?.detailed_rating?.total_ratings;
 
   return (
     <Card 
@@ -58,11 +64,11 @@ const TeamCard = ({
               className="text-lg font-bold truncate"
               style={{ color: logoColors.primaryBlue }}
             >
-              {team.team_name || 'Unnamed Team'}
+              {team.name || 'Unnamed Team'}
             </CardTitle>
-            {showAuthor && team.creator && (
+            {showAuthor && (team.username || team.creator?.username) && (
               <p className="text-sm text-gray-300 mt-1">
-                by {team.creator.username || 'Unknown'}
+                by {team.username || team.creator?.username}
               </p>
             )}
           </div>
@@ -82,7 +88,7 @@ const TeamCard = ({
             )}
             {team.is_public !== undefined && (
               <Badge 
-                variant={team.is_public ? "default" : "secondary"}
+                variant={team.is_public ? 'default' : 'secondary'}
                 className="text-xs"
                 style={{
                   backgroundColor: team.is_public 
@@ -107,47 +113,16 @@ const TeamCard = ({
         )}
 
         {/* Team Rating */}
-        {team.average_rating && (
+        {averageRating !== undefined && averageRating !== null && (
           <div className="flex items-center gap-2 mb-3">
             <Star className="h-4 w-4" style={{ color: logoColors.yellowOrange }} />
             <span className="text-sm text-white font-medium">
-              {team.average_rating.toFixed(1)}
+              {Number(averageRating).toFixed(1)}
             </span>
-            <span className="text-xs text-gray-400">
-              ({team.total_ratings || 0} rating{team.total_ratings !== 1 ? 's' : ''})
-            </span>
-          </div>
-        )}
-
-        {/* Team Tags */}
-        {team.tags && team.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {team.tags.slice(0, 3).map((tag, index) => (
-              <Badge 
-                key={index} 
-                variant="outline" 
-                className="text-xs px-2 py-0.5"
-                style={{ 
-                  backgroundColor: logoColors.yellowOrangeAlpha(0.1),
-                  borderColor: logoColors.yellowOrange,
-                  color: logoColors.yellowOrange
-                }}
-              >
-                {tag}
-              </Badge>
-            ))}
-            {team.tags.length > 3 && (
-              <Badge 
-                variant="outline" 
-                className="text-xs px-2 py-0.5"
-                style={{ 
-                  backgroundColor: logoColors.darkBlueAlpha(0.2),
-                  borderColor: logoColors.darkBlue,
-                  color: logoColors.darkBlue
-                }}
-              >
-                +{team.tags.length - 3}
-              </Badge>
+            {totalRatings !== undefined && (
+              <span className="text-xs text-gray-400">
+                ({totalRatings} rating{totalRatings === 1 ? '' : 's'})
+              </span>
             )}
           </div>
         )}
@@ -162,7 +137,7 @@ const TeamCard = ({
               </div>
               <div className="flex items-center gap-1">
                 <MessageSquare className="h-3 w-3" />
-                <span>{team.comments ? team.comments.length : 0}</span>
+                <span>{Array.isArray(team.comments) ? team.comments.length : (team.comments_count || 0)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Eye className="h-3 w-3" />
