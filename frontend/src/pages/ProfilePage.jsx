@@ -580,7 +580,7 @@ const ProfilePage = () => {
                             </div>
                             <div className="flex items-center gap-1">
                               <MessageSquare className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
-                              <span className="text-xs text-gray-300">{team.comments || 0}</span>
+                              <span className="text-xs text-gray-300">{Array.isArray(team.comments) ? team.comments.length : (team.comments_count || 0)}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Eye className="h-4 w-4" style={{ color: logoColors.secondaryBlue }} />
