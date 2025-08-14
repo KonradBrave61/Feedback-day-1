@@ -159,7 +159,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <h4 className="text-white font-semibold">{slot.team_name || 'Saved Team'}</h4>
-                          <p className="text-xs text-gray-400">Slot: {slot.slot_name || slot.slot_id}</p>
+                          <p className="text-xs text-gray-400">Slot: {slot.slot_name || `Slot ${slot.slot_number || slot.slot_id}`}</p>
                         </div>
                         <Button onClick={() => handleLoadSavedTeam(slot)} className="text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
                           <Save className="h-4 w-4 mr-2" /> Apply
