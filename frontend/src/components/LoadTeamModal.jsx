@@ -155,7 +155,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                   </Card>
                 ) : (
                   savedTeams.map((slot) => (
-                    <Card key={slot.slot_id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
+                    <Card key={slot.slot_number || slot.slot_id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <h4 className="text-white font-semibold">{slot.team_name || 'Saved Team'}</h4>
