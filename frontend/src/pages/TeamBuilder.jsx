@@ -59,6 +59,10 @@ const TeamBuilder = () => {
   const [teamPlayers, setTeamPlayers] = useState({});
   const [benchPlayers, setBenchPlayers] = useState({});
   
+  // Track if we loaded an existing team to offer overwrite
+  const [loadedTeamId, setLoadedTeamId] = useState(null);
+  const [loadedTeamName, setLoadedTeamName] = useState('');
+
   // Modal states
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [showTeamBuilderSearch, setShowTeamBuilderSearch] = useState(false);
