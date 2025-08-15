@@ -51,6 +51,7 @@ const CommunityHub = () => {
 
   useEffect(() => {
     fetchCommunityData();
+    // Including dependencies for correct re-fetch on change
   }, [sortBy, filterBy, searchQuery]);
 
   const fetchCommunityData = async () => {
