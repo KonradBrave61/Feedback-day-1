@@ -274,6 +274,23 @@ const ProfilePage = () => {
   };
 
   const handleQuickPrivacyToggle = async (team) => {
+  const handleDeleteTeam = async (teamId) => {
+    try {
+      const res = await deleteTeam(teamId);
+      if (res.success) {
+        toast.success('Team deleted successfully');
+        setTeams(prev => prev.filter(t => t.id !== teamId));
+        if (selectedTeam?.id === teamId) {
+          setShowTeamPreview(false);
+          setSelectedTeam(null);
+        }
+      } else {
+        toast.error(res.error || 'Failed to delete team');
+      }
+    } catch (e) {
+      toast.error('An error occurred while deleting team');
+    }
+  };
     await handleTeamPrivacyToggle(team.id, !team.is_public);
   };
 
