@@ -650,6 +650,10 @@ const TeamBuilder = () => {
       const teamData = incoming?.team?.team || incoming?.team || incoming?.team_data || incoming;
       console.log('Loading team data (normalized):', teamData);
       
+      // Persist loaded team id/name so Save dialog can offer overwrite
+      if (teamData.id) setLoadedTeamId(teamData.id);
+      if (teamData.name) setLoadedTeamName(teamData.name);
+
       // Load formation
       const formationIdOrName = teamData.formation_id || teamData.formation;
       if (formationIdOrName) {
