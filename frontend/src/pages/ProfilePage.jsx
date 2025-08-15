@@ -28,7 +28,8 @@ import {
   Eye,
   Lock,
   Unlock,
-  Edit
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logoColors, componentColors } from '../styles/colors';
