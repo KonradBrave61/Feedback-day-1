@@ -36,6 +36,12 @@ const SaveTeamModal = ({
       return;
     }
 
+    // If we came from editing a loaded team and consumer provided overwrite handler, show choice first
+    if (!isEditing && onOverwrite) {
+      setShowOverwriteChoice(true);
+      return;
+    }
+
     setIsSaving(true);
     try {
       await onSave(formData);
