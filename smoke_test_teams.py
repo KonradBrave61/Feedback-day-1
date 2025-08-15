@@ -212,7 +212,7 @@ class TeamSmokeTest:
             
         try:
             update_data = {
-                "team_name": "Updated Smoke Test Team",
+                "name": "Updated Smoke Test Team",
                 "description": "Updated description for smoke test"
             }
             
@@ -220,7 +220,7 @@ class TeamSmokeTest:
             
             if response.status_code == 200:
                 updated_team = response.json()
-                if updated_team.get('team_name') == "Updated Smoke Test Team":
+                if updated_team.get('name') == "Updated Smoke Test Team":
                     self.log_result("Update Team", True, "Team name updated successfully")
                     return True
                 else:
