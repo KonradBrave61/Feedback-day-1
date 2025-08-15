@@ -273,7 +273,6 @@ const ProfilePage = () => {
     }
   };
 
-  const handleQuickPrivacyToggle = async (team) => {
   const handleDeleteTeam = async (teamId) => {
     try {
       const res = await deleteTeam(teamId);
