@@ -37,7 +37,7 @@ import { logoColors, componentColors } from '../styles/colors';
 import { showSessionExpiredNotification } from '../components/Notification';
 
 const ProfilePage = () => {
-  const { user, loading: authLoading, updateProfile, loadTeams, loadFollowers, loadFollowing, updateTeam } = useAuth();
+  const { user, loading: authLoading, updateProfile, loadTeams, loadFollowers, loadFollowing, updateTeam, deleteTeam } = useAuth();
   const navigate = useNavigate();
   
   const [editing, setEditing] = useState(false);
