@@ -596,6 +596,34 @@ const TeamBuilder = () => {
     return { total, average, breakdown: stats, playerCount: totalPlayers };
   };
 
+  // Build full payload from current builder state and form
+  const buildTeamPayload = (teamData) => ({
+    ...teamData,
+    formation: (selectedFormation?.id ?? selectedFormation?.name ?? '').toString(),
+    players: Object.entries(teamPlayers)
+      .filter(([_, player]) => !!player)
+      .map(([positionId, player]) => ({
+        character_id: player.id,
+        position_id: positionId,
+        user_level: player.userLevel || player.baseLevel || 1,
+        user_rarity: player.userRarity || player.baseRarity || 1,
+        user_equipment: player.userEquipment || {},
+        user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
+      })),
+    bench_players: Object.entries(benchPlayers)
+      .filter(([_, player]) => !!player)
+      .map(([slot, player]) => ({
+        character_id: player.id,
+        slot_id: `bench_${slot}`,
+        user_level: player.userLevel || player.baseLevel || 1,
+        user_rarity: player.userRarity || player.baseRarity || 1,
+        user_equipment: player.userEquipment || {},
+        user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
+      })),
+    tactics: selectedTactics.map(t => ({ id: t.id, name: t.name })),
+    coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null
+  });
+
   const handleSaveTeam = async (teamData) => {
     try {
       // Prepare team data for saving (align with backend TeamCreate)
