@@ -290,6 +290,8 @@ const ProfilePage = () => {
       toast.error('An error occurred while deleting team');
     }
   };
+
+  const handleQuickPrivacyToggle = async (team) => {
     await handleTeamPrivacyToggle(team.id, !team.is_public);
   };
 
