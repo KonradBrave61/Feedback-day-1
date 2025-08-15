@@ -44,7 +44,9 @@ const SaveTeamModal = ({
 
     setIsSaving(true);
     try {
-      await onSave(formData);
+      // If user is editing existing, default description to team name automatically
+      const payload = { ...formData, description: formData.description?.trim() ? formData.description : formData.name };
+      await onSave(payload);
       toast.success(isEditing ? 'Team updated successfully!' : 'Team saved successfully!');
       onClose();
     } catch (error) {
