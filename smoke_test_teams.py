@@ -68,7 +68,7 @@ class TeamSmokeTest:
             
             # Login to get token
             login_data = {
-                "username": "smoketest_user",
+                "email": "smoketest@example.com",
                 "password": "SecurePass123!"
             }
             
