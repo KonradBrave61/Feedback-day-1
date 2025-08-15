@@ -804,6 +804,13 @@ const TeamBuilder = () => {
 
   const teamStats = getTeamStats();
 
+  // Direct update helper using AuthContext.updateTeam
+  const updateTeamDirect = async (teamId, payload) => {
+    const result = await updateTeam(teamId, payload);
+    if (!result?.success) throw new Error(result?.error || 'Failed to overwrite team');
+    return result;
+  };
+
   // Auto-load team if redirected from Profile/Preview
   useEffect(() => {
     try {
