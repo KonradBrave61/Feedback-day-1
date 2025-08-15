@@ -1289,6 +1289,10 @@ const TeamBuilder = () => {
           onSave={async (form) => {
             // new save
             const result = await handleSaveTeam(form);
+            if (result?.success && result.team?.id) {
+              setLoadedTeamId(result.team.id);
+              setLoadedTeamName(result.team.name || form.name || '');
+            }
             return result;
           }}
           onOverwrite={loadedTeamId ? async (form) => {
