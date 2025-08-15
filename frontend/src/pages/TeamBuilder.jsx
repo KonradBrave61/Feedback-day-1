@@ -794,6 +794,8 @@ const TeamBuilder = () => {
   };
 
   const handleClearAll = () => {
+    setLoadedTeamId(null);
+    setLoadedTeamName('');
     setTeamPlayers({});
     setBenchPlayers({});
     setSelectedTactics([]);
