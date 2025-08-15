@@ -1237,7 +1237,11 @@ const TeamBuilder = () => {
         <EnhancedSaveTeamModal
           isOpen={showSaveModal}
           onClose={() => setShowSaveModal(false)}
-          onSave={handleSaveTeam}
+          onSave={async (form) => {
+            // Pass through the SaveTeam flow without slots
+            const result = await handleSaveTeam(form);
+            return result;
+          }}
           teamData={{
             formation: selectedFormation?.name,
             players: Object.keys(teamPlayers).length,
