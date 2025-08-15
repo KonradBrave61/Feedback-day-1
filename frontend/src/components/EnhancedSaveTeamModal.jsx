@@ -27,6 +27,7 @@ const SaveTeamModal = ({
   });
   const [currentTag, setCurrentTag] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [showOverwriteChoice, setShowOverwriteChoice] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
