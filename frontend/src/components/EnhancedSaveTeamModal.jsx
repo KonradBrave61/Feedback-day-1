@@ -124,7 +124,8 @@ const SaveTeamModal = ({
                     onClick={async () => {
                       setIsSaving(true);
                       try {
-                        const payload = { ...formData, description: formData.description?.trim() ? formData.description : formData.name };
+                        // Force description to match name when overwriting existing team
+                        const payload = { ...formData, description: formData.name };
                         await onOverwrite(payload);
                         toast.success('Team overwritten successfully!');
                         onClose();
