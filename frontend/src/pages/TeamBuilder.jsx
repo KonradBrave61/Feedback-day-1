@@ -1287,7 +1287,7 @@ const TeamBuilder = () => {
           }}
           onOverwrite={loadedTeamId ? async (form) => {
             // Overwrite the loaded team id
-            const payload = await buildTeamPayload(form);
+            const payload = buildTeamPayload(form);
             const res = await updateTeamDirect(loadedTeamId, payload);
             return res;
           } : null}
