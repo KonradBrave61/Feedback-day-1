@@ -10,41 +10,44 @@ import { Download, Globe, Save, Search, Users, X } from 'lucide-react';
 import { UnorderedList, ListItem } from './ui/list';
 
 const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
-  const { loadSaveSlots, loadCommunityTeams, loadTeamDetails, user } = useAuth();
-  const [activeTab, setActiveTab] = useState('saved');
+  const { loadCommunityTeams, loadTeamDetails, loadTeams } = useAuth();
+  const [activeTab, setActiveTab] = useState('mine');
   const [isLoading, setIsLoading] = useState(false);
-  const [savedTeams, setSavedTeams] = useState([]);
+  const [myTeams, setMyTeams] = useState([]);
   const [communityTeams, setCommunityTeams] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [teamUrl, setTeamUrl] = useState('');
 
+  // Load user's own teams when modal opens
   useEffect(() => {
     if (!isOpen) return;
-    // Load saved teams
-    const fetchTeams = async () => {
+    const fetchMyTeams = async () => {
       try {
         setIsLoading(true);
-        const slots = await loadSaveSlots();
-        const occupied = (slots?.saveSlots || []).filter((s) => s.is_occupied);
-        setSavedTeams(occupied);
+        const res = await loadTeams();
+        if (res?.success) {
+          setMyTeams(res.teams || []);
+        } else {
+          setMyTeams([]);
+        }
       } catch (e) {
-        console.error('Failed to load save slots', e);
+        console.error('Failed to load my teams', e);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchTeams();
-  }, [isOpen, loadSaveSlots]);
+    fetchMyTeams();
+  }, [isOpen, loadTeams]);
 
-  const handleLoadSavedTeam = async (slot) => {
-    if (!slot?.team_id) return;
+  const handleLoadMyTeam = async (team) => {
+    if (!team?.id) return;
     try {
       setIsLoading(true);
-      const teamWrap = await loadTeamDetails(slot.team_id);
-      const team = teamWrap?.team || teamWrap; // backend returns { team: {...} }
-      if (!team) throw new Error('Invalid team data');
-      onLoadTeam(team);
-      toast.success(`Loaded team: ${team.name || slot.team_name}`);
+      const teamWrap = await loadTeamDetails(team.id);
+      const fullTeam = teamWrap?.team || teamWrap; // backend may return { team: {...} }
+      if (!fullTeam) throw new Error('Invalid team data');
+      onLoadTeam(fullTeam);
+      toast.success(`Loaded team: ${fullTeam.name || team.name}`);
       onClose();
     } catch (e) {
       console.error('Failed to load team', e);
@@ -75,9 +78,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
 
   const filteredCommunity = useMemo(() => {
     if (!searchQuery) return communityTeams;
-    return communityTeams.filter((t) =>
-      (t.name || '').toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return communityTeams.filter((t) => (t.name || '').toLowerCase().includes(searchQuery.toLowerCase()));
   }, [communityTeams, searchQuery]);
 
   useEffect(() => {
@@ -100,12 +101,12 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg border" style={{ 
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg border" style={{
         backgroundColor: logoColors.blackAlpha(0.9),
         borderColor: logoColors.primaryBlueAlpha(0.3)
       }}>
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b" style={{ 
+        <div className="flex justify-between items-center p-6 border-b" style={{
           borderColor: logoColors.primaryBlueAlpha(0.2)
         }}>
           <div>
@@ -124,46 +125,54 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
         {/* Tabs */}
         <div className="p-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6" style={{ 
+            <TabsList className="grid w-full grid-cols-3 mb-6" style={{
               backgroundColor: logoColors.blackAlpha(0.3)
             }}>
-              <TabsTrigger value="saved" className="text-white" style={{ 
-                backgroundColor: activeTab === 'saved' ? logoColors.primaryBlueAlpha(0.4) : 'transparent'
+              <TabsTrigger value="mine" className="text-white" style={{
+                backgroundColor: activeTab === 'mine' ? logoColors.primaryBlueAlpha(0.4) : 'transparent'
               }}>
-                My Saved Teams
+                My Teams
               </TabsTrigger>
-              <TabsTrigger value="community" className="text-white" style={{ 
+              <TabsTrigger value="community" className="text-white" style={{
                 backgroundColor: activeTab === 'community' ? logoColors.primaryBlueAlpha(0.4) : 'transparent'
               }}>
                 Community Teams
               </TabsTrigger>
-              <TabsTrigger value="url" className="text-white" style={{ 
+              <TabsTrigger value="url" className="text-white" style={{
                 backgroundColor: activeTab === 'url' ? logoColors.primaryBlueAlpha(0.4) : 'transparent'
               }}>
                 Import from URL
               </TabsTrigger>
             </TabsList>
 
-            {/* Saved */}
-            <TabsContent value="saved">
+            {/* My Teams */}
+            <TabsContent value="mine">
               <div className="grid md:grid-cols-2 gap-4">
                 {isLoading ? (
                   <p className="text-gray-300">Loading...</p>
-                ) : savedTeams.length === 0 ? (
+                ) : myTeams.length === 0 ? (
                   <Card className="p-6 text-gray-300" style={{ backgroundColor: logoColors.blackAlpha(0.2) }}>
-                    No saved teams found. Save a team first from Team Builder.
+                    No teams found. Save a team first from Team Builder.
                   </Card>
                 ) : (
-                  savedTeams.map((slot) => (
-                    <Card key={slot.slot_number || slot.slot_id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
+                  myTeams.map((team) => (
+                    <Card key={team.id} className="p-4 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.2) }}>
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <h4 className="text-white font-semibold">{slot.team_name || 'Saved Team'}</h4>
-                          <p className="text-xs text-gray-400">Slot: {slot.slot_name || `Slot ${slot.slot_number || slot.slot_id}`}</p>
+                          <h4 className="text-white font-semibold">{team.name || 'Saved Team'}</h4>
+                          <p className="text-xs text-gray-400">Formation: {team.formation || '—'}</p>
                         </div>
-                        <Button onClick={() => handleLoadSavedTeam(slot)} className="text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
+                        <Button onClick={() => handleLoadMyTeam(team)} className="text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
                           <Save className="h-4 w-4 mr-2" /> Apply
                         </Button>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs text-gray-400">
+                        <div className="flex items-center gap-1"><Users className="h-3 w-3" />{team.likes || 0} likes</div>
+                        <div>•</div>
+                        <div>{team.views || 0} views</div>
+                        {team.is_public === false && (
+                          <div>• Private</div>
+                        )}
                       </div>
                     </Card>
                   ))
@@ -189,7 +198,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="text-white font-semibold">{t.name}</h4>
-                        <p className="text-xs text-gray-400">By {t.user?.username || 'Unknown'}</p>
+                        <p className="text-xs text-gray-400">By {t.user?.username || t.username || 'Unknown'}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-gray-400" />
@@ -211,7 +220,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                     value={teamUrl}
                     onChange={(e) => setTeamUrl(e.target.value)}
                     className="text-white border"
-                    style={{ 
+                    style={{
                       backgroundColor: logoColors.blackAlpha(0.5),
                       borderColor: logoColors.primaryBlueAlpha(0.3)
                     }}
@@ -228,7 +237,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                   Load Team from URL
                 </Button>
 
-                <div className="mt-6 p-4 rounded border" style={{ 
+                <div className="mt-6 p-4 rounded border" style={{
                   backgroundColor: logoColors.blackAlpha(0.3),
                   borderColor: logoColors.primaryBlueAlpha(0.2)
                 }}>
