@@ -124,7 +124,8 @@ const SaveTeamModal = ({
                     onClick={async () => {
                       setIsSaving(true);
                       try {
-                        await onOverwrite(formData);
+                        const payload = { ...formData, description: formData.description?.trim() ? formData.description : formData.name };
+                        await onOverwrite(payload);
                         toast.success('Team overwritten successfully!');
                         onClose();
                       } catch (e) {
