@@ -1303,6 +1303,8 @@ const TeamBuilder = () => {
           } : null}
           editTargetName={loadedTeamName}
           teamData={{
+            name: loadedTeamName || '',
+            description: loadedTeamName || '',
             formation: selectedFormation?.name,
             players: Object.keys(teamPlayers).length,
             bench: Object.keys(benchPlayers).length,
