@@ -15,7 +15,9 @@ const SaveTeamModal = ({
   onClose, 
   onSave, 
   teamData = null,
-  isEditing = false 
+  isEditing = false,
+  onOverwrite = null,
+  editTargetName = ''
 }) => {
   const [formData, setFormData] = useState({
     name: teamData?.name || '',
