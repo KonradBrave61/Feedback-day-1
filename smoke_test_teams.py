@@ -93,8 +93,8 @@ class TeamSmokeTest:
         try:
             # Minimal team payload as requested
             team_data = {
-                "team_name": "Smoke Test Team",
-                "formation_id": "1",
+                "name": "Smoke Test Team",
+                "formation": "4-4-2",
                 "players": [
                     {
                         "character_id": "1",
