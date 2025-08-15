@@ -150,7 +150,7 @@ class TeamSmokeTest:
                 "tactics": [],
                 "coach": None,
                 "description": "Smoke test team",
-                "is_public": False
+                "is_public": True
             }
             
             response = self.session.post(f"{API_BASE}/teams", json=team_data)
