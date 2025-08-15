@@ -576,20 +576,57 @@ const ProfilePage = () => {
                             <h3 className="font-bold text-white mb-1 hover:underline">{team.name}</h3>
                             <p className="text-sm text-gray-300 mb-2">{team.formation_name}</p>
                           </div>
-                          <Button
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleQuickPrivacyToggle(team);
-                            }}
-                            className="ml-2 p-2 hover:opacity-80 hover:text-white"
-                            style={{ 
-                              backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
-                              color: logoColors.white
-                            }}
-                          >
-                            {team.is_public ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
-                          </Button>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleQuickPrivacyToggle(team);
+                              }}
+                              className="p-2 hover:opacity-80 hover:text-white"
+                              style={{ 
+                                backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
+                                color: logoColors.white
+                              }}
+                              title={team.is_public ? 'Make Private' : 'Make Public'}
+                            >
+                              {team.is_public ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                            </Button>
+
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  className="p-2 hover:opacity-80 hover:text-white bg-red-800/30"
+                                  onClick={(e) => e.stopPropagation()}
+                                  title="Delete team"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="text-white">Delete this team?</AlertDialogTitle>
+                                  <AlertDialogDescription className="text-gray-300">
+                                    This action cannot be undone. This will permanently delete the team "{team.name}".
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel className="text-white border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className="text-white"
+                                    style={{ backgroundColor: '#b91c1c', borderColor: '#7f1d1d' }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDeleteTeam(team.id);
+                                    }}
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
