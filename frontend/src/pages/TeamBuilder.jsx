@@ -832,6 +832,10 @@ const TeamBuilder = () => {
             const wrapped = result.team?.team || result.team || result.team_data || result;
             // Call existing handler to map into UI
             handleLoadTeam(wrapped);
+            // if result has id/name, remember for overwrite offer
+            const target = result.team || result;
+            if (target?.id) setLoadedTeamId(target.id);
+            if (target?.name) setLoadedTeamName(target.name);
             toast.success('Team loaded into builder');
           } else {
             toast.error(result?.error || 'Failed to load team details');
