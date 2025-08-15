@@ -145,7 +145,8 @@ const SaveTeamModal = ({
                     onClick={async () => {
                       setIsSaving(true);
                       try {
-                        await onSave(formData);
+                        const payload = { ...formData, description: formData.description?.trim() ? formData.description : formData.name };
+                        await onSave(payload);
                         toast.success('Team saved as new successfully!');
                         onClose();
                       } catch (e) {
