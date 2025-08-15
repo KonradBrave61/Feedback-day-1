@@ -319,6 +319,7 @@ const SaveTeamModal = ({
                 </Button>
               </div>
             </form>
+            )}
           </CardContent>
         </Card>
       </div>
