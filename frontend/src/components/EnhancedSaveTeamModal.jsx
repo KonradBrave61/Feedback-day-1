@@ -111,6 +111,66 @@ const SaveTeamModal = ({
           </CardHeader>
           
           <CardContent className="flex-1 overflow-y-auto">
+            {showOverwriteChoice ? (
+              <div className="space-y-4">
+                <div className="text-center mb-2">
+                  <h3 className="text-lg font-semibold text-white mb-2">How do you want to save?</h3>
+                  <p className="text-gray-300 text-sm">You have a team loaded{editTargetName ? `: ${editTargetName}` : ''}. You can overwrite it or save as a new team.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Button
+                    onClick={async () => {
+                      setIsSaving(true);
+                      try {
+                        await onOverwrite(formData);
+                        toast.success('Team overwritten successfully!');
+                        onClose();
+                      } catch (e) {
+                        console.error('Overwrite failed', e);
+                        toast.error('Failed to overwrite team');
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }}
+                    className="w-full text-black font-bold hover:opacity-80"
+                    style={{ background: logoColors.yellowOrangeGradient }}
+                    disabled={isSaving}
+                  >
+                    Overwrite Current Team
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      setIsSaving(true);
+                      try {
+                        await onSave(formData);
+                        toast.success('Team saved as new successfully!');
+                        onClose();
+                      } catch (e) {
+                        console.error('Save new failed', e);
+                        toast.error('Failed to save as new');
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }}
+                    className="w-full text-white hover:opacity-80"
+                    style={{ backgroundColor: logoColors.primaryBlueAlpha(0.4), borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                    disabled={isSaving}
+                  >
+                    Save as New Team
+                  </Button>
+                </div>
+                <div className="pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowOverwriteChoice(false)}
+                    className="w-full text-white border hover:opacity-80"
+                    style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                  >
+                    Back
+                  </Button>
+                </div>
+              </div>
+            ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Team Name */}
               <div>
