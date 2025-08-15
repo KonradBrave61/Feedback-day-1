@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Users, Shield, Zap, Target, Star, Trophy, Shirt, Award, TrendingUp, Edit } from 'lucide-react';
+import { X, Users, Shield, Zap, Target, Edit } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
 import { mockFormations, mockCharacters } from '../data/mock';
+import { calculateStats } from '../data/mock';
 
 const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   const { loadTeamDetails } = useAuth();
@@ -72,6 +74,34 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return 'FW';
   };
 
+  const getCharacterRef = (player) => {
+    const cid = player.character_id || player.id;
+    if (!cid) return null;
+    const char = mockCharacters.find(c => c.id === cid || c.id === parseInt(cid));
+    return char || null;
+  };
+
+  const getPlayerElement = (player) => {
+    if (player.element) return player.element;
+    const ref = getCharacterRef(player);
+    return ref?.element || 'Neutral';
+  };
+
+  const getPlayerLevel = (player) => player.user_level || player.userLevel || getCharacterRef(player)?.baseLevel || 1;
+  const getPlayerRarity = (player) => (player.user_rarity || player.userRarity || getCharacterRef(player)?.baseRarity || 'Common');
+
+  const getPlayerEquipment = (player) => {
+    const eq = player.user_equipment || player.userEquipment || {};
+    return {
+      boots: eq.boots || null,
+      bracelets: eq.bracelets || null,
+      pendants: eq.pendants || null,
+      special: eq.special || null,
+    };
+  };
+
+  const getPlayerTechniques = (player) => (player.user_hissatsu || player.userHissatsu || []);
+
   const handlePrivacyToggle = async () => {
     if (onPrivacyToggle) await onPrivacyToggle(team.id, !team.is_public);
   };
@@ -92,15 +122,126 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return positionColors[position] || { backgroundColor: logoColors.lightGray, color: logoColors.black };
   };
 
+  const StatRow = ({ label, value }) => (
+    <div className="flex items-center justify-between text-xs">
+      <span className="text-gray-300">{label}</span>
+      <span className="font-semibold text-white">{value}</span>
+    </div>
+  );
+
+  const EquipmentChip = ({ item }) => {
+    if (!item) return null;
+    const totalBonus = item?.stats && typeof item.stats === 'object'
+      ? Object.values(item.stats).reduce((a, b) => a + (Number(b) || 0), 0)
+      : 0;
+    return (
+      <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2), color: logoColors.white }}>
+        {item.name || 'Item'}{totalBonus ? ` (+${totalBonus})` : ''}
+      </span>
+    );
+  };
+
+  const PlayerHoverCard = ({ player }) => {
+    if (!player) return null;
+    const charRef = getCharacterRef(player) || {};
+    const level = getPlayerLevel(player);
+    const rarity = getPlayerRarity(player);
+    const element = getPlayerElement(player);
+    const equipment = getPlayerEquipment(player);
+    const techniques = getPlayerTechniques(player);
+
+    const stats = calculateStats(
+      {
+        ...charRef,
+        baseLevel: charRef.baseLevel || 1,
+        baseRarity: charRef.baseRarity || 'Common',
+        baseStats: charRef.baseStats, // calculateStats handles undefined safely
+      },
+      equipment,
+      level,
+      rarity
+    );
+
+    return (
+      <div className="w-80 rounded-md border p-3" style={{ backgroundColor: logoColors.blackAlpha(0.85), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.3) }}>
+            {player.image ? (
+              <img src={player.image} alt={getPlayerName(player)} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white text-sm font-bold">
+                {getPlayerName(player).substring(0, 2)}
+              </div>
+            )}
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-white truncate">{getPlayerName(player)}</div>
+            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+              <Badge className="text-[10px] px-1.5 py-0.5" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+                {getPlayerPosition(player)}
+              </Badge>
+              <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
+                {String(rarity).toUpperCase()}
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>
+                {element}
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <StatRow label="Kick ⚽" value={stats.kick?.main ?? '-'} />
+          <StatRow label="Control 🎯" value={stats.control?.main ?? '-'} />
+          <StatRow label="Technique ⭐" value={stats.technique?.main ?? '-'} />
+          <StatRow label="Intelligence 🧠" value={stats.intelligence?.main ?? '-'} />
+          <StatRow label="Pressure 🛡️" value={stats.pressure?.main ?? '-'} />
+          <StatRow label="Agility ⚡" value={stats.agility?.main ?? '-'} />
+          <StatRow label="Physical 💪" value={stats.physical?.main ?? '-'} />
+        </div>
+
+        {/* Equipment */}
+        {(equipment.boots || equipment.bracelets || equipment.pendants || equipment.special) && (
+          <div className="mt-3">
+            <div className="text-[11px] text-gray-300 mb-1">Equipment</div>
+            <div className="flex flex-wrap gap-1.5">
+              <EquipmentChip item={equipment.boots} />
+              <EquipmentChip item={equipment.bracelets} />
+              <EquipmentChip item={equipment.pendants} />
+              <EquipmentChip item={equipment.special} />
+            </div>
+          </div>
+        )}
+
+        {/* Techniques */}
+        {Array.isArray(techniques) && techniques.length > 0 && (
+          <div className="mt-3">
+            <div className="text-[11px] text-gray-300 mb-1">Techniques</div>
+            <div className="flex flex-wrap gap-1.5">
+              {techniques.map((tech, idx) => (
+                <span key={idx} className="text-[10px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), borderColor: logoColors.primaryYellowAlpha(0.3), color: logoColors.primaryYellow }}>
+                  {tech?.name || `Tech ${idx + 1}`}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderFormationField = () => {
     if (!teamDetails || !teamDetails.players) return null;
     const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
 
     return (
       <div className="w-full h-full flex items-center justify-center">
-        {/* Fit field to 90% of the box */}
+        {/* Fit field to 98% of the box as requested */}
         <div
-          className="relative w-[90%] h-[90%] rounded-lg overflow-hidden"
+          className="relative w-[98%] h-[98%] rounded-lg overflow-hidden"
           style={{
             background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
             backgroundImage: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),linear-gradient(0deg, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 51%)`,
@@ -122,7 +263,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <div className="absolute bottom-0 right-0 w-4 h-4 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
           </div>
 
-          {/* Players */}
+          {/* Players with hover info (only on pitch) */}
           {formation.positions.map((position) => {
             const player = teamDetails.players.find(p => p.position_id === position.id);
             return (
@@ -132,23 +273,30 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 style={{ left: `${position.x}%`, top: `${position.y}%` }}
               >
                 {player ? (
-                  <div className="flex flex-col items-center">
-                    <div className="relative">
-                      <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
-                        {player.image ? (
-                          <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="text-white text-xs font-bold">{getPlayerName(player).substring(0, 2)}</div>
-                        )}
+                  <HoverCard openDelay={150} closeDelay={150}>
+                    <HoverCardTrigger asChild>
+                      <div className="flex flex-col items-center">
+                        <div className="relative">
+                          <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                            {player.image ? (
+                              <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="text-white text-xs font-bold">{getPlayerName(player).substring(0, 2)}</div>
+                            )}
+                          </div>
+                          <div className="absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded text-white font-bold" style={{ backgroundColor: getPositionStyle(position.position).backgroundColor }}>
+                            {position.position}
+                          </div>
+                        </div>
+                        <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
+                          {getPlayerName(player)}
+                        </div>
                       </div>
-                      <div className="absolute -top-1 -right-1 text-xs px-1 py-0.5 rounded text-white font-bold" style={{ backgroundColor: getPositionStyle(position.position).backgroundColor }}>
-                        {position.position}
-                      </div>
-                    </div>
-                    <div className="text-xs font-medium text-white bg-black/50 px-2 py-1 rounded mt-1 min-w-max">
-                      {getPlayerName(player)}
-                    </div>
-                  </div>
+                    </HoverCardTrigger>
+                    <HoverCardContent side="top" align="center" className="p-0 bg-transparent border-0 shadow-none">
+                      <PlayerHoverCard player={player} />
+                    </HoverCardContent>
+                  </HoverCard>
                 ) : (
                   <div className="flex flex-col items-center">
                     <div className="w-12 h-12 rounded-full border-2 border-dashed border-white/50 flex items-center justify-center">
@@ -174,7 +322,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Starting XI - Redesigned to a compact responsive grid */}
+        {/* Starting XI - compact grid */}
         <div>
           <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
@@ -220,7 +368,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
         {/* Bench Players - keep list style */}
         <div>
           <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <Award className="h-5 w-5" style={{ color: logoColors.primaryOrange }} />
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: logoColors.primaryOrange, color: logoColors.black }}>B</span>
             Bench ({bench.length}/5)
           </h3>
           <div className="space-y-3">
@@ -291,7 +439,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
           </div>
           <div className="flex items-center gap-3">
             <Button onClick={handlePrivacyToggle} className="text-white border hover:opacity-80" style={{ backgroundColor: team?.is_public ? logoColors.primaryBlueAlpha(0.4) : logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-              {team?.is_public ? (<><Users className="h-4 w-4 mr-2" />Make Private</>) : (<><Shield className="h-4 w-4 mr-2" />Make Public</>)}
+              {team?.is_public ? (<> <Users className="h-4 w-4 mr-2" />Make Private</>) : (<> <Shield className="h-4 w-4 mr-2" />Make Public</>)}
             </Button>
             <Button onClick={handleEditInBuilder} className="text-black hover:opacity-80 font-bold" style={{ background: logoColors.yellowOrangeGradient }}>
               <Edit className="h-4 w-4 mr-2" />
@@ -319,7 +467,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     Formation: {teamDetails?.formation || 'Unknown'}
                   </CardTitle>
                 </CardHeader>
-                {/* Taller box; field scales to 90% inside */}
+                {/* Taller box; field scales to 98% inside */}
                 <CardContent className="p-4 h-[480px] md:h-[560px] lg:h-[600px]">
                   {renderFormationField()}
                 </CardContent>
@@ -398,29 +546,23 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                       <div className="space-y-2">
                         {teamDetails.tactics.map((tactic, index) => (
                           <div key={index} className="p-2 rounded border" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                            <div className="font-medium text-sm">{tactic.name || 'Unknown Tactic'}</div>
-                            <div className="text-xs text-gray-300">{tactic.effect || tactic.description || 'No description'}</div>
+                            <div className="text-sm font-medium">{tactic.name}</div>
+                            {tactic.description && (
+                              <div className="text-xs text-gray-300 mt-1">{tactic.description}</div>
+                            )}
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-center py-4">
-                        <p className="text-gray-400 text-sm">No tactics selected</p>
-                      </div>
+                      <div className="text-center py-2 text-gray-400 text-sm">No tactics assigned</div>
                     )}
                   </CardContent>
                 </Card>
               </div>
             </div>
 
-            {/* Player Details */}
-            <div className="mt-6">
-              <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                <CardContent className="p-4">
-                  {renderPlayerDetails()}
-                </CardContent>
-              </Card>
-            </div>
+            {/* Players and Bench Details */}
+            <div className="mt-6">{renderPlayerDetails()}</div>
           </div>
         )}
       </div>
