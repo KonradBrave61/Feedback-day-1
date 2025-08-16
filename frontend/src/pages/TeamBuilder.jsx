@@ -1258,6 +1258,29 @@ const TeamBuilder = () => {
                     );
                   })}
                 </div>
+
+                {/* Managers pyramid under bench */}
+                <div className="mt-6">
+                  <div className="text-sm text-gray-200 mb-2">Managers (up to 3)</div>
+                  <div className="flex flex-col items-center">
+                    {/* Top */}
+                    <div className="flex justify-center mb-2">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
+                        <span className="text-[10px] text-gray-400">—</span>
+                      </div>
+                    </div>
+                    {/* Bottom */}
+                    <div className="flex gap-4">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
+                        <span className="text-[10px] text-gray-400">—</span>
+                      </div>
+                      <div className="w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
+                        <span className="text-[10px] text-gray-400">—</span>
+                      </div>
+                    </div>
+                    <Button size="sm" variant="outline" className="mt-3" onClick={() => setShowManagerModal(true)}>Select Managers</Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
