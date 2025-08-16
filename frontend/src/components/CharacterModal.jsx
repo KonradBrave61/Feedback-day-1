@@ -954,11 +954,7 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
     const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
     if (boxes.length === 0) return setLines(null);
 
-    // anchor points: right-center, top-center, bottom-center of number square
-    const anchorRight = {
-      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width,
-      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height / 2
-    };
+    // anchor points: top-center and bottom-center of the number square (50% along the walls)
     const anchorTop = {
       x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
       y: anchorRectAbs.top - rectWrap.top
@@ -969,32 +965,38 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
     };
 
     const segs = [];
-    const stub = 12; // short vertical stub length above/below the number square, like in the sketch
     boxes.forEach((b, idx) => {
       const r = b.getBoundingClientRect();
       const boxLeft = r.left - rectWrap.left;
-      const anchor = idx === 0 ? anchorTop : anchorBottom; // centers of top/bottom walls
-      const yKink = idx === 0 ? (anchor.y - stub) : (anchor.y + stub);
+      const boxMidY = r.top - rectWrap.top + r.height / 2; // exact middle of the technique box
+      const anchor = idx === 0 ? anchorTop : anchorBottom;
       const xCenter = anchor.x; // 50% of top/bottom wall
 
-      // Segment 1: short vertical from the number square wall center to yKink
-      segs.push({ x1: xCenter, y1: anchor.y, x2: xCenter, y2: yKink });
-      // Segment 2: horizontal from the kink straight into the technique box
-      segs.push({ x1: xCenter, y1: yKink, x2: boxLeft, y2: yKink });
+      // Segment 1: vertical from the number square wall center to the box middle Y
+      segs.push({ x1: xCenter, y1: anchor.y, x2: xCenter, y2: boxMidY });
+      // Segment 2: horizontal from that Y into the technique box
+      segs.push({ x1: xCenter, y1: boxMidY, x2: boxLeft, y2: boxMidY });
     });
     setLines(segs);
   };
 
   useLayoutEffect(() => {
-    rafRef.current = requestAnimationFrame(measure);
-    const ro = new ResizeObserver(() => {
+    const schedule = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(measure);
-    });
+    };
+    schedule();
+
+    const ro = new ResizeObserver(schedule);
     if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener('resize', measure);
+
+    // Rerun on scroll (modal/content scroll / zoom)
+    window.addEventListener('resize', schedule, true);
+    window.addEventListener('scroll', schedule, true);
+
     return () => {
-      window.removeEventListener('resize', measure);
+      window.removeEventListener('resize', schedule, true);
+      window.removeEventListener('scroll', schedule, true);
       ro.disconnect();
       cancelAnimationFrame(rafRef.current);
     };
@@ -1005,7 +1007,7 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
       {/* Connect like the sketch: pure two-segment elbow from number square into each technique box */}
       <svg className="pointer-events-none absolute left-0 top-0 w-full h-full" width="100%" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {lines && (
-          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <g stroke="rgba(255,255,255,0.5)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
             {lines.map((ln, i) => (
               <line key={i} x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
             ))}
