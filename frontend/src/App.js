@@ -15,6 +15,7 @@ import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 
 import CommunityHub from "./pages/CommunityHub";
+import ChatPage from "./pages/ChatPage";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
 import Notification from "./components/Notification";
