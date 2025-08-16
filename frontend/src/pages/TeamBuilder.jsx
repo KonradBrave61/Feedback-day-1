@@ -765,7 +765,8 @@ const TeamBuilder = () => {
         teamData.bench_players.forEach(playerData => {
           if (playerData.character_id && playerData.slot_id) {
             const slotIndex = playerData.slot_id.replace('bench_', '');
-            const base = mockCharacters.find(c => c.id === playerData.character_id);
+            const baseIndex = __baseCharactersIndex.current || {};
+            const base = baseIndex[playerData.character_id] || mockCharacters.find(c => c.id === playerData.character_id);
             const hissatsuRaw = playerData.user_hissatsu;
             const normalizedHissatsu = Array.isArray(hissatsuRaw)
               ? hissatsuRaw
