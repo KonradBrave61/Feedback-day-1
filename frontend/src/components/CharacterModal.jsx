@@ -1008,7 +1008,7 @@ const SlotConnector = ({ children }) => {
       ro.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [anchorRectAbs, children]);
+  }, [children]);
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative overflow-hidden">
