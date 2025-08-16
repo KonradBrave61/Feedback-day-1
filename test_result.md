@@ -804,15 +804,13 @@ LATEST ISSUES FIXED:
 
 ## test_plan:
   current_focus:
-    - "TEAM BUILDER REVIEW REQUEST FIXES TESTING COMPLETED ✅"
-    - "CharacterModal findIndex Error Fix - VERIFIED WORKING ✅"
-    - "Manage Presets Functionality - VERIFIED WORKING ✅"
-    - "4-4-2 Diamond Formation Display - VERIFIED WORKING ✅"
-    - "Player Position Selection - VERIFIED WORKING ✅"
-    - "Edit Buttons for Presets - VERIFIED WORKING ✅"
+    - "CHAT ENDPOINTS SMOKE TESTING COMPLETED ✅"
+    - "COMMENT PARENT_ID FUNCTIONALITY TESTING COMPLETED ✅"
+    - "All newly added chat functionality verified working ✅"
+    - "Updated comment system with threaded replies verified working ✅"
   stuck_tasks: []
   test_all: false
-  test_priority: "team_builder_fixes_verified"
+  test_priority: "chat_and_comments_verified"
 
 ## agent_communication:
   - agent: "main"
