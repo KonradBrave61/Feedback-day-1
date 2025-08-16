@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Users, Shield, Zap, Target, Edit } from 'lucide-react';
 import { Button } from './ui/button';
@@ -45,53 +45,53 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   };
 
   const getPlayerName = (player) => {
-    if (player.name && player.name !== 'Unknown' && player.name !== 'Unnamed Player' && player.name !== 'Player') {
+    if (player?.name && !['Unknown', 'Unnamed Player', 'Player'].includes(player.name)) {
       return player.name;
     }
-    if (player.character_id) {
+    if (player?.character_id) {
       const character = mockCharacters.find(char => char.id === player.character_id || char.id === parseInt(player.character_id));
       if (character) return character.name;
     }
-    if (player.id) {
+    if (player?.id) {
       const character = mockCharacters.find(char => char.id === player.id || char.id === parseInt(player.id));
       if (character) return character.name;
     }
-    const footballNames = ['Roberto Silva','Marco Gonzalez','David Rodriguez','Carlos Mendez','Antonio Lopez','Miguel Santos','Fernando Torres','Alberto Vega','Diego Morales','Ricardo Herrera','Gabriel Ruiz','Manuel Castro','Alejandro Ortiz','Francisco Jimenez','Juan Romero'];
-    const nameIndex = (parseInt(player.position_id || player.id || 1) + (player.position?.charCodeAt(0) || 65)) % footballNames.length;
-    return footballNames[nameIndex];
+    const fallback = ['Roberto Silva','Marco Gonzalez','David Rodriguez','Carlos Mendez','Antonio Lopez','Miguel Santos','Fernando Torres','Alberto Vega','Diego Morales','Ricardo Herrera','Gabriel Ruiz','Manuel Castro','Alejandro Ortiz','Francisco Jimenez','Juan Romero'];
+    const nameIndex = (parseInt(player?.position_id || player?.id || 1) + (player?.position?.charCodeAt(0) || 65)) % fallback.length;
+    return fallback[nameIndex];
   };
 
   const getPlayerPosition = (player) => {
-    if (player.position) return player.position;
-    if (player.character_id) {
+    if (player?.position) return player.position;
+    if (player?.character_id) {
       const character = mockCharacters.find(char => char.id === player.character_id || char.id === parseInt(player.character_id));
-      if (character && character.position) return character.position;
+      if (character?.position) return character.position;
     }
-    if (player.id) {
+    if (player?.id) {
       const character = mockCharacters.find(char => char.id === player.id || char.id === parseInt(player.id));
-      if (character && character.position) return character.position;
+      if (character?.position) return character.position;
     }
     return 'FW';
   };
 
   const getCharacterRef = (player) => {
-    const cid = player.character_id || player.id;
+    const cid = player?.character_id || player?.id;
     if (!cid) return null;
     const char = mockCharacters.find(c => c.id === cid || c.id === parseInt(cid));
     return char || null;
   };
 
   const getPlayerElement = (player) => {
-    if (player.element) return player.element;
+    if (player?.element) return player.element;
     const ref = getCharacterRef(player);
     return ref?.element || 'Neutral';
   };
 
-  const getPlayerLevel = (player) => player.user_level || player.userLevel || getCharacterRef(player)?.baseLevel || 1;
-  const getPlayerRarity = (player) => (player.user_rarity || player.userRarity || getCharacterRef(player)?.baseRarity || 'Common');
+  const getPlayerLevel = (player) => player?.user_level || player?.userLevel || getCharacterRef(player)?.baseLevel || 1;
+  const getPlayerRarity = (player) => (player?.user_rarity || player?.userRarity || getCharacterRef(player)?.baseRarity || 'Common');
 
   const getPlayerEquipment = (player) => {
-    const eq = player.user_equipment || player.userEquipment || {};
+    const eq = player?.user_equipment || player?.userEquipment || {};
     return {
       boots: eq.boots || null,
       bracelets: eq.bracelets || null,
@@ -100,7 +100,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     };
   };
 
-  const getPlayerTechniques = (player) => (player.user_hissatsu || player.userHissatsu || []);
+  const getPlayerTechniques = (player) => (player?.user_hissatsu || player?.userHissatsu || []);
 
   const handlePrivacyToggle = async () => {
     if (onPrivacyToggle) await onPrivacyToggle(team.id, !team.is_public);
@@ -155,7 +155,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
         ...charRef,
         baseLevel: charRef.baseLevel || 1,
         baseRarity: charRef.baseRarity || 'Common',
-        baseStats: charRef.baseStats, // calculateStats handles undefined safely
+        baseStats: charRef.baseStats,
       },
       equipment,
       level,
@@ -167,7 +167,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
         {/* Header */}
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.3) }}>
-            {player.image ? (
+            {player?.image ? (
               <img src={player.image} alt={getPlayerName(player)} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white text-sm font-bold">
@@ -278,7 +278,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                       <div className="flex flex-col items-center">
                         <div className="relative">
                           <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-800 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
-                            {player.image ? (
+                            {player?.image ? (
                               <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
                             ) : (
                               <div className="text-white text-xs font-bold">{getPlayerName(player).substring(0, 2)}</div>
@@ -312,114 +312,139 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     );
   };
 
+  // Build ordered Starting XI list based on formation positions
+  const orderedPlayers = useMemo(() => {
+    if (!teamDetails?.players) return [];
+    const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
+    const list = [];
+    formation.positions.forEach(pos => {
+      const player = teamDetails.players.find(p => p.position_id === pos.id);
+      if (player) list.push({ player, pos });
+    });
+    return list;
+  }, [teamDetails]);
+
+  const computeOverall = (stats) => {
+    if (!stats) return 0;
+    const vals = [stats.kick?.main, stats.control?.main, stats.technique?.main, stats.intelligence?.main, stats.pressure?.main, stats.agility?.main, stats.physical?.main].filter(v => typeof v === 'number');
+    if (!vals.length) return 0;
+    return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+  };
+
+  const MiniBars = ({ stats }) => {
+    const trio = [
+      { key: 'kick', label: 'Kick', color: logoColors.primaryYellow },
+      { key: 'technique', label: 'Tech', color: logoColors.primaryOrange },
+      { key: 'agility', label: 'Agi', color: logoColors.secondaryBlue },
+    ];
+    return (
+      <div className="flex gap-1 w-full">
+        {trio.map((t) => {
+          const v = stats?.[t.key]?.main || 0;
+          const pct = Math.max(5, Math.min(100, Math.round((v / 200) * 100)));
+          return (
+            <div key={t.key} className="flex-1 h-1.5 rounded bg-white/10 overflow-hidden">
+              <div className="h-full" style={{ width: `${pct}%`, backgroundColor: t.color }} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const PlayerRow = ({ entry }) => {
+    const p = entry.player;
+    const charRef = getCharacterRef(p) || {};
+    const level = getPlayerLevel(p);
+    const rarity = getPlayerRarity(p);
+    const element = getPlayerElement(p);
+    const equipment = getPlayerEquipment(p);
+    const stats = useMemo(() => calculateStats({ ...charRef }, equipment, level, rarity), [charRef, equipment, level, rarity]);
+    const overall = computeOverall(stats);
+
+    const techniques = getPlayerTechniques(p);
+
+    return (
+      <div className="p-2 rounded border flex items-center gap-3" style={{ backgroundColor: logoColors.blackAlpha(0.25), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
+        <div className="relative">
+          <div className="w-10 h-10 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.25) }}>
+            {p?.image ? (
+              <img src={p.image} alt={getPlayerName(p)} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">{getPlayerName(p).substring(0, 2)}</div>
+            )}
+          </div>
+          <Badge className="absolute -bottom-1 -right-1 text-[10px] px-1 py-0.5" style={{ backgroundColor: getPositionStyle(getPlayerPosition(p)).backgroundColor }}>
+            {getPlayerPosition(p)}
+          </Badge>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="text-white font-medium text-sm truncate">{getPlayerName(p)}</div>
+            <span className="text-[10px] px-1 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>{String(rarity).toUpperCase()}</span>
+            <span className="text-[10px] px-1 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>{element}</span>
+            <span className="text-[10px] px-1 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
+          </div>
+          <div className="mt-1 flex items-center gap-2">
+            <div className="text-xs text-white/90 font-semibold">OVR {overall}</div>
+            <MiniBars stats={stats} />
+          </div>
+          {Array.isArray(techniques) && techniques.length > 0 && (
+            <div className="mt-1 flex flex-wrap gap-1">
+              {techniques.slice(0, 3).map((t, i) => (
+                <span key={i} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
+                  {t?.name || `Tech ${i + 1}`}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderPlayerDetails = () => {
-    const players = teamDetails?.players || [];
-    let bench = [];
-    if (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players)) bench = teamDetails.bench_players;
-    else if (teamDetails?.bench && Array.isArray(teamDetails.bench)) bench = teamDetails.bench;
-    else if (teamDetails?.team_data?.bench_players && Array.isArray(teamDetails.team_data.bench_players)) bench = teamDetails.team_data.bench_players;
-    else if (teamDetails?.team_data?.bench && Array.isArray(teamDetails.team_data.bench)) bench = teamDetails.team_data.bench;
+    const bench = (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players))
+      ? teamDetails.bench_players
+      : (teamDetails?.bench && Array.isArray(teamDetails.bench))
+        ? teamDetails.bench
+        : (teamDetails?.team_data?.bench_players && Array.isArray(teamDetails.team_data.bench_players))
+          ? teamDetails.team_data.bench_players
+          : (teamDetails?.team_data?.bench && Array.isArray(teamDetails.team_data.bench))
+            ? teamDetails.team_data.bench
+            : [];
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Starting XI - compact grid */}
+        {/* Starting XI - simple list for clarity */}
         <div>
-          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
             <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
             Starting XI
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-            {players.map((player, index) => (
-              <div key={index} className="p-3 rounded border backdrop-blur-lg"
-                   style={{ backgroundColor: logoColors.blackAlpha(0.35), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div className="w-12 h-12 rounded-full bg-gray-700 border-2 border-white overflow-hidden">
-                      {player.image ? (
-                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-sm font-bold">
-                          {getPlayerName(player).substring(0, 2)}
-                        </div>
-                      )}
-                    </div>
-                    <Badge className="absolute -bottom-1 -right-1 text-[10px] px-1 py-0.5"
-                           style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
-                      {getPlayerPosition(player)}
-                    </Badge>
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-white font-semibold text-sm truncate">{getPlayerName(player)}</div>
-                    <div className="text-xs text-gray-300 flex items-center gap-2">
-                      <span>Lv {player.user_level || player.userLevel || 1}</span>
-                      {(player.user_rarity || player.userRarity) && (
-                        <span className="px-1.5 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
-                          {(player.user_rarity || player.userRarity).toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="space-y-2">
+            {orderedPlayers.map((entry, idx) => (
+              <PlayerRow key={idx} entry={entry} />
             ))}
+            {orderedPlayers.length === 0 && (
+              <div className="text-sm text-gray-400">No players assigned to this formation.</div>
+            )}
           </div>
         </div>
 
-        {/* Bench Players - keep list style */}
+        {/* Bench - simple list */}
         <div>
-          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: logoColors.primaryOrange, color: logoColors.black }}>B</span>
-            Bench ({bench.length}/5)
+            Bench
           </h3>
-          <div className="space-y-3">
-            {bench.map((player, index) => (
-              <Card key={index} className="backdrop-blur-lg border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.1) }}>
-                <CardContent className="p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
-                      {player.image ? (
-                        <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
-                          {getPlayerName(player).substring(0, 2)}
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h5 className="text-white font-medium text-sm truncate">{getPlayerName(player)}</h5>
-                      <div className="text-xs text-gray-400">
-                        {getPlayerPosition(player)} • Level {player.user_level || player.userLevel || 1}
-                      </div>
-                      {((player.user_hissatsu && player.user_hissatsu.length > 0) || (player.userHissatsu && player.userHissatsu.length > 0)) && (
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
-                            <span key={techIndex} className="text-xs px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
-                              {technique.name || `Tech${techIndex + 1}`}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <Badge style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
-                      {getPlayerPosition(player)}
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="space-y-2">
+            {bench.map((p, i) => (
+              <PlayerRow key={i} entry={{ player: p, pos: { id: p.position_id, position: getPlayerPosition(p) } }} />
             ))}
-
-            {Array.from({ length: Math.max(0, 5 - bench.length) }, (_, index) => (
-              <Card key={`empty-${index}`} className="backdrop-blur-lg border border-dashed" style={{ backgroundColor: logoColors.blackAlpha(0.1), borderColor: logoColors.primaryBlueAlpha(0.1) }}>
-                <CardContent className="p-3">
-                  <div className="flex items-center gap-3 opacity-50">
-                    <div className="w-12 h-12 rounded-full border-2 border-dashed border-gray-500 flex items-center justify-center">
-                      <span className="text-gray-500 text-xs">Empty</span>
-                    </div>
-                    <span className="text-gray-500 text-sm">Bench Slot {bench.length + index + 1}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {bench.length === 0 && (
+              <div className="text-sm text-gray-400">No bench players.</div>
+            )}
           </div>
         </div>
       </div>
@@ -473,8 +498,9 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 </CardContent>
               </Card>
 
-              {/* Team Info & Stats */}
+              {/* Team Info & Players */}
               <div className="space-y-4">
+                {/* Team Info */}
                 <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
                   <CardContent className="p-4">
                     <div className="grid grid-cols-2 gap-4 text-center">
@@ -495,74 +521,10 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   </CardContent>
                 </Card>
 
-                {/* Coach Info */}
-                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-sm">
-                      <Users className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
-                      Coach
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    {teamDetails?.coach ? (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
-                            {teamDetails.coach.name?.substring(0, 2) || 'CO'}
-                          </div>
-                          <div>
-                            <div className="font-medium text-sm">{teamDetails.coach.name || 'Unknown Coach'}</div>
-                            <div className="text-xs text-gray-400">{teamDetails.coach.title || 'Coach'}</div>
-                          </div>
-                        </div>
-                        {teamDetails.coach.specialties && (
-                          <div className="flex flex-wrap gap-1">
-                            {teamDetails.coach.specialties.map((specialty, index) => (
-                              <span key={index} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
-                                {specialty}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-center py-4">
-                        <p className="text-gray-400 text-sm">No coach assigned</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Tactics */}
-                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-sm">
-                      <Zap className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
-                      Tactics
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    {teamDetails?.tactics && teamDetails.tactics.length > 0 ? (
-                      <div className="space-y-2">
-                        {teamDetails.tactics.map((tactic, index) => (
-                          <div key={index} className="p-2 rounded border" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                            <div className="text-sm font-medium">{tactic.name}</div>
-                            {tactic.description && (
-                              <div className="text-xs text-gray-300 mt-1">{tactic.description}</div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-2 text-gray-400 text-sm">No tactics assigned</div>
-                    )}
-                  </CardContent>
-                </Card>
+                {/* Players Lists */}
+                {renderPlayerDetails()}
               </div>
             </div>
-
-            {/* Players and Bench Details */}
-            <div className="mt-6">{renderPlayerDetails()}</div>
           </div>
         )}
       </div>
