@@ -1001,10 +1001,10 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
-      {/* Connect like the sketch: technique boxes to the top and bottom of the number square */}
+      {/* Connect like the sketch: pure two-segment elbow from number square into each technique box */}
       <svg className="pointer-events-none absolute left-0 top-0 w-full h-full" width="100%" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {lines && (
-          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round">
+          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
             {lines.map((ln, i) => (
               <line key={i} x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
             ))}
