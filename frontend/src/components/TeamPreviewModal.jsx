@@ -339,8 +339,6 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     const rarity = getPlayerRarity(p);
     const element = getPlayerElement(p);
     const equipment = getPlayerEquipment(p);
-    const stats = useMemo(() => calculateStats({ ...charRef }, equipment, level, rarity), [charRef, equipment, level, rarity]);
-    const overall = computeOverall(stats);
 
     const techniques = getPlayerTechniques(p);
 
