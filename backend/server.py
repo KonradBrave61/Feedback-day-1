@@ -51,6 +51,7 @@ try:
     app.include_router(constellations.router, prefix="/api", tags=["constellations"])
     app.include_router(techniques.router, prefix="/api", tags=["techniques"])
     app.include_router(utils.router, prefix="/api", tags=["utils"])
+    app.include_router(chat.router, prefix="/api", tags=["chat"])
 except Exception as e:
     print(f"Error importing routes: {e}")
 
