@@ -122,18 +122,19 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return positionColors[position] || { backgroundColor: logoColors.lightGray, color: logoColors.black };
   };
 
-  const StatBar = ({ label, value, color }) => {
+  const StatBar = ({ label, value, base, bonus, color }) => {
     const v = Number(value) || 0;
     const pct = Math.max(5, Math.min(100, Math.round((v / 200) * 100)));
     return (
-      <div className="space-y-1">
-        <div className="flex items-center justify-between text-[11px]">
-          <span className="text-gray-300">{label}</span>
+      <div className="space-y-0.5">
+        <div className="flex items-center justify-between text-[12px]">
+          <span className="text-gray-200">{label}</span>
           <span className="font-semibold text-white">{v}</span>
         </div>
-        <div className="h-1.5 rounded bg-white/10 overflow-hidden">
+        <div className="h-2 rounded bg-white/10 overflow-hidden">
           <div className="h-full" style={{ width: `${pct}%`, backgroundColor: color }} />
         </div>
+        <div className="text-[11px] text-gray-300">{base ?? '-'} base{typeof bonus === 'number' && bonus !== 0 ? ` + ${bonus} eq` : ''}</div>
       </div>
     );
   };
@@ -144,7 +145,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
       ? Object.values(item.stats).reduce((a, b) => a + (Number(b) || 0), 0)
       : 0;
     return (
-      <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2), color: logoColors.white }}>
+      <span className="text-[11px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.blackAlpha(0.4), borderColor: logoColors.primaryBlueAlpha(0.3), color: logoColors.white }}>
         {item.name || 'Item'}{totalBonus ? ` (+${totalBonus})` : ''}
       </span>
     );
@@ -167,10 +168,10 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     );
 
     return (
-      <div className="w-[360px] rounded-md border p-3" style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.4) }}>
+      <div className="w-[420px] rounded-md border p-4" style={{ backgroundColor: logoColors.blackAlpha(0.98), borderColor: logoColors.primaryBlueAlpha(0.5) }}>
         {/* Header */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.3) }}>
+          <div className="w-14 h-14 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.35) }}>
             {player?.image ? (
               <img src={player.image} alt={getPlayerName(player)} className="w-full h-full object-cover" />
             ) : (
@@ -180,37 +181,37 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             )}
           </div>
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-white truncate">{getPlayerName(player)}</div>
-            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-              <Badge className="text-[10px] px-1.5 py-0.5" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+            <div className="text-[14px] font-semibold text-white truncate">{getPlayerName(player)}</div>
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
+              <Badge className="text-[11px] px-1.5 py-0.5" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
                 {getPlayerPosition(player)}
               </Badge>
-              <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
+              <span className="text-[11px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
                 {String(rarity).toUpperCase()}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>
+              <span className="text-[11px] px-1.5 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>
                 {element}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
+              <span className="text-[11px] px-1.5 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
             </div>
           </div>
         </div>
 
-        {/* Stats - 7 bars */}
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <StatBar label="Kick" value={stats.kick?.main} color={logoColors.primaryYellow} />
-          <StatBar label="Control" value={stats.control?.main} color={logoColors.secondaryBlue} />
-          <StatBar label="Technique" value={stats.technique?.main} color={logoColors.primaryOrange} />
-          <StatBar label="Intelligence" value={stats.intelligence?.main} color={logoColors.lightBlue} />
-          <StatBar label="Pressure" value={stats.pressure?.main} color={logoColors.darkBlue} />
-          <StatBar label="Agility" value={stats.agility?.main} color={logoColors.secondaryBlue} />
-          <StatBar label="Physical" value={stats.physical?.main} color={logoColors.gray} />
+        {/* Stats - 7 bars with breakdown */}
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <StatBar label="Kick" value={stats.kick?.main} base={stats.kick?.base} bonus={stats.kick?.equipmentBonus} color={logoColors.primaryYellow} />
+          <StatBar label="Control" value={stats.control?.main} base={stats.control?.base} bonus={stats.control?.equipmentBonus} color={logoColors.secondaryBlue} />
+          <StatBar label="Technique" value={stats.technique?.main} base={stats.technique?.base} bonus={stats.technique?.equipmentBonus} color={logoColors.primaryOrange} />
+          <StatBar label="Intelligence" value={stats.intelligence?.main} base={stats.intelligence?.base} bonus={stats.intelligence?.equipmentBonus} color={logoColors.lightBlue} />
+          <StatBar label="Pressure" value={stats.pressure?.main} base={stats.pressure?.base} bonus={stats.pressure?.equipmentBonus} color={logoColors.darkBlue} />
+          <StatBar label="Agility" value={stats.agility?.main} base={stats.agility?.base} bonus={stats.agility?.equipmentBonus} color={logoColors.secondaryBlue} />
+          <StatBar label="Physical" value={stats.physical?.main} base={stats.physical?.base} bonus={stats.physical?.equipmentBonus} color={logoColors.gray} />
         </div>
 
         {/* Equipment */}
         {(equipment.boots || equipment.bracelets || equipment.pendants || equipment.special) && (
           <div className="mt-3">
-            <div className="text-[11px] text-gray-300 mb-1">Equipment</div>
+            <div className="text-[12px] text-gray-200 mb-1">Equipment</div>
             <div className="flex flex-wrap gap-1.5">
               <EquipmentChip item={equipment.boots} />
               <EquipmentChip item={equipment.bracelets} />
@@ -223,10 +224,10 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
         {/* Techniques */}
         {Array.isArray(techniques) && techniques.length > 0 && (
           <div className="mt-3">
-            <div className="text-[11px] text-gray-300 mb-1">Techniques</div>
+            <div className="text-[12px] text-gray-200 mb-1">Techniques</div>
             <div className="flex flex-wrap gap-1.5">
               {techniques.map((tech, idx) => (
-                <span key={idx} className="text-[10px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), borderColor: logoColors.primaryYellowAlpha(0.3), color: logoColors.primaryYellow }}>
+                <span key={idx} className="text-[11px] px-1.5 py-0.5 rounded border" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), borderColor: logoColors.primaryYellowAlpha(0.3), color: logoColors.primaryYellow }}>
                   {tech?.name || `Tech ${idx + 1}`}
                 </span>
               ))}
@@ -270,6 +271,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
           {/* Players with hover info (portal to avoid clipping) */}
           {formation.positions.map((position) => {
             const player = teamDetails.players.find(p => p.position_id === position.id);
+            const side = position.x > 60 ? 'left' : 'right';
             return (
               <div
                 key={position.id}
@@ -277,7 +279,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 style={{ left: `${position.x}%`, top: `${position.y}%` }}
               >
                 {player ? (
-                  <HoverCard openDelay={120} closeDelay={120}>
+                  <HoverCard openDelay={100} closeDelay={180}>
                     <HoverCardTrigger asChild>
                       <div className="flex flex-col items-center">
                         <div className="relative">
@@ -297,7 +299,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                         </div>
                       </div>
                     </HoverCardTrigger>
-                    <HoverCardContent side="right" align="center" className="p-0 bg-transparent border-0 shadow-none w-auto">
+                    <HoverCardContent side={side} align="center" sideOffset={12} className="p-0 bg-transparent border-0 shadow-none w-auto">
                       <PlayerHoverCard player={player} />
                     </HoverCardContent>
                   </HoverCard>
@@ -503,7 +505,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 </CardContent>
               </Card>
 
-              {/* Team Info & Coach & Tactics */}
+              {/* Team Info, Coach, Tactics */}
               <div className="space-y-4">
                 {/* Team Info */}
                 <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
