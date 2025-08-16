@@ -677,6 +677,11 @@ const TeamBuilder = () => {
 
   const handleLoadTeam = async (incoming) => {
     try {
+      // Clear existing state to prevent stale items/techniques from previous team
+      setTeamPlayers({});
+      setBenchPlayers({});
+      setSelectedTactics([]);
+      setSelectedCoach(null);
       // Unwrap common backend shapes
       const teamData = incoming?.team?.team || incoming?.team || incoming?.team_data || incoming;
       console.log('Loading team data (normalized):', teamData);
