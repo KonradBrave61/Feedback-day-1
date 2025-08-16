@@ -48,6 +48,7 @@ const TeamBuilder = () => {
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
   const [selectedTactics, setSelectedTactics] = useState([]);
   const [selectedCoach, setSelectedCoach] = useState(null);
+  const [selectedManagers, setSelectedManagers] = useState([]);
   
   // Preset management
   const [tacticPresets, setTacticPresets] = useState({
