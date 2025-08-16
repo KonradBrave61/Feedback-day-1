@@ -41,7 +41,7 @@ import LoadTeamModal from '../components/LoadTeamModal';
 import { useAuth } from '../contexts/AuthContext';
 
 const TeamBuilder = () => {
-  const { user, saveTeam, loadTeamDetails, updateTeam } = useAuth();
+  const { user, saveTeam, loadTeamDetails, updateTeam, loadCharacters } = useAuth();
   
   // Formation and tactical setup
   const [selectedFormation, setSelectedFormation] = useState(mockFormations[0]);
