@@ -977,15 +977,28 @@ const SlotConnector = ({ children }) => {
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
-      <svg className="pointer-events-none absolute left-[-12px] top-0 h-full" width="12" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+      {/* Custom connector drawing: top elbow to first box, bottom elbow to second box */}
+      <svg className="pointer-events-none absolute left-[-24px] top-0 h-full" width="36" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {arms && (
           <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none">
-            {/* Vertical spine at x=10 from first box mid to last box mid */}
-            <line x1="10" y1={arms.y1} x2="10" y2={arms.y2} />
-            {/* Horizontal arms into each box midpoint */}
-            {arms.mids.map((t, idx) => (
-              <line key={idx} x1="10" y1={t.y} x2="12" y2={t.y} />
-            ))}
+            {/* Top elbow (slightly above the midpoint of the first box) */}
+            {arms.mids[0] && (
+              <>
+                {/* short up segment off the top wall */}
+                <line x1="18" y1={arms.mids[0].y - 10} x2="18" y2={arms.mids[0].y - 2} />
+                {/* 90-degree turn into the first technique box */}
+                <line x1="18" y1={arms.mids[0].y - 2} x2="36" y2={arms.mids[0].y - 2} />
+              </>
+            )}
+            {/* Bottom elbow (slightly below the midpoint of the second box) – mirror of the top */}
+            {arms.mids[1] && (
+              <>
+                {/* short down segment off the bottom wall */}
+                <line x1="18" y1={arms.mids[1].y + 10} x2="18" y2={arms.mids[1].y + 2} />
+                {/* 90-degree turn into the second technique box */}
+                <line x1="18" y1={arms.mids[1].y + 2} x2="36" y2={arms.mids[1].y + 2} />
+              </>
+            )}
           </g>
         )}
       </svg>
