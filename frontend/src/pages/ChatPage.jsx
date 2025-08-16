@@ -38,7 +38,9 @@ const ChatPage = () => {
   const partnerFromConvo = (c) => c?.partner || {};
 
   const openConversation = async (c) => {
+    if (!c) return;
     setActiveConvo(c);
+    setDraft('');
     const res = await getMessages(c.id);
     if (res?.success) setMessages(res.messages || []);
     if (pollRef.current) clearInterval(pollRef.current);
