@@ -214,15 +214,21 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   const handleHissatsuSelect = (hissatsu) => {
     const currentPreset = `preset${activePreset}`;
     const slotIndex = selectedCategory;
-    
+
     setSelectedHissatsu(prev => {
       const newPresets = { ...prev };
-      const currentTechniques = [...newPresets[currentPreset]];
+      const currentTechniques = Array.isArray(newPresets[currentPreset]) ? [...newPresets[currentPreset]] : [null, null, null, null, null, null];
+      // Prevent duplicates within the same preset
+      const existsIdx = currentTechniques.findIndex(t => t && hissatsu && t.id === hissatsu.id);
+      if (existsIdx !== -1 && existsIdx !== slotIndex) {
+        // Swap to the clicked slot to allow moving a technique
+        currentTechniques[existsIdx] = currentTechniques[slotIndex] || null;
+      }
       currentTechniques[slotIndex] = hissatsu;
       newPresets[currentPreset] = currentTechniques;
       return newPresets;
     });
-    
+
     setShowHissatsuList(false);
     setSelectedCategory(null);
   };
