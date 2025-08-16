@@ -106,7 +106,7 @@ const Navigation = () => {
                           variant="ghost"
                           className="w-full justify-start text-white hover:bg-blue-700/30"
                           onClick={() => {
-                            navigate('/dashboard');
+                            navigate('/chat');
                             setShowProfileMenu(false);
                           }}
                         >
