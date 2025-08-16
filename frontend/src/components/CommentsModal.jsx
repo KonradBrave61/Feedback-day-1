@@ -11,6 +11,8 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
   const [comments, setComments] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [replyTo, setReplyTo] = useState(null);
+
 
   const teamTitle = useMemo(() => team?.name || team?.team_name || 'Team', [team]);
 
