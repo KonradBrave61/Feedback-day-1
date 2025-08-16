@@ -26,7 +26,9 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
         if (!Array.isArray(list)) {
           list = Object.values(list);
         }
-        setComments(Array.isArray(list) ? list : []);
+        // Sort by created_at asc and keep as flat list; we'll render threaded by parent_id
+        const normalized = (Array.isArray(list) ? list : []).sort((a,b)=> new Date(a.created_at)-new Date(b.created_at));
+        setComments(normalized);
       } catch (e) {
         setComments([]);
       } finally {
