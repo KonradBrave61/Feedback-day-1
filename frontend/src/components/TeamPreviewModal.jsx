@@ -122,12 +122,21 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return positionColors[position] || { backgroundColor: logoColors.lightGray, color: logoColors.black };
   };
 
-  const StatRow = ({ label, value }) => (
-    <div className="flex items-center justify-between text-xs">
-      <span className="text-gray-300">{label}</span>
-      <span className="font-semibold text-white">{value}</span>
-    </div>
-  );
+  const StatBar = ({ label, value, color }) => {
+    const v = Number(value) || 0;
+    const pct = Math.max(5, Math.min(100, Math.round((v / 200) * 100)));
+    return (
+      <div className="space-y-1">
+        <div className="flex items-center justify-between text-[11px]">
+          <span className="text-gray-300">{label}</span>
+          <span className="font-semibold text-white">{v}</span>
+        </div>
+        <div className="h-1.5 rounded bg-white/10 overflow-hidden">
+          <div className="h-full" style={{ width: `${pct}%`, backgroundColor: color }} />
+        </div>
+      </div>
+    );
+  };
 
   const EquipmentChip = ({ item }) => {
     if (!item) return null;
@@ -151,19 +160,14 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     const techniques = getPlayerTechniques(player);
 
     const stats = calculateStats(
-      {
-        ...charRef,
-        baseLevel: charRef.baseLevel || 1,
-        baseRarity: charRef.baseRarity || 'Common',
-        baseStats: charRef.baseStats,
-      },
+      { ...charRef },
       equipment,
       level,
       rarity
     );
 
     return (
-      <div className="w-80 rounded-md border p-3" style={{ backgroundColor: logoColors.blackAlpha(0.85), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+      <div className="w-[360px] rounded-md border p-3" style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.4) }}>
         {/* Header */}
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.3) }}>
@@ -192,15 +196,15 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
           </div>
         </div>
 
-        {/* Stats */}
+        {/* Stats - 7 bars */}
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <StatRow label="Kick ⚽" value={stats.kick?.main ?? '-'} />
-          <StatRow label="Control 🎯" value={stats.control?.main ?? '-'} />
-          <StatRow label="Technique ⭐" value={stats.technique?.main ?? '-'} />
-          <StatRow label="Intelligence 🧠" value={stats.intelligence?.main ?? '-'} />
-          <StatRow label="Pressure 🛡️" value={stats.pressure?.main ?? '-'} />
-          <StatRow label="Agility ⚡" value={stats.agility?.main ?? '-'} />
-          <StatRow label="Physical 💪" value={stats.physical?.main ?? '-'} />
+          <StatBar label="Kick" value={stats.kick?.main} color={logoColors.primaryYellow} />
+          <StatBar label="Control" value={stats.control?.main} color={logoColors.secondaryBlue} />
+          <StatBar label="Technique" value={stats.technique?.main} color={logoColors.primaryOrange} />
+          <StatBar label="Intelligence" value={stats.intelligence?.main} color={logoColors.lightBlue} />
+          <StatBar label="Pressure" value={stats.pressure?.main} color={logoColors.darkBlue} />
+          <StatBar label="Agility" value={stats.agility?.main} color={logoColors.secondaryBlue} />
+          <StatBar label="Physical" value={stats.physical?.main} color={logoColors.gray} />
         </div>
 
         {/* Equipment */}
@@ -239,7 +243,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
     return (
       <div className="w-full h-full flex items-center justify-center">
-        {/* Fit field to 98% of the box as requested */}
+        {/* Fit field to 98% of the box */}
         <div
           className="relative w-[98%] h-[98%] rounded-lg overflow-hidden"
           style={{
@@ -263,7 +267,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <div className="absolute bottom-0 right-0 w-4 h-4 border-t-2 border-l-2 border-white/40 rounded-tl-lg"></div>
           </div>
 
-          {/* Players with hover info (only on pitch) */}
+          {/* Players with hover info (portal to avoid clipping) */}
           {formation.positions.map((position) => {
             const player = teamDetails.players.find(p => p.position_id === position.id);
             return (
@@ -273,7 +277,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 style={{ left: `${position.x}%`, top: `${position.y}%` }}
               >
                 {player ? (
-                  <HoverCard openDelay={150} closeDelay={150}>
+                  <HoverCard openDelay={120} closeDelay={120}>
                     <HoverCardTrigger asChild>
                       <div className="flex flex-col items-center">
                         <div className="relative">
@@ -293,7 +297,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                         </div>
                       </div>
                     </HoverCardTrigger>
-                    <HoverCardContent side="top" align="center" className="p-0 bg-transparent border-0 shadow-none">
+                    <HoverCardContent side="right" align="center" className="p-0 bg-transparent border-0 shadow-none w-auto">
                       <PlayerHoverCard player={player} />
                     </HoverCardContent>
                   </HoverCard>
@@ -404,6 +408,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
   };
 
   const renderPlayerDetails = () => {
+    const players = orderedPlayers;
     const bench = (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players))
       ? teamDetails.bench_players
       : (teamDetails?.bench && Array.isArray(teamDetails.bench))
@@ -416,23 +421,23 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Starting XI - simple list for clarity */}
+        {/* Starting XI - list */}
         <div>
           <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
             <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
             Starting XI
           </h3>
           <div className="space-y-2">
-            {orderedPlayers.map((entry, idx) => (
+            {players.map((entry, idx) => (
               <PlayerRow key={idx} entry={entry} />
             ))}
-            {orderedPlayers.length === 0 && (
+            {players.length === 0 && (
               <div className="text-sm text-gray-400">No players assigned to this formation.</div>
             )}
           </div>
         </div>
 
-        {/* Bench - simple list */}
+        {/* Bench - list */}
         <div>
           <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: logoColors.primaryOrange, color: logoColors.black }}>B</span>
@@ -498,7 +503,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 </CardContent>
               </Card>
 
-              {/* Team Info & Players */}
+              {/* Team Info & Coach & Tactics */}
               <div className="space-y-4">
                 {/* Team Info */}
                 <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
@@ -521,10 +526,74 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                   </CardContent>
                 </Card>
 
-                {/* Players Lists */}
-                {renderPlayerDetails()}
+                {/* Coach Info */}
+                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Users className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                      Coach
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    {teamDetails?.coach ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
+                            {teamDetails.coach.name?.substring(0, 2) || 'CO'}
+                          </div>
+                          <div>
+                            <div className="font-medium text-sm">{teamDetails.coach.name || 'Unknown Coach'}</div>
+                            <div className="text-xs text-gray-400">{teamDetails.coach.title || 'Coach'}</div>
+                          </div>
+                        </div>
+                        {teamDetails.coach.specialties && (
+                          <div className="flex flex-wrap gap-1">
+                            {teamDetails.coach.specialties.map((specialty, index) => (
+                              <span key={index} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
+                                {specialty}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-2">
+                        <p className="text-gray-400 text-sm">No coach assigned</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Tactics */}
+                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Zap className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                      Tactics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    {teamDetails?.tactics && teamDetails.tactics.length > 0 ? (
+                      <div className="space-y-2">
+                        {teamDetails.tactics.map((tactic, index) => (
+                          <div key={index} className="p-2 rounded border" style={{ backgroundColor: logoColors.primaryBlueAlpha(0.1), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                            <div className="text-sm font-medium">{tactic.name}</div>
+                            {tactic.description && (
+                              <div className="text-xs text-gray-300 mt-1">{tactic.description}</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-2 text-gray-400 text-sm">No tactics assigned</div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
             </div>
+
+            {/* Players and Bench Details */}
+            <div className="mt-6">{renderPlayerDetails()}</div>
           </div>
         )}
       </div>
