@@ -752,7 +752,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                           </div>
                         </div>
                         {/* Right: two stacked technique boxes (A then B) */}
-                        <div className="flex-1 space-y-3">
+                        <div className="flex-1 space-y-3 relative">
+                          {/* Connector line from the slot number to the mid of first box */}
+                          <div className="absolute left-[-10px] top-6 w-[10px] h-[2px]" style={{ backgroundColor: 'rgba(255,255,255,0.25)' }} />
+                          <div className="absolute left-[-10px] top-6 w-[2px] h-[28px]" style={{ backgroundColor: 'rgba(255,255,255,0.25)' }} />
                           {renderSlot(slotBase, techniqueA)}
                           {renderSlot(slotBase + 1, techniqueB)}
                         </div>
