@@ -556,6 +556,28 @@ LATEST ISSUES FIXED:
         comment: "PLACEHOLDER ENDPOINT SMOKE TEST COMPLETED: Conducted focused testing of the new placeholder image endpoint as requested in review. RESULTS: 100% SUCCESS RATE (4/4 tests passed) ✅ GET /api/placeholder/150/150 - SUCCESS: Returns 200 status with proper image/png content-type. Generated 950 bytes PNG image correctly. ✅ GET /api/status - SUCCESS: Core status endpoint still working correctly after placeholder addition. ✅ GET /api/characters - SUCCESS: Characters endpoint still working correctly, no regression detected. ✅ GET /api/equipment - SUCCESS: Equipment endpoint still working correctly, no regression detected. CONCLUSION: The new placeholder image endpoint at /api/placeholder/{width}/{height} is working perfectly and returns proper PNG images. All existing core endpoints remain functional with no regressions detected. The placeholder endpoint addition is ready for production use."
 
 ## frontend:
+  - task: "Fix sticky reply state in CommentsModal and reset on team switch/close"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/CommentsModal.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Reset replyTo and input when modal opens with a different team and when it closes; also clear replyTo after a successful reply so the selection does not persist across teams."
+  - task: "Chat UX fixes: auto-open first conversation, draft reset on convo switch, startConversation param fix"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/ChatPage.jsx, /app/frontend/src/contexts/AuthContext.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Auto-open the first conversation after loading so chat is visible immediately; reset message draft when switching active conversation; fixed startConversation to send partner_id as query param matching backend signature so sending messages is reliable."
   - task: "CharacterModal findIndex Error Fix"
     implemented: true
     working: true
