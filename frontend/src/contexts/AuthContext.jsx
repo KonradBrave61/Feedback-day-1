@@ -680,6 +680,23 @@ export const AuthProvider = ({ children }) => {
     loadPublicTeamDetails,
     saveTeamToSlot,
     saveTeamToSlot,
+    // Characters API
+    loadCharacters: async (filters = {}) => {
+      try {
+        const params = new URLSearchParams();
+        if (filters.position) params.append('position', filters.position);
+        if (filters.element) params.append('element', filters.element);
+        if (filters.search) params.append('search', filters.search);
+        if (filters.limit) params.append('limit', String(filters.limit));
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/characters?${params.toString()}`);
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return { success: true, characters: data };
+      } catch (e) {
+        console.error('Load characters error', e);
+        return { success: false };
+      }
+    },
     // Chat APIs
     startConversation: async (partnerId) => {
       try {
