@@ -80,7 +80,10 @@ async def start_conversation(
         "unread_counts": {current_user.id: 0, partner_id: 0},
     }
     await db.chats.insert_one(convo_doc)
-
+    
+    # Remove MongoDB _id field for JSON serialization
+    convo_doc.pop('_id', None)
+    
     return {"success": True, "conversation": convo_doc}
 
 @router.get("/chat/conversations")
