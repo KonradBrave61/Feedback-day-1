@@ -556,6 +556,17 @@ LATEST ISSUES FIXED:
         comment: "PLACEHOLDER ENDPOINT SMOKE TEST COMPLETED: Conducted focused testing of the new placeholder image endpoint as requested in review. RESULTS: 100% SUCCESS RATE (4/4 tests passed) ✅ GET /api/placeholder/150/150 - SUCCESS: Returns 200 status with proper image/png content-type. Generated 950 bytes PNG image correctly. ✅ GET /api/status - SUCCESS: Core status endpoint still working correctly after placeholder addition. ✅ GET /api/characters - SUCCESS: Characters endpoint still working correctly, no regression detected. ✅ GET /api/equipment - SUCCESS: Equipment endpoint still working correctly, no regression detected. CONCLUSION: The new placeholder image endpoint at /api/placeholder/{width}/{height} is working perfectly and returns proper PNG images. All existing core endpoints remain functional with no regressions detected. The placeholder endpoint addition is ready for production use."
 
 ## frontend:
+  - task: "Fix stale items/techniques when loading other user's team"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/TeamBuilder.jsx, /app/frontend/src/contexts/AuthContext.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Clear team state before applying a newly loaded team; added base character cache preloading via /api/characters and used it when merging. Prevents previous team's equipment/techniques persisting when loading teams from other users."
   - task: "Fix sticky reply state in CommentsModal and reset on team switch/close"
     implemented: true
     working: true
