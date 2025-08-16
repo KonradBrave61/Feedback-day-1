@@ -6,7 +6,7 @@ import { Card } from './ui/card';
 import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
-import { Download, Globe, Save, Search, Users, X } from 'lucide-react';
+import { Download, Globe, Search, Users, X } from 'lucide-react';
 import { UnorderedList, ListItem } from './ui/list';
 
 const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
