@@ -352,9 +352,9 @@ class BackendTester:
         
         try:
             headers = {"Authorization": f"Bearer {self.user_a_token}"}
-            data = {"user_id": self.user_b_id}
+            params = {"user_id": self.user_b_id}
             
-            response = self.session.post(f"{API_BASE}/chat/unblock", json=data, headers=headers)
+            response = self.session.post(f"{API_BASE}/chat/unblock", params=params, headers=headers)
             
             if response.status_code == 200:
                 result = response.json()
