@@ -19,6 +19,7 @@ import ChatPage from "./pages/ChatPage";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
 import Notification from "./components/Notification";
+import ChatBubble from "./components/ChatBubble";
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
+            {/* Global overlays */}
+            <ChatBubble />
             <Notification />
             <Toaster />
           </BrowserRouter>
