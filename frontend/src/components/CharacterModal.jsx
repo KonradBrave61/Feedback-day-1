@@ -658,62 +658,60 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               </div>
               
               <div className="space-y-3">
-                {[0, 1, 2].map(slotIndex => {
+                {[0, 2, 4].map(slotBase => {
                   const currentPreset = `preset${activePreset}`;
-                  const technique = (selectedHissatsu?.[currentPreset] || [null, null, null])[slotIndex];
-                  
-                  return (
+                  const techniqueA = (selectedHissatsu?.[currentPreset] || [])[slotBase] || null;
+                  const techniqueB = (selectedHissatsu?.[currentPreset] || [])[slotBase + 1] || null;
+
+                  const renderSlot = (idx, technique) => (
                     <div
-                      key={slotIndex}
-                      className={`relative p-4 rounded-lg border cursor-pointer transition-all hover:scale-105 ${
-                        technique 
-                          ? 'border-orange-500/30' 
-                          : 'border-dashed hover:border-blue-400/60'
+                      key={idx}
+                      className={`relative p-3 rounded-lg border cursor-pointer transition-all hover:scale-[1.02] ${
+                        technique ? 'border-orange-500/30' : 'border-dashed hover:border-blue-400/60'
                       }`}
                       style={technique ? {
-                        backgroundColor: logoColors.primaryBlueAlpha(0.2),
+                        backgroundColor: logoColors.primaryBlueAlpha(0.18),
                         borderColor: logoColors.primaryBlueAlpha(0.3)
                       } : {
-                        backgroundColor: logoColors.blackAlpha(0.2),
-                        borderColor: logoColors.primaryBlueAlpha(0.3)
+                        backgroundColor: logoColors.blackAlpha(0.15),
+                        borderColor: logoColors.primaryBlueAlpha(0.25)
                       }}
-                      onClick={() => handleHissatsuSlotClick(slotIndex)}
+                      onClick={() => handleHissatsuSlotClick(idx)}
                     >
-                      {technique ? (
-                        <div className="flex items-center gap-3">
-                          <img src={technique.icon} alt={technique.name} className="w-10 h-10 flex-shrink-0" />
-                          <div className="flex-1">
-                            <div className="font-medium text-sm">{technique.name}</div>
-                            <div className="text-xs text-gray-300 mt-1">{technique.description}</div>
-                            <Badge variant="outline" className={`mt-2 text-xs`}
-                                   style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
-                              {technique.type}
-                            </Badge>
-                          </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+                             style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
+                          {technique ? (
+                            <img src={technique.icon} alt={technique.name} className="w-7 h-7 object-cover rounded" />
+                          ) : (
+                            <Plus className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[11px] text-gray-400">{displaySlotLabel(idx)}</div>
+                          <div className="text-sm font-medium truncate">{technique ? technique.name : 'Add Technique'}</div>
+                        </div>
+                        {technique && (
                           <Button
                             variant="ghost"
                             size="sm"
                             className="w-6 h-6 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white flex-shrink-0"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveHissatsu(slotIndex);
-                            }}
+                            onClick={(e) => { e.stopPropagation(); handleRemoveHissatsu(idx); }}
                           >
                             <X className="h-3 w-3" />
                           </Button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-3 py-2">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center"
-                               style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
-                            <Plus className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
-                          </div>
-                          <div className="flex-1">
-                            <div className="text-sm font-medium" style={{ color: logoColors.primaryBlue }}>Add Technique</div>
-                            <div className="text-xs text-gray-400">Click to select a technique for slot {slotIndex + 1}</div>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+                    </div>
+                  );
+
+                  return (
+                    <div key={slotBase} className="rounded-lg border p-3" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.1) }}>
+                      <div className="text-xs mb-2 font-semibold text-white">Slot {Math.floor(slotBase/2) + 1}</div>
+                      <div className="grid grid-cols-2 gap-3">
+                        {renderSlot(slotBase, techniqueA)}
+                        {renderSlot(slotBase + 1, techniqueB)}
+                      </div>
                     </div>
                   );
                 })}
