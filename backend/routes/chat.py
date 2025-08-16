@@ -187,6 +187,9 @@ async def send_message(
     }
 
     await db.messages.insert_one(msg_doc)
+    
+    # Remove MongoDB _id field for JSON serialization
+    msg_doc.pop('_id', None)
 
     # Update conversation last message and unread for partner
     await db.chats.update_one(
