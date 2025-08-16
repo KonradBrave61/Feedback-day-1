@@ -925,25 +925,27 @@ const SlotGroup = ({ slotNum, children }) => {
 };
 
 // Precise connector wrapper: measures children and draws an SVG connector to midpoints
-const SlotConnector = ({ anchorRectAbs, children }) => {
+const SlotConnector = ({ children }) => {
   const containerRef = useRef(null);
   const [lines, setLines] = useState(null);
   const rafRef = useRef(null);
 
   const measure = () => {
     const wrap = containerRef.current;
-    if (!wrap || !anchorRectAbs) return setLines(null);
+    if (!wrap) return setLines(null);
 
-    // Use offset-based measurement to avoid fractional drift with devicePixelRatio and CSS transforms
     const rectWrap = wrap.getBoundingClientRect();
     const wrapLeft = rectWrap.left;
     const wrapTop = rectWrap.top;
 
+    const anchorEl = wrap.parentElement?.querySelector('[data-number-anchor]');
+    if (!anchorEl) return setLines(null);
+    const rNum = anchorEl.getBoundingClientRect();
+
     const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
     if (boxes.length === 0) return setLines(null);
 
-    // anchor points on the number square, using getBoundingClientRect to map to wrap coordinates
-    const rNum = anchorRectAbs;
+    // anchor points derived directly from the DOM for robustness
     const anchorTop = {
       x: rNum.left - wrapLeft + rNum.width / 2,
       y: rNum.top - wrapTop
@@ -963,13 +965,9 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
       const boxLeft = r.left - wrapLeft;
       const boxMidY = r.top - wrapTop + r.height / 2; // exact middle of the technique box
       const anchor = idx === 0 ? anchorTop : anchorBottom;
-
-      // Calculate kink X at 50% between number square center and its right edge (scale-safe)
       const xKink = anchor.x + (anchorRight.x - anchor.x) * 0.5;
 
-      // Segment 1: vertical from number square wall center to the box middle Y
       segs.push({ x1: xKink, y1: anchor.y, x2: xKink, y2: boxMidY });
-      // Segment 2: horizontal from that Y into the technique box
       segs.push({ x1: xKink, y1: boxMidY, x2: boxLeft, y2: boxMidY });
     });
     setLines(segs);
