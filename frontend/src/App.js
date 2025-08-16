@@ -13,7 +13,7 @@ import HelperPage from "./pages/HelperPage";
 import SupportPage from "./pages/SupportPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
-import Dashboard from "./pages/Dashboard";
+
 import CommunityHub from "./pages/CommunityHub";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
