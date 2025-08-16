@@ -4,6 +4,7 @@ import { X, Users, Shield, Zap, Target, Edit, Award } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { AspectRatio } from './ui/aspect-ratio';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 import { logoColors } from '../styles/colors';
 import { useAuth } from '../contexts/AuthContext';
