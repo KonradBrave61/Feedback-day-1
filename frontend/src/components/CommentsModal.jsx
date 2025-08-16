@@ -58,6 +58,7 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
       if (result?.success && result.comment) {
         setComments((prev) => [...prev, result.comment]);
         setInput('');
+        setReplyTo(null);
       }
     } catch (_) {}
   };
