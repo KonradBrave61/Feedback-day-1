@@ -11,6 +11,23 @@ import { UnorderedList, ListItem } from './ui/list';
 
 const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
   const { loadCommunityTeams, loadTeamDetails, loadTeams } = useAuth();
+  const handleLoadCommunityTeam = async (team) => {
+    if (!team?.id) return;
+    try {
+      setIsLoading(true);
+      const teamWrap = await loadTeamDetails(team.id);
+      const fullTeam = teamWrap?.team || teamWrap;
+      if (!fullTeam) throw new Error('Invalid team data');
+      onLoadTeam(fullTeam);
+      toast.success(`Loaded community team: ${fullTeam.name || team.name}`);
+      onClose();
+    } catch (e) {
+      console.error('Failed to load community team', e);
+      toast.error('Failed to load community team');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const [activeTab, setActiveTab] = useState('mine');
   const [isLoading, setIsLoading] = useState(false);
   const [myTeams, setMyTeams] = useState([]);
