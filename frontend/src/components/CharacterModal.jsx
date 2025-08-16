@@ -950,29 +950,34 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
     const wrap = containerRef.current;
     if (!wrap || !anchorRectAbs) return setLines(null);
 
+    // Use offset-based measurement to avoid fractional drift with devicePixelRatio and CSS transforms
     const rectWrap = wrap.getBoundingClientRect();
+    const wrapLeft = rectWrap.left;
+    const wrapTop = rectWrap.top;
+
     const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
     if (boxes.length === 0) return setLines(null);
 
-    // anchor points on the number square
-    const anchorRight = {
-      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width,
-      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height / 2
-    };
+    // anchor points on the number square, using getBoundingClientRect to map to wrap coordinates
+    const rNum = anchorRectAbs;
     const anchorTop = {
-      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
-      y: anchorRectAbs.top - rectWrap.top
+      x: rNum.left - wrapLeft + rNum.width / 2,
+      y: rNum.top - wrapTop
     };
     const anchorBottom = {
-      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
-      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height
+      x: rNum.left - wrapLeft + rNum.width / 2,
+      y: rNum.top - wrapTop + rNum.height
+    };
+    const anchorRight = {
+      x: rNum.left - wrapLeft + rNum.width,
+      y: rNum.top - wrapTop + rNum.height / 2
     };
 
     const segs = [];
     boxes.forEach((b, idx) => {
       const r = b.getBoundingClientRect();
-      const boxLeft = r.left - rectWrap.left;
-      const boxMidY = r.top - rectWrap.top + r.height / 2; // exact middle of the technique box
+      const boxLeft = r.left - wrapLeft;
+      const boxMidY = r.top - wrapTop + r.height / 2; // exact middle of the technique box
       const anchor = idx === 0 ? anchorTop : anchorBottom;
 
       // Calculate kink X at 50% between number square center and its right edge (scale-safe)
