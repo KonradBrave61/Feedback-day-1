@@ -62,6 +62,9 @@ const TeamBuilder = () => {
   // Track if we loaded an existing team to offer overwrite
   const [loadedTeamId, setLoadedTeamId] = useState(null);
   const [loadedTeamName, setLoadedTeamName] = useState('');
+  // Cache for base characters to map external teams reliably
+  const __baseCharactersIndex = useRef(null);
+
 
   // Modal states
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
