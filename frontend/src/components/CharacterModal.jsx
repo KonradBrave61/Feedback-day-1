@@ -24,15 +24,38 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   });
   const normalizePresets = (char) => {
     const raw = char?.userHissatsu || char?.user_hissatsu || null;
+    const makeSlots = (arr) => {
+      const out = [null, null, null, null, null, null];
+      if (!Array.isArray(arr)) return out;
+      if (arr.length >= 6) {
+        for (let i = 0; i < 6; i++) out[i] = arr[i] || null;
+        return out;
+      }
+      // Legacy: 3 techniques (one per slot) -> place into first sub-slot of each slot
+      for (let i = 0; i < Math.min(3, arr.length); i++) out[i * 2] = arr[i] || null;
+      return out;
+    };
+
     if (Array.isArray(raw)) {
+      // Legacy: flat array. Interpret as 6 for preset1 and next 6 for preset2
+      const p1 = raw.slice(0, 6);
+      const p2 = raw.slice(6, 12);
       return {
-        preset1: raw.slice(0, 3),
-        preset2: raw.slice(3, 6)
+        preset1: makeSlots(p1),
+        preset2: makeSlots(p2)
       };
     }
+    if (raw && (Array.isArray(raw.preset1) || Array.isArray(raw.preset2))) {
+      return {
+        preset1: makeSlots(raw.preset1 || []),
+        preset2: makeSlots(raw.preset2 || [])
+      };
+    }
+    // Fallback to character's default techniques
+    const base = Array.isArray(char?.hissatsu) ? char.hissatsu : [];
     return {
-      preset1: raw?.preset1 || char?.hissatsu?.slice(0, 3) || [],
-      preset2: raw?.preset2 || char?.hissatsu?.slice(3, 6) || []
+      preset1: makeSlots(base.slice(0, 3)),
+      preset2: makeSlots(base.slice(3, 6))
     };
   };
   const [selectedHissatsu, setSelectedHissatsu] = useState(normalizePresets(character));
