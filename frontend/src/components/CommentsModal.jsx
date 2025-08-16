@@ -108,9 +108,15 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
               )}
             </div>
 
+            {replyTo && (
+              <div className="px-4 pt-3 text-xs text-blue-200 flex items-center gap-2">
+                Replying to {replyTo.username || 'user'}
+                <button className="text-white/70 hover:underline" onClick={() => setReplyTo(null)}>cancel</button>
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="p-4 flex gap-2 border-t" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
               <Input
-                placeholder="Write a comment..."
+                placeholder={replyTo ? `Reply to ${replyTo.username || 'user'}...` : "Write a comment..."}
                 className="flex-1 text-white border"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
