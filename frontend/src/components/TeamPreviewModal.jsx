@@ -364,25 +364,27 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
           <div className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Formation Field */}
-              <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                <CardHeader className="flex items-center justify-between">
+              <Card className="relative backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-lg">
                     <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                     Formation: {teamDetails?.formation || 'Unknown'}
                   </CardTitle>
-                  {/* Coach inline on the right side at the same level */}
-                  {teamDetails?.coach && (
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
-                        {teamDetails.coach.name?.substring(0, 2) || 'CO'}
-                      </div>
-                      <div className="hidden md:block">
-                        <div className="text-[12px] font-medium">{teamDetails.coach.name}</div>
-                        <div className="text-[11px] text-gray-300 -mt-0.5">{teamDetails.coach.title || 'Coach'}</div>
-                      </div>
-                    </div>
-                  )}
                 </CardHeader>
+                {/* Coach in the top-right corner of the formation card at the same level */}
+                {teamDetails?.coach && (
+                  <div className="absolute top-3 right-3 flex items-center gap-2 bg-black/40 backdrop-blur-sm rounded-full px-2 py-1 border"
+                       style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
+                         style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
+                      {teamDetails.coach.name?.substring(0, 2) || 'CO'}
+                    </div>
+                    <div className="hidden md:flex flex-col leading-tight">
+                      <div className="text-[11px] font-medium">{teamDetails.coach.name}</div>
+                      <div className="text-[10px] text-gray-300">{teamDetails.coach.title || 'Coach'}</div>
+                    </div>
+                  </div>
+                )}
                 {/* Taller box; field scales to 98% inside */}
                 <CardContent className="p-4 h-[480px] md:h-[560px] lg:h-[600px]">
                   {renderFormationField()}
