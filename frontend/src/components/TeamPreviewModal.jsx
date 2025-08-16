@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Users, Shield, Zap, Target, Edit } from 'lucide-react';
+import { X, Users, Shield, Zap, Target, Edit, Award } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -318,113 +318,17 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     );
   };
 
-  // Build ordered Starting XI list based on formation positions
-  const orderedPlayers = useMemo(() => {
-    if (!teamDetails?.players) return [];
-    const formation = mockFormations.find(f => f.name === teamDetails.formation) || mockFormations[0];
-    const list = [];
-    formation.positions.forEach(pos => {
-      const player = teamDetails.players.find(p => p.position_id === pos.id);
-      if (player) list.push({ player, pos });
-    });
-    return list;
+  // Memoized bench list
+  const benchPlayers = useMemo(() => {
+    if (!teamDetails) return [];
+    if (Array.isArray(teamDetails.bench_players)) return teamDetails.bench_players;
+    if (Array.isArray(teamDetails.bench)) return teamDetails.bench;
+    if (teamDetails.team_data) {
+      if (Array.isArray(teamDetails.team_data.bench_players)) return teamDetails.team_data.bench_players;
+      if (Array.isArray(teamDetails.team_data.bench)) return teamDetails.team_data.bench;
+    }
+    return [];
   }, [teamDetails]);
-
-  // Overall and minibars removed from list view per user request
-
-  const PlayerRow = ({ entry }) => {
-    const p = entry.player;
-    const charRef = getCharacterRef(p) || {};
-    const level = getPlayerLevel(p);
-    const rarity = getPlayerRarity(p);
-    const element = getPlayerElement(p);
-    const equipment = getPlayerEquipment(p);
-
-    const techniques = getPlayerTechniques(p);
-
-    return (
-      <div className="p-2 rounded border flex items-center gap-3" style={{ backgroundColor: logoColors.blackAlpha(0.25), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
-        <div className="relative">
-          <div className="w-10 h-10 rounded-full overflow-hidden border" style={{ borderColor: logoColors.whiteAlpha(0.25) }}>
-            {p?.image ? (
-              <img src={p.image} alt={getPlayerName(p)} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">{getPlayerName(p).substring(0, 2)}</div>
-            )}
-          </div>
-          <Badge className="absolute -bottom-1 -right-1 text-[10px] px-1 py-0.5" style={{ backgroundColor: getPositionStyle(getPlayerPosition(p)).backgroundColor }}>
-            {getPlayerPosition(p)}
-          </Badge>
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="text-white font-medium text-sm truncate">{getPlayerName(p)}</div>
-            <span className="text-[10px] px-1 py-0.5 rounded border" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>{String(rarity).toUpperCase()}</span>
-            <span className="text-[10px] px-1 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>{element}</span>
-            <span className="text-[10px] px-1 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
-          </div>
-          {Array.isArray(techniques) && techniques.length > 0 && (
-            <div className="mt-1 flex flex-wrap gap-1">
-              {techniques.map((t, i) => (
-                <span key={i} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
-                  {t?.name || `Tech ${i + 1}`}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const renderPlayerDetails = () => {
-    const players = orderedPlayers;
-    const bench = (teamDetails?.bench_players && Array.isArray(teamDetails.bench_players))
-      ? teamDetails.bench_players
-      : (teamDetails?.bench && Array.isArray(teamDetails.bench))
-        ? teamDetails.bench
-        : (teamDetails?.team_data?.bench_players && Array.isArray(teamDetails.team_data.bench_players))
-          ? teamDetails.team_data.bench_players
-          : (teamDetails?.team_data?.bench && Array.isArray(teamDetails.team_data.bench))
-            ? teamDetails.team_data.bench
-            : [];
-
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Starting XI - list */}
-        <div>
-          <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
-            Starting XI
-          </h3>
-          <div className="space-y-2">
-            {players.map((entry, idx) => (
-              <PlayerRow key={idx} entry={entry} />
-            ))}
-            {players.length === 0 && (
-              <div className="text-sm text-gray-400">No players assigned to this formation.</div>
-            )}
-          </div>
-        </div>
-
-        {/* Bench - list */}
-        <div>
-          <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: logoColors.primaryOrange, color: logoColors.black }}>B</span>
-            Bench
-          </h3>
-          <div className="space-y-2">
-            {bench.map((p, i) => (
-              <PlayerRow key={i} entry={{ player: p, pos: { id: p.position_id, position: getPlayerPosition(p) } }} />
-            ))}
-            {bench.length === 0 && (
-              <div className="text-sm text-gray-400">No bench players.</div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   if (!isOpen) return null;
 
@@ -461,11 +365,23 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Formation Field */}
               <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                <CardHeader>
+                <CardHeader className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-lg">
                     <Target className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                     Formation: {teamDetails?.formation || 'Unknown'}
                   </CardTitle>
+                  {/* Coach inline on the right side at the same level */}
+                  {teamDetails?.coach && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold" style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
+                        {teamDetails.coach.name?.substring(0, 2) || 'CO'}
+                      </div>
+                      <div className="hidden md:block">
+                        <div className="text-[12px] font-medium">{teamDetails.coach.name}</div>
+                        <div className="text-[11px] text-gray-300 -mt-0.5">{teamDetails.coach.title || 'Coach'}</div>
+                      </div>
+                    </div>
+                  )}
                 </CardHeader>
                 {/* Taller box; field scales to 98% inside */}
                 <CardContent className="p-4 h-[480px] md:h-[560px] lg:h-[600px]">
@@ -473,68 +389,9 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                 </CardContent>
               </Card>
 
-              {/* Team Info, Coach, Tactics */}
+              {/* Right Column: Tactics up, Bench up, Team Info after */}
               <div className="space-y-4">
-                {/* Team Info */}
-                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                  <CardContent className="p-4">
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div>
-                        <div className="text-lg font-bold text-white">{teamDetails?.likes || 0}</div>
-                        <div className="text-xs text-gray-300">Likes</div>
-                      </div>
-                      <div>
-                        <div className="text-lg font-bold text-white">{teamDetails?.views || 0}</div>
-                        <div className="text-xs text-gray-300">Views</div>
-                      </div>
-                    </div>
-                    <div className="mt-3 text-center">
-                      <Badge style={{ backgroundColor: teamDetails?.is_public ? logoColors.primaryBlueAlpha(0.2) : logoColors.blackAlpha(0.5), color: logoColors.white }}>
-                        {teamDetails?.is_public ? 'Public Team' : 'Private Team'}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Coach Info */}
-                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-sm">
-                      <Users className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
-                      Coach
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    {teamDetails?.coach ? (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: logoColors.primaryYellow, color: 'black' }}>
-                            {teamDetails.coach.name?.substring(0, 2) || 'CO'}
-                          </div>
-                          <div>
-                            <div className="font-medium text-sm">{teamDetails.coach.name || 'Unknown Coach'}</div>
-                            <div className="text-xs text-gray-400">{teamDetails.coach.title || 'Coach'}</div>
-                          </div>
-                        </div>
-                        {teamDetails.coach.specialties && (
-                          <div className="flex flex-wrap gap-1">
-                            {teamDetails.coach.specialties.map((specialty, index) => (
-                              <span key={index} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.2), color: logoColors.primaryYellow }}>
-                                {specialty}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-center py-2">
-                        <p className="text-gray-400 text-sm">No coach assigned</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Tactics */}
+                {/* Tactics (goes up) */}
                 <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-sm">
@@ -559,11 +416,78 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     )}
                   </CardContent>
                 </Card>
+
+                {/* Bench (goes up) */}
+                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-sm">
+                      <Award className="h-4 w-4" style={{ color: logoColors.primaryOrange }} />
+                      Bench ({benchPlayers.length}/5)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                    {benchPlayers.length > 0 ? (
+                      <div className="space-y-3">
+                        {benchPlayers.map((player, index) => (
+                          <div key={index} className="flex items-center gap-3 p-2 rounded border" style={{ backgroundColor: logoColors.blackAlpha(0.2), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
+                            <div className="w-10 h-10 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
+                              {player.image ? (
+                                <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
+                                  {getPlayerName(player).substring(0, 2)}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-white font-medium text-sm truncate">{getPlayerName(player)}</div>
+                              <div className="text-xs text-gray-400">{getPlayerPosition(player)} • Lv {player.user_level || player.userLevel || 1}</div>
+                              {((player.user_hissatsu && player.user_hissatsu.length > 0) || (player.userHissatsu && player.userHissatsu.length > 0)) && (
+                                <div className="mt-1 flex flex-wrap gap-1">
+                                  {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
+                                    <span key={techIndex} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
+                                      {technique.name || `Tech${techIndex + 1}`}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            <Badge className="shrink-0" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+                              {getPlayerPosition(player)}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-2 text-gray-400 text-sm">No bench players</div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Team Info moved down */}
+                <Card className="backdrop-blur-lg text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                  <CardContent className="p-4">
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div>
+                        <div className="text-lg font-bold text-white">{teamDetails?.likes || 0}</div>
+                        <div className="text-xs text-gray-300">Likes</div>
+                      </div>
+                      <div>
+                        <div className="text-lg font-bold text-white">{teamDetails?.views || 0}</div>
+                        <div className="text-xs text-gray-300">Views</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <Badge style={{ backgroundColor: teamDetails?.is_public ? logoColors.primaryBlueAlpha(0.2) : logoColors.blackAlpha(0.5), color: logoColors.white }}>
+                        {teamDetails?.is_public ? 'Public Team' : 'Private Team'}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
 
-            {/* Players and Bench Details */}
-            <div className="mt-6">{renderPlayerDetails()}</div>
+            {/* Removed the Starting XI list below the pitch as requested */}
           </div>
         )}
       </div>
