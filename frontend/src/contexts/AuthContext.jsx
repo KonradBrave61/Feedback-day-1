@@ -697,6 +697,18 @@ export const AuthProvider = ({ children }) => {
         return { success: false };
       }
     },
+    // Characters detail by ID
+    loadCharacter: async (characterId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/characters/${characterId}`);
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return { success: true, character: data };
+      } catch (e) {
+        console.error('Load character error', e);
+        return { success: false };
+      }
+    },
     // Chat APIs
     startConversation: async (partnerId) => {
       try {
