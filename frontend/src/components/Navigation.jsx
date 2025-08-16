@@ -110,8 +110,8 @@ const Navigation = () => {
                             setShowProfileMenu(false);
                           }}
                         >
-                          <LayoutDashboard className="h-4 w-4 mr-2" />
-                          Dashboard
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Chat
                         </Button>
                         <Button
                           variant="ghost"
