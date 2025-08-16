@@ -899,6 +899,32 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 };
 
 
+// Group wrapper that renders the left number circle and uses SlotConnector for 90° lines
+const SlotGroup = ({ slotNum, children }) => {
+  return (
+    <div className="grid grid-cols-[36px_1fr] gap-2">
+      {/* Left label column with number circle and a short connector */}
+      <div className="relative">
+        <div
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full grid place-items-center text-[12px] font-bold text-white/90"
+          style={{ border: '2px solid rgba(255,255,255,0.45)' }}
+        >
+          {slotNum}
+        </div>
+        {/* small horizontal line to meet the vertical spine */}
+        <div
+          className="absolute right-0 top-1/2 -translate-y-1/2 h-[2px]"
+          style={{ width: 12, background: 'rgba(255,255,255,0.45)' }}
+        />
+      </div>
+      {/* Right column with precise connector and technique boxes */}
+      <SlotConnector>
+        {children}
+      </SlotConnector>
+    </div>
+  );
+};
+
 // Precise connector wrapper: measures children and draws an SVG connector to midpoints
 const SlotConnector = ({ children }) => {
   const containerRef = useRef(null);
