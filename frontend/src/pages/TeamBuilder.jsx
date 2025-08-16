@@ -725,7 +725,8 @@ const TeamBuilder = () => {
         teamData.players.forEach(playerData => {
           if (playerData.character_id && playerData.position_id) {
             // Find base character to merge canonical data (portrait, nickname, position, element)
-            const base = mockCharacters.find(c => c.id === playerData.character_id);
+            const baseIndex = __baseCharactersIndex.current || {};
+            const base = baseIndex[playerData.character_id] || mockCharacters.find(c => c.id === playerData.character_id);
             // Normalize techniques: backend may send array or {preset1,preset2}
             const hissatsuRaw = playerData.user_hissatsu;
             const normalizedHissatsu = Array.isArray(hissatsuRaw)
