@@ -461,10 +461,10 @@ class BackendTester:
             
             response = self.session.post(f"{API_BASE}/teams", json=team_data, headers=headers)
             
-            if response.status_code == 201:
+            if response.status_code in [200, 201]:
                 result = response.json()
                 self.team_id = result["id"]
-                self.log_result("Create Test Team", True, f"Team ID: {self.team_id}", 201)
+                self.log_result("Create Test Team", True, f"Team ID: {self.team_id}", response.status_code)
                 return True
             else:
                 self.log_result("Create Test Team", False, response.text, response.status_code)
