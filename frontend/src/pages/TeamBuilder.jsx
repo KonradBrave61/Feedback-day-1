@@ -675,7 +675,7 @@ const TeamBuilder = () => {
     }
   };
 
-  const handleLoadTeam = (incoming) => {
+  const handleLoadTeam = async (incoming) => {
     try {
       // Unwrap common backend shapes
       const teamData = incoming?.team?.team || incoming?.team || incoming?.team_data || incoming;
