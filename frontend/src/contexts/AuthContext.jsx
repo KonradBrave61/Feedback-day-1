@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const refreshTimerRef = useRef(null);
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL; // All endpoints must use /api prefix per ingress rules
 
   const scheduleProactiveRefresh = (accessToken) => {
     if (refreshTimerRef.current) {
