@@ -721,9 +721,9 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                             </div>
                           </div>
                           {/* AT value on the right, stacked label and number */}
-                          <div className="text-right">
-                            <div className="text-xs text-white/80">AT</div>
-                            <div className="text-2xl font-extrabold" style={{ color: logoColors.primaryBlue }}>{atVal ?? '--'}</div>
+                          <div className="text-right leading-none">
+                            <div className="text-[10px] text-white/80 mb-0.5">AT</div>
+                            <div className="text-[22px] font-extrabold" style={{ color: logoColors.primaryBlue }}>{atVal ?? '--'}</div>
                           </div>
                         </div>
                         {technique && (
