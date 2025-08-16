@@ -743,7 +743,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   return (
                     <div key={slotBase} className="rounded-lg border p-3" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.05) }}>
                       <div className="flex items-stretch gap-3">
-                        {/* Left vertical slot label with connector */}
+                        {/* Left vertical slot label with thin spine */}
                         <div className="relative w-8 flex items-center justify-center">
                           <div className="absolute top-2 bottom-2 left-1/2 -translate-x-1/2 w-[2px] bg-white/20" />
                           <div className="relative z-10 w-7 h-7 rounded-lg border flex items-center justify-center text-sm font-bold"
@@ -751,16 +751,15 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                             {Math.floor(slotBase/2) + 1}
                           </div>
                         </div>
-                        {/* Right: two stacked technique boxes (A then B) */}
-                        <div className="flex-1 space-y-3">
-                          {/* Wrap first technique to draw an L-shaped connector from its mid-height to the number */}
-                          <div className="relative">
-                            {/* Horizontal segment into the box wall */}
-                            <div className="pointer-events-none absolute -left-3 top-1/2 -translate-y-1/2 w-3 h-[2px]" style={{ backgroundColor: 'rgba(255,255,255,0.28)' }} />
-                            {/* Vertical segment going upward to meet the horizontal */}
-                            <div className="pointer-events-none absolute -left-3 top-1/2 -translate-y-full w-[2px] h-5" style={{ backgroundColor: 'rgba(255,255,255,0.28)' }} />
-                            {renderSlot(slotBase, techniqueA)}
-                          </div>
+                        {/* Right: two stacked technique boxes (A then B) with precise connectors */}
+                        <div className="flex-1 space-y-4 relative">
+                          {/* Vertical spine between mid of A and mid of B */}
+                          <div className="pointer-events-none absolute -left-3" style={{ top: '32px', height: '80px', width: '2px', background: 'rgba(255,255,255,0.35)' }} />
+                          {/* Horizontal arms to each box mid */}
+                          <div className="pointer-events-none absolute -left-3" style={{ top: '32px', width: '12px', height: '2px', background: 'rgba(255,255,255,0.35)' }} />
+                          <div className="pointer-events-none absolute -left-3" style={{ top: '112px', width: '12px', height: '2px', background: 'rgba(255,255,255,0.35)' }} />
+                          {/* Boxes with fixed heights so mid alignment is exact */}
+                          {renderSlot(slotBase, techniqueA)}
                           {renderSlot(slotBase + 1, techniqueB)}
                         </div>
                       </div>
