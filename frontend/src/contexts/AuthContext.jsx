@@ -396,7 +396,7 @@ export const AuthProvider = ({ children }) => {
       const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/${teamId}/comment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify(parentId ? { content, parent_id: parentId } : { content }),
       });
       if (!response.ok) {
         throw new Error('Comment action failed');
