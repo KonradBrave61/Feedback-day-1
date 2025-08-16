@@ -906,8 +906,8 @@ const SlotGroup = ({ slotNum, children }) => {
       {/* Left label column with number circle and a short connector */}
       <div className="relative">
         <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full grid place-items-center text-[12px] font-bold text-white/90"
-          style={{ border: '2px solid rgba(255,255,255,0.45)' }}
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md grid place-items-center text-[12px] font-bold text-white/90"
+          style={{ border: '2px solid rgba(255,255,255,0.45)', background: 'transparent' }}
         >
           {slotNum}
         </div>
