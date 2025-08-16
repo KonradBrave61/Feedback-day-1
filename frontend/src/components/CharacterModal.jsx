@@ -1011,7 +1011,7 @@ const SlotConnector = ({ children }) => {
   }, [children]);
 
   return (
-    <div ref={containerRef} className="flex-1 space-y-4 relative overflow-hidden">
+    <div ref={containerRef} className="flex-1 space-y-4 relative">
       {/* Connect like the sketch: pure two-segment elbow from number square into each technique box */}
       <svg className="pointer-events-none absolute left-0 top-0 w-full h-full" width="100%" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {lines && (
