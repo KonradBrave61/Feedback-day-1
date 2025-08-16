@@ -941,23 +941,39 @@ const SlotGroup = ({ slotNum, children }) => {
 };
 
 // Precise connector wrapper: measures children and draws an SVG connector to midpoints
-const SlotConnector = ({ anchorAbs, children }) => {
+const SlotConnector = ({ anchorRectAbs, children }) => {
   const containerRef = useRef(null);
   const [lines, setLines] = useState(null);
   const rafRef = useRef(null);
 
   const measure = () => {
     const wrap = containerRef.current;
-    if (!wrap || !anchorAbs) return setLines(null);
+    if (!wrap || !anchorRectAbs) return setLines(null);
 
     const rectWrap = wrap.getBoundingClientRect();
     const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
     if (boxes.length === 0) return setLines(null);
 
-    const segs = boxes.map((b) => {
+    // anchor points: right-center, top-center, bottom-center of number square
+    const anchorRight = {
+      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width,
+      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height / 2
+    };
+    const anchorTop = {
+      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
+      y: anchorRectAbs.top - rectWrap.top
+    };
+    const anchorBottom = {
+      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
+      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height
+    };
+
+    const segs = boxes.map((b, idx) => {
       const r = b.getBoundingClientRect();
       const start = { x: r.left - rectWrap.left, y: r.top - rectWrap.top + r.height / 2 };
-      const target = { x: anchorAbs.x - rectWrap.left, y: anchorAbs.y - rectWrap.top };
+      // First (top) technique connects to number square top-center, second to bottom-center
+      const target = idx === 0 ? anchorTop : anchorBottom;
+      // Build two segments: from target to near right edge (small horizontal), then vertical down/up
       return { x1: start.x, y1: start.y, x2: target.x, y2: target.y };
     });
     setLines(segs);
@@ -976,11 +992,11 @@ const SlotConnector = ({ anchorAbs, children }) => {
       ro.disconnect();
       cancelAnimationFrame(rafRef.current);
     };
-  }, [anchorAbs, children]);
+  }, [anchorRectAbs, children]);
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
-      {/* Diagonal connectors from box center-left to number square center-right */}
+      {/* Connect like the sketch: technique boxes to the top and bottom of the number square */}
       <svg className="pointer-events-none absolute left-0 top-0 w-full h-full" width="100%" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {lines && (
           <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round">
