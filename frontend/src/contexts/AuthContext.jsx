@@ -679,6 +679,80 @@ export const AuthProvider = ({ children }) => {
     loadTeamDetails,
     loadPublicTeamDetails,
     saveTeamToSlot,
+    saveTeamToSlot,
+    // Chat APIs
+    startConversation: async (partnerId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/start`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ partner_id: partnerId }),
+        });
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return data;
+      } catch (e) { return { success: false }; }
+    },
+    listConversations: async () => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/conversations`);
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
+    getMessages: async (conversationId, after = null) => {
+      try {
+        const params = new URLSearchParams();
+        if (after) params.append('after', after);
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/conversations/${conversationId}/messages?${params}`);
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
+    sendMessage: async (conversationId, content) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/conversations/${conversationId}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content }),
+        });
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
+    blockUser: async (userId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/block`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId }),
+        });
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
+    unblockUser: async (userId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/unblock`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId }),
+        });
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
+    updateChatSettings: async (settings) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings),
+        });
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
   };
 
   return (
