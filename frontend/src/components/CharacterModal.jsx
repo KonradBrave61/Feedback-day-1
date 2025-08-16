@@ -211,6 +211,23 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     return `${slotNum}-${sub}`;
   };
 
+  // Compute AT value for a technique based on current calculated stats
+  const getTechniqueAT = (tech) => {
+    if (!tech || !calculatedStats) return null;
+    const type = (tech.type || '').toLowerCase();
+    let key = 'technique';
+    if (type.includes('shot')) key = 'kick';
+    else if (type.includes('dribble')) key = 'technique';
+    else if (type.includes('pass')) key = 'control';
+    else if (type.includes('block')) key = 'pressure';
+    else if (type.includes('catch')) key = 'intelligence';
+    else if (type.includes('punch')) key = 'physical';
+    const val = Number(calculatedStats?.[key]?.main || 0);
+    // Normalize to 1..99 similar to UI in reference
+    const at = Math.max(1, Math.min(99, Math.round((val / 200) * 99)));
+    return at;
+  };
+
   const handleHissatsuSelect = (hissatsu) => {
     const currentPreset = `preset${activePreset}`;
     const slotIndex = selectedCategory;
