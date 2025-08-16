@@ -703,29 +703,28 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                         }}
                         onClick={() => handleHissatsuSlotClick(idx)}
                       >
-                        {/* Top bar with technique name and AT value on right */}
-                        <div className="flex items-center justify-between px-3 py-1.5" style={{ background: 'linear-gradient(90deg, rgba(0,140,255,0.5) 0%, rgba(0,140,255,0.2) 100%)' }}>
-                          <div className="flex items-center gap-2 min-w-0">
-                            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-black/20">
+                        {/* Single box layout matching the provided sketch */}
+                        <div className="flex items-center justify-between px-3 py-2">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {/* Technique type icon circle */}
+                            <div className="w-8 h-8 rounded-full border flex items-center justify-center overflow-hidden"
+                                 style={{ borderColor: logoColors.primaryBlueAlpha(0.4), backgroundColor: logoColors.blackAlpha(0.2) }}>
                               {technique ? (
-                                <img src={technique.icon} alt={technique.name} className="w-5 h-5 object-cover rounded-full" />
+                                <img src={technique.icon} alt={technique.type} className="w-6 h-6 object-cover" />
                               ) : (
-                                <Plus className="h-3.5 w-3.5" />
+                                <Plus className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
                               )}
                             </div>
-                            <div className="text-sm font-semibold truncate">{technique ? technique.name : 'Add Technique'}</div>
+                            <div className="flex flex-col min-w-0">
+                              <div className="text-sm font-medium truncate">{technique ? technique.name : 'Add Technique'}</div>
+                              <div className="text-[11px] text-gray-400">{displaySlotLabel(idx)}</div>
+                            </div>
                           </div>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-[10px] text-white/80">AT</span>
-                            <span className="text-xl font-extrabold" style={{ color: logoColors.primaryBlue }}>{atVal ?? '--'}</span>
+                          {/* AT value on the right, stacked label and number */}
+                          <div className="text-right">
+                            <div className="text-xs text-white/80">AT</div>
+                            <div className="text-2xl font-extrabold" style={{ color: logoColors.primaryBlue }}>{atVal ?? '--'}</div>
                           </div>
-                        </div>
-                        {/* Bottom area small label like 1-A and description */}
-                        <div className="px-3 py-2">
-                          <div className="text-[11px] text-gray-400 mb-1">{displaySlotLabel(idx)}</div>
-                          {technique && (
-                            <div className="text-[12px] text-gray-200 line-clamp-2">{technique.description}</div>
-                          )}
                         </div>
                         {technique && (
                           <Button
