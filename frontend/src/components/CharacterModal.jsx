@@ -909,4 +909,44 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   );
 };
 
+
+// Precise connector wrapper: measures children and draws an SVG connector to midpoints
+const SlotConnector = ({ children }) => {
+  const containerRef = useRef(null);
+  const [arms, setArms] = useState(null);
+
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const boxes = Array.from(el.querySelectorAll('[data-tech-box]'));
+    if (boxes.length === 0) return;
+    const rectParent = el.getBoundingClientRect();
+    const mids = boxes.map(b => {
+      const r = b.getBoundingClientRect();
+      return { y: r.top - rectParent.top + r.height / 2 };
+    });
+    const y1 = mids[0]?.y ?? 0;
+    const y2 = mids[mids.length - 1]?.y ?? y1;
+    setArms({ y1, y2, mids });
+  });
+
+  return (
+    <div ref={containerRef} className="flex-1 space-y-4 relative">
+      <svg className="pointer-events-none absolute left-[-12px] top-0 h-full" width="12" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+        {arms && (
+          <g stroke="rgba(255,255,255,0.38)" strokeWidth="2" fill="none">
+            <line x1="10" y1={arms.y1} x2="10" y2={arms.y2} />
+            {arms.mids.map((t, idx) => (
+              <line key={idx} x1="10" y1={t.y} x2="12" y2={t.y} />
+            ))}
+          </g>
+        )}
+      </svg>
+      {React.Children.map(children, (child) => (
+        <div data-tech-box className="relative">{child}</div>
+      ))}
+    </div>
+  );
+};
+
 export default CharacterModal;
