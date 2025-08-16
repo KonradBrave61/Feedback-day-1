@@ -1273,7 +1273,7 @@ const TeamBuilder = () => {
                     </div>
                     {/* Bottom */}
                     <div className="flex gap-4">
-                      <div className="w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
+                      <div className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
                         <span className="text-[10px] text-gray-400">—</span>
                       </div>
                       <div className="w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
