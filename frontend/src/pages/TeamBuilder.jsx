@@ -709,6 +709,16 @@ const TeamBuilder = () => {
         setSelectedCoach(coachObj || teamData.coach);
       }
       
+      // Ensure base character cache is available before mapping players (load once)
+      if (!__baseCharactersIndex.current || Object.keys(__baseCharactersIndex.current).length === 0) {
+        try {
+          const res = await loadCharacters({ limit: 500 });
+          if (res?.success && Array.isArray(res.characters)) {
+            __baseCharactersIndex.current = res.characters.reduce((acc, ch) => { acc[ch.id] = ch; return acc; }, {});
+          }
+        } catch (_) {}
+      }
+
       // Load main team players
       if (teamData.players && Array.isArray(teamData.players)) {
         const newTeamPlayers = {};
