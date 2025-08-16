@@ -436,33 +436,40 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     {benchPlayers.length > 0 ? (
                       <div className="space-y-3">
                         {benchPlayers.map((player, index) => (
-                          <div key={index} className="flex items-center gap-3 p-2 rounded border" style={{ backgroundColor: logoColors.blackAlpha(0.2), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
-                            <div className="w-10 h-10 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
-                              {player.image ? (
-                                <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
-                                  {getPlayerName(player).substring(0, 2)}
+                          <HoverCard key={index} openDelay={100} closeDelay={150}>
+                            <HoverCardTrigger asChild>
+                              <div className="flex items-center gap-3 p-2 rounded border cursor-pointer" style={{ backgroundColor: logoColors.blackAlpha(0.2), borderColor: logoColors.primaryBlueAlpha(0.15) }}>
+                                <div className="w-10 h-10 rounded-full bg-gray-700 border border-white/50 overflow-hidden">
+                                  {player.image ? (
+                                    <img src={player.image} alt={player.name} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
+                                      {getPlayerName(player).substring(0, 2)}
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-white font-medium text-sm truncate">{getPlayerName(player)}</div>
-                              <div className="text-xs text-gray-400">{getPlayerPosition(player)} • Lv {player.user_level || player.userLevel || 1}</div>
-                              {((player.user_hissatsu && player.user_hissatsu.length > 0) || (player.userHissatsu && player.userHissatsu.length > 0)) && (
-                                <div className="mt-1 flex flex-wrap gap-1">
-                                  {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
-                                    <span key={techIndex} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
-                                      {technique.name || `Tech${techIndex + 1}`}
-                                    </span>
-                                  ))}
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-white font-medium text-sm truncate">{getPlayerName(player)}</div>
+                                  <div className="text-xs text-gray-400">{getPlayerPosition(player)} • Lv {player.user_level || player.userLevel || 1}</div>
+                                  {((player.user_hissatsu && player.user_hissatsu.length > 0) || (player.userHissatsu && player.userHissatsu.length > 0)) && (
+                                    <div className="mt-1 flex flex-wrap gap-1">
+                                      {(player.user_hissatsu || player.userHissatsu || []).map((technique, techIndex) => (
+                                        <span key={techIndex} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
+                                          {technique.name || `Tech${techIndex + 1}`}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                            </div>
-                            <Badge className="shrink-0" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
-                              {getPlayerPosition(player)}
-                            </Badge>
-                          </div>
+                                <Badge className="shrink-0" style={{ backgroundColor: getPositionStyle(getPlayerPosition(player)).backgroundColor }}>
+                                  {getPlayerPosition(player)}
+                                </Badge>
+                              </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent side="left" align="center" sideOffset={12} className="p-0 bg-transparent border-0 shadow-none w-auto">
+                              <PlayerHoverCard player={player} />
+                            </HoverCardContent>
+                          </HoverCard>
                         ))}
                       </div>
                     ) : (
