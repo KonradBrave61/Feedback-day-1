@@ -163,7 +163,7 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                           <p className="text-xs text-gray-400">Formation: {team.formation || '—'}</p>
                         </div>
                         <Button onClick={() => handleLoadMyTeam(team)} className="text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
-                          <Save className="h-4 w-4 mr-2" /> Apply
+                          Load
                         </Button>
                       </div>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
