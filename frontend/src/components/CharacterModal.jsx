@@ -751,17 +751,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                             {Math.floor(slotBase/2) + 1}
                           </div>
                         </div>
-                        {/* Right: two stacked technique boxes (A then B) with precise connectors */}
-                        <div className="flex-1 space-y-4 relative">
-                          {/* Vertical spine between mid of A and mid of B */}
-                          <div className="pointer-events-none absolute -left-3" style={{ top: '32px', height: '80px', width: '2px', background: 'rgba(255,255,255,0.35)' }} />
-                          {/* Horizontal arms to each box mid */}
-                          <div className="pointer-events-none absolute -left-3" style={{ top: '32px', width: '12px', height: '2px', background: 'rgba(255,255,255,0.35)' }} />
-                          <div className="pointer-events-none absolute -left-3" style={{ top: '112px', width: '12px', height: '2px', background: 'rgba(255,255,255,0.35)' }} />
-                          {/* Boxes with fixed heights so mid alignment is exact */}
+                        {/* Right: two stacked technique boxes (A then B) with dynamic connectors */}
+                        <SlotConnector>
                           {renderSlot(slotBase, techniqueA)}
                           {renderSlot(slotBase + 1, techniqueB)}
-                        </div>
+                        </SlotConnector>
                       </div>
                     </div>
                   );
