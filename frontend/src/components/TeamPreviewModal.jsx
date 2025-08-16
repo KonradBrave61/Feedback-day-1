@@ -343,9 +343,11 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <p className="text-sm text-gray-300">{teamDetails?.formation || 'Unknown Formation'}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button onClick={handlePrivacyToggle} className="text-white border hover:opacity-80" style={{ backgroundColor: team?.is_public ? logoColors.primaryBlueAlpha(0.4) : logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-              {team?.is_public ? (<> <Users className="h-4 w-4 mr-2" />Make Private</>) : (<> <Shield className="h-4 w-4 mr-2" />Make Public</>)}
-            </Button>
+            {onPrivacyToggle && (
+              <Button onClick={handlePrivacyToggle} className="text-white border hover:opacity-80" style={{ backgroundColor: team?.is_public ? logoColors.primaryBlueAlpha(0.4) : logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                {team?.is_public ? (<> <Users className="h-4 w-4 mr-2" />Make Private</>) : (<> <Shield className="h-4 w-4 mr-2" />Make Public</>)}
+              </Button>
+            )}
             <Button onClick={handleEditInBuilder} className="text-black hover:opacity-80 font-bold" style={{ background: logoColors.yellowOrangeGradient }}>
               <Edit className="h-4 w-4 mr-2" />
               Edit in Builder
