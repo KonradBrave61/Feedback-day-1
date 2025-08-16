@@ -220,6 +220,9 @@ const LoadTeamModal = ({ isOpen, onClose, onLoadTeam }) => {
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-gray-400" />
                         <span className="text-xs text-gray-400">{t.likes || 0} likes</span>
+                        <Button onClick={() => handleLoadCommunityTeam(t)} className="ml-3 text-black hover:opacity-80" style={{ background: logoColors.yellowOrangeGradient }}>
+                          Load
+                        </Button>
                       </div>
                     </div>
                   </Card>
