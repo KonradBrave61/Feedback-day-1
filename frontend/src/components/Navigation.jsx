@@ -106,17 +106,6 @@ const Navigation = () => {
                           variant="ghost"
                           className="w-full justify-start text-white hover:bg-blue-700/30"
                           onClick={() => {
-                            navigate('/chat');
-                            setShowProfileMenu(false);
-                          }}
-                        >
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Chat
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start text-white hover:bg-blue-700/30"
-                          onClick={() => {
                             navigate('/profile');
                             setShowProfileMenu(false);
                           }}
