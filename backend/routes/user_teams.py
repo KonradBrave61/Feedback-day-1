@@ -474,15 +474,24 @@ async def get_team_details(
     """Get detailed team information including comments and ratings"""
     db = await get_database()
     
-    team_doc = await db.teams.find_one({"id": team_id, "is_public": True})
+    # Allow owners to access their private teams; others can access only public teams
+    team_doc = await db.teams.find_one({"id": team_id})
     if not team_doc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Team not found"
         )
+
+    # If not owner and not public, disallow
+    is_owner = team_doc.get("user_id") == current_user.id
+    if not is_owner and not team_doc.get("is_public", False):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Team not found"
+        )
     
-    # Increment view count if not owner
-    if team_doc["user_id"] != current_user.id:
+    # Increment view count only for non-owners viewing public teams
+    if not is_owner and team_doc.get("is_public", False):
         await db.teams.update_one(
             {"id": team_id},
             {"$inc": {"views": 1}}
