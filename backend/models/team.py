@@ -69,6 +69,7 @@ class TeamComment(BaseModel):
     username: str
     user_avatar: Optional[str] = None
     content: str
+    parent_id: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Team(BaseModel):
