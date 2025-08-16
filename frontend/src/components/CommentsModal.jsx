@@ -73,20 +73,36 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
               ) : comments.length === 0 ? (
                 <div className="p-6 text-center text-gray-300">No comments yet. Be the first to comment!</div>
               ) : (
-                comments.map((c) => (
-                  <div key={c.id || `${c.username}-${c.created_at}`} className="p-4 flex gap-3">
-                    <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gray-600/40 flex items-center justify-center text-sm font-bold">
-                      {(c.username || 'U')[0]}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="font-semibold text-white truncate">{c.username || 'User'}</span>
-                        <span className="text-gray-400 truncate">{new Date(c.created_at).toLocaleString()}</span>
+                // Recursive render
+                (() => {
+                  const byParent = comments.reduce((acc, c) => {
+                    const pid = c.parent_id || 'root';
+                    (acc[pid] = acc[pid] || []).push(c);
+                    return acc;
+                  }, {});
+                  const renderThread = (parentId, depth=0) => {
+                    const nodes = byParent[parentId || 'root'] || [];
+                    return nodes.map((c) => (
+                      <div key={c.id} className={`p-4 ${depth? 'pt-2' : ''}`} style={{ paddingLeft: depth? 24: 16 }}>
+                        <div className="flex gap-3">
+                          <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gray-600/40 flex items-center justify-center text-sm font-bold">
+                            {(c.username || 'U')[0]}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 text-sm">
+                              <span className="font-semibold text-white truncate">{c.username || 'User'}</span>
+                              <span className="text-gray-400 truncate">{new Date(c.created_at).toLocaleString()}</span>
+                            </div>
+                            <div className="text-gray-200 mt-1 whitespace-pre-wrap break-words">{String(c.content || '')}</div>
+                            <button onClick={() => setReplyTo(c)} className="mt-2 text-xs text-blue-300 hover:underline inline-flex items-center gap-1"><CornerDownRight className="h-3 w-3" /> Reply</button>
+                            {renderThread(c.id, depth+1)}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-gray-200 mt-1 whitespace-pre-wrap break-words">{String(c.content || '')}</div>
-                    </div>
-                  </div>
-                ))
+                    ));
+                  };
+                  return renderThread(null, 0);
+                })()
               )}
             </div>
 
