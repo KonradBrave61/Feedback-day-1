@@ -66,7 +66,7 @@ const Navigation = () => {
               </div>
             </div>
 
-            {/* Desktop Navigation Items - REMOVED since everything is in hamburger menu */}
+            {/* Desktop Navigation Items kept minimal; Chat in profile menu */}
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
