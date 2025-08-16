@@ -941,79 +941,52 @@ const SlotGroup = ({ slotNum, children }) => {
 };
 
 // Precise connector wrapper: measures children and draws an SVG connector to midpoints
-const SlotConnector = ({ children }) => {
+const SlotConnector = ({ anchorAbs, children }) => {
   const containerRef = useRef(null);
-  const [arms, setArms] = useState(null);
+  const [lines, setLines] = useState(null);
   const rafRef = useRef(null);
-  const lastRef = useRef(null);
 
   const measure = () => {
-    const el = containerRef.current;
-    if (!el) return;
-    const boxes = Array.from(el.querySelectorAll('[data-tech-box]'));
-    if (boxes.length === 0) return;
-    const rectParent = el.getBoundingClientRect();
-    const mids = boxes.map(b => {
+    const wrap = containerRef.current;
+    if (!wrap || !anchorAbs) return setLines(null);
+
+    const rectWrap = wrap.getBoundingClientRect();
+    const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
+    if (boxes.length === 0) return setLines(null);
+
+    const segs = boxes.map((b) => {
       const r = b.getBoundingClientRect();
-      return { y: r.top - rectParent.top + r.height / 2 };
+      const start = { x: r.left - rectWrap.left, y: r.top - rectWrap.top + r.height / 2 };
+      const target = { x: anchorAbs.x - rectWrap.left, y: anchorAbs.y - rectWrap.top };
+      return { x1: start.x, y1: start.y, x2: target.x, y2: target.y };
     });
-    const y1 = mids[0]?.y ?? 0;
-    const y2 = mids[mids.length - 1]?.y ?? y1;
-    const next = { y1, y2, mids };
-    const prev = lastRef.current;
-    const same = prev && prev.y1 === next.y1 && prev.y2 === next.y2 && prev.mids.length === next.mids.length && prev.mids.every((m, i) => m.y === next.mids[i].y);
-    if (!same) {
-      lastRef.current = next;
-      setArms(next);
-    }
+    setLines(segs);
   };
 
   useLayoutEffect(() => {
-    // measure once after mount/children change
     rafRef.current = requestAnimationFrame(measure);
-    const el = containerRef.current;
-    if (!el) return () => {};
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(measure);
     });
-    ro.observe(el);
-    const onResize = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(measure);
-    };
-    window.addEventListener('resize', onResize);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener('resize', measure);
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener('resize', measure);
       ro.disconnect();
       cancelAnimationFrame(rafRef.current);
     };
-  }, [children]);
+  }, [anchorAbs, children]);
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
-      {/* Custom connector drawing: top elbow to first box, bottom elbow to second box */}
-      <svg className="pointer-events-none absolute left-[-24px] top-0 h-full" width="36" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-        {arms && (
-          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none">
-            {/* Top elbow (slightly above the midpoint of the first box) */}
-            {arms.mids[0] && (
-              <>
-                {/* short up segment off the top wall */}
-                <line x1="18" y1={arms.mids[0].y - 10} x2="18" y2={arms.mids[0].y - 2} />
-                {/* 90-degree turn into the first technique box */}
-                <line x1="18" y1={arms.mids[0].y - 2} x2="36" y2={arms.mids[0].y - 2} />
-              </>
-            )}
-            {/* Bottom elbow (slightly below the midpoint of the second box) – mirror of the top */}
-            {arms.mids[1] && (
-              <>
-                {/* short down segment off the bottom wall */}
-                <line x1="18" y1={arms.mids[1].y + 10} x2="18" y2={arms.mids[1].y + 2} />
-                {/* 90-degree turn into the second technique box */}
-                <line x1="18" y1={arms.mids[1].y + 2} x2="36" y2={arms.mids[1].y + 2} />
-              </>
-            )}
+      {/* Diagonal connectors from box center-left to number square center-right */}
+      <svg className="pointer-events-none absolute left-0 top-0 w-full h-full" width="100%" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+        {lines && (
+          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round">
+            {lines.map((ln, i) => (
+              <line key={i} x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
+            ))}
           </g>
         )}
       </svg>
