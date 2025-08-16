@@ -330,33 +330,7 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
     return list;
   }, [teamDetails]);
 
-  const computeOverall = (stats) => {
-    if (!stats) return 0;
-    const vals = [stats.kick?.main, stats.control?.main, stats.technique?.main, stats.intelligence?.main, stats.pressure?.main, stats.agility?.main, stats.physical?.main].filter(v => typeof v === 'number');
-    if (!vals.length) return 0;
-    return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
-  };
-
-  const MiniBars = ({ stats }) => {
-    const trio = [
-      { key: 'kick', label: 'Kick', color: logoColors.primaryYellow },
-      { key: 'technique', label: 'Tech', color: logoColors.primaryOrange },
-      { key: 'agility', label: 'Agi', color: logoColors.secondaryBlue },
-    ];
-    return (
-      <div className="flex gap-1 w-full">
-        {trio.map((t) => {
-          const v = stats?.[t.key]?.main || 0;
-          const pct = Math.max(5, Math.min(100, Math.round((v / 200) * 100)));
-          return (
-            <div key={t.key} className="flex-1 h-1.5 rounded bg-white/10 overflow-hidden">
-              <div className="h-full" style={{ width: `${pct}%`, backgroundColor: t.color }} />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
+  // Overall and minibars removed from list view per user request
 
   const PlayerRow = ({ entry }) => {
     const p = entry.player;
