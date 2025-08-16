@@ -902,23 +902,6 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 // Group wrapper that renders the left number circle and uses SlotConnector for 90° lines
 const SlotGroup = ({ slotNum, children }) => {
   const anchorRef = useRef(null);
-  const [anchorRectAbs, setAnchorRectAbs] = useState(null);
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      if (!anchorRef.current) return;
-      const r = anchorRef.current.getBoundingClientRect();
-      setAnchorRectAbs({ left: r.left, top: r.top, width: r.width, height: r.height });
-    };
-    const ro = new ResizeObserver(measure);
-    if (anchorRef.current) ro.observe(anchorRef.current);
-    window.addEventListener('resize', measure);
-    measure();
-    return () => {
-      window.removeEventListener('resize', measure);
-      ro.disconnect();
-    };
-  }, []);
 
   return (
     <div className="grid grid-cols-[36px_1fr] gap-2">
@@ -926,6 +909,7 @@ const SlotGroup = ({ slotNum, children }) => {
       <div className="relative">
         <div
           ref={anchorRef}
+          data-number-anchor
           className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md grid place-items-center text-[12px] font-bold text-white/90"
           style={{ border: '2px solid rgba(255,255,255,0.45)', background: 'transparent' }}
         >
@@ -933,7 +917,7 @@ const SlotGroup = ({ slotNum, children }) => {
         </div>
       </div>
       {/* Right column draws connectors from square top/bottom into each technique box */}
-      <SlotConnector anchorRectAbs={anchorRectAbs}>
+      <SlotConnector>
         {children}
       </SlotConnector>
     </div>
