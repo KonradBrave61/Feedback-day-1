@@ -954,7 +954,11 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
     const boxes = Array.from(wrap.querySelectorAll('[data-tech-box]'));
     if (boxes.length === 0) return setLines(null);
 
-    // anchor points: top-center and bottom-center of the number square (50% along the walls)
+    // anchor points on the number square
+    const anchorRight = {
+      x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width,
+      y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height / 2
+    };
     const anchorTop = {
       x: anchorRectAbs.left - rectWrap.left + anchorRectAbs.width / 2,
       y: anchorRectAbs.top - rectWrap.top
