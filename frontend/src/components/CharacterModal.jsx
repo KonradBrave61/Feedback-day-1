@@ -968,13 +968,18 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
       y: anchorRectAbs.top - rectWrap.top + anchorRectAbs.height
     };
 
-    const segs = boxes.map((b, idx) => {
+    const segs = [];
+    boxes.forEach((b, idx) => {
       const r = b.getBoundingClientRect();
-      const start = { x: r.left - rectWrap.left, y: r.top - rectWrap.top + r.height / 2 };
-      // First (top) technique connects to number square top-center, second to bottom-center
-      const target = idx === 0 ? anchorTop : anchorBottom;
-      // Build two segments: from target to near right edge (small horizontal), then vertical down/up
-      return { x1: start.x, y1: start.y, x2: target.x, y2: target.y };
+      const boxLeft = r.left - rectWrap.left;
+      const boxMidY = r.top - rectWrap.top + r.height / 2;
+      const anchorY = idx === 0 ? anchorTop.y : anchorBottom.y;
+      const xKink = anchorRight.x; // right edge of number square
+
+      // Segment 1: vertical from number square edge to the technique box center Y
+      segs.push({ x1: xKink, y1: anchorY, x2: xKink, y2: boxMidY });
+      // Segment 2: horizontal from kink to box left center
+      segs.push({ x1: xKink, y1: boxMidY, x2: boxLeft, y2: boxMidY });
     });
     setLines(segs);
   };
