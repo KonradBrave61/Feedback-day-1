@@ -974,12 +974,14 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
       const boxLeft = r.left - rectWrap.left;
       const boxMidY = r.top - rectWrap.top + r.height / 2; // exact middle of the technique box
       const anchor = idx === 0 ? anchorTop : anchorBottom;
-      const xCenter = anchor.x; // 50% of top/bottom wall
 
-      // Segment 1: vertical from the number square wall center to the box middle Y
-      segs.push({ x1: xCenter, y1: anchor.y, x2: xCenter, y2: boxMidY });
+      // Calculate kink X at 50% between number square center and its right edge (scale-safe)
+      const xKink = anchor.x + (anchorRight.x - anchor.x) * 0.5;
+
+      // Segment 1: vertical from number square wall center to the box middle Y
+      segs.push({ x1: xKink, y1: anchor.y, x2: xKink, y2: boxMidY });
       // Segment 2: horizontal from that Y into the technique box
-      segs.push({ x1: xCenter, y1: boxMidY, x2: boxLeft, y2: boxMidY });
+      segs.push({ x1: xKink, y1: boxMidY, x2: boxLeft, y2: boxMidY });
     });
     setLines(segs);
   };
