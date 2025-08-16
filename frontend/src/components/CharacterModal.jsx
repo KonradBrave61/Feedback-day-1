@@ -686,47 +686,60 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   const techniqueA = (selectedHissatsu?.[currentPreset] || [])[slotBase] || null;
                   const techniqueB = (selectedHissatsu?.[currentPreset] || [])[slotBase + 1] || null;
 
-                  const renderSlot = (idx, technique) => (
-                    <div
-                      key={idx}
-                      className={`relative p-3 rounded-lg border cursor-pointer transition-all hover:scale-[1.02] ${
-                        technique ? 'border-orange-500/30' : 'border-dashed hover:border-blue-400/60'
-                      }`}
-                      style={technique ? {
-                        backgroundColor: logoColors.primaryBlueAlpha(0.18),
-                        borderColor: logoColors.primaryBlueAlpha(0.3)
-                      } : {
-                        backgroundColor: logoColors.blackAlpha(0.15),
-                        borderColor: logoColors.primaryBlueAlpha(0.25)
-                      }}
-                      onClick={() => handleHissatsuSlotClick(idx)}
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                             style={{ backgroundColor: logoColors.primaryBlueAlpha(0.2) }}>
-                          {technique ? (
-                            <img src={technique.icon} alt={technique.name} className="w-7 h-7 object-cover rounded" />
-                          ) : (
-                            <Plus className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
-                          )}
+                  const renderSlot = (idx, technique) => {
+                    const atVal = technique ? getTechniqueAT(technique) : null;
+                    return (
+                      <div
+                        key={idx}
+                        className={`relative p-0 rounded-lg border cursor-pointer transition-all hover:scale-[1.01] overflow-hidden ${
+                          technique ? 'border-orange-500/30' : 'border-dashed hover:border-blue-400/60'
+                        }`}
+                        style={technique ? {
+                          backgroundColor: logoColors.primaryBlueAlpha(0.12),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        } : {
+                          backgroundColor: logoColors.blackAlpha(0.1),
+                          borderColor: logoColors.primaryBlueAlpha(0.25)
+                        }}
+                        onClick={() => handleHissatsuSlotClick(idx)}
+                      >
+                        {/* Top bar with technique name and AT value on right */}
+                        <div className="flex items-center justify-between px-3 py-1.5" style={{ background: 'linear-gradient(90deg, rgba(0,140,255,0.5) 0%, rgba(0,140,255,0.2) 100%)' }}>
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-black/20">
+                              {technique ? (
+                                <img src={technique.icon} alt={technique.name} className="w-5 h-5 object-cover rounded-full" />
+                              ) : (
+                                <Plus className="h-3.5 w-3.5" />
+                              )}
+                            </div>
+                            <div className="text-sm font-semibold truncate">{technique ? technique.name : 'Add Technique'}</div>
+                          </div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-[10px] text-white/80">AT</span>
+                            <span className="text-xl font-extrabold" style={{ color: logoColors.primaryBlue }}>{atVal ?? '--'}</span>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-[11px] text-gray-400">{displaySlotLabel(idx)}</div>
-                          <div className="text-sm font-medium truncate">{technique ? technique.name : 'Add Technique'}</div>
+                        {/* Bottom area small label like 1-A and description */}
+                        <div className="px-3 py-2">
+                          <div className="text-[11px] text-gray-400 mb-1">{displaySlotLabel(idx)}</div>
+                          {technique && (
+                            <div className="text-[12px] text-gray-200 line-clamp-2">{technique.description}</div>
+                          )}
                         </div>
                         {technique && (
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="w-6 h-6 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white flex-shrink-0"
+                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white"
                             onClick={(e) => { e.stopPropagation(); handleRemoveHissatsu(idx); }}
                           >
                             <X className="h-3 w-3" />
                           </Button>
                         )}
                       </div>
-                    </div>
-                  );
+                    );
+                  };
 
                   return (
                     <div key={slotBase} className="rounded-lg border p-3" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.1) }}>
