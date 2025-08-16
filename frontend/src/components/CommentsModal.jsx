@@ -18,6 +18,9 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
 
   useEffect(() => {
     if (!isOpen || !team?.id) return;
+    // Reset reply/input when opening or switching team
+    setReplyTo(null);
+    setInput('');
     (async () => {
       setLoading(true);
       try {
@@ -38,6 +41,14 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
       }
     })();
   }, [isOpen, team?.id]);
+
+  // Also clear reply/input when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setReplyTo(null);
+      setInput('');
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
