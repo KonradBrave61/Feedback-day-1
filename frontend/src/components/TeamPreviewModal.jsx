@@ -391,13 +391,9 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
             <span className="text-[10px] px-1 py-0.5 rounded border" style={{ color: logoColors.secondaryBlue, borderColor: logoColors.secondaryBlue }}>{element}</span>
             <span className="text-[10px] px-1 py-0.5 rounded border text-gray-200" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>Lv {level}</span>
           </div>
-          <div className="mt-1 flex items-center gap-2">
-            <div className="text-xs text-white/90 font-semibold">OVR {overall}</div>
-            <MiniBars stats={stats} />
-          </div>
           {Array.isArray(techniques) && techniques.length > 0 && (
             <div className="mt-1 flex flex-wrap gap-1">
-              {techniques.slice(0, 3).map((t, i) => (
+              {techniques.map((t, i) => (
                 <span key={i} className="text-[10px] px-1 py-0.5 rounded" style={{ backgroundColor: logoColors.primaryYellowAlpha(0.15), color: logoColors.primaryYellow }}>
                   {t?.name || `Tech ${i + 1}`}
                 </span>
