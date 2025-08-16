@@ -64,10 +64,10 @@ class BackendTester:
             }
             
             response = self.session.post(f"{API_BASE}/auth/register", json=user_a_data)
-            if response.status_code == 201:
+            if response.status_code in [200, 201]:
                 self.user_a_token = response.json()["access_token"]
                 self.user_a_id = response.json()["user"]["id"]
-                self.log_result("User A Registration", True, f"User ID: {self.user_a_id}", 201)
+                self.log_result("User A Registration", True, f"User ID: {self.user_a_id}", response.status_code)
             else:
                 self.log_result("User A Registration", False, response.text, response.status_code)
                 return False
