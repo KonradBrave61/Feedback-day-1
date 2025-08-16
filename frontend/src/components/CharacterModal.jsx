@@ -977,26 +977,22 @@ const SlotConnector = ({ children }) => {
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
-      {/* Custom connector drawing: top elbow to first box, bottom elbow to second box */}
+      {/* Custom connector drawing: both elbows go OUT from box, then DOWN (no reversed/up elbows) */}
       <svg className="pointer-events-none absolute left-[-24px] top-0 h-full" width="36" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {arms && (
-          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none">
-            {/* Top elbow (slightly above the midpoint of the first box) */}
+          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round">
+            {/* Top box elbow: horizontal out from box, then down */}
             {arms.mids[0] && (
               <>
-                {/* short up segment off the top wall */}
-                <line x1="18" y1={arms.mids[0].y - 10} x2="18" y2={arms.mids[0].y - 2} />
-                {/* 90-degree turn into the first technique box */}
-                <line x1="18" y1={arms.mids[0].y - 2} x2="36" y2={arms.mids[0].y - 2} />
+                <line x1="36" y1={arms.mids[0].y} x2="24" y2={arms.mids[0].y} />
+                <line x1="24" y1={arms.mids[0].y} x2="24" y2={arms.mids[0].y + 10} />
               </>
             )}
-            {/* Bottom elbow (slightly below the midpoint of the second box) – mirror of the top */}
+            {/* Bottom box elbow: horizontal out from box, then down (same direction, no mirroring up) */}
             {arms.mids[1] && (
               <>
-                {/* short down segment off the bottom wall */}
-                <line x1="18" y1={arms.mids[1].y + 10} x2="18" y2={arms.mids[1].y + 2} />
-                {/* 90-degree turn into the second technique box */}
-                <line x1="18" y1={arms.mids[1].y + 2} x2="36" y2={arms.mids[1].y + 2} />
+                <line x1="36" y1={arms.mids[1].y} x2="24" y2={arms.mids[1].y} />
+                <line x1="24" y1={arms.mids[1].y} x2="24" y2={arms.mids[1].y + 10} />
               </>
             )}
           </g>
