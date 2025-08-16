@@ -691,7 +691,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                     return (
                       <div
                         key={idx}
-                        className={`relative p-0 rounded-lg border cursor-pointer transition-all hover:scale-[1.01] overflow-hidden ${
+                        className={`relative p-0 rounded-lg border cursor-pointer transition-all hover:scale-[1.005] overflow-hidden h-[72px] ${
                           technique ? 'border-orange-500/30' : 'border-dashed hover:border-blue-400/60'
                         }`}
                         style={technique ? {
