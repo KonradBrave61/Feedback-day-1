@@ -74,6 +74,7 @@ const TeamBuilder = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showLoadModal, setShowLoadModal] = useState(false);
   const [showTacticsModal, setShowTacticsModal] = useState(false);
+  const [showManagerModal, setShowManagerModal] = useState(false);
   
   // Helper functions for preset management
   const handlePresetsUpdate = (updatedPresets, newCurrentPreset) => {
