@@ -386,9 +386,13 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
                     </div>
                   </div>
                 )}
-                {/* Taller box; field scales to 98% inside */}
-                <CardContent className="p-4 h-[480px] md:h-[560px] lg:h-[600px]">
-                  {renderFormationField()}
+                {/* Lock the formation area to a soccer-pitch friendly aspect ratio (~2:3) and let it scale responsively */}
+                <CardContent className="p-4">
+                  <AspectRatio ratio={3/4}>
+                    <div className="absolute inset-0">
+                      {renderFormationField()}
+                    </div>
+                  </AspectRatio>
                 </CardContent>
               </Card>
 
