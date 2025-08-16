@@ -93,7 +93,10 @@ const FormationField = ({ formation, players, benchPlayers, onAddPlayer, onRemov
                   {player.nickname}
                 </div>
                 <div className="text-xs text-gray-300 text-center">
-                  Lv.{player.baseLevel}
+                  {(() => {
+                    const lvl = player?.userLevel ?? player?.user_level ?? player?.baseLevel ?? player?.level ?? 1;
+                    return `Lv.${lvl}`;
+                  })()}
                 </div>
               </CardContent>
             </Card>
