@@ -256,14 +256,15 @@ async def comment_on_team(
         user_id=current_user.id,
         username=current_user.username,
         user_avatar=current_user.profile_picture,
-        content=comment_data.content
+        content=comment_data.content,
+        parent_id=comment_data.parent_id
     )
-    
+
     await db.teams.update_one(
         {"id": team_id},
         {"$push": {"comments": comment.dict()}}
     )
-    
+
     return {"message": "Comment added successfully", "comment": comment}
 
 @router.get("/teams/{team_id}/view")
