@@ -973,14 +973,14 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
     boxes.forEach((b, idx) => {
       const r = b.getBoundingClientRect();
       const boxLeft = r.left - rectWrap.left;
-      const anchorY = idx === 0 ? anchorTop.y : anchorBottom.y;
-      const yKink = idx === 0 ? (anchorY - stub) : (anchorY + stub);
-      const xKink = anchorRight.x; // right edge of number square
+      const anchor = idx === 0 ? anchorTop : anchorBottom; // centers of top/bottom walls
+      const yKink = idx === 0 ? (anchor.y - stub) : (anchor.y + stub);
+      const xCenter = anchor.x; // 50% of top/bottom wall
 
-      // Segment 1: short vertical from the number square edge to yKink
-      segs.push({ x1: xKink, y1: anchorY, x2: xKink, y2: yKink });
-      // Segment 2: horizontal from yKink straight into the technique box
-      segs.push({ x1: xKink, y1: yKink, x2: boxLeft, y2: yKink });
+      // Segment 1: short vertical from the number square wall center to yKink
+      segs.push({ x1: xCenter, y1: anchor.y, x2: xCenter, y2: yKink });
+      // Segment 2: horizontal from the kink straight into the technique box
+      segs.push({ x1: xCenter, y1: yKink, x2: boxLeft, y2: yKink });
     });
     setLines(segs);
   };
