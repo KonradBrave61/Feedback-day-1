@@ -204,6 +204,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     setShowHissatsuList(true);
   };
 
+  // Map 0..5 index to Slot number and sub-slot
+  const displaySlotLabel = (i) => {
+    const slotNum = Math.floor(i / 2) + 1;
+    const sub = i % 2 === 0 ? 'A' : 'B';
+    return `${slotNum}-${sub}`;
+  };
+
   const handleHissatsuSelect = (hissatsu) => {
     const currentPreset = `preset${activePreset}`;
     const slotIndex = selectedCategory;
