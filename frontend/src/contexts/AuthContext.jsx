@@ -683,10 +683,9 @@ export const AuthProvider = ({ children }) => {
     // Chat APIs
     startConversation: async (partnerId) => {
       try {
-        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/start`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ partner_id: partnerId }),
+        const url = `${backendUrl}/api/chat/start?partner_id=${encodeURIComponent(partnerId)}`;
+        const response = await makeAuthenticatedRequest(url, {
+          method: 'POST'
         });
         if (!response.ok) return { success: false };
         const data = await response.json();
