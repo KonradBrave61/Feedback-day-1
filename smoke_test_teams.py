@@ -23,7 +23,7 @@ def get_backend_url():
                     return line.split('=', 1)[1].strip()
     except:
         pass
-    return "https://chat-display-fix-1.preview.emergentagent.com"
+    return "https://technique-diagram.preview.emergentagent.com"
 
 BASE_URL = get_backend_url()
 API_BASE = f"{BASE_URL}/api"

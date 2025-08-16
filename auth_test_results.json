@@ -103,6 +103,6 @@
       }
     }
   ],
-  "backend_url": "https://chat-display-fix-1.preview.emergentagent.com/api",
+  "backend_url": "https://technique-diagram.preview.emergentagent.com/api",
   "token_expiry_minutes": 30
 }
