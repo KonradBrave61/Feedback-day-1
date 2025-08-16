@@ -981,6 +981,10 @@ const SlotConnector = ({ children }) => {
       <svg className="pointer-events-none absolute left-[-24px] top-0 h-full" width="36" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {arms && (
           <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none" strokeLinecap="round">
+            {/* Vertical wall between the two boxes */}
+            {arms.mids[0] && arms.mids[1] && (
+              <line x1="24" y1={arms.mids[0].y} x2="24" y2={arms.mids[1].y} />
+            )}
             {/* Top box elbow: horizontal out from box, then down */}
             {arms.mids[0] && (
               <>
