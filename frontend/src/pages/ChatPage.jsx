@@ -35,6 +35,13 @@ const ChatPage = () => {
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, []);
 
+  // Auto-open the first conversation so user sees a chat immediately and can send messages
+  useEffect(() => {
+    if (!activeConvo && conversations && conversations.length > 0) {
+      openConversation(conversations[0]);
+    }
+  }, [conversations]);
+
   const partnerFromConvo = (c) => c?.partner || {};
 
   const openConversation = async (c) => {
