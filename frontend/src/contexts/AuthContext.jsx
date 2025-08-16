@@ -742,6 +742,13 @@ export const AuthProvider = ({ children }) => {
         return await response.json();
       } catch (e) { return { success: false }; }
     },
+    getChatSettings: async () => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/settings`);
+        if (!response.ok) return { success: false };
+        return await response.json();
+      } catch (e) { return { success: false }; }
+    },
     updateChatSettings: async (settings) => {
       try {
         const response = await makeAuthenticatedRequest(`${backendUrl}/api/chat/settings`, {
