@@ -37,6 +37,7 @@ function App() {
               <Route path="/helper" element={<HelperPage />} />
               <Route path="/support" element={<SupportPage />} />
               <Route path="/community" element={<CommunityHub />} />
+              <Route path="/chat" element={<ChatPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
