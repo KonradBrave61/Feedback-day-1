@@ -27,7 +27,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<MainPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              
               <Route path="/team-builder" element={<TeamBuilder />} />
               <Route path="/characters" element={<CharactersPage />} />
               <Route path="/constellations" element={<ConstellationsPage />} />
