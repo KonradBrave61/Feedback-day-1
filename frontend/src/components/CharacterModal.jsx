@@ -914,8 +914,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 const SlotConnector = ({ children }) => {
   const containerRef = useRef(null);
   const [arms, setArms] = useState(null);
+  const rafRef = useRef(null);
+  const lastRef = useRef(null);
 
-  useLayoutEffect(() => {
+  const measure = () => {
     const el = containerRef.current;
     if (!el) return;
     const boxes = Array.from(el.querySelectorAll('[data-tech-box]'));
@@ -927,15 +929,45 @@ const SlotConnector = ({ children }) => {
     });
     const y1 = mids[0]?.y ?? 0;
     const y2 = mids[mids.length - 1]?.y ?? y1;
-    setArms({ y1, y2, mids });
-  });
+    const next = { y1, y2, mids };
+    const prev = lastRef.current;
+    const same = prev && prev.y1 === next.y1 && prev.y2 === next.y2 && prev.mids.length === next.mids.length && prev.mids.every((m, i) => m.y === next.mids[i].y);
+    if (!same) {
+      lastRef.current = next;
+      setArms(next);
+    }
+  };
+
+  useLayoutEffect(() => {
+    // measure once after mount/children change
+    rafRef.current = requestAnimationFrame(measure);
+    const el = containerRef.current;
+    if (!el) return () => {};
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(measure);
+    });
+    ro.observe(el);
+    const onResize = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(measure);
+    };
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      ro.disconnect();
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [children]);
 
   return (
     <div ref={containerRef} className="flex-1 space-y-4 relative">
       <svg className="pointer-events-none absolute left-[-12px] top-0 h-full" width="12" height="100%" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
         {arms && (
-          <g stroke="rgba(255,255,255,0.38)" strokeWidth="2" fill="none">
+          <g stroke="rgba(255,255,255,0.45)" strokeWidth="2" fill="none">
+            {/* Vertical spine at x=10 from first box mid to last box mid */}
             <line x1="10" y1={arms.y1} x2="10" y2={arms.y2} />
+            {/* Horizontal arms into each box midpoint */}
             {arms.mids.map((t, idx) => (
               <line key={idx} x1="10" y1={t.y} x2="12" y2={t.y} />
             ))}
