@@ -901,24 +901,39 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
 // Group wrapper that renders the left number circle and uses SlotConnector for 90° lines
 const SlotGroup = ({ slotNum, children }) => {
+  const anchorRef = useRef(null);
+  const [anchorAbs, setAnchorAbs] = useState(null);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (!anchorRef.current) return;
+      const rect = anchorRef.current.getBoundingClientRect();
+      setAnchorAbs({ x: rect.left + rect.width, y: rect.top + rect.height / 2 });
+    };
+    const ro = new ResizeObserver(measure);
+    if (anchorRef.current) ro.observe(anchorRef.current);
+    window.addEventListener('resize', measure);
+    measure();
+    return () => {
+      window.removeEventListener('resize', measure);
+      ro.disconnect();
+    };
+  }, []);
+
   return (
     <div className="grid grid-cols-[36px_1fr] gap-2">
-      {/* Left label column with number circle and a short connector */}
+      {/* Left label column with number square */}
       <div className="relative">
         <div
+          ref={anchorRef}
           className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md grid place-items-center text-[12px] font-bold text-white/90"
           style={{ border: '2px solid rgba(255,255,255,0.45)', background: 'transparent' }}
         >
           {slotNum}
         </div>
-        {/* small horizontal line to meet the vertical spine */}
-        <div
-          className="absolute right-0 top-1/2 -translate-y-1/2 h-[2px]"
-          style={{ width: 12, background: 'rgba(255,255,255,0.45)' }}
-        />
       </div>
-      {/* Right column with precise connector and technique boxes */}
-      <SlotConnector>
+      {/* Right column draws connectors directly to the number square center */}
+      <SlotConnector anchorAbs={anchorAbs}>
         {children}
       </SlotConnector>
     </div>
