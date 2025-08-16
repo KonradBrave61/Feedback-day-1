@@ -391,7 +391,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const commentOnTeam = async (teamId, content) => {
+  const commentOnTeam = async (teamId, content, parentId = null) => {
     try {
       const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/${teamId}/comment`, {
         method: 'POST',
