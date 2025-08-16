@@ -453,6 +453,30 @@ LATEST ISSUES FIXED:
         agent: "testing"
         comment: "Sample constellation data initialization fully tested and working perfectly. Successfully tested: 1) Three sample constellations (Lightning, Flame, Wind) automatically created on first API call 2) Each constellation has proper orb positions (x, y coordinates 0-100), glow intensities, and connections between orbs 3) Character pools populated from existing characters in database, organized by element and rarity 4) Proper legendary/epic/rare/normal distribution with at least 1 legendary per constellation 5) Base drop rates sum to 100% (0.5% legendary, 4.5% epic, 25% rare, 70% normal) 6) Background colors and orb colors properly set for visual theming 7) Constellation initialization only occurs when database is empty, preventing duplicates. All sample data initialization verified through comprehensive testing."
 
+  - task: "Chat System API Endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/chat.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎯 CHAT ENDPOINTS SMOKE TESTING COMPLETED SUCCESSFULLY: Conducted comprehensive testing of newly added chat functionality as specifically requested in review. RESULTS: 100% SUCCESS RATE (14/14 tests passed) ✅ AUTHENTICATION SETUP: Successfully registered and authenticated two test users (User A follows User B) with proper follow relationship established for chat access control ✅ POST /api/chat/start with partner_id - Working perfectly, creates conversation between users with proper participant validation and returns conversation ID ✅ GET /api/chat/conversations - Working perfectly, returns conversation list with partner information (id, username, profile_picture, coach_level) and conversation metadata ✅ POST /api/chat/conversations/{id}/messages - Working perfectly, sends messages with proper content validation, updates last_message, and increments unread counts ✅ GET /api/chat/conversations/{id}/messages - Working perfectly, retrieves message history and resets unread count for requesting user ✅ POST /api/chat/block with user_id - Working perfectly, blocks user and prevents further messaging ✅ Blocked message attempt verification - Working perfectly, returns 403 Forbidden when attempting to send messages to blocked users ✅ POST /api/chat/unblock with user_id - Working perfectly, unblocks user and restores messaging capability ✅ Unblocked message test - Working perfectly, messaging works again after unblocking ✅ PUT /api/chat/settings - Working perfectly, updates chat preferences (accept_messages_from: 'following', read_receipts: true, notifications: true) CRITICAL FIXES APPLIED: Fixed MongoDB ObjectId serialization errors in chat/start and message sending endpoints by removing _id fields before JSON response. All chat endpoints are fully operational and ready for production use."
+
+  - task: "Updated Comments with Parent ID Support"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/user_teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎯 COMMENT PARENT_ID FUNCTIONALITY TESTING COMPLETED SUCCESSFULLY: Conducted comprehensive testing of updated comment system with optional parent_id support as specifically requested in review. RESULTS: 100% SUCCESS RATE (3/3 tests passed) ✅ CREATE TEST TEAM: Successfully created public test team for comment functionality testing ✅ PARENT COMMENT CREATION: POST /api/teams/{team_id}/comment with content only - Working perfectly, creates parent comment with proper user attribution and returns comment ID ✅ REPLY COMMENT WITH PARENT_ID: POST /api/teams/{team_id}/comment with content and parent_id - Working perfectly, creates reply comment linked to parent comment with proper parent_id field preservation. Verified comment structure includes user_id, username, content, parent_id, and created_at fields. The updated comment system properly supports threaded conversations with parent-child relationships. All comment functionality is operational and ready for production use."
+
   - task: "Fix Tactical Visualization Runtime Error"
     implemented: true
     working: true
