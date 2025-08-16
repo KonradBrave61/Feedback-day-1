@@ -245,9 +245,9 @@ const TeamPreviewModal = ({ isOpen, onClose, team, onPrivacyToggle }) => {
 
     return (
       <div className="w-full h-full flex items-center justify-center">
-        {/* Fit field to 98% of the box */}
+        {/* Fit field to full container with consistent padding */}
         <div
-          className="relative w-[98%] h-[98%] rounded-lg overflow-hidden"
+          className="relative w-full h-full rounded-lg overflow-hidden"
           style={{
             background: 'linear-gradient(to bottom, #22c55e 0%, #16a34a 50%, #22c55e 100%)',
             backgroundImage: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%),linear-gradient(0deg, rgba(255,255,255,0.1) 49%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 51%)`,
