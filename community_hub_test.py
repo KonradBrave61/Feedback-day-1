@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration - Use the correct backend URL from frontend/.env
-BACKEND_URL = "https://quick-stats-view.preview.emergentagent.com/api"
+BACKEND_URL = "https://chat-hub-20.preview.emergentagent.com/api"
 
 class CommunityHubAPITester:
     def __init__(self):

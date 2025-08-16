@@ -13,7 +13,7 @@ import os
 from typing import Dict, Any, Optional
 
 # Configuration
-BACKEND_URL = "https://quick-stats-view.preview.emergentagent.com/api"
+BACKEND_URL = "https://chat-hub-20.preview.emergentagent.com/api"
 SECRET_KEY = "your-secret-key-here-change-in-production"  # From auth.py
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # From auth.py
