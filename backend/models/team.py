@@ -140,3 +140,4 @@ class LikeRequest(BaseModel):
 
 class CommentRequest(BaseModel):
     content: str
+    parent_id: Optional[str] = None
