@@ -987,24 +987,39 @@ const SlotConnector = ({ anchorRectAbs, children }) => {
   };
 
   useLayoutEffect(() => {
+    let frame;
     const schedule = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(measure);
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
     };
-    schedule();
 
+    // Observe container and its children size changes
     const ro = new ResizeObserver(schedule);
-    if (containerRef.current) ro.observe(containerRef.current);
+    if (containerRef.current) {
+      ro.observe(containerRef.current);
+      // Also observe all technique boxes individually for dynamic height changes
+      containerRef.current.querySelectorAll('[data-tech-box]').forEach(el => ro.observe(el));
+    }
 
-    // Rerun on scroll (modal/content scroll / zoom)
-    window.addEventListener('resize', schedule, true);
-    window.addEventListener('scroll', schedule, true);
+    // Use animation frame on every paint to survive CSS transform scale changes smoothly
+    let running = true;
+    const loop = () => {
+      if (!running) return;
+      schedule();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+
+    // Recompute on window resize and modal scroll
+    window.addEventListener('resize', schedule, { passive: true, capture: true });
+    window.addEventListener('scroll', schedule, { passive: true, capture: true });
 
     return () => {
-      window.removeEventListener('resize', schedule, true);
-      window.removeEventListener('scroll', schedule, true);
+      running = false;
+      window.removeEventListener('resize', schedule, { capture: true });
+      window.removeEventListener('scroll', schedule, { capture: true });
       ro.disconnect();
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(frame);
     };
   }, [anchorRectAbs, children]);
 
