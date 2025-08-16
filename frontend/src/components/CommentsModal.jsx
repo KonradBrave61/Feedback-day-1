@@ -43,7 +43,7 @@ const CommentsModal = ({ isOpen, onClose, team }) => {
     e.preventDefault();
     if (!input.trim()) return;
     try {
-      const result = await commentOnTeam(team.id, input.trim());
+      const result = await commentOnTeam(team.id, input.trim(), replyTo?.id || null);
       if (result?.success && result.comment) {
         setComments((prev) => [...prev, result.comment]);
         setInput('');
