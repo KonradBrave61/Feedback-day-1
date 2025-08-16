@@ -742,11 +742,21 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   };
 
                   return (
-                    <div key={slotBase} className="rounded-lg border p-3" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.1) }}>
-                      <div className="text-xs mb-2 font-semibold text-white">Slot {Math.floor(slotBase/2) + 1}</div>
-                      <div className="grid grid-cols-2 gap-3">
-                        {renderSlot(slotBase, techniqueA)}
-                        {renderSlot(slotBase + 1, techniqueB)}
+                    <div key={slotBase} className="rounded-lg border p-3" style={{ borderColor: logoColors.primaryBlueAlpha(0.2), backgroundColor: logoColors.blackAlpha(0.05) }}>
+                      <div className="flex items-stretch gap-3">
+                        {/* Left vertical slot label with connector */}
+                        <div className="relative w-8 flex items-center justify-center">
+                          <div className="absolute top-2 bottom-2 left-1/2 -translate-x-1/2 w-[2px] bg-white/20" />
+                          <div className="relative z-10 w-7 h-7 rounded-lg border flex items-center justify-center text-sm font-bold"
+                               style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3), color: '#fff' }}>
+                            {Math.floor(slotBase/2) + 1}
+                          </div>
+                        </div>
+                        {/* Right: two stacked technique boxes (A then B) */}
+                        <div className="flex-1 space-y-3">
+                          {renderSlot(slotBase, techniqueA)}
+                          {renderSlot(slotBase + 1, techniqueB)}
+                        </div>
                       </div>
                     </div>
                   );
