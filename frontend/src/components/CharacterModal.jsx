@@ -707,12 +707,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                         <div className="flex items-center justify-between px-3 py-2">
                           <div className="flex items-center gap-3 min-w-0">
                             {/* Technique type icon circle */}
-                            <div className="w-8 h-8 rounded-full border flex items-center justify-center overflow-hidden"
+                            <div className="w-10 h-10 rounded-full border flex items-center justify-center overflow-hidden"
                                  style={{ borderColor: logoColors.primaryBlueAlpha(0.4), backgroundColor: logoColors.blackAlpha(0.2) }}>
                               {technique ? (
-                                <img src={technique.icon} alt={technique.type} className="w-6 h-6 object-cover" />
+                                <img src={technique.icon} alt={technique.type} className="w-8 h-8 object-cover" />
                               ) : (
-                                <Plus className="h-4 w-4" style={{ color: logoColors.primaryBlue }} />
+                                <Plus className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
                               )}
                             </div>
                             <div className="flex flex-col min-w-0">
