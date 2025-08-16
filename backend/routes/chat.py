@@ -238,6 +238,17 @@ async def unblock_user(
     )
     return {"success": True, "blocked": False}
 
+@router.get("/chat/settings")
+async def get_chat_settings(current_user: User = Depends(get_current_user)):
+    db = await get_database()
+    user_doc = await db.users.find_one({"id": current_user.id})
+    settings = user_doc.get("chat_settings", {
+        "accept_messages_from": "following",
+        "read_receipts": True,
+        "notifications": True,
+    })
+    return {"success": True, "settings": settings, "blocked_users": user_doc.get("blocked_users", [])}
+
 @router.put("/chat/settings")
 async def update_chat_settings(
     settings: dict,
