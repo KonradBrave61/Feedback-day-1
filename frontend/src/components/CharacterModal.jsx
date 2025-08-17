@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, Activity, Gauge, Dumbbell } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, Activity, Gauge, Dumbbell, Scale } from 'lucide-react';
 import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 import { logoColors } from '../styles/colors';
