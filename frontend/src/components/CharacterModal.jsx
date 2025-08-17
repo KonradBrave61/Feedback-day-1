@@ -10,7 +10,8 @@ import { toast } from 'sonner';
 import { logoColors } from '../styles/colors';
 import { useComparison } from '../contexts/ComparisonContext';
 
-const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam, teamBuildingMode = false, pendingPosition = null, pendingIsBench = false, onAddToComparison }) => {
+const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam, teamBuildingMode = false, pendingPosition = null, pendingIsBench = false }) => {
+  const { addToComparison } = useComparison();
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
     allCharacters && character ? allCharacters.findIndex(c => c.id === character.id) : 0
   );
