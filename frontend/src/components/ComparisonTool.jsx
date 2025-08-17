@@ -13,8 +13,8 @@ import { useComparison } from '../contexts/ComparisonContext';
 
 const ComparisonTool = () => {
   const { user } = useAuth();
+  const { compareItems, addToComparison, removeFromComparison, clearComparison } = useComparison();
   const [isOpen, setIsOpen] = useState(false);
-  const [compareItems, setCompareItems] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('characters');
