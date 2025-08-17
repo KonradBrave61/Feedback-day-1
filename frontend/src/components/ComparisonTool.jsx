@@ -57,7 +57,7 @@ const ComparisonTool = () => {
           break;
         case 'coaches':
         case 'managers':
-          url = `${backendUrl}/api/coaches`;
+          url = `${backendUrl}/api/teams/coaches/`;
           break;
         default:
           return { success: false, data: [] };
