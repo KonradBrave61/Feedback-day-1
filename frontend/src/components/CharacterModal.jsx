@@ -929,12 +929,12 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           </Card>
         </div>
 
-        {/* Add to Team Button - Restored with enhanced functionality */}
-        {onAddToTeam && (
-          <div className="mt-6 flex justify-center">
+        {/* Action Buttons */}
+        <div className="mt-6 flex justify-center gap-4">
+          {onAddToTeam && (
             <Button
               onClick={addToTeam}
-              className="text-white px-8 py-3 text-lg font-semibold hover:opacity-80"
+              className="text-white px-6 py-3 text-lg font-semibold hover:opacity-80"
               style={{ background: logoColors.yellowOrangeGradient, color: logoColors.black }}
             >
               <Plus className="h-5 w-5 mr-2" />
@@ -946,8 +946,22 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                 'Add to Team'
               )}
             </Button>
-          </div>
-        )}
+          )}
+          
+          <Button
+            onClick={addToComparison}
+            variant="outline"
+            className="px-6 py-3 text-lg font-semibold hover:opacity-80"
+            style={{ 
+              borderColor: logoColors.primaryBlue, 
+              color: logoColors.primaryBlue,
+              backgroundColor: 'transparent'
+            }}
+          >
+            <Scale className="h-5 w-5 mr-2" />
+            Compare
+          </Button>
+        </div>
 
         {/* Equipment List Modal */}
         {showEquipmentList && selectedCategory && (
