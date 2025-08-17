@@ -22,6 +22,7 @@ import { ComparisonProvider } from "./contexts/ComparisonContext";
 import Notification from "./components/Notification";
 import ChatBubble from "./components/ChatBubble";
 import ComparisonTool from "./components/ComparisonTool";
+import AbilityTree from "./pages/AbilityTree";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/profile/:userId" element={<ProfilePage />} />
+              <Route path="/ability-tree" element={<AbilityTree />} />
             </Routes>
             {/* Global overlays */}
             <ChatBubble />

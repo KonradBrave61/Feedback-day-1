@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars, Menu, X, Package, Zap, HelpCircle, Headphones } from 'lucide-react';
+import { Home, Users, User, Settings, Trophy, Target, LogOut, UserCircle, LayoutDashboard, MessageSquare, UserPlus, Globe, Stars, Menu, X, Package, Zap, HelpCircle, Headphones, GitBranch } from 'lucide-react';
 import { logoColors, componentColors } from '../styles/colors';
 
 const Navigation = () => {
@@ -22,6 +22,7 @@ const Navigation = () => {
     { path: '/community', label: 'Community Hub', icon: MessageSquare },
     { path: '/items', label: 'Items', icon: Package },
     { path: '/techniques', label: 'Techniques', icon: Zap },
+    { path: '/ability-tree', label: 'Ability Tree', icon: GitBranch },
     { path: '/helper', label: 'Helper', icon: HelpCircle },
     { path: '/support', label: 'Support', icon: Headphones },
   ];
@@ -65,8 +66,6 @@ const Navigation = () => {
                 </div>
               </div>
             </div>
-
-            {/* Desktop Navigation Items kept minimal; Chat in profile menu */}
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
