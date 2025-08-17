@@ -73,7 +73,16 @@ async def get_user_profile(
             detail="User not found"
         )
     
-    return UserPublic(**user)
+    # Calculate follower and following counts
+    followers_count = len(user.get("followers", []))
+    following_count = len(user.get("following", []))
+    
+    # Add counts to user data
+    user_data = dict(user)
+    user_data["followers_count"] = followers_count
+    user_data["following_count"] = following_count
+    
+    return UserPublic(**user_data)
 
 @router.get("/users/{user_id}/teams", response_model=List[Team])
 async def get_user_public_teams(
