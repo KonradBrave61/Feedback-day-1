@@ -238,6 +238,18 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
   };
 
   const handleHissatsuSelect = (hissatsu) => {
+    // Handle Mixi Max selection
+    if (selectedCategory === 'mixiMax') {
+      setSelectedHissatsu(prev => ({
+        ...prev,
+        mixiMax: hissatsu
+      }));
+      setShowHissatsuList(false);
+      setSelectedCategory(null);
+      return;
+    }
+
+    // Handle regular technique selection
     const currentPreset = `preset${activePreset}`;
     const slotIndex = selectedCategory;
 
