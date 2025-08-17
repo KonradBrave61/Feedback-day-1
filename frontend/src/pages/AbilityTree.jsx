@@ -89,17 +89,25 @@ const initialEdges = [
 ];
 
 const AbilityTree = () => {
+  const containerRef = useRef(null);
+  const svgRef = useRef(null);
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [selecting, setSelecting] = useState(null); // selected node id for inline card
-  const [anchor, setAnchor] = useState(null); // {x,y} screen coords for inline card
-
+  const [selecting, setSelecting] = useState(null); // selected node for inline card
+  const [anchor, setAnchor] = useState(null); // {left, top} relative to container
   const totalLP = 25;
   const [usedLP, setUsedLP] = useState(7); // some pre-spent
 
   const nodeById = useMemo(() => Object.fromEntries(nodes.map(n => [n.id, n])), [nodes]);
 
   const lpLeft = totalLP - usedLP;
+
+  // Close on ESC
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setSelecting(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const isUnlockable = (n) => {
     if (!n) return false;
