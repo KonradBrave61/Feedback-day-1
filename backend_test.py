@@ -39,20 +39,26 @@ class CommunityProfileChatTester:
         }
         
         response = self.session.post(f"{self.backend_url}/auth/register", json=user_a_data)
-        if response.status_code != 201:
+        if response.status_code not in [200, 201]:
             self.log(f"❌ User A registration failed: {response.status_code} - {response.text}")
             return False
             
-        # Login User A
-        login_data = {"email": user_a_data["email"], "password": user_a_data["password"]}
-        response = self.session.post(f"{self.backend_url}/auth/login", json=login_data)
-        if response.status_code != 200:
-            self.log(f"❌ User A login failed: {response.status_code} - {response.text}")
-            return False
-            
-        user_a_auth = response.json()
-        self.user_a_token = user_a_auth["access_token"]
-        self.user_a_id = user_a_auth["user"]["id"]
+        # Check if registration returned login data directly
+        if response.status_code == 200:
+            user_a_auth = response.json()
+            self.user_a_token = user_a_auth["access_token"]
+            self.user_a_id = user_a_auth["user"]["id"]
+        else:
+            # Login User A
+            login_data = {"email": user_a_data["email"], "password": user_a_data["password"]}
+            response = self.session.post(f"{self.backend_url}/auth/login", json=login_data)
+            if response.status_code != 200:
+                self.log(f"❌ User A login failed: {response.status_code} - {response.text}")
+                return False
+                
+            user_a_auth = response.json()
+            self.user_a_token = user_a_auth["access_token"]
+            self.user_a_id = user_a_auth["user"]["id"]
         
         # Register User B
         user_b_data = {
