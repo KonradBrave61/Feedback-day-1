@@ -212,8 +212,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     setShowHissatsuList(true);
   };
 
-  const handleMixiMaxSlotClick = () => {
-    setSelectedCategory('mixiMax');
+  const handleMixiMaxSlotClick = (slotNumber) => {
+    setSelectedCategory(`mixiMax${slotNumber}`);
     setShowHissatsuList(true);
   };
 
