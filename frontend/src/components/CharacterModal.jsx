@@ -145,6 +145,32 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     }
   };
 
+  // Helper to convert hex color to rgba string
+  const hexToRgba = (hex, alpha = 1) => {
+    const clean = hex.replace('#', '');
+    const bigint = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  // Element color mapping for radar polygon
+  const getElementColor = (element) => {
+    const e = String(element || '').toLowerCase();
+    const map = {
+      fire: '#EF4444',        // red-500
+      earth: '#B45309',       // amber-700-ish
+      wind: '#14B8A6',        // teal-500
+      wood: '#22C55E',        // green-500
+      lightning: '#EAB308',   // yellow-500
+      thunder: '#EAB308',
+      void: '#8B5CF6',        // violet-500
+      neutral: '#64748B'      // slate-500
+    };
+    return map[e] || logoColors.primaryBlue;
+  };
+
   const navigateCharacter = (direction) => {
     if (!allCharacters || allCharacters.length === 0) {
       return; // Don't navigate if no characters available
