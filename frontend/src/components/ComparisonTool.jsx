@@ -556,7 +556,7 @@ const ComparisonTool = () => {
                   No {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} available
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 h-full overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 h-full overflow-y-auto pr-2">
                   {filteredItems.map(item => {
                     const isSelected = isInComparison(item.id, selectedCategory);
                     const canAdd = !isSelected && canAddMore(selectedCategory);
