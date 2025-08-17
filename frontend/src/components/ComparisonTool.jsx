@@ -339,7 +339,7 @@ const ComparisonTool = () => {
               )}
 
               <div className="text-sm text-gray-400">
-                {compareItems.length} items selected
+                {compareItems.length}/2 items selected
               </div>
             </div>
 
