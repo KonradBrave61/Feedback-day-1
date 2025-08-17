@@ -40,22 +40,26 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
       // Legacy: flat array. Interpret as 6 for preset1 and next 6 for preset2
       const p1 = raw.slice(0, 6);
       const p2 = raw.slice(6, 12);
+      const mixiMax = raw.slice(12, 13) || [null]; // Mixi Max slot
       return {
         preset1: makeSlots(p1),
-        preset2: makeSlots(p2)
+        preset2: makeSlots(p2),
+        mixiMax: mixiMax[0] || null
       };
     }
     if (raw && (Array.isArray(raw.preset1) || Array.isArray(raw.preset2))) {
       return {
         preset1: makeSlots(raw.preset1 || []),
-        preset2: makeSlots(raw.preset2 || [])
+        preset2: makeSlots(raw.preset2 || []),
+        mixiMax: raw.mixiMax || null
       };
     }
     // Fallback to character's default techniques
     const base = Array.isArray(char?.hissatsu) ? char.hissatsu : [];
     return {
       preset1: makeSlots(base.slice(0, 3)),
-      preset2: makeSlots(base.slice(3, 6))
+      preset2: makeSlots(base.slice(3, 6)),
+      mixiMax: null
     };
   };
   const [selectedHissatsu, setSelectedHissatsu] = useState(normalizePresets(character));
