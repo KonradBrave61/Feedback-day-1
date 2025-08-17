@@ -58,6 +58,20 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
               alt={character.name}
               className="w-full aspect-square object-cover rounded-lg mb-2"
             />
+            {/* Compare Button */}
+            <Button
+              onClick={handleCompareClick}
+              size="sm"
+              variant="outline"
+              className={`absolute top-1 right-1 w-8 h-8 p-0 rounded-full ${
+                isInComparison(character.id) 
+                  ? 'bg-blue-500/80 border-blue-400 text-white' 
+                  : 'bg-black/60 border-white/40 text-white hover:bg-blue-500/80'
+              }`}
+              title={isInComparison(character.id) ? "Remove from comparison" : "Add to comparison"}
+            >
+              <Scale className="h-3 w-3" />
+            </Button>
           </div>
           
           <div className="space-y-1">
