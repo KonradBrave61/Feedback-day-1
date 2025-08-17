@@ -122,7 +122,7 @@ class ComparisonToolAPITester:
                         # Test position filtering
                         if 'position' in character:
                             position = character['position']
-                            filter_response = requests.get(f"{BACKEND_URL}/characters?position={position}", 
+                            filter_response = requests.get(f"{BACKEND_URL}/characters/?position={position}", 
                                                          headers=self.get_headers())
                             if filter_response.status_code == 200:
                                 filtered_data = filter_response.json()
