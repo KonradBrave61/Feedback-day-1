@@ -12,6 +12,7 @@ class FormationPosition(BaseModel):
 class Formation(BaseModel):
     id: Optional[str] = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    tactical_name: Optional[str] = None  # e.g., "4-4-2", "3-5-2"
     positions: List[FormationPosition]
 
 class Tactic(BaseModel):
