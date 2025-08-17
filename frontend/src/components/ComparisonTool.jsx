@@ -11,7 +11,7 @@ import { calculateStats } from '../data/mock';
 import { useAuth } from '../contexts/AuthContext';
 
 const ComparisonTool = () => {
-  const { user, loadCharacters, loadCoaches, loadTechniques, loadEquipment } = useAuth();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [compareItems, setCompareItems] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
@@ -27,37 +27,63 @@ const ComparisonTool = () => {
     { value: 'managers', label: 'Managers', icon: '👩‍💼' }
   ];
 
-  const loadData = async (category) => {
-    setLoading(true);
+  // Direct API calls without authentication for comparison tool (public access)
+  const loadComparisonData = async (category, filters = {}) => {
+    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+    
     try {
+      let url;
+      const params = new URLSearchParams();
+      
       switch (category) {
         case 'characters':
-          const charactersData = await loadCharacters();
-          if (charactersData?.success) {
-            setAvailableItems(charactersData.characters || []);
-          }
+          if (filters.position) params.append('position', filters.position);
+          if (filters.element) params.append('element', filters.element);
+          if (filters.search) params.append('search', filters.search);
+          url = `${backendUrl}/api/characters${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'items':
-          const equipmentData = await loadEquipment();
-          if (equipmentData?.success) {
-            setAvailableItems(equipmentData.equipment || []);
-          }
+          if (filters.category) params.append('category', filters.category);
+          if (filters.rarity) params.append('rarity', filters.rarity);
+          if (filters.search) params.append('search', filters.search);
+          url = `${backendUrl}/api/equipment${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'techniques':
-          const techniquesData = await loadTechniques();
-          if (techniquesData?.success) {
-            setAvailableItems(techniquesData.techniques || []);
-          }
+          if (filters.technique_type) params.append('technique_type', filters.technique_type);
+          if (filters.category) params.append('category', filters.category);
+          if (filters.element) params.append('element', filters.element);
+          if (filters.search) params.append('search', filters.search);
+          url = `${backendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'coaches':
         case 'managers':
-          const coachesData = await loadCoaches();
-          if (coachesData?.success) {
-            setAvailableItems(coachesData.coaches || []);
-          }
+          url = `${backendUrl}/api/coaches`;
           break;
         default:
-          setAvailableItems([]);
+          return { success: false, data: [] };
+      }
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error(`Error loading ${category}:`, error);
+      return { success: false, data: [] };
+    }
+  };
+
+  const loadData = async (category) => {
+    setLoading(true);
+    try {
+      const result = await loadComparisonData(category);
+      if (result.success) {
+        setAvailableItems(result.data || []);
+      } else {
+        setAvailableItems([]);
       }
     } catch (error) {
       console.error('Error loading data:', error);
