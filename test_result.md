@@ -613,7 +613,7 @@ LATEST ISSUES FIXED:
 
   - task: "Comparison Tool Item Selection Fix"
     implemented: true
-    working: false
+    working: true
     file: "/app/frontend/src/components/ComparisonTool.jsx"
     stuck_count: 1
     priority: "high"
