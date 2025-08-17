@@ -61,7 +61,7 @@ const ComparisonTool = () => {
           url = `${backendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'coaches':
-          url = `${httpsBackendUrl}/api/teams/coaches/`;
+          url = `${backendUrl}/api/teams/coaches/`;
           break;
         default:
           console.error(`Unknown category: ${category}`);
