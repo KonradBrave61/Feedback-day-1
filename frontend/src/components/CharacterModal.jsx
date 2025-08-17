@@ -754,10 +754,83 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   );
                 })}
               </div>
+
+              {/* Mixi Max Slot */}
+              <div className="mt-4 rounded-lg border p-3" style={{ borderColor: logoColors.primaryYellow, backgroundColor: logoColors.blackAlpha(0.08) }}>
+                <div className="grid grid-cols-[36px_1fr] gap-2">
+                  <div className="relative">
+                    <div
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md grid place-items-center text-[12px] font-bold text-black"
+                      style={{ 
+                        border: `2px solid ${logoColors.primaryYellow}`, 
+                        background: logoColors.primaryYellow 
+                      }}
+                    >
+                      M
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    {(() => {
+                      const mixiMaxTechnique = selectedHissatsu?.mixiMax || null;
+                      const atVal = mixiMaxTechnique ? getTechniqueAT(mixiMaxTechnique) : null;
+                      return (
+                        <div
+                          className={`relative p-0 rounded-lg border cursor-pointer transition-all hover:scale-[1.005] overflow-hidden h-[72px] ${
+                            mixiMaxTechnique ? 'border-yellow-500/50' : 'border-dashed hover:border-yellow-400/60'
+                          }`}
+                          style={mixiMaxTechnique ? {
+                            backgroundColor: logoColors.primaryYellowAlpha(0.15),
+                            borderColor: logoColors.primaryYellow
+                          } : {
+                            backgroundColor: logoColors.blackAlpha(0.1),
+                            borderColor: logoColors.primaryYellowAlpha(0.4)
+                          }}
+                          onClick={() => handleMixiMaxSlotClick()}
+                        >
+                          <div className="flex items-center justify-between px-3 py-2">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-8 h-8 rounded-full border flex items-center justify-center overflow-hidden"
+                                   style={{ borderColor: logoColors.primaryYellow, backgroundColor: logoColors.blackAlpha(0.2) }}>
+                                {mixiMaxTechnique ? (
+                                  <img src={mixiMaxTechnique.icon} alt={mixiMaxTechnique.type} className="w-6 h-6 object-cover" />
+                                ) : (
+                                  <Plus className="h-4 w-4" style={{ color: logoColors.primaryYellow }} />
+                                )}
+                              </div>
+                              <div className="flex flex-col min-w-0">
+                                <div className="text-sm font-medium truncate text-yellow-200">
+                                  {mixiMaxTechnique ? mixiMaxTechnique.name : 'Add Mixi Max'}
+                                </div>
+                                <div className="text-[11px] text-yellow-400/70">Mixi Max Technique</div>
+                              </div>
+                            </div>
+                            <div className="text-right leading-none">
+                              <div className="text-[10px] text-yellow-200/80 mb-0.5">AT</div>
+                              <div className="text-[22px] font-extrabold" style={{ color: logoColors.primaryYellow }}>
+                                {atVal ?? '--'}
+                              </div>
+                            </div>
+                          </div>
+                          {mixiMaxTechnique && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="absolute -top-2 -right-2 w-6 h-6 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white"
+                              onClick={(e) => { e.stopPropagation(); handleRemoveMixiMax(); }}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              </div>
               
               <div className="mt-4 text-center">
                 <p className="text-xs text-gray-400">
-                  Click on a slot to add/change technique. Click preset buttons to switch between presets.
+                  Click on slots to add/change techniques. The "M" slot is for special Mixi Max techniques.
                 </p>
               </div>
             </CardContent>
