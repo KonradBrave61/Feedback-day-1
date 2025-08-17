@@ -41,8 +41,12 @@ const TeamCard = ({
     if (onComment) onComment(team.id);
   };
 
-  const handleView = () => {
-    if (onView) onView(team.id);
+  const handleAuthorClick = (e) => {
+    e.stopPropagation();
+    const userId = team.user_id || team.creator?.id;
+    if (userId) {
+      navigate(`/profile/${userId}`);
+    }
   };
 
   // Rating mapping
