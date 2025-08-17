@@ -667,7 +667,7 @@ const ProfilePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" style={{ color: logoColors.primaryBlue }} />
-                  My Teams ({Array.isArray(teams) ? teams.length : 0})
+                  {isOwnProfile ? 'My Teams' : 'Public Teams'} ({Array.isArray(teams) ? teams.length : 0})
                 </CardTitle>
               </CardHeader>
               <CardContent>
