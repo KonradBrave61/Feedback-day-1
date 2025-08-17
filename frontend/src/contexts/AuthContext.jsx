@@ -833,6 +833,46 @@ export const AuthProvider = ({ children }) => {
         return { success: false };
       }
     },
+    // User Profile API
+    loadUserProfile: async (userId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/community/users/${userId}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return { success: true, user: data };
+      } catch (error) {
+        console.error('Load user profile error:', error);
+        return { success: false, error: error.message };
+      }
+    },
+    loadUserTeams: async (userId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/community/users/${userId}/teams`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return { success: true, teams: data };
+      } catch (error) {
+        console.error('Load user teams error:', error);
+        return { success: false, error: error.message };
+      }
+    },
+    checkFollowStatus: async (userId) => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/community/users/${userId}/follow-status`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return { success: true, ...data };
+      } catch (error) {
+        console.error('Check follow status error:', error);
+        return { success: false, error: error.message };
+      }
+    },
   };
 
   return (
