@@ -3,6 +3,7 @@
 import requests
 import json
 import sys
+import uuid
 from datetime import datetime
 
 # Configuration
