@@ -7,6 +7,7 @@ import { X, Plus, Scale, Search, Filter } from 'lucide-react';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { logoColors } from '../styles/colors';
+import { calculateStats } from '../data/mock';
 import { useAuth } from '../contexts/AuthContext';
 
 const ComparisonTool = () => {
