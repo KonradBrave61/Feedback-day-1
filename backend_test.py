@@ -29,7 +29,7 @@ class CommunityProfileChatTester:
         # Register User A
         user_a_data = {
             "username": "alice_community",
-            "email": "alice@community.test",
+            "email": "alice@example.com",
             "password": "password123",
             "coach_level": 15,
             "favorite_position": "MF",
