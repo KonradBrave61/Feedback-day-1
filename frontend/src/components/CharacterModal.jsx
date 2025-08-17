@@ -340,130 +340,83 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     }
   };
 
-  const StatRadarChart = ({ stats }) => {
+  const StatRadarChart = ({ stats, element }) => {
+    // Target style: compact dark disc with white rings, icons around, and polygon colored by element
     const statNames = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
-    const statIcons = {
-      'kick': '⚽',        // Soccer ball for kick (more visible)
-      'control': '🎯',     // Target for control 
-      'technique': '⭐',    // Star for technique (more visible)
-      'intelligence': '🧠', // Brain for intelligence
-      'pressure': '🛡️',    // Shield for pressure
-      'agility': '⚡',     // Lightning for agility
-      'physical': '💪'     // Muscle for physical
-    };
-    
-    // Calculate dynamic max value based on actual stats for better scaling
-    const statValues = statNames.map(stat => stats[stat].main);
-    const maxStatValue = Math.max(...statValues);
-    const maxValue = Math.max(150, maxStatValue * 1.2); // At least 150, or 20% above max stat
-    
-    const center = 60;
-    const radius = 50;
-    
-    const points = statNames.map((stat, index) => {
-      const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
-      const value = stats[stat].main;
-      const r = Math.max(3, (value / maxValue) * radius); // Minimum radius of 3 for visibility
+
+    // Scale: use 0..255 like your reference image where some stats show up to ~255
+    const maxValue = 255;
+    const size = 160;           // overall SVG size
+    const center = size / 2;    // center point
+    const radius = 56;          // outer ring radius (inside the black disc margin)
+
+    const polyPoints = statNames.map((stat, i) => {
+      const angle = (i / statNames.length) * Math.PI * 2 - Math.PI / 2; // start at top
+      const value = Number(stats?.[stat]?.main ?? 0);
+      const r = Math.max(4, Math.min(radius, (value / maxValue) * radius));
       const x = center + r * Math.cos(angle);
       const y = center + r * Math.sin(angle);
-      return { x, y, value, stat };
+      return { x, y };
     });
 
-    const pathData = points.map((point, index) => 
-      `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
-    ).join(' ') + ' Z';
+    const path = polyPoints
+      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(' ') + ' Z';
+
+    const ringColor = 'rgba(255,255,255,0.18)';
+    const spokeColor = 'rgba(255,255,255,0.22)';
+    const discStroke = 'rgba(0,0,0,0.8)';
+    const discFill = 'rgba(0,0,0,0.86)';
+
+    const baseColor = getElementColor(element);
+    const fillColor = hexToRgba(baseColor, 0.62); // red-like translucent fill
+    const strokeColor = baseColor;                // solid edge same as element
+
+    // tiny icon unicode to match theme (no external assets needed)
+    const labelIcons = {
+      kick: '⚽', control: '🎯', technique: '⭐', intelligence: '🧠', pressure: '🛡️', agility: '⚡', physical: '💪'
+    };
 
     return (
       <div className="relative">
-        <svg width="120" height="120" className="mx-auto">
-          {/* Background circles with better visibility */}
-          {[0.2, 0.4, 0.6, 0.8, 1.0].map((ratio, index) => (
-            <circle
-              key={index}
-              cx={center}
-              cy={center}
-              r={radius * ratio}
-              fill="none"
-              stroke="rgba(255,255,255,0.2)"
-              strokeWidth="1"
-            />
+        <svg width={size} height={size} className="mx-auto block">
+          {/* Black disc */}
+          <circle cx={center} cy={center} r={radius + 18} fill={discFill} stroke={discStroke} strokeWidth="2" />
+
+          {/* Concentric rings */}
+          {[0.25, 0.5, 0.75, 1].map((t, idx) => (
+            <circle key={idx} cx={center} cy={center} r={radius * t} fill="none" stroke={ringColor} strokeWidth="1" />
           ))}
-          
-          {/* Stat lines */}
-          {statNames.map((stat, index) => {
-            const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
-            const x = center + radius * Math.cos(angle);
-            const y = center + radius * Math.sin(angle);
+
+          {/* spokes */}
+          {statNames.map((_, i) => {
+            const a = (i / statNames.length) * Math.PI * 2 - Math.PI / 2;
+            const x = center + radius * Math.cos(a);
+            const y = center + radius * Math.sin(a);
+            return <line key={i} x1={center} y1={center} x2={x} y2={y} stroke={spokeColor} strokeWidth="1" />;
+          })}
+
+          {/* polygon */}
+          <path d={path} fill={fillColor} stroke={strokeColor} strokeWidth="2.5" />
+
+          {/* stat points */}
+          {polyPoints.map((p, i) => (
+            <circle key={i} cx={p.x} cy={p.y} r="3.5" fill={strokeColor} stroke="white" strokeWidth="1.5" />
+          ))}
+
+          {/* outer icons around disc */}
+          {statNames.map((stat, i) => {
+            const a = (i / statNames.length) * Math.PI * 2 - Math.PI / 2;
+            const r = radius + 12; // place just outside rings, inside disc border
+            const x = center + r * Math.cos(a);
+            const y = center + r * Math.sin(a);
             return (
-              <line
-                key={stat}
-                x1={center}
-                y1={center}
-                x2={x}
-                y2={y}
-                stroke="rgba(255,255,255,0.3)"
-                strokeWidth="1"
-              />
+              <text key={stat} x={x} y={y + 3} textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#ffffff" style={{opacity: 0.9}}>
+                {labelIcons[stat]}
+              </text>
             );
           })}
-          
-          {/* Stat labels with improved icons and visibility */}
-          {statNames.map((stat, index) => {
-            const angle = (index * 2 * Math.PI) / statNames.length - Math.PI / 2;
-            const labelRadius = radius + 18;
-            const x = center + labelRadius * Math.cos(angle);
-            const y = center + labelRadius * Math.sin(angle);
-            return (
-              <g key={stat}>
-                {/* White background circle for better visibility */}
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="10"
-                  fill="rgba(255,255,255,0.1)"
-                  stroke="rgba(255,255,255,0.3)"
-                  strokeWidth="1"
-                />
-                {/* Icon */}
-                <text
-                  x={x}
-                  y={y + 2}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className="fill-white text-[14px]"
-                  style={{ textShadow: '0 0 3px rgba(0,0,0,0.8)' }}
-                >
-                  {statIcons[stat]}
-                </text>
-              </g>
-            );
-          })}
-          
-          {/* Stat area with better opacity */}
-          <path
-            d={pathData}
-            fill={logoColors.primaryBlueAlpha(0.4)}
-            stroke={logoColors.primaryBlue}
-            strokeWidth="2"
-          />
-          
-          {/* Stat points with better visibility */}
-          {points.map((point, index) => (
-            <circle
-              key={index}
-              cx={point.x}
-              cy={point.y}
-              r="4"
-              fill={logoColors.primaryBlue}
-              stroke="white"
-              strokeWidth="2"
-            />
-          ))}
         </svg>
-        {/* Max value indicator */}
-        <div className="text-center mt-2">
-          <span className="text-xs text-gray-400">Max: {Math.round(maxValue)}</span>
-        </div>
       </div>
     );
   };
