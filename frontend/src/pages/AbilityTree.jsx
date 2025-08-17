@@ -122,11 +122,16 @@ const AbilityTree = () => {
     if (!isUnlockable(n)) return;
     if ((n.cost || 0) > lpLeft) return;
     if (n.type === 'Shot' || n.type === 'Dribble' || n.type === 'Pass' || n.type === 'Defense') {
-      // Find screen position for anchored popup near the click
-      const rect = evt?.currentTarget?.ownerSVGElement?.getBoundingClientRect?.();
-      const ax = rect ? rect.left + (n.x / VIEW_W) * rect.width : window.innerWidth / 2;
-      const ay = rect ? rect.top + (n.y / VIEW_H) * rect.height : window.innerHeight / 2;
-      setAnchor({ x: ax, y: ay });
+      // Anchor relative to container so it sticks during scroll and layout
+      const svgRect = svgRef.current?.getBoundingClientRect();
+      const contRect = containerRef.current?.getBoundingClientRect();
+      if (svgRect && contRect) {
+        const px = svgRect.left + (n.x / VIEW_W) * svgRect.width;
+        const py = svgRect.top + (n.y / VIEW_H) * svgRect.height;
+        setAnchor({ left: px - contRect.left, top: py - contRect.top });
+      } else {
+        setAnchor({ left: window.innerWidth / 2, top: window.innerHeight / 2 });
+      }
       setSelecting(n);
     }
   };
