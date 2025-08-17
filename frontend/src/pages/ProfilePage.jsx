@@ -101,82 +101,117 @@ const ProfilePage = () => {
   }, [user, authLoading, navigate]);
 
   const fetchUserData = async () => {
-    console.log('ProfilePage: Fetching user data...');
+    console.log('ProfilePage: Fetching user data for:', isOwnProfile ? 'own profile' : `user ${userId}`);
+    setLoading(true);
     
     try {
-      // Load user teams with better error handling
-      const teamsResult = await loadTeams();
-      console.log('ProfilePage: Teams result:', teamsResult);
-      
-      if (teamsResult.success && teamsResult.teams && Array.isArray(teamsResult.teams)) {
-        setTeams(teamsResult.teams);
-        setStats(prev => ({
-          ...prev,
-          teamsCreated: teamsResult.teams.length
-        }));
-        console.log('ProfilePage: Successfully loaded teams:', teamsResult.teams.length);
-      } else {
-        console.error('ProfilePage: Failed to load teams:', teamsResult.error);
+      if (isOwnProfile) {
+        // Load current user's data
+        if (user) {
+          setProfile({
+            username: user.username || '',
+            email: user.email || '',
+            coachLevel: user.coach_level || 1,
+            favoritePosition: user.favorite_position || 'FW',
+            favoriteElement: user.favorite_element || 'Fire',
+            favoriteTeam: user.favourite_team || ''
+          });
+          setProfileUser(user);
+        }
+
+        // Load user teams
+        const teamsResult = await loadTeams();
+        console.log('ProfilePage: Teams result:', teamsResult);
         
-        // Check if this is an authentication error
-        if (teamsResult.authError && teamsResult.error && teamsResult.error.includes('Session expired')) {
-          // Silent redirect without popup, as requested
-          navigate('/login');
-          return; // Exit early to avoid loading other data
+        if (teamsResult.success && teamsResult.teams && Array.isArray(teamsResult.teams)) {
+          setTeams(teamsResult.teams);
+          setStats(prev => ({
+            ...prev,
+            teamsCreated: teamsResult.teams.length
+          }));
         } else {
-          toast.error(`Failed to load teams: ${teamsResult.error || 'Unknown error'}`);
+          console.error('ProfilePage: Failed to load teams:', teamsResult.error);
+          if (teamsResult.authError && teamsResult.error && teamsResult.error.includes('Session expired')) {
+            navigate('/login');
+            return;
+          }
+          setTeams([]);
+        }
+
+        // Load followers/following for own profile
+        const followersResult = await loadFollowers();
+        const followingResult = await loadFollowing();
+        
+        let followersCount = 0;
+        let followingCount = 0;
+        
+        if (followersResult.success && followersResult.followers) {
+          followersCount = followersResult.followers.length;
+        }
+        if (followingResult.success && followingResult.following) {
+          followingCount = followingResult.following.length;
         }
         
-        // Set empty array as fallback
-        setTeams([]);
         setStats(prev => ({
           ...prev,
-          teamsCreated: 0
+          followers: followersCount,
+          following: followingCount
         }));
-      }
-
-      // Load followers data
-      const followersResult = await loadFollowers();
-      console.log('ProfilePage: Followers result:', followersResult);
-      
-      let followersCount = 0;
-      let followingCount = 0;
-      
-      if (followersResult.success && followersResult.followers) {
-        followersCount = followersResult.followers.length;
-        console.log('ProfilePage: Successfully loaded followers data:', followersCount);
+        
       } else {
-        console.error('ProfilePage: Failed to load followers:', followersResult.error);
-        // Don't show error for followers as it's less critical
-      }
+        // Load other user's data
+        const userProfileResult = await loadUserProfile(userId);
+        console.log('ProfilePage: User profile result:', userProfileResult);
+        
+        if (userProfileResult.success && userProfileResult.user) {
+          const otherUser = userProfileResult.user;
+          setProfileUser(otherUser);
+          setProfile({
+            username: otherUser.username || '',
+            email: '', // Don't show other user's email
+            coachLevel: otherUser.coach_level || 1,
+            favoritePosition: otherUser.favorite_position || 'FW',
+            favoriteElement: otherUser.favorite_element || 'Fire',
+            favoriteTeam: otherUser.favourite_team || ''
+          });
+          
+          setStats(prev => ({
+            ...prev,
+            teamsCreated: otherUser.total_teams || 0,
+            followers: otherUser.followers_count || 0,
+            following: otherUser.following_count || 0
+          }));
+        } else {
+          console.error('ProfilePage: Failed to load user profile:', userProfileResult.error);
+          toast.error('Failed to load user profile');
+          navigate('/community');
+          return;
+        }
 
-      // Load following data
-      const followingResult = await loadFollowing();
-      if (followingResult.success && followingResult.following) {
-        followingCount = followingResult.following.length;
-        console.log('ProfilePage: Successfully loaded following data:', followingCount);
-      } else {
-        console.error('ProfilePage: Failed to load following:', followingResult.error);
+        // Load other user's public teams
+        const userTeamsResult = await loadUserTeams(userId);
+        if (userTeamsResult.success && userTeamsResult.teams) {
+          setTeams(userTeamsResult.teams);
+        } else {
+          setTeams([]);
+        }
+
+        // Check follow status
+        const followStatusResult = await checkFollowStatus(userId);
+        if (followStatusResult.success) {
+          setFollowStatus({
+            is_following: followStatusResult.is_following || false,
+            can_follow: followStatusResult.can_follow || false
+          });
+        }
       }
-      
-      // Update stats with both counts
-      setStats(prev => ({
-        ...prev,
-        followers: followersCount,
-        following: followingCount
-      }));
       
     } catch (error) {
       console.error('ProfilePage: Unexpected error in fetchUserData:', error);
-      toast.error('An unexpected error occurred while loading your profile data');
-      // Set fallback data
+      toast.error('An unexpected error occurred while loading profile data');
       setTeams([]);
-      setStats(prev => ({
-        ...prev,
-        teamsCreated: 0,
-        followers: 0,
-        following: 0
-      }));
+    } finally {
+      setLoading(false);
     }
   };
 
