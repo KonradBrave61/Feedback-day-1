@@ -56,7 +56,6 @@ const ComparisonTool = () => {
           url = `${backendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'coaches':
-        case 'managers':
           url = `${backendUrl}/api/teams/coaches/`;
           break;
         default:
