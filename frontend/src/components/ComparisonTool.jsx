@@ -246,23 +246,13 @@ const ComparisonTool = () => {
       );
     }
 
+    // Render comparison in columns and rows format
     return (
-      <div className="flex gap-4 overflow-x-auto pb-4 flex-wrap">
-        {compareItems.map(item => {
-          switch (selectedCategory) {
-            case 'characters':
-              return <div key={item.id}>{renderCharacterComparison(item)}</div>;
-            case 'items':
-              return <div key={item.id}>{renderItemComparison(item)}</div>;
-            case 'techniques':
-              return <div key={item.id}>{renderTechniqueComparison(item)}</div>;
-            case 'coaches':
-            case 'managers':
-              return <div key={item.id}>{renderCoachComparison(item)}</div>;
-            default:
-              return null;
-          }
-        })}
+      <div className="w-full">
+        {selectedCategory === 'characters' && renderCharacterComparisonTable()}
+        {selectedCategory === 'items' && renderItemComparisonTable()}
+        {selectedCategory === 'techniques' && renderTechniqueComparisonTable()}
+        {(selectedCategory === 'coaches' || selectedCategory === 'managers') && renderCoachComparisonTable()}
       </div>
     );
   };
