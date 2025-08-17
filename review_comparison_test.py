@@ -195,11 +195,9 @@ class ComparisonToolReviewTester:
             "/teams/coaches"
         ]
         
-        # Create a new session without any auth headers
-        no_auth_session = requests.Session()
-        
         for endpoint in endpoints:
-            response = no_auth_session.get(f"{self.backend_url}{endpoint}")
+            # Use direct requests.get instead of session to avoid any cached headers
+            response = requests.get(f"{self.backend_url}{endpoint}")
             if response.status_code != 200:
                 self.log(f"❌ {endpoint} requires authentication (status: {response.status_code})")
                 return False
