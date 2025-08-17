@@ -166,7 +166,17 @@ export const mockHissatsu = [
   { id: 47, name: "Ice Catch", description: "Freezing catch technique", type: "Catch", icon: "/api/placeholder/40/40" },
   { id: 48, name: "Magnet Catch", description: "Magnetic attraction catch", type: "Catch", icon: "/api/placeholder/40/40" },
   { id: 49, name: "Quantum Catch", description: "Quantum mechanics catch", type: "Catch", icon: "/api/placeholder/40/40" },
-  { id: 50, name: "Galaxy Catch", description: "Cosmic power catch", type: "Catch", icon: "/api/placeholder/40/40" }
+  { id: 50, name: "Galaxy Catch", description: "Cosmic power catch", type: "Catch", icon: "/api/placeholder/40/40" },
+
+  // Mixi Max Techniques - Special fusion techniques with legendary beings
+  { id: 51, name: "Shindou Keshin Mix Max", description: "Fusion with ancient warrior spirit", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 52, name: "Kirino Beast Mix Max", description: "Fusion with prehistoric beast", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 53, name: "Shinsuke Void Mix Max", description: "Fusion with dimensional keeper", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 54, name: "Tenma Dragon Mix Max", description: "Fusion with legendary dragon spirit", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 55, name: "Tsurugi Lightning Mix Max", description: "Fusion with thunder deity", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 56, name: "Aoi Forest Mix Max", description: "Fusion with nature guardian", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 57, name: "Kariya Shadow Mix Max", description: "Fusion with shadow assassin", type: "mixi-max", icon: "/api/placeholder/40/40" },
+  { id: 58, name: "Minaho Ice Mix Max", description: "Fusion with ice empress", type: "mixi-max", icon: "/api/placeholder/40/40" }
 ];
 
 export const mockTactics = [
