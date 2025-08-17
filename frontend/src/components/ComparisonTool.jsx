@@ -540,7 +540,7 @@ const ComparisonTool = () => {
   return (
     <>
       {/* Floating Comparison Button - Fixed positioning and visibility */}
-      <div className="fixed bottom-4 right-20 z-50 select-none">
+      <div className="fixed bottom-4 right-4 z-50 select-none">
         <Button
           onClick={() => setIsOpen(true)}
           className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2 flex items-center justify-center"
