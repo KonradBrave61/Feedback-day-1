@@ -948,7 +948,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
           )}
           
           <Button
-            onClick={addToComparison}
+            onClick={handleAddToComparison}
             variant="outline"
             className="px-6 py-3 text-lg font-semibold hover:opacity-80"
             style={{ 
