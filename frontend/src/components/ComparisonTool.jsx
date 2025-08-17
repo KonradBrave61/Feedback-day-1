@@ -631,8 +631,8 @@ const ComparisonTool = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
                 {filteredItems.map(item => {
-                  const isSelected = isInComparison(item.id);
-                  const canAdd = !isSelected && canAddMore;
+                  const isSelected = isInComparison(item.id, selectedCategory);
+                  const canAdd = !isSelected && canAddMore(selectedCategory);
                   
                   return (
                     <div key={item.id} 
@@ -647,9 +647,9 @@ const ComparisonTool = () => {
                          }}
                          onClick={() => {
                            if (isSelected) {
-                             removeFromComparison(item.id);
+                             removeFromComparison(item.id, selectedCategory);
                            } else if (canAdd) {
-                             addToComparison(item);
+                             addToComparison(item, selectedCategory);
                            }
                          }}>
                       
@@ -661,14 +661,14 @@ const ComparisonTool = () => {
                           <div className="text-xs text-gray-400 truncate">
                             {selectedCategory === 'characters' && item.position}
                             {selectedCategory === 'items' && item.category}
-                            {selectedCategory === 'techniques' && item.type}
+                            {selectedCategory === 'techniques' && (item.type || item.technique_type)}
                             {selectedCategory === 'coaches' && item.title}
                           </div>
                         </div>
                         
                         {isSelected ? (
                           <X className="h-4 w-4 text-red-400" 
-                             onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
+                             onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id, selectedCategory); }} />
                         ) : canAdd ? (
                           <Scale className="h-4 w-4 text-green-400" />
                         ) : (
