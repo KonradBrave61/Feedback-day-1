@@ -258,6 +258,47 @@ const AbilityTree = () => {
     });
     return closest?.unlocked;
   };
+          {/* inline selection state popup */}
+          {selecting && anchor && (
+            <div
+              className="absolute z-50 w-[340px] rounded-lg border shadow-xl"
+              style={{
+                left: Math.max(12, Math.min(anchor.x - 160, window.innerWidth - 360)) - (document.querySelector('body')?.getBoundingClientRect()?.left || 0),
+                top: Math.max(12, anchor.y + 16) - (document.querySelector('body')?.getBoundingClientRect()?.top || 0),
+                backgroundColor: logoColors.blackAlpha(0.92),
+                borderColor: logoColors.primaryBlueAlpha(0.35)
+              }}
+            >
+              <div className="p-3 border-b" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                <div className="flex items-center justify-between">
+                  <div className="text-white text-sm font-semibold">Select {selecting.type}</div>
+                  <div className="text-[11px] px-2 py-0.5 rounded bg-blue-600/30 text-blue-200 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>Cost +{selecting.cost} LP</div>
+                </div>
+              </div>
+              <div className="max-h-[260px] overflow-y-auto">
+                {listByType(selecting.type).map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => unlockWithTechnique(t)}
+                    className="w-full text-left px-3 py-2 hover:bg-blue-800/30 flex items-center gap-3"
+                    style={{ borderBottom: `1px solid ${logoColors.primaryBlueAlpha(0.12)}` }}
+                  >
+                    <img src={t.icon} alt={t.name} className="w-7 h-7" />
+                    <div className="min-w-0">
+                      <div className="text-white text-sm font-medium truncate">{t.name}</div>
+                      <div className="text-[11px] text-gray-300 truncate">{t.description}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className="p-2 flex justify-end">
+                <Button variant="ghost" className="text-white hover:bg-blue-700/30" onClick={() => setSelecting(null)}>
+                  <X className="h-4 w-4 mr-1" /> Close
+                </Button>
+              </div>
+            </div>
+          )}
+
 
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
