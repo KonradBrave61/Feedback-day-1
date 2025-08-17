@@ -79,12 +79,16 @@ const ComparisonTool = () => {
   };
 
   const loadData = async (category) => {
+    console.log(`Loading data for category: ${category}`);
     setLoading(true);
     try {
       const result = await loadComparisonData(category);
+      console.log(`Load result for ${category}:`, result);
       if (result.success) {
         setAvailableItems(result.data || []);
+        console.log(`Set ${result.data?.length || 0} items for ${category}`);
       } else {
+        console.log(`Failed to load ${category}:`, result);
         setAvailableItems([]);
       }
     } catch (error) {
