@@ -540,7 +540,7 @@ const ComparisonTool = () => {
                   {compareItems.length} selected (Max 6)
                 </div>
               </div>
-              <div className="h-full overflow-y-auto">
+              <div className="h-full overflow-y-auto pr-2">
                 {renderComparison()}
               </div>
             </div>
