@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { logoColors } from '../styles/colors';
 import { calculateStats } from '../data/mock';
 import { useAuth } from '../contexts/AuthContext';
+import { useComparison } from '../contexts/ComparisonContext';
 
 const ComparisonTool = () => {
   const { user } = useAuth();
