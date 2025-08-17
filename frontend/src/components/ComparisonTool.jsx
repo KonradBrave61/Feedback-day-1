@@ -51,7 +51,7 @@ const ComparisonTool = () => {
           if (filters.category) params.append('category', filters.category);
           if (filters.rarity) params.append('rarity', filters.rarity);
           if (filters.search) params.append('search', filters.search);
-          url = `${backendUrl}/api/equipment${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${backendUrl}/api/equipment/${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'techniques':
           if (filters.technique_type) params.append('technique_type', filters.technique_type);
