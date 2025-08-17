@@ -301,11 +301,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     toast.success('Hissatsu techniques updated!');
   };
 
-  const addToComparison = () => {
-    if (onAddToComparison) {
-      onAddToComparison(currentCharacter);
-      toast.success(`${currentCharacter.name} added to comparison!`);
-    }
+  const handleAddToComparison = () => {
+    addToComparison(currentCharacter);
   };
 
   const addToTeam = () => {
