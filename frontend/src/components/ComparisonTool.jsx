@@ -437,7 +437,7 @@ const ComparisonTool = () => {
                             <X className="h-4 w-4 text-red-400" 
                                onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
                           ) : canAdd ? (
-                            <Plus className="h-4 w-4 text-green-400" />
+                            <Scale className="h-4 w-4 text-green-400" />
                           ) : (
                             <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)">
                               <Scale className="h-4 w-4" />
