@@ -212,6 +212,7 @@ const ComparisonTool = () => {
                       <div className="flex flex-col gap-1">
                         <StatBar value={v} max={maxByStat[statName]} />
                         <CellWithBest value={v} isBest={isBest} />
+                        <div className="text-[10px] text-gray-400 text-center">sec: {(ch.base_stats?.[statName]?.secondary ?? '-')}</div>
                       </div>
                     </td>
                   );
