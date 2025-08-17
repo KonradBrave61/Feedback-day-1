@@ -788,6 +788,51 @@ export const AuthProvider = ({ children }) => {
         return await response.json();
       } catch (e) { return { success: false }; }
     },
+    // Techniques API
+    loadTechniques: async (filters = {}) => {
+      try {
+        const params = new URLSearchParams();
+        if (filters.technique_type) params.append('technique_type', filters.technique_type);
+        if (filters.category) params.append('category', filters.category);
+        if (filters.element) params.append('element', filters.element);
+        if (filters.search) params.append('search', filters.search);
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/techniques?${params.toString()}`);
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return { success: true, techniques: data };
+      } catch (e) {
+        console.error('Load techniques error', e);
+        return { success: false };
+      }
+    },
+    // Coaches API
+    loadCoaches: async () => {
+      try {
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/coaches`);
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return { success: true, coaches: data };
+      } catch (e) {
+        console.error('Load coaches error', e);
+        return { success: false };
+      }
+    },
+    // Equipment API
+    loadEquipment: async (filters = {}) => {
+      try {
+        const params = new URLSearchParams();
+        if (filters.category) params.append('category', filters.category);
+        if (filters.rarity) params.append('rarity', filters.rarity);
+        if (filters.search) params.append('search', filters.search);
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/equipment?${params.toString()}`);
+        if (!response.ok) return { success: false };
+        const data = await response.json();
+        return { success: true, equipment: data };
+      } catch (e) {
+        console.error('Load equipment error', e);
+        return { success: false };
+      }
+    },
   };
 
   return (
