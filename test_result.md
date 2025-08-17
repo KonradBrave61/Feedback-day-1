@@ -567,6 +567,30 @@ LATEST ISSUES FIXED:
         agent: "testing"
         comment: "PLACEHOLDER ENDPOINT SMOKE TEST COMPLETED: Conducted focused testing of the new placeholder image endpoint as requested in review. RESULTS: 100% SUCCESS RATE (4/4 tests passed) ✅ GET /api/placeholder/150/150 - SUCCESS: Returns 200 status with proper image/png content-type. Generated 950 bytes PNG image correctly. ✅ GET /api/status - SUCCESS: Core status endpoint still working correctly after placeholder addition. ✅ GET /api/characters - SUCCESS: Characters endpoint still working correctly, no regression detected. ✅ GET /api/equipment - SUCCESS: Equipment endpoint still working correctly, no regression detected. CONCLUSION: The new placeholder image endpoint at /api/placeholder/{width}/{height} is working perfectly and returns proper PNG images. All existing core endpoints remain functional with no regressions detected. The placeholder endpoint addition is ready for production use."
 
+  - task: "New Managers Addition (Nelly Raimon, Aki Kino, Haruna Otonashi, Midori Seto)"
+    implemented: false
+    working: false
+    file: "/app/backend/routes/teams.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "🚨 NEW MANAGERS NOT IMPLEMENTED: Comprehensive testing reveals that the new managers (Nelly Raimon, Aki Kino, Haruna Otonashi, Midori Seto) have NOT been added to the database yet. GET /api/coaches/ endpoint returns only 3 existing coaches: Mark Evans Sr., Ray Dark, and Hibiki Seigou. The new managers are completely missing from the coaches collection. This is a critical implementation gap that needs to be addressed by the main agent."
+
+  - task: "Mixi Max Techniques System"
+    implemented: true
+    working: true
+    file: "/app/backend/routes/techniques.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ MIXI MAX TECHNIQUES FULLY OPERATIONAL: Comprehensive testing confirms the Mixi Max techniques system is working perfectly. GET /api/techniques/?technique_type=mixi-max successfully retrieves 8 Mixi Max techniques including 'Shindou Keshin Mix Max', 'Kirino Beast Mix Max', 'Shinsuke Void Mix Max', 'Tenma Dragon Mix Max', and 'Tsurugi Lightning Mix Max'. All techniques have proper data structure with required fields (name, description, technique_type, category, element, power, rarity). Filtering works correctly - regular techniques (avatar, totem, mix-max) can be retrieved without Mixi Max contamination. Total technique database contains 38 techniques with proper type distribution: 8 avatar, 15 totem, 8 mixi-max, 7 mix-max. All technique endpoints are fully functional and ready for production use."
+
 ## frontend:
   - task: "Fix stale items/techniques when loading other user's team"
     implemented: true
