@@ -289,13 +289,16 @@ const ComparisonTool = () => {
       <div className="fixed bottom-4 right-20 z-40 select-none">
         <Button
           onClick={() => setIsOpen(true)}
-          className="w-12 h-12 rounded-full shadow-lg hover:scale-110 transition-all duration-200"
+          className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2"
           style={{ 
-            background: logoColors.primaryBlueGradient,
-            color: 'white'
+            background: logoColors.primaryOrangeGradient,
+            color: 'white',
+            borderColor: logoColors.primaryBlue,
+            boxShadow: '0 8px 32px rgba(214, 84, 42, 0.4)'
           }}
+          title="Comparison Tool"
         >
-          <Scale className="h-5 w-5" />
+          <Scale className="h-6 w-6" />
         </Button>
       </div>
 
