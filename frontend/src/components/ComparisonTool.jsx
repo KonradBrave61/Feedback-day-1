@@ -58,7 +58,7 @@ const ComparisonTool = () => {
           if (filters.category) params.append('category', filters.category);
           if (filters.element) params.append('element', filters.element);
           if (filters.search) params.append('search', filters.search);
-          url = `${httpsBackendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${backendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'coaches':
           url = `${httpsBackendUrl}/api/teams/coaches/`;
