@@ -361,41 +361,50 @@ const ComparisonTool = () => {
                 <div className="text-center py-8 text-gray-400">Loading...</div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
-                  {filteredItems.map(item => (
-                    <div key={item.id} 
-                         className="p-3 rounded-lg border cursor-pointer hover:scale-105 transition-all"
-                         style={{ 
-                           backgroundColor: compareItems.find(i => i.id === item.id) 
-                             ? logoColors.primaryBlueAlpha(0.2) 
-                             : logoColors.blackAlpha(0.2),
-                           borderColor: compareItems.find(i => i.id === item.id)
-                             ? logoColors.primaryBlue
-                             : logoColors.primaryBlueAlpha(0.3)
-                         }}
-                         onClick={() => addToComparison(item)}>
-                      
-                      <div className="flex items-center gap-2">
-                        <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'} 
-                             alt={item.name} className="w-8 h-8 rounded" />
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-white truncate">{item.name}</div>
-                          <div className="text-xs text-gray-400 truncate">
-                            {selectedCategory === 'characters' && item.position}
-                            {selectedCategory === 'items' && item.category}
-                            {selectedCategory === 'techniques' && item.type}
-                            {(selectedCategory === 'coaches' || selectedCategory === 'managers') && item.title}
-                          </div>
-                        </div>
+                  {filteredItems.map(item => {
+                    const isSelected = compareItems.find(i => i.id === item.id);
+                    const canAdd = isSelected || compareItems.length < 2;
+                    
+                    return (
+                      <div key={item.id} 
+                           className={`p-3 rounded-lg border transition-all ${canAdd ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-60'}`}
+                           style={{ 
+                             backgroundColor: isSelected
+                               ? logoColors.primaryBlueAlpha(0.2) 
+                               : logoColors.blackAlpha(0.2),
+                             borderColor: isSelected
+                               ? logoColors.primaryBlue
+                               : logoColors.primaryBlueAlpha(0.3)
+                           }}
+                           onClick={() => canAdd ? addToComparison(item) : null}>
                         
-                        {compareItems.find(i => i.id === item.id) ? (
-                          <X className="h-4 w-4 text-red-400" 
-                             onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
-                        ) : (
-                          <Plus className="h-4 w-4 text-green-400" />
-                        )}
+                        <div className="flex items-center gap-2">
+                          <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'} 
+                               alt={item.name} className="w-8 h-8 rounded" />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-white truncate">{item.name}</div>
+                            <div className="text-xs text-gray-400 truncate">
+                              {selectedCategory === 'characters' && item.position}
+                              {selectedCategory === 'items' && item.category}
+                              {selectedCategory === 'techniques' && item.type}
+                              {(selectedCategory === 'coaches' || selectedCategory === 'managers') && item.title}
+                            </div>
+                          </div>
+                          
+                          {isSelected ? (
+                            <X className="h-4 w-4 text-red-400" 
+                               onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
+                          ) : canAdd ? (
+                            <Plus className="h-4 w-4 text-green-400" />
+                          ) : (
+                            <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (2 items max)">
+                              <Scale className="h-4 w-4" />
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
