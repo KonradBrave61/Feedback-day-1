@@ -833,7 +833,9 @@ const TeamBuilder = () => {
               // keep both merged array and separate presets for editors
               userHissatsu: {
                 preset1: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(0, 3) : (hissatsuRaw?.preset1 || []),
-                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || [])
+                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || []),
+                mixiMax1: hissatsuRaw?.mixiMax1 || null,
+                mixiMax2: hissatsuRaw?.mixiMax2 || null
               },
               // display helpers
               name: base?.name || playerData.name || `Player ${playerData.character_id}`,
