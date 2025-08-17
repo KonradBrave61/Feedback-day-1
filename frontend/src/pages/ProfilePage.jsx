@@ -547,17 +547,44 @@ const ProfilePage = () => {
                         <span className="text-sm text-gray-300">{profile.favoriteElement}</span>
                       </div>
                     </div>
-                    <Button
-                      onClick={() => setEditing(true)}
-                      className="w-full text-white border hover:opacity-80 hover:text-white"
-                      style={{ 
-                        backgroundColor: logoColors.primaryBlueAlpha(0.4),
-                        borderColor: logoColors.primaryBlueAlpha(0.3)
-                      }}
-                    >
-                      <Edit3 className="h-4 w-4 mr-2" />
-                      Edit Profile
-                    </Button>
+                    {isOwnProfile ? (
+                      <Button
+                        onClick={() => setEditing(true)}
+                        className="w-full text-white border hover:opacity-80 hover:text-white"
+                        style={{ 
+                          backgroundColor: logoColors.primaryBlueAlpha(0.4),
+                          borderColor: logoColors.primaryBlueAlpha(0.3)
+                        }}
+                      >
+                        <Edit3 className="h-4 w-4 mr-2" />
+                        Edit Profile
+                      </Button>
+                    ) : followStatus.can_follow ? (
+                      <Button
+                        onClick={handleFollow}
+                        className="w-full text-white border hover:opacity-80"
+                        style={{ 
+                          backgroundColor: followStatus.is_following 
+                            ? logoColors.primaryOrangeAlpha(0.4)
+                            : logoColors.primaryBlueAlpha(0.4),
+                          borderColor: followStatus.is_following 
+                            ? logoColors.primaryOrange
+                            : logoColors.primaryBlue
+                        }}
+                      >
+                        {followStatus.is_following ? (
+                          <>
+                            <UserCheck className="h-4 w-4 mr-2" />
+                            Unfollow
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="h-4 w-4 mr-2" />
+                            Follow
+                          </>
+                        )}
+                      </Button>
+                    ) : null}
                   </>
                 )}
               </CardContent>
