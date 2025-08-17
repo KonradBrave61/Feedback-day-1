@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://compare-items.preview.emergentagent.com/api"
+BASE_URL = "https://technique-compare.preview.emergentagent.com/api"
 
 class UserProfileFocusedTester:
     def __init__(self):
