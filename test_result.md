@@ -965,6 +965,8 @@ agent_communication:
   test_priority: "high_first"
 
 ## agent_communication:
+  - agent: "main"
+    message: "Applied consistent HTTPS URL construction in ComparisonTool.jsx by ensuring trailing slashes on /api/characters/, /api/equipment/, and /api/techniques/ to match backend routers. Using REACT_APP_BACKEND_URL from env and enforcing https:// at runtime. Please retest the comparison tool categories to confirm Characters, Items, and Techniques now load items and can be selected."
     -agent: "main"
     -message: "Updated comparison tool to fix Mixed Content Security Error by enforcing HTTPS requests and removing authentication requirements. All 4 categories (Characters, Items, Techniques, Coaches) should now load data correctly. Please test the comparison tool functionality to verify the fix is working for all categories."
     -agent: "testing"
