@@ -32,7 +32,7 @@ const ComparisonTool = () => {
 
   // Direct API calls without authentication for comparison tool (public access)
   const loadComparisonData = async (category, filters = {}) => {
-    const backendUrl = import.meta.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     console.log(`Loading comparison data for ${category}, backend URL: ${backendUrl}`);
     
     try {
