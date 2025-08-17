@@ -583,7 +583,7 @@ const ComparisonTool = () => {
                           <div className="flex-1 min-w-0">
                             <div className="text-sm font-semibold text-white truncate" title={item.name}>{item.name}</div>
                             <div className="text-xs text-gray-400 truncate">
-                              {selectedCategory === 'characters' &amp;&amp; (
+                              {selectedCategory === 'characters' && (
                                 <span>{item.position} • {item.element}</span>
                               )}
                               {selectedCategory === 'items' &amp;&amp; (
