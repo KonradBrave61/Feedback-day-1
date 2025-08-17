@@ -286,10 +286,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     });
   };
 
-  const handleRemoveMixiMax = () => {
+  const handleRemoveMixiMax = (slotNumber) => {
     setSelectedHissatsu(prev => ({
       ...prev,
-      mixiMax: null
+      [`mixiMax${slotNumber}`]: null
     }));
   };
 
