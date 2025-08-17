@@ -957,15 +957,17 @@ agent_communication:
 
 ## test_plan:
   current_focus:
-    - "CHAT ENDPOINTS SMOKE TESTING COMPLETED ✅"
-    - "COMMENT PARENT_ID FUNCTIONALITY TESTING COMPLETED ✅"
-    - "All newly added chat functionality verified working ✅"
-    - "Updated comment system with threaded replies verified working ✅"
-  stuck_tasks: []
+    - "Comparison Tool Mixed Content Security Error Fix"
+  stuck_tasks:
+    - "Comparison Tool Item Selection Fix"
   test_all: false
-  test_priority: "chat_and_comments_verified"
+  test_priority: "high_first"
 
 ## agent_communication:
+    -agent: "main"
+    -message: "Updated comparison tool to fix Mixed Content Security Error by enforcing HTTPS requests and removing authentication requirements. All 4 categories (Characters, Items, Techniques, Coaches) should now load data correctly. Please test the comparison tool functionality to verify the fix is working for all categories."
+    -agent: "testing"
+    -message: "🚨 CRITICAL MIXED CONTENT SECURITY ERROR FIX TESTING RESULTS: Tested the comparison tool Mixed Content Security Error fix as requested. PARTIAL SUCCESS FOUND: ✅ Coaches category working perfectly (7 coaches loading with complete data) ❌ Characters, Items, and Techniques categories all showing 'No [category] available' messages. The HTTPS enforcement fix is only working for the coaches endpoint (/api/teams/coaches/) but failing for the other three endpoints (/api/characters, /api/equipment, /api/techniques). This suggests the Mixed Content Security Error fix needs to be applied to all comparison tool API endpoints, not just coaches. Users can only compare coaches currently - the comparison tool is not functional for the other 3 categories. RECOMMENDATION: Main agent should investigate why only coaches endpoint works with HTTPS while characters, equipment, and techniques endpoints are still failing to load data."
   - agent: "main"
     message: "Successfully implemented team builder layout changes: 1) Made the pitch vertical by increasing height from h-96 to h-[600px] 2) Moved bench from below the pitch to the right side by restructuring the layout from 3-column to 4-column grid 3) Updated bench display to show as vertical stack with smaller player avatars 4) Enhanced pitch markings to match real football field with proper penalty areas, goal areas, center circle, penalty spots, penalty arcs, corner arcs, and outer boundary. The layout now shows: Left panel (controls) | Formation field (2 columns) | Bench (right side). The changes create a more realistic football pitch appearance and better space utilization."
   - agent: "main"
