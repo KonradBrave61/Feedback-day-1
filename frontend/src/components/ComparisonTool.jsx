@@ -543,7 +543,7 @@ const ComparisonTool = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {/* Floating Comparison Button - Fixed positioning and visibility */}
       <div className="fixed bottom-4 left-4 z-50 select-none">
         <DialogTrigger asChild>
@@ -556,6 +556,7 @@ const ComparisonTool = () => {
               boxShadow: '0 8px 32px rgba(214, 84, 42, 0.6)'
             }}
             title="Comparison Tool"
+            onClick={() => setIsOpen(true)}
           >
             <Scale className="h-6 w-6" />
           </Button>
