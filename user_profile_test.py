@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://follow-chat-system.preview.emergentagent.com/api"
+BASE_URL = "https://compare-items.preview.emergentagent.com/api"
 
 class UserProfileEndpointTester:
     def __init__(self):
