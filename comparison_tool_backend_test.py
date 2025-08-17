@@ -190,7 +190,7 @@ class ComparisonToolAPITester:
                         # Test rarity filtering
                         if 'rarity' in equipment:
                             rarity = equipment['rarity']
-                            filter_response = requests.get(f"{BACKEND_URL}/equipment?rarity={rarity}", 
+                            filter_response = requests.get(f"{BACKEND_URL}/equipment/?rarity={rarity}", 
                                                          headers=self.get_headers())
                             if filter_response.status_code == 200:
                                 filtered_data = filter_response.json()
