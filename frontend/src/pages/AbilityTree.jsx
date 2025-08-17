@@ -91,7 +91,9 @@ const initialEdges = [
 const AbilityTree = () => {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [selecting, setSelecting] = useState(null); // node for technique selection
+  const [selecting, setSelecting] = useState(null); // selected node id for inline card
+  const [anchor, setAnchor] = useState(null); // {x,y} screen coords for inline card
+
   const totalLP = 25;
   const [usedLP, setUsedLP] = useState(7); // some pre-spent
 
