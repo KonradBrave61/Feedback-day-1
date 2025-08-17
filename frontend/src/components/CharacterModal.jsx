@@ -62,7 +62,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     return {
       preset1: makeSlots(base.slice(0, 3)),
       preset2: makeSlots(base.slice(3, 6)),
-      mixiMax: null
+      mixiMax1: null,
+      mixiMax2: null
     };
   };
   const [selectedHissatsu, setSelectedHissatsu] = useState(normalizePresets(character));
