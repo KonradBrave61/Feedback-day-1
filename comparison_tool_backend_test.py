@@ -177,7 +177,7 @@ class ComparisonToolAPITester:
                         # Test category filtering
                         if 'category' in equipment:
                             category = equipment['category']
-                            filter_response = requests.get(f"{BACKEND_URL}/equipment?category={category}", 
+                            filter_response = requests.get(f"{BACKEND_URL}/equipment/?category={category}", 
                                                          headers=self.get_headers())
                             if filter_response.status_code == 200:
                                 filtered_data = filter_response.json()
