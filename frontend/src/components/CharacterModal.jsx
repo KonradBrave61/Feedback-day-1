@@ -270,6 +270,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     });
   };
 
+  const handleRemoveMixiMax = () => {
+    setSelectedHissatsu(prev => ({
+      ...prev,
+      mixiMax: null
+    }));
+  };
+
   const handleHissatsuConfirm = () => {
     setShowHissatsuList(false);
     setSelectedCategory(null);
