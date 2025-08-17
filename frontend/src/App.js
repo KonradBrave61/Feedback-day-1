@@ -42,6 +42,7 @@ function App() {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
             </Routes>
             {/* Global overlays */}
             <ChatBubble />
