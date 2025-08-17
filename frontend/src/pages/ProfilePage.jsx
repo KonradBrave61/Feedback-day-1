@@ -377,6 +377,23 @@ const ProfilePage = () => {
     }
   };
 
+  const handleStartChat = async () => {
+    if (isOwnProfile) return;
+    
+    try {
+      const result = await startConversation(userId);
+      if (result.success) {
+        toast.success('Chat started! Use the chat bubble to continue the conversation.');
+        // Optionally navigate to the chat page or trigger opening the chat bubble
+      } else {
+        toast.error('Failed to start chat. Make sure you are following this user.');
+      }
+    } catch (error) {
+      console.error('Start chat error:', error);
+      toast.error('Failed to start chat');
+    }
+  };
+
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
