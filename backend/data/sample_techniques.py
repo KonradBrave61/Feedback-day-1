@@ -196,7 +196,122 @@ sample_techniques = [
         "animation_description": "Ocean turtle totem creates swirling water barriers around the goal"
     },
 
-    # MIX-MAX TECHNIQUES  
+    # MIXI MAX TECHNIQUES - Special fusion techniques with legendary beings
+    {
+        "name": "Shindou Keshin Mix Max",
+        "description": "Fusion with the ancient warrior spirit for enhanced leadership abilities",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "wind",
+        "power": 285,
+        "rarity": "Legendary",
+        "min_level": 30,
+        "learning_cost": 1200,
+        "stat_requirements": {"technique": 130, "intelligence": 120, "control": 100},
+        "stat_bonuses": {"technique": 15, "intelligence": 12, "control": 10},
+        "animation_description": "Ancient warrior spirit merges with the player, granting divine football abilities"
+    },
+    {
+        "name": "Kirino Beast Mix Max",
+        "description": "Fusion with a prehistoric beast for incredible defensive power",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "earth",
+        "power": 270,
+        "rarity": "Legendary",
+        "min_level": 28,
+        "learning_cost": 1100,
+        "stat_requirements": {"physical": 125, "pressure": 110, "technique": 95},
+        "stat_bonuses": {"physical": 18, "pressure": 12, "technique": 8},
+        "animation_description": "Prehistoric beast spirit fuses with the player, creating an unstoppable defender"
+    },
+    {
+        "name": "Shinsuke Void Mix Max",
+        "description": "Fusion with a dimensional keeper for ultimate goalkeeping abilities",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "void",
+        "power": 300,
+        "rarity": "Legendary",
+        "min_level": 35,
+        "learning_cost": 1500,
+        "allowed_positions": ["GK"],
+        "stat_requirements": {"technique": 140, "intelligence": 125, "agility": 110},
+        "stat_bonuses": {"technique": 20, "intelligence": 15, "agility": 12},
+        "animation_description": "Dimensional keeper spirit grants mastery over space and time in the goal area"
+    },
+    {
+        "name": "Tenma Dragon Mix Max",
+        "description": "Fusion with the legendary dragon spirit for explosive attacking power",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "fire",
+        "power": 320,
+        "rarity": "Legendary",
+        "min_level": 40,
+        "learning_cost": 2000,
+        "stat_requirements": {"kick": 150, "technique": 140, "agility": 120},
+        "stat_bonuses": {"kick": 25, "technique": 20, "agility": 15},
+        "animation_description": "Ancient dragon spirit fuses with the player, unleashing mythical football power"
+    },
+    {
+        "name": "Tsurugi Lightning Mix Max",
+        "description": "Fusion with the thunder deity for lightning-fast strikes",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "wind",
+        "power": 295,
+        "rarity": "Legendary",
+        "min_level": 32,
+        "learning_cost": 1300,
+        "stat_requirements": {"kick": 135, "agility": 125, "technique": 105},
+        "stat_bonuses": {"kick": 18, "agility": 16, "technique": 12},
+        "animation_description": "Thunder deity spirit grants control over lightning and storm for devastating shots"
+    },
+    {
+        "name": "Aoi Forest Mix Max",
+        "description": "Fusion with the nature guardian for perfect ball control and harmony",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "wood",
+        "power": 260,
+        "rarity": "Legendary",
+        "min_level": 26,
+        "learning_cost": 1000,
+        "stat_requirements": {"control": 120, "technique": 110, "intelligence": 100},
+        "stat_bonuses": {"control": 20, "technique": 15, "intelligence": 10},
+        "animation_description": "Nature guardian spirit creates perfect harmony between player and ball"
+    },
+    {
+        "name": "Kariya Shadow Mix Max",
+        "description": "Fusion with the shadow assassin for invisible dribbling techniques",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "void",
+        "power": 275,
+        "rarity": "Legendary",
+        "min_level": 29,
+        "learning_cost": 1150,
+        "stat_requirements": {"agility": 130, "control": 115, "technique": 100},
+        "stat_bonuses": {"agility": 20, "control": 15, "technique": 10},
+        "animation_description": "Shadow assassin spirit grants the ability to become one with darkness during play"
+    },
+    {
+        "name": "Minaho Ice Mix Max",
+        "description": "Fusion with the ice empress for freezing defensive techniques",
+        "technique_type": "mixi-max",
+        "category": "Mixed",
+        "element": "void",
+        "power": 265,
+        "rarity": "Legendary",
+        "min_level": 27,
+        "learning_cost": 1050,
+        "stat_requirements": {"pressure": 120, "intelligence": 110, "technique": 95},
+        "stat_bonuses": {"pressure": 18, "intelligence": 12, "technique": 10},
+        "animation_description": "Ice empress spirit freezes time and space around incoming attacks"
+    },
+
+    # LEGACY MIX-MAX TECHNIQUES  
     {
         "name": "Tornado Fire Blast",
         "description": "Hybrid technique combining wind speed with fire power for devastating shots",
