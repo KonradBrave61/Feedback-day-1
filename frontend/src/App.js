@@ -18,6 +18,7 @@ import CommunityHub from "./pages/CommunityHub";
 import ChatPage from "./pages/ChatPage";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ComparisonProvider } from "./contexts/ComparisonContext";
 import Notification from "./components/Notification";
 import ChatBubble from "./components/ChatBubble";
 import ComparisonTool from "./components/ComparisonTool";
