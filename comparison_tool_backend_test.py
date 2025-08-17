@@ -48,6 +48,8 @@ class ComparisonToolAPITester:
                 self.user_id = data.get("user_id")
                 self.log_result("Login with test credentials", True, f"Token obtained: {self.auth_token[:20]}...")
                 return True
+            else:
+                self.log_result("Login with test credentials", False, f"Login failed: {response.status_code} - {response.text}")
         except Exception as e:
             self.log_result("Login with test credentials", False, f"Login failed: {str(e)}")
         
