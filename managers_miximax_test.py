@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://selection-bubble.preview.emergentagent.com/api"
+BACKEND_URL = "https://item-compare-fix.preview.emergentagent.com/api"
 
 class ManagersMixiMaxTester:
     def __init__(self):
