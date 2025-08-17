@@ -58,10 +58,14 @@ class UserPublic(BaseModel):
     username: str
     coach_level: int
     favourite_team: str
+    favorite_position: str = "MF"
+    favorite_element: str = "Fire"
     profile_picture: Optional[str] = None
     bio: Optional[str] = None
     total_teams: int = 0
     total_likes_received: int = 0
+    followers_count: int = 0
+    following_count: int = 0
     created_at: datetime
 
 class FollowRequest(BaseModel):
