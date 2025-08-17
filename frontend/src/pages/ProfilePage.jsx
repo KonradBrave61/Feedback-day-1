@@ -598,11 +598,11 @@ const ProfilePage = () => {
               <CardContent className="p-4">
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <div className="text-2xl font-bold text-white">{followData.followerCount}</div>
+                    <div className="text-2xl font-bold text-white">{stats.followers || 0}</div>
                     <div className="text-sm text-gray-300">Followers</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{followData.followingCount}</div>
+                    <div className="text-2xl font-bold text-white">{stats.following || 0}</div>
                     <div className="text-sm text-gray-300">Following</div>
                   </div>
                 </div>
