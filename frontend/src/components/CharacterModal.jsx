@@ -992,8 +992,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                  }}>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-bold">
-                  {selectedCategory === 'mixiMax' 
-                    ? 'Select Mixi Max Technique' 
+                  {selectedCategory === 'mixiMax1' 
+                    ? 'Select Mixi Max Technique #1' 
+                    : selectedCategory === 'mixiMax2'
+                    ? 'Select Mixi Max Technique #2'
                     : `Select Technique for Slot ${selectedCategory + 1}`
                   }
                 </h3>
