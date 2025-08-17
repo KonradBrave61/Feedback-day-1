@@ -28,7 +28,8 @@ function App() {
     <div className="App">
       <DndProvider backend={HTML5Backend}>
         <AuthProvider>
-          <BrowserRouter>
+          <ComparisonProvider>
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<MainPage />} />
               
