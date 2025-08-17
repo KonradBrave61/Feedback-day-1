@@ -598,9 +598,9 @@ const ComparisonTool = () => {
             </div>
 
             {compareItems.length > 0 && (
-              <Button onClick={clearComparison} variant="outline" size="sm"
+              <Button onClick={() => clearComparison(selectedCategory)} variant="outline" size="sm"
                       style={{ borderColor: logoColors.primaryRed, color: logoColors.primaryRed }}>
-                Clear All
+                Clear {categories.find(c => c.value === selectedCategory)?.label}
               </Button>
             )}
 
