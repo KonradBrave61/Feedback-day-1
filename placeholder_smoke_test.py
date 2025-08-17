@@ -10,7 +10,7 @@ import sys
 import os
 
 # Get backend URL from environment
-BACKEND_URL = "https://matchup-tool.preview.emergentagent.com"
+BACKEND_URL = "https://formation-update.preview.emergentagent.com"
 
 def test_placeholder_endpoint():
     """Test the new placeholder image endpoint"""
