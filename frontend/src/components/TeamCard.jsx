@@ -49,6 +49,10 @@ const TeamCard = ({
     }
   };
 
+  const handleView = () => {
+    if (onView) onView(team.id);
+  };
+
   // Rating mapping
   const averageRating = team?.rating ?? team?.detailed_rating?.average_rating;
   const totalRatings = team?.detailed_rating?.total_ratings;
