@@ -108,12 +108,17 @@ const AbilityTree = () => {
     return !!nodeById[n.parent]?.unlocked;
   };
 
-  const handleNodeClick = (n) => {
+  const handleNodeClick = (n, evt) => {
     if (!n) return;
     if (n.type === 'Plus' || n.type === 'Gate') return; // not selectable
     if (!isUnlockable(n)) return;
     if ((n.cost || 0) > lpLeft) return;
     if (n.type === 'Shot' || n.type === 'Dribble' || n.type === 'Pass' || n.type === 'Defense') {
+      // Find screen position for anchored popup near the click
+      const rect = evt?.currentTarget?.ownerSVGElement?.getBoundingClientRect?.();
+      const ax = rect ? rect.left + (n.x / VIEW_W) * rect.width : window.innerWidth / 2;
+      const ay = rect ? rect.top + (n.y / VIEW_H) * rect.height : window.innerHeight / 2;
+      setAnchor({ x: ax, y: ay });
       setSelecting(n);
     }
   };
