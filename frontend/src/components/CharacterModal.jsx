@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Plus, X, Check, Zap, Users, Target, Shield, 
 import { mockEquipment, mockHissatsu, calculateStats } from '../data/mock';
 import { toast } from 'sonner';
 import { logoColors } from '../styles/colors';
+import { useComparison } from '../contexts/ComparisonContext';
 
 const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam, teamBuildingMode = false, pendingPosition = null, pendingIsBench = false, onAddToComparison }) => {
   const [currentCharacterIndex, setCurrentCharacterIndex] = useState(
