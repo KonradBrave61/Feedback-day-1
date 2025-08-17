@@ -32,8 +32,10 @@ const ComparisonTool = () => {
 
   // Direct API calls without authentication for comparison tool (public access)
   const loadComparisonData = async (category, filters = {}) => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    console.log(`Loading comparison data for ${category}, backend URL: ${backendUrl}`);
+    // Ensure HTTPS URL - fix for mixed content error
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://item-compare-fix.preview.emergentagent.com';
+    const httpsBackendUrl = backendUrl.replace(/^http:/, 'https:');
+    console.log(`Loading comparison data for ${category}, backend URL: ${httpsBackendUrl}`);
     
     try {
       let url;
@@ -44,23 +46,23 @@ const ComparisonTool = () => {
           if (filters.position) params.append('position', filters.position);
           if (filters.element) params.append('element', filters.element);
           if (filters.search) params.append('search', filters.search);
-          url = `${backendUrl}/api/characters${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${httpsBackendUrl}/api/characters${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'items':
           if (filters.category) params.append('category', filters.category);
           if (filters.rarity) params.append('rarity', filters.rarity);
           if (filters.search) params.append('search', filters.search);
-          url = `${backendUrl}/api/equipment${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${httpsBackendUrl}/api/equipment${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'techniques':
           if (filters.technique_type) params.append('technique_type', filters.technique_type);
           if (filters.category) params.append('category', filters.category);
           if (filters.element) params.append('element', filters.element);
           if (filters.search) params.append('search', filters.search);
-          url = `${backendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${httpsBackendUrl}/api/techniques${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'coaches':
-          url = `${backendUrl}/api/teams/coaches/`;
+          url = `${httpsBackendUrl}/api/teams/coaches/`;
           break;
         default:
           console.error(`Unknown category: ${category}`);
