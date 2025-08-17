@@ -102,28 +102,7 @@ const ComparisonTool = () => {
 
   const handleCategoryChange = (newCategory) => {
     setSelectedCategory(newCategory);
-    setCompareItems([]);
     setSearchTerm('');
-  };
-
-  const addToComparison = (item) => {
-    if (compareItems.find(i => i.id === item.id)) return;
-    
-    // Limit to maximum 6 items for comparison
-    if (compareItems.length >= 6) {
-      // Remove the first item and add the new one
-      setCompareItems([...compareItems.slice(1), item]);
-    } else {
-      setCompareItems([...compareItems, item]);
-    }
-  };
-
-  const removeFromComparison = (itemId) => {
-    setCompareItems(compareItems.filter(i => i.id !== itemId));
-  };
-
-  const clearComparison = () => {
-    setCompareItems([]);
   };
 
   const filteredItems = availableItems.filter(item => {
