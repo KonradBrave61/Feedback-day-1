@@ -346,7 +346,10 @@ const ComparisonTool = () => {
             {/* Comparison View */}
             <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
-              <h3 className="text-lg font-bold mb-4 text-center">Comparison</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-center">Comparison</h3>
+                <div className="text-sm text-gray-400">Max 2 items</div>
+              </div>
               <div className="h-full overflow-y-auto">
                 {renderComparison()}
               </div>
