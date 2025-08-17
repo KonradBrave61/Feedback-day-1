@@ -738,6 +738,8 @@ const ProfilePage = () => {
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
+                              </>
+                            )}
                           </div>
                         </div>
                         <div className="flex items-center justify-between">
