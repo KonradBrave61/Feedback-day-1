@@ -57,7 +57,7 @@ class CommunityProfileChatTester:
         # Register User B
         user_b_data = {
             "username": "bob_profile",
-            "email": "bob@profile.test", 
+            "email": "bob@example.com", 
             "password": "password123",
             "coach_level": 20,
             "favorite_position": "FW",
