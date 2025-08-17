@@ -146,8 +146,8 @@ class ComparisonToolReviewTester:
         """Test GET /api/teams/coaches/ endpoint"""
         self.log("👨‍💼 Testing Coaches endpoint...")
         
-        # Test without trailing slash
-        response = self.session.get(f"{self.backend_url}/teams/coaches")
+        # Test without trailing slash - use direct requests to avoid session issues
+        response = requests.get(f"{self.backend_url}/teams/coaches")
         if response.status_code != 200:
             self.log(f"❌ GET /api/teams/coaches failed: {response.status_code} - {response.text}")
             return False, 0
@@ -161,7 +161,7 @@ class ComparisonToolReviewTester:
         self.log(f"✅ GET /api/teams/coaches - SUCCESS: {count} coaches returned")
         
         # Test with trailing slash
-        response = self.session.get(f"{self.backend_url}/teams/coaches/")
+        response = requests.get(f"{self.backend_url}/teams/coaches/")
         if response.status_code != 200:
             self.log(f"❌ GET /api/teams/coaches/ (with trailing slash) failed: {response.status_code}")
             return False, count
