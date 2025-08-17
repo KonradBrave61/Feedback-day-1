@@ -13,12 +13,15 @@ import { useComparison } from '../contexts/ComparisonContext';
 
 const ComparisonTool = () => {
   const { user } = useAuth();
-  const { compareItems, addToComparison, removeFromComparison, clearComparison, isInComparison, canAddMore } = useComparison();
+  const { comparisonData, addToComparison, removeFromComparison, clearComparison, isInComparison, getCompareItems, canAddMore } = useComparison();
   const [isOpen, setIsOpen] = useState(false);
   const [availableItems, setAvailableItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('characters');
   const [loading, setLoading] = useState(false);
+
+  // Get current category's comparison items
+  const compareItems = getCompareItems(selectedCategory);
 
   const categories = [
     { value: 'characters', label: 'Characters', icon: '👤' },
