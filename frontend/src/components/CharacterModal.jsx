@@ -208,6 +208,11 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
     setShowHissatsuList(true);
   };
 
+  const handleMixiMaxSlotClick = () => {
+    setSelectedCategory('mixiMax');
+    setShowHissatsuList(true);
+  };
+
   // Map 0..5 index to Slot number and sub-slot
   const displaySlotLabel = (i) => {
     const slotNum = Math.floor(i / 2) + 1;
