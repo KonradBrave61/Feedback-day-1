@@ -33,6 +33,7 @@ const ComparisonTool = () => {
   // Direct API calls without authentication for comparison tool (public access)
   const loadComparisonData = async (category, filters = {}) => {
     const backendUrl = import.meta.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL;
+    console.log(`Loading comparison data for ${category}, backend URL: ${backendUrl}`);
     
     try {
       let url;
@@ -62,15 +63,20 @@ const ComparisonTool = () => {
           url = `${backendUrl}/api/teams/coaches/`;
           break;
         default:
+          console.error(`Unknown category: ${category}`);
           return { success: false, data: [] };
       }
 
+      console.log(`Fetching from URL: ${url}`);
       const response = await fetch(url);
+      console.log(`Response status: ${response.status}`);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
+      console.log(`Received data for ${category}:`, data?.length || 0, 'items');
       return { success: true, data };
     } catch (error) {
       console.error(`Error loading ${category}:`, error);
