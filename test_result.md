@@ -617,7 +617,7 @@ LATEST ISSUES FIXED:
     file: "/app/frontend/src/components/ComparisonTool.jsx"
     stuck_count: 4
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
