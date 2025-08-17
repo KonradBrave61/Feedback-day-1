@@ -126,6 +126,21 @@ const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
                   {character.teamPassives?.length || 0} passives
                 </span>
               </div>
+              
+              {/* Compare Button */}
+              <Button
+                onClick={handleCompareClick}
+                size="sm"
+                variant="outline"
+                className={`ml-auto w-8 h-8 p-0 rounded-full ${
+                  isInComparison(character.id) 
+                    ? 'bg-blue-500/80 border-blue-400 text-white' 
+                    : 'bg-black/60 border-white/40 text-white hover:bg-blue-500/80'
+                }`}
+                title={isInComparison(character.id) ? "Remove from comparison" : "Add to comparison"}
+              >
+                <Scale className="h-3 w-3" />
+              </Button>
             </div>
           </div>
         </div>
