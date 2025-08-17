@@ -45,7 +45,7 @@ const ComparisonTool = () => {
           if (filters.position) params.append('position', filters.position);
           if (filters.element) params.append('element', filters.element);
           if (filters.search) params.append('search', filters.search);
-          url = `${backendUrl}/api/characters${params.toString() ? '?' + params.toString() : ''}`;
+          url = `${backendUrl}/api/characters/${params.toString() ? '?' + params.toString() : ''}`;
           break;
         case 'items':
           if (filters.category) params.append('category', filters.category);
