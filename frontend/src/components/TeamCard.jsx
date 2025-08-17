@@ -20,6 +20,7 @@ const TeamCard = ({
   onComment, 
   onView 
 }) => {
+  const navigate = useNavigate();
   const formatDate = (dateString) => {
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
