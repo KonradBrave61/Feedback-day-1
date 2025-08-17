@@ -72,7 +72,6 @@ const ComparisonTool = () => {
       
       // Force HTTPS to prevent webpack dev server from converting to HTTP
       const httpsUrl = url.replace(/^http:\/\//, 'https://');
-      console.log(`🔒 Force HTTPS URL: ${httpsUrl}`);
       
       // Create custom fetch with HTTPS enforcement
       const response = await fetch(httpsUrl, {
