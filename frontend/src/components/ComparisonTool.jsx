@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
-import { X, Scale, Search, Filter } from 'lucide-react';
+import { X, Scale, Search, Crown } from 'lucide-react';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from './ui/tooltip';
 import { logoColors } from '../styles/colors';
 import { calculateStats } from '../data/mock';
 import { useAuth } from '../contexts/AuthContext';
@@ -34,12 +35,9 @@ const ComparisonTool = () => {
   const loadComparisonData = async (category, filters = {}) => {
     // Use proper environment variable for HTTPS backend URL
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    console.log(`Loading comparison data for ${category}, backend URL: ${backendUrl}`);
-    
     try {
       let url;
       const params = new URLSearchParams();
-      
       switch (category) {
         case 'characters':
           if (filters.position) params.append('position', filters.position);
@@ -64,32 +62,19 @@ const ComparisonTool = () => {
           url = `${backendUrl}/api/teams/coaches/`;
           break;
         default:
-          console.error(`Unknown category: ${category}`);
           return { success: false, data: [] };
       }
 
-      console.log(`Fetching from URL: ${url}`);
-      
-      // Force HTTPS to prevent webpack dev server from converting to HTTP
+      // Enforce https to avoid mixed content in some browser redirect edge-cases
       const httpsUrl = url.replace(/^http:\/\//, 'https://');
-      
-      // Create custom fetch with HTTPS enforcement
       const response = await fetch(httpsUrl, {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
-      console.log(`Response status: ${response.status}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      console.log(`Received data for ${category}:`, data?.length || 0, 'items');
       return { success: true, data };
     } catch (error) {
       console.error(`Error loading ${category}:`, error);
@@ -98,20 +83,15 @@ const ComparisonTool = () => {
   };
 
   const loadData = async (category) => {
-    console.log(`Loading data for category: ${category}`);
     setLoading(true);
     try {
       const result = await loadComparisonData(category);
-      console.log(`Load result for ${category}:`, result);
       if (result.success) {
         setAvailableItems(result.data || []);
-        console.log(`Set ${result.data?.length || 0} items for ${category}`);
       } else {
-        console.log(`Failed to load ${category}:`, result);
         setAvailableItems([]);
       }
     } catch (error) {
-      console.error('Error loading data:', error);
       setAvailableItems([]);
     } finally {
       setLoading(false);
@@ -119,9 +99,7 @@ const ComparisonTool = () => {
   };
 
   useEffect(() => {
-    if (isOpen) {
-      loadData(selectedCategory);
-    }
+    if (isOpen) loadData(selectedCategory);
   }, [selectedCategory, isOpen]);
 
   const handleCategoryChange = (newCategory) => {
@@ -139,150 +117,68 @@ const ComparisonTool = () => {
     );
   });
 
-  const renderCharacterComparison = (character) => {
-    const stats = calculateStats(character, {}, character.level || 99, character.rarity || 'Legendary');
+  // ===== Visual helpers =====
+  const StatBar = ({ value = 0, max = 0, color = logoColors.primaryBlue, showValue = true }) => {
+    const pct = Math.min(100, Math.round(max > 0 ? (value / max) * 100 : 0));
     return (
-      <Card className="flex-1 min-w-[250px]" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-        <CardContent className="p-4">
-          <div className="text-center mb-3">
-            <img src={character.image} alt={character.name} className="w-16 h-16 rounded-full mx-auto mb-2" />
-            <h4 className="font-bold text-white">{character.name}</h4>
-            <div className="flex justify-center gap-2 mt-1">
-              <Badge className={`${getPositionColor(character.position)} text-xs px-1`}>
-                {character.position}
-              </Badge>
-              <Badge variant="outline" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
-                {character.element}
-              </Badge>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-1 text-xs">
-            <div className="text-gray-300">Kick: <span className="text-white font-bold">{stats.kick?.main || 0}</span></div>
-            <div className="text-gray-300">Control: <span className="text-white font-bold">{stats.control?.main || 0}</span></div>
-            <div className="text-gray-300">Technique: <span className="text-white font-bold">{stats.technique?.main || 0}</span></div>
-            <div className="text-gray-300">Intelligence: <span className="text-white font-bold">{stats.intelligence?.main || 0}</span></div>
-            <div className="text-gray-300">Pressure: <span className="text-white font-bold">{stats.pressure?.main || 0}</span></div>
-            <div className="text-gray-300">Agility: <span className="text-white font-bold">{stats.agility?.main || 0}</span></div>
-            <div className="text-gray-300">Physical: <span className="text-white font-bold">{stats.physical?.main || 0}</span></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="w-full h-5 rounded bg-gray-700/60 overflow-hidden">
+        <div
+          className="h-full transition-all"
+          style={{
+            width: `${pct}%`,
+            background: `linear-gradient(90deg, ${logoColors.primaryBlueAlpha(0.7)} 0%, ${logoColors.primaryBlue} 100%)`
+          }}
+        />
+      </div>
     );
   };
 
-  const renderItemComparison = (item) => (
-    <Card className="flex-1 min-w-[250px]" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-      <CardContent className="p-4">
-        <div className="text-center mb-3">
-          <img src={item.icon} alt={item.name} className="w-12 h-12 mx-auto mb-2" />
-          <h4 className="font-bold text-white">{item.name}</h4>
-          <Badge className={getRarityColor(item.rarity)} variant="outline">
-            {item.rarity}
-          </Badge>
-        </div>
-        
-        <div className="text-xs">
-          <div className="text-gray-300 mb-2">Category: <span className="text-white">{item.category}</span></div>
-          {item.stats && (
-            <div className="grid grid-cols-2 gap-1">
-              {Object.entries(item.stats).map(([stat, value]) => (
-                <div key={stat} className="text-gray-300">
-                  {stat}: <span className="text-white font-bold">+{value}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+  const CellWithBest = ({ value, isBest }) => (
+    <div className="flex items-center justify-center gap-1 text-white">
+      <span className="font-semibold">{value}</span>
+      {isBest && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Crown className="h-4 w-4 text-yellow-400 drop-shadow" />
+          </TooltipTrigger>
+          <TooltipContent className="bg-black/80">Best in row</TooltipContent>
+        </Tooltip>
+      )}
+    </div>
   );
 
-  const renderTechniqueComparison = (technique) => (
-    <Card className="flex-1 min-w-[250px]" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-      <CardContent className="p-4">
-        <div className="text-center mb-3">
-          <img src={technique.icon} alt={technique.name} className="w-12 h-12 mx-auto mb-2" />
-          <h4 className="font-bold text-white">{technique.name}</h4>
-          <Badge variant="outline" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
-            {technique.type}
-          </Badge>
-        </div>
-        
-        <div className="text-xs space-y-1">
-          <div className="text-gray-300">{technique.description}</div>
-          {technique.power && (
-            <div className="text-gray-300">Power: <span className="text-white font-bold">{technique.power}</span></div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const renderCoachComparison = (coach) => (
-    <Card className="flex-1 min-w-[250px]" style={{ backgroundColor: logoColors.blackAlpha(0.3), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-      <CardContent className="p-4">
-        <div className="text-center mb-3">
-          <img src={coach.portrait} alt={coach.name} className="w-16 h-16 rounded-full mx-auto mb-2" />
-          <h4 className="font-bold text-white">{coach.name}</h4>
-          <div className="text-sm text-gray-300">{coach.title}</div>
-        </div>
-        
-        <div className="text-xs">
-          {coach.bonuses?.teamStats && (
-            <div className="mb-2">
-              <div className="text-gray-300 font-medium mb-1">Team Bonuses:</div>
-              <div className="grid grid-cols-2 gap-1">
-                {Object.entries(coach.bonuses.teamStats).map(([stat, value]) => (
-                  <div key={stat} className="text-gray-300">
-                    {stat}: <span className="text-white font-bold">+{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {coach.specialties && coach.specialties.length > 0 && (
-            <div>
-              <div className="text-gray-300 font-medium mb-1">Specialties:</div>
-              <div className="flex flex-wrap gap-1">
-                {coach.specialties.map((specialty, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs" 
-                         style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
-                    {specialty}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  // New table-based comparison renderers for columns and rows layout
+  // ===== Character Comparison Table (with bars + best) =====
   const renderCharacterComparisonTable = () => {
     const allStats = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
-    
+
+    // Precompute values and max per stat
+    const valueByChar = compareItems.map(character => {
+      const stats = calculateStats(character, {}, character.level || 99, character.rarity || 'Legendary');
+      const map = {};
+      allStats.forEach(s => {
+        map[s] = stats[s]?.main || character.base_stats?.[s]?.main || 0;
+      });
+      return { id: character.id, data: map };
+    });
+    const maxByStat = allStats.reduce((acc, s) => {
+      acc[s] = Math.max(0, ...valueByChar.map(v => v.data[s] || 0));
+      return acc;
+    }, {});
+
     return (
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
-          {/* Header Row */}
           <thead>
             <tr>
-              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              <th className="p-2 border border-gray-700 sticky top-0 z-10" style={{ background: logoColors.blackAlpha(0.7) }}>Attribute</th>
               {compareItems.map(character => (
-                <th key={character.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                <th key={character.id} className="p-3 border border-gray-700 text-center min-w-[140px] sticky top-0 z-10" style={{ background: `linear-gradient(180deg, ${logoColors.blackAlpha(0.8)} 0%, ${logoColors.blackAlpha(0.6)} 100%)` }}>
                   <div className="flex flex-col items-center gap-1">
-                    <img src={character.image} alt={character.name} className="w-10 h-10 rounded-full" />
-                    <div className="text-xs">{character.name}</div>
+                    <img src={character.image} alt={character.name} className="w-10 h-10 rounded-full ring-2" style={{ borderColor: logoColors.primaryBlue }} />
+                    <div className="text-xs text-white font-semibold truncate max-w-[120px]" title={character.name}>{character.name}</div>
                     <div className="flex gap-1">
-                      <Badge className={`${getPositionColor(character.position)} text-xs px-1`}>
-                        {character.position}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
-                        {character.element}
-                      </Badge>
+                      <Badge className={`${getPositionColor(character.position)} text-[10px] px-1 py-0.5`}>{character.position}</Badge>
+                      <Badge variant="outline" className="text-[10px] px-1 py-0.5" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>{character.element}</Badge>
                     </div>
                   </div>
                 </th>
@@ -290,36 +186,33 @@ const ComparisonTool = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Basic Info Row */}
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Position</td>
-              {compareItems.map(character => (
-                <td key={character.id} className="p-2 border border-gray-600 text-center text-white">
-                  {character.position}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Element</td>
-              {compareItems.map(character => (
-                <td key={character.id} className="p-2 border border-gray-600 text-center text-white">
-                  {character.element}
-                </td>
-              ))}
-            </tr>
-            
-            {/* Stats Rows */}
+            {['Position', 'Element'].map((label, idx) => (
+              <tr key={label} className="bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium">{label}</td>
+                {compareItems.map((ch) => (
+                  <td key={ch.id} className="p-2 border border-gray-700 text-center text-white">
+                    {idx === 0 ? ch.position : ch.element}
+                  </td>
+                ))}
+              </tr>
+            ))}
+
             {allStats.map(statName => (
-              <tr key={statName}>
-                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
-                  {statName}
+              <tr key={statName} className="odd:bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium capitalize">
+                  <div className="flex items-center gap-2">
+                    {statName}
+                  </div>
                 </td>
-                {compareItems.map(character => {
-                  const stats = calculateStats(character, {}, character.level || 99, character.rarity || 'Legendary');
-                  const statValue = stats[statName]?.main || character.base_stats?.[statName] || 0;
+                {compareItems.map(ch => {
+                  const v = valueByChar.find(x => x.id === ch.id)?.data?.[statName] || 0;
+                  const isBest = v === maxByStat[statName] && v > 0;
                   return (
-                    <td key={character.id} className="p-2 border border-gray-600 text-center text-white font-bold">
-                      {statValue}
+                    <td key={ch.id} className="p-2 border border-gray-700">
+                      <div className="flex flex-col gap-1">
+                        <StatBar value={v} max={maxByStat[statName]} />
+                        <CellWithBest value={v} isBest={isBest} />
+                      </div>
                     </td>
                   );
                 })}
@@ -331,58 +224,60 @@ const ComparisonTool = () => {
     );
   };
 
+  // ===== Items Comparison Table =====
   const renderItemComparisonTable = () => {
-    const allCategories = [...new Set(compareItems.map(item => item.category))];
-    const allRarities = [...new Set(compareItems.map(item => item.rarity))];
     const allStats = [...new Set(compareItems.flatMap(item => Object.keys(item.stats || {})))];
+
+    const valueByItem = compareItems.map(item => ({ id: item.id, data: item.stats || {} }));
+    const maxByStat = allStats.reduce((acc, s) => {
+      acc[s] = Math.max(0, ...valueByItem.map(v => v.data?.[s] || 0));
+      return acc;
+    }, {});
 
     return (
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              <th className="p-2 border border-gray-700 sticky top-0 z-10" style={{ background: logoColors.blackAlpha(0.7) }}>Attribute</th>
               {compareItems.map(item => (
-                <th key={item.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                <th key={item.id} className="p-3 border border-gray-700 text-center min-w-[140px] sticky top-0 z-10" style={{ background: `linear-gradient(180deg, ${logoColors.blackAlpha(0.8)} 0%, ${logoColors.blackAlpha(0.6)} 100%)` }}>
                   <div className="flex flex-col items-center gap-1">
                     <img src={item.icon} alt={item.name} className="w-10 h-10" />
-                    <div className="text-xs">{item.name}</div>
-                    <Badge className={getRarityColor(item.rarity)} variant="outline" className="text-xs">
-                      {item.rarity}
-                    </Badge>
+                    <div className="text-xs text-white font-semibold truncate max-w-[120px]" title={item.name}>{item.name}</div>
+                    <Badge className={getRarityColor(item.rarity)} variant="outline">{item.rarity}</Badge>
                   </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Category</td>
-              {compareItems.map(item => (
-                <td key={item.id} className="p-2 border border-gray-600 text-center text-white">
-                  {item.category}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Rarity</td>
-              {compareItems.map(item => (
-                <td key={item.id} className="p-2 border border-gray-600 text-center text-white">
-                  {item.rarity}
-                </td>
-              ))}
-            </tr>
-            
-            {allStats.map(statName => (
-              <tr key={statName}>
-                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
-                  {statName}
-                </td>
-                {compareItems.map(item => (
-                  <td key={item.id} className="p-2 border border-gray-600 text-center text-white font-bold">
-                    {item.stats?.[statName] ? `+${item.stats[statName]}` : '-'}
+            {['Category', 'Rarity'].map((label, idx) => (
+              <tr key={label} className="bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium">{label}</td>
+                {compareItems.map((it) => (
+                  <td key={it.id} className="p-2 border border-gray-700 text-center text-white">
+                    {idx === 0 ? it.category : it.rarity}
                   </td>
                 ))}
+              </tr>
+            ))}
+
+            {allStats.map(statName => (
+              <tr key={statName} className="odd:bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium capitalize">{statName}</td>
+                {compareItems.map(it => {
+                  const v = valueByItem.find(x => x.id === it.id)?.data?.[statName] || 0;
+                  const isBest = v === maxByStat[statName] && v > 0;
+                  return (
+                    <td key={it.id} className="p-2 border border-gray-700">
+                      <div className="flex flex-col gap-1">
+                        <StatBar value={v} max={maxByStat[statName]} />
+                        <CellWithBest value={v ? `+${v}` : '-'} isBest={isBest} />
+                      </div>
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
@@ -391,18 +286,20 @@ const ComparisonTool = () => {
     );
   };
 
+  // ===== Techniques Comparison Table =====
   const renderTechniqueComparisonTable = () => {
+    const maxPower = Math.max(0, ...compareItems.map(t => t.power || 0));
     return (
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              <th className="p-2 border border-gray-700 sticky top-0 z-10" style={{ background: logoColors.blackAlpha(0.7) }}>Attribute</th>
               {compareItems.map(technique => (
-                <th key={technique.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                <th key={technique.id} className="p-3 border border-gray-700 text-center min-w-[140px] sticky top-0 z-10" style={{ background: `linear-gradient(180deg, ${logoColors.blackAlpha(0.8)} 0%, ${logoColors.blackAlpha(0.6)} 100%)` }}>
                   <div className="flex flex-col items-center gap-1">
                     <img src={technique.icon || '/api/placeholder/40/40'} alt={technique.name} className="w-10 h-10" />
-                    <div className="text-xs">{technique.name}</div>
+                    <div className="text-xs text-white font-semibold truncate max-w-[120px]" title={technique.name}>{technique.name}</div>
                     <Badge variant="outline" className="text-xs" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
                       {technique.type || technique.technique_type}
                     </Badge>
@@ -412,45 +309,33 @@ const ComparisonTool = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Type</td>
-              {compareItems.map(technique => (
-                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
-                  {technique.type || technique.technique_type}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Element</td>
-              {compareItems.map(technique => (
-                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
-                  {technique.element || '-'}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Power</td>
-              {compareItems.map(technique => (
-                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white font-bold">
-                  {technique.power || '-'}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Category</td>
-              {compareItems.map(technique => (
-                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
-                  {technique.category || '-'}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Description</td>
-              {compareItems.map(technique => (
-                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white text-xs">
-                  {technique.description || '-'}
-                </td>
-              ))}
+            {['Type', 'Element', 'Category', 'Description'].map((label) => (
+              <tr key={label} className="bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium">{label}</td>
+                {compareItems.map((t) => (
+                  <td key={t.id} className="p-2 border border-gray-700 text-center text-white text-xs">
+                    {label === 'Type' && (t.type || t.technique_type)}
+                    {label === 'Element' && (t.element || '-')}
+                    {label === 'Category' && (t.category || '-')}
+                    {label === 'Description' && (t.description || '-')}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            <tr className="odd:bg-gray-800/40">
+              <td className="p-2 border border-gray-700 text-white font-medium">Power</td>
+              {compareItems.map(t => {
+                const v = t.power || 0;
+                const isBest = v === maxPower && v > 0;
+                return (
+                  <td key={t.id} className="p-2 border border-gray-700">
+                    <div className="flex flex-col gap-1">
+                      <StatBar value={v} max={maxPower} />
+                      <CellWithBest value={v || '-'} isBest={isBest} />
+                    </div>
+                  </td>
+                );
+              })}
             </tr>
           </tbody>
         </table>
@@ -458,57 +343,65 @@ const ComparisonTool = () => {
     );
   };
 
+  // ===== Coaches Comparison Table =====
   const renderCoachComparisonTable = () => {
     const allBonusStats = [...new Set(compareItems.flatMap(coach => Object.keys(coach.bonuses?.teamStats || {})))];
-    
+    const valueByCoach = compareItems.map(coach => ({ id: coach.id, data: coach.bonuses?.teamStats || {} }));
+    const maxByStat = allBonusStats.reduce((acc, s) => {
+      acc[s] = Math.max(0, ...valueByCoach.map(v => v.data?.[s] || 0));
+      return acc;
+    }, {});
+
     return (
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              <th className="p-2 border border-gray-700 sticky top-0 z-10" style={{ background: logoColors.blackAlpha(0.7) }}>Attribute</th>
               {compareItems.map(coach => (
-                <th key={coach.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                <th key={coach.id} className="p-3 border border-gray-700 text-center min-w-[140px] sticky top-0 z-10" style={{ background: `linear-gradient(180deg, ${logoColors.blackAlpha(0.8)} 0%, ${logoColors.blackAlpha(0.6)} 100%)` }}>
                   <div className="flex flex-col items-center gap-1">
-                    <img src={coach.portrait || '/api/placeholder/40/40'} alt={coach.name} className="w-10 h-10 rounded-full" />
-                    <div className="text-xs">{coach.name}</div>
-                    <div className="text-xs text-gray-300">{coach.title}</div>
+                    <img src={coach.portrait || '/api/placeholder/40/40'} alt={coach.name} className="w-10 h-10 rounded-full ring-2" style={{ borderColor: logoColors.primaryBlue }} />
+                    <div className="text-xs text-white font-semibold truncate max-w-[120px]" title={coach.name}>{coach.name}</div>
+                    <div className="text-[10px] text-gray-300">{coach.title}</div>
                   </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Title</td>
+            <tr className="bg-gray-800/40">
+              <td className="p-2 border border-gray-700 text-white font-medium">Title</td>
               {compareItems.map(coach => (
-                <td key={coach.id} className="p-2 border border-gray-600 text-center text-white">
-                  {coach.title}
-                </td>
+                <td key={coach.id} className="p-2 border border-gray-700 text-center text-white">{coach.title}</td>
               ))}
             </tr>
-            
+
             {allBonusStats.map(statName => (
-              <tr key={statName}>
-                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
-                  {statName} Bonus
-                </td>
-                {compareItems.map(coach => (
-                  <td key={coach.id} className="p-2 border border-gray-600 text-center text-white font-bold">
-                    {coach.bonuses?.teamStats?.[statName] ? `+${coach.bonuses.teamStats[statName]}` : '-'}
-                  </td>
-                ))}
+              <tr key={statName} className="odd:bg-gray-800/40">
+                <td className="p-2 border border-gray-700 text-white font-medium capitalize">{statName} Bonus</td>
+                {compareItems.map(coach => {
+                  const v = valueByCoach.find(x => x.id === coach.id)?.data?.[statName] || 0;
+                  const isBest = v === maxByStat[statName] && v > 0;
+                  return (
+                    <td key={coach.id} className="p-2 border border-gray-700">
+                      <div className="flex flex-col gap-1">
+                        <StatBar value={v} max={maxByStat[statName]} />
+                        <CellWithBest value={v ? `+${v}` : '-'} isBest={isBest} />
+                      </div>
+                    </td>
+                  );
+                })}
               </tr>
             ))}
-            
+
             <tr>
-              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Specialties</td>
+              <td className="p-2 border border-gray-700 text-white font-medium">Specialties</td>
               {compareItems.map(coach => (
-                <td key={coach.id} className="p-2 border border-gray-600 text-center text-white text-xs">
+                <td key={coach.id} className="p-2 border border-gray-700 text-center text-white text-xs">
                   <div className="flex flex-wrap gap-1 justify-center">
                     {coach.specialties?.map((specialty, idx) => (
-                      <Badge key={idx} variant="outline" className="text-xs"
-                             style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
+                      <Badge key={idx} variant="outline" className="text-xs" style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
                         {specialty}
                       </Badge>
                     )) || '-'}
@@ -534,7 +427,6 @@ const ComparisonTool = () => {
       );
     }
 
-    // Render comparison in columns and rows format
     return (
       <div className="w-full">
         {selectedCategory === 'characters' && renderCharacterComparisonTable()}
@@ -567,7 +459,7 @@ const ComparisonTool = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* Floating Comparison Button - Fixed positioning and visibility */}
+      {/* Floating Comparison Button */}
       <div className="fixed bottom-4 left-4 z-50 select-none">
         <DialogTrigger asChild>
           <Button
@@ -589,135 +481,138 @@ const ComparisonTool = () => {
       {/* Comparison Modal */}
       <DialogContent className="max-w-6xl h-[90vh] flex flex-col text-white" 
                      style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-        <DialogHeader className="flex-shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <Scale className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
-            Comparison Tool
-          </DialogTitle>
-        </DialogHeader>
+        <TooltipProvider>
+          <DialogHeader className="flex-shrink-0">
+            <DialogTitle className="flex items-center gap-2 text-xl">
+              <Scale className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
+              Comparison Tool
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-          {/* Controls */}
-          <div className="flex gap-4 items-center flex-wrap">
-            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-              <SelectTrigger className="w-[180px]" style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                {categories.map(cat => (
-                  <SelectItem key={cat.value} value={cat.value} className="text-white hover:bg-blue-700/30">
-                    {cat.icon} {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex-1 flex flex-col gap-4 overflow-hidden">
+            {/* Controls */}
+            <div className="flex gap-4 items-center flex-wrap">
+              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+                <SelectTrigger className="w-[180px]" style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                  {categories.map(cat => (
+                    <SelectItem key={cat.value} value={cat.value} className="text-white hover:bg-blue-700/30">
+                      {cat.icon} {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder={`Search ${selectedCategory}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 text-white"
-                style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}
-              />
-            </div>
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder={`Search ${selectedCategory}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 text-white"
+                  style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}
+                />
+              </div>
 
-            {compareItems.length > 0 && (
-              <Button onClick={() => clearComparison(selectedCategory)} variant="outline" size="sm"
-                      style={{ borderColor: logoColors.primaryRed, color: logoColors.primaryRed }}>
-                Clear {categories.find(c => c.value === selectedCategory)?.label}
-              </Button>
-            )}
+              {compareItems.length > 0 && (
+                <Button onClick={() => clearComparison(selectedCategory)} variant="outline" size="sm"
+                        style={{ borderColor: logoColors.primaryRed, color: logoColors.primaryRed }}>
+                  Clear {categories.find(c => c.value === selectedCategory)?.label}
+                </Button>
+              )}
 
-            <div className="text-sm text-gray-400">
-              {compareItems.length}/6 {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} selected
-            </div>
-          </div>
-
-          {/* Comparison View */}
-          <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
-               style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-center">
-                {categories.find(c => c.value === selectedCategory)?.icon} {categories.find(c => c.value === selectedCategory)?.label} Comparison
-              </h3>
               <div className="text-sm text-gray-400">
-                {compareItems.length} selected (Max 6)
+                {compareItems.length}/6 {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} selected
               </div>
             </div>
-            <div className="h-full overflow-y-auto">
-              {renderComparison()}
-            </div>
-          </div>
 
-          {/* Available Items */}
-          <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
-               style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
-            <h3 className="text-lg font-bold mb-4">Available {categories.find(c => c.value === selectedCategory)?.label}</h3>
-            
-            {loading ? (
-              <div className="text-center py-8 text-gray-400">Loading...</div>
-            ) : availableItems.length === 0 ? (
-              <div className="text-center py-8 text-gray-400">
-                No {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} available
+            {/* Comparison View */}
+            <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
+                 style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-center">
+                  {categories.find(c => c.value === selectedCategory)?.icon} {categories.find(c => c.value === selectedCategory)?.label} Comparison
+                </h3>
+                <div className="text-sm text-gray-400">
+                  {compareItems.length} selected (Max 6)
+                </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
-                {filteredItems.map(item => {
-                  const isSelected = isInComparison(item.id, selectedCategory);
-                  const canAdd = !isSelected && canAddMore(selectedCategory);
-                  
-                  return (
-                    <div key={item.id} 
-                         className={`p-3 rounded-lg border transition-all ${canAdd || isSelected ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-60'}`}
-                         style={{ 
-                           backgroundColor: isSelected
-                             ? logoColors.primaryBlueAlpha(0.2) 
-                             : logoColors.blackAlpha(0.2),
-                           borderColor: isSelected
-                             ? logoColors.primaryBlue
-                             : logoColors.primaryBlueAlpha(0.3)
-                         }}
-                         onClick={() => {
-                           if (isSelected) {
-                             removeFromComparison(item.id, selectedCategory);
-                           } else if (canAdd) {
-                             addToComparison(item, selectedCategory);
-                           }
-                         }}>
-                      
-                      <div className="flex items-center gap-2">
-                        <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'} 
-                             alt={item.name} className="w-8 h-8 rounded" />
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-white truncate">{item.name}</div>
-                          <div className="text-xs text-gray-400 truncate">
-                            {selectedCategory === 'characters' && item.position}
-                            {selectedCategory === 'items' && item.category}
-                            {selectedCategory === 'techniques' && (item.type || item.technique_type)}
-                            {selectedCategory === 'coaches' && item.title}
+              <div className="h-full overflow-y-auto">
+                {renderComparison()}
+              </div>
+            </div>
+
+            {/* Available Items */}
+            <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
+                 style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
+              <h3 className="text-lg font-bold mb-4">Available {categories.find(c => c.value === selectedCategory)?.label}</h3>
+              {loading ? (
+                <div className="text-center py-8 text-gray-400">Loading...</div>
+              ) : availableItems.length === 0 ? (
+                <div className="text-center py-8 text-gray-400">
+                  No {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} available
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 h-full overflow-y-auto">
+                  {filteredItems.map(item => {
+                    const isSelected = isInComparison(item.id, selectedCategory);
+                    const canAdd = !isSelected &amp;&amp; canAddMore(selectedCategory);
+                    return (
+                      <div key={item.id}
+                           className={`p-3 rounded-lg border transition-all ${canAdd || isSelected ? 'cursor-pointer hover:scale-[1.02]' : 'cursor-not-allowed opacity-60'}`}
+                           style={{
+                             background: isSelected
+                               ? `linear-gradient(180deg, ${logoColors.primaryBlueAlpha(0.18)} 0%, ${logoColors.primaryBlueAlpha(0.08)} 100%)`
+                               : logoColors.blackAlpha(0.2),
+                             borderColor: isSelected ? logoColors.primaryBlue : logoColors.primaryBlueAlpha(0.3),
+                             boxShadow: isSelected ? '0 0 0 2px rgba(59,130,246,0.3)' : 'none'
+                           }}
+                           onClick={() => {
+                             if (isSelected) {
+                               removeFromComparison(item.id, selectedCategory);
+                             } else if (canAdd) {
+                               addToComparison(item, selectedCategory);
+                             }
+                           }}>
+
+                        <div className="flex items-center gap-3">
+                          <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'}
+                               alt={item.name} className="w-10 h-10 rounded" />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-white truncate" title={item.name}>{item.name}</div>
+                            <div className="text-xs text-gray-400 truncate">
+                              {selectedCategory === 'characters' &amp;&amp; (
+                                <span>{item.position} • {item.element}</span>
+                              )}
+                              {selectedCategory === 'items' &amp;&amp; (
+                                <span>{item.category} • {item.rarity}</span>
+                              )}
+                              {selectedCategory === 'techniques' &amp;&amp; (
+                                <span>{item.type || item.technique_type}{item.power ? ` • ${item.power} Power` : ''}</span>
+                              )}
+                              {selectedCategory === 'coaches' &amp;&amp; (
+                                <span>{item.title}</span>
+                              )}
+                            </div>
                           </div>
+                          {isSelected ? (
+                            <X className="h-4 w-4 text-red-400" onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id, selectedCategory); }} />
+                          ) : canAdd ? (
+                            <Scale className="h-4 w-4 text-green-400" />
+                          ) : (
+                            <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)"><Scale className="h-4 w-4" /></div>
+                          )}
                         </div>
-                        
-                        {isSelected ? (
-                          <X className="h-4 w-4 text-red-400" 
-                             onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id, selectedCategory); }} />
-                        ) : canAdd ? (
-                          <Scale className="h-4 w-4 text-green-400" />
-                        ) : (
-                          <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)">
-                            <Scale className="h-4 w-4" />
-                          </div>
-                        )}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </TooltipProvider>
       </DialogContent>
     </Dialog>
   );
