@@ -418,7 +418,7 @@ const ProfilePage = () => {
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
-                {editing ? (
+                {editing && isOwnProfile ? (
                   <>
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: logoColors.lightBlue }}>
