@@ -71,7 +71,12 @@ const ComparisonTool = () => {
       }
 
       console.log(`Fetching from URL: ${url}`);
-      const response = await fetch(url);
+      
+      // Force HTTPS to prevent webpack dev server from converting to HTTP
+      const httpsUrl = url.replace(/^http:\/\//, 'https://');
+      console.log(`🔒 Force HTTPS URL: ${httpsUrl}`);
+      
+      const response = await fetch(httpsUrl);
       console.log(`Response status: ${response.status}`);
       
       if (!response.ok) {
