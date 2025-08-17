@@ -231,7 +231,7 @@ const ComparisonTool = () => {
       return (
         <div className="text-center py-8 text-gray-400">
           <Scale className="w-12 h-12 mx-auto mb-2 opacity-50" />
-          <p>Add items to start comparing</p>
+          <p>Add up to 2 items to start comparing</p>
         </div>
       );
     }
