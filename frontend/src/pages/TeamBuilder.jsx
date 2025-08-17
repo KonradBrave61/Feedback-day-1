@@ -499,61 +499,130 @@ const TeamBuilder = () => {
     // When changing formations, keep players that can fit in new formation
     const newTeamPlayers = {};
     
-    // Try to preserve as many players as possible
-    const newPositions = formation.positions;
-    const currentPlayers = Object.entries(teamPlayers);
-    
-    // First, try to place players in matching positions
-    currentPlayers.forEach(([oldPositionId, player]) => {
+    // Create a mapping of position types to available slots in new formation
+    const newFormationSlots = {};
+    formation.positions.forEach(pos => {
+      if (!newFormationSlots[pos.position]) {
+        newFormationSlots[pos.position] = [];
+      }
+      newFormationSlots[pos.position].push(pos.id);
+    });
+
+    // Try to reassign players to compatible positions
+    Object.entries(teamPlayers).forEach(([oldPosId, player]) => {
       if (!player) return;
+
+      const playerPosition = player.position;
       
-      const oldPosition = selectedFormation.positions.find(p => p.id === oldPositionId);
-      if (!oldPosition) return;
-      
-      // Try to find a matching position in new formation
-      const matchingNewPosition = newPositions.find(
-        pos => pos.position === oldPosition.position && !newTeamPlayers[pos.id]
-      );
-      
-      if (matchingNewPosition) {
-        newTeamPlayers[matchingNewPosition.id] = player;
+      // First try to find a slot for the same position type
+      if (newFormationSlots[playerPosition] && newFormationSlots[playerPosition].length > 0) {
+        const newSlotId = newFormationSlots[playerPosition].shift();
+        newTeamPlayers[newSlotId] = player;
+      } else {
+        // If no matching position, try to find any available slot
+        let foundSlot = false;
+        for (const [posType, slots] of Object.entries(newFormationSlots)) {
+          if (slots.length > 0) {
+            const newSlotId = slots.shift();
+            newTeamPlayers[newSlotId] = player;
+            foundSlot = true;
+            break;
+          }
+        }
+        
+        // If no slots available, move to bench
+        if (!foundSlot) {
+          // Find first available bench slot
+          let benchSlotFound = false;
+          for (let i = 0; i < 5; i++) {
+            if (!benchPlayers[i]) {
+              setBenchPlayers(prev => ({
+                ...prev,
+                [i]: player
+              }));
+              benchSlotFound = true;
+              break;
+            }
+          }
+          
+          if (!benchSlotFound) {
+            // Bench is full, player will be lost - could show warning
+            toast.warning(`${player.name} couldn't be placed in new formation and bench is full`);
+          }
+        }
       }
     });
-    
-    // Then, try to fit remaining players in any available spots
-    currentPlayers.forEach(([oldPositionId, player]) => {
-      if (!player) return;
-      
-      // Skip if player is already placed
-      if (Object.values(newTeamPlayers).some(p => p?.id === player.id)) return;
-      
-      // Find any available position
-      const availablePosition = newPositions.find(pos => !newTeamPlayers[pos.id]);
-      if (availablePosition) {
-        newTeamPlayers[availablePosition.id] = player;
-      }
-    });
-    
+
     setTeamPlayers(newTeamPlayers);
     setSelectedFormation(formation);
+    toast.success(`Formation changed to ${formation.name}`);
   };
 
-  const handleTacticToggle = (tactic) => {
-    setSelectedTactics(prev => {
-      const isSelected = prev.some(t => t.id === tactic.id);
-      if (isSelected) {
-        return prev.filter(t => t.id !== tactic.id);
-      } else {
-        // Limit to 2 tactics
-        if (prev.length >= 2) {
-          toast.warning('You can only select up to 2 tactics at a time.');
-          return prev;
-        }
-        return [...prev, tactic];
-      }
-    });
+  // Handle manager selection  
+  const handleManagerSelect = (managers) => {
+    setSelectedManagers(managers || []);
+    toast.success(`Selected ${managers?.length || 0} managers`);
   };
 
+  // Manager display pyramid
+  const renderManagerPyramid = () => {
+    const managersArray = Array.isArray(selectedManagers) ? selectedManagers : [];
+    const topManager = managersArray[0] || null;
+    const bottomLeft = managersArray[1] || null;
+    const bottomRight = managersArray[2] || null;
+
+    return (
+      <div className="mt-6">
+        <div className="text-sm text-gray-200 mb-2">Managers ({managersArray.length}/3)</div>
+        <div className="flex flex-col items-center">
+          {/* Top */}
+          <div className="flex justify-center mb-2">
+            <div 
+              className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}
+              onClick={() => setShowManagerModal(true)}
+            >
+              {topManager ? (
+                <img src={topManager.portrait} alt={topManager.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[10px] text-gray-400">—</span>
+              )}
+            </div>
+          </div>
+          {/* Bottom */}
+          <div className="flex gap-4">
+            <div 
+              className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}
+              onClick={() => setShowManagerModal(true)}
+            >
+              {bottomLeft ? (
+                <img src={bottomLeft.portrait} alt={bottomLeft.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[10px] text-gray-400">—</span>
+              )}
+            </div>
+            <div 
+              className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}
+              onClick={() => setShowManagerModal(true)}
+            >
+              {bottomRight ? (
+                <img src={bottomRight.portrait} alt={bottomRight.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[10px] text-gray-400">—</span>
+              )}
+            </div>
+          </div>
+          <Button size="sm" variant="outline" className="mt-3" onClick={() => setShowManagerModal(true)}>
+            Select Managers
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  // Team statistics helper
   const getTeamStats = () => {
     const players = Object.values(teamPlayers).filter(p => p);
     if (players.length === 0) return { total: 0, average: 0, breakdown: {} };
@@ -627,7 +696,8 @@ const TeamBuilder = () => {
         user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
       })),
     tactics: selectedTactics.map(t => ({ id: t.id, name: t.name })),
-    coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null
+    coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null,
+    managers: selectedManagers ? selectedManagers.map(m => ({ id: m.id, name: m.name })) : []
   });
 
   const handleSaveTeam = async (teamData) => {
@@ -657,7 +727,8 @@ const TeamBuilder = () => {
             user_hissatsu: player.userHissatsu || { preset1: [], preset2: [] }
           })),
         tactics: selectedTactics.map(t => ({ id: t.id, name: t.name })),
-        coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null
+        coach: selectedCoach ? { id: selectedCoach.id, name: selectedCoach.name } : null,
+        managers: selectedManagers ? selectedManagers.map(m => ({ id: m.id, name: m.name })) : []
       };
 
       // Validate payload quickly to avoid undefined access
@@ -685,6 +756,8 @@ const TeamBuilder = () => {
       setBenchPlayers({});
       setSelectedTactics([]);
       setSelectedCoach(null);
+      setSelectedManagers([]);
+      
       // Unwrap common backend shapes
       const teamData = incoming?.team?.team || incoming?.team || incoming?.team_data || incoming;
       console.log('Loading team data (normalized):', teamData);
@@ -715,6 +788,17 @@ const TeamBuilder = () => {
       if (teamData.coach) {
         const coachObj = teamData.coach.id ? mockCoaches.find(c => c.id === teamData.coach.id) : null;
         setSelectedCoach(coachObj || teamData.coach);
+      }
+
+      // Load managers
+      if (teamData.managers && Array.isArray(teamData.managers)) {
+        const managerObjects = teamData.managers.map(managerData => {
+          if (typeof managerData === 'object' && managerData.id) {
+            return mockCoaches.find(c => c.id === managerData.id) || managerData;
+          }
+          return mockCoaches.find(c => c.id === managerData) || null;
+        }).filter(Boolean);
+        setSelectedManagers(managerObjects);
       }
       
       // Ensure base character cache is available before mapping players (load once)
@@ -823,6 +907,7 @@ const TeamBuilder = () => {
     setBenchPlayers({});
     setSelectedTactics([]);
     setSelectedCoach(null);
+    setSelectedManagers([]);
     setSelectedFormation(mockFormations[0]); // Reset to default formation instead of null
     toast.success('Team cleared successfully!');
   };
@@ -1261,28 +1346,8 @@ const TeamBuilder = () => {
                   })}
                 </div>
 
-                {/* Managers pyramid under bench */}
-                <div className="mt-6">
-                  <div className="text-sm text-gray-200 mb-2">Managers (up to 3)</div>
-                  <div className="flex flex-col items-center">
-                    {/* Top */}
-                    <div className="flex justify-center mb-2">
-                      <div className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
-                        <span className="text-[10px] text-gray-400">—</span>
-                      </div>
-                    </div>
-                    {/* Bottom */}
-                    <div className="flex gap-4">
-                      <div className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
-                        <span className="text-[10px] text-gray-400">—</span>
-                      </div>
-                      <div className="w-16 h-16 rounded-lg overflow-hidden border flex items-center justify-center" style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.3) }}>
-                        <span className="text-[10px] text-gray-400">—</span>
-                      </div>
-                    </div>
-                    <Button size="sm" variant="outline" className="mt-3" onClick={() => setShowManagerModal(true)}>Select Managers</Button>
-                  </div>
-                </div>
+                {/* Managers pyramid under bench - Updated with working functionality */}
+                {renderManagerPyramid()}
               </CardContent>
             </Card>
           </div>
@@ -1385,6 +1450,16 @@ const TeamBuilder = () => {
         onCoachSelect={setSelectedCoach}
         selectedCoach={selectedCoach}
       />
+
+      {/* Manager Selection Modal - Fixed to work properly */}
+      {showManagerModal && (
+        <ManagerSelector
+          isOpen={showManagerModal}
+          onClose={() => setShowManagerModal(false)}
+          onConfirm={handleManagerSelect}
+          selectedManagers={selectedManagers}
+        />
+      )}
 
       {/* Tactical Visualization Modal */}
       {showTacticVisualizationModal && (

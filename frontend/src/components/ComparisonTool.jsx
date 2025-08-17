@@ -82,10 +82,10 @@ const ComparisonTool = () => {
   const addToComparison = (item) => {
     if (compareItems.find(i => i.id === item.id)) return;
     
-    // Limit to maximum 2 items for comparison
-    if (compareItems.length >= 2) {
+    // Limit to maximum 6 items for comparison
+    if (compareItems.length >= 6) {
       // Remove the first item and add the new one
-      setCompareItems([compareItems[1], item]);
+      setCompareItems([...compareItems.slice(1), item]);
     } else {
       setCompareItems([...compareItems, item]);
     }
@@ -235,13 +235,13 @@ const ComparisonTool = () => {
       return (
         <div className="text-center py-8 text-gray-400">
           <Scale className="w-12 h-12 mx-auto mb-2 opacity-50" />
-          <p>Add up to 2 items to start comparing</p>
+          <p>Add up to 6 items to start comparing</p>
         </div>
       );
     }
 
     return (
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex gap-4 overflow-x-auto pb-4 flex-wrap">
         {compareItems.map(item => {
           switch (selectedCategory) {
             case 'characters':
@@ -285,16 +285,16 @@ const ComparisonTool = () => {
 
   return (
     <>
-      {/* Floating Comparison Button */}
-      <div className="fixed bottom-4 right-20 z-40 select-none">
+      {/* Floating Comparison Button - Fixed positioning and visibility */}
+      <div className="fixed bottom-4 right-20 z-50 select-none">
         <Button
           onClick={() => setIsOpen(true)}
-          className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2"
+          className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2 flex items-center justify-center"
           style={{ 
             background: logoColors.primaryOrangeGradient,
             color: 'white',
             borderColor: logoColors.primaryBlue,
-            boxShadow: '0 8px 32px rgba(214, 84, 42, 0.4)'
+            boxShadow: '0 8px 32px rgba(214, 84, 42, 0.6)'
           }}
           title="Comparison Tool"
         >
@@ -348,7 +348,7 @@ const ComparisonTool = () => {
               )}
 
               <div className="text-sm text-gray-400">
-                {compareItems.length}/2 items selected
+                {compareItems.length}/6 items selected
               </div>
             </div>
 
@@ -357,7 +357,7 @@ const ComparisonTool = () => {
                  style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-center">Comparison</h3>
-                <div className="text-sm text-gray-400">Max 2 items</div>
+                <div className="text-sm text-gray-400">Max 6 items</div>
               </div>
               <div className="h-full overflow-y-auto">
                 {renderComparison()}
@@ -375,7 +375,7 @@ const ComparisonTool = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
                   {filteredItems.map(item => {
                     const isSelected = compareItems.find(i => i.id === item.id);
-                    const canAdd = isSelected || compareItems.length < 2;
+                    const canAdd = isSelected || compareItems.length < 6;
                     
                     return (
                       <div key={item.id} 
@@ -409,7 +409,7 @@ const ComparisonTool = () => {
                           ) : canAdd ? (
                             <Plus className="h-4 w-4 text-green-400" />
                           ) : (
-                            <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (2 items max)">
+                            <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)">
                               <Scale className="h-4 w-4" />
                             </div>
                           )}
