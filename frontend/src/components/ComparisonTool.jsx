@@ -538,152 +538,151 @@ const ComparisonTool = () => {
   };
 
   return (
-    <>
+    <Dialog>
       {/* Floating Comparison Button - Fixed positioning and visibility */}
       <div className="fixed bottom-4 right-4 z-50 select-none">
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2 flex items-center justify-center"
-          style={{ 
-            background: logoColors.primaryOrangeGradient,
-            color: 'white',
-            borderColor: logoColors.primaryBlue,
-            boxShadow: '0 8px 32px rgba(214, 84, 42, 0.6)'
-          }}
-          title="Comparison Tool"
-        >
-          <Scale className="h-6 w-6" />
-        </Button>
+        <DialogTrigger asChild>
+          <Button
+            className="w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-all duration-200 border-2 flex items-center justify-center"
+            style={{ 
+              background: logoColors.primaryOrangeGradient,
+              color: 'white',
+              borderColor: logoColors.primaryBlue,
+              boxShadow: '0 8px 32px rgba(214, 84, 42, 0.6)'
+            }}
+            title="Comparison Tool"
+          >
+            <Scale className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
       </div>
 
       {/* Comparison Modal */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-6xl h-[90vh] flex flex-col text-white" 
-                       style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-          <DialogHeader className="flex-shrink-0">
-            <DialogTitle className="flex items-center gap-2 text-xl">
-              <Scale className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
-              Comparison Tool
-            </DialogTitle>
-          </DialogHeader>
+      <DialogContent className="max-w-6xl h-[90vh] flex flex-col text-white" 
+                     style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="flex items-center gap-2 text-xl">
+            <Scale className="h-6 w-6" style={{ color: logoColors.primaryBlue }} />
+            Comparison Tool
+          </DialogTitle>
+        </DialogHeader>
 
-          <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-            {/* Controls */}
-            <div className="flex gap-4 items-center flex-wrap">
-              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-                <SelectTrigger className="w-[180px]" style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
-                  {categories.map(cat => (
-                    <SelectItem key={cat.value} value={cat.value} className="text-white hover:bg-blue-700/30">
-                      {cat.icon} {cat.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+        <div className="flex-1 flex flex-col gap-4 overflow-hidden">
+          {/* Controls */}
+          <div className="flex gap-4 items-center flex-wrap">
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+              <SelectTrigger className="w-[180px]" style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent style={{ backgroundColor: logoColors.blackAlpha(0.9), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
+                {categories.map(cat => (
+                  <SelectItem key={cat.value} value={cat.value} className="text-white hover:bg-blue-700/30">
+                    {cat.icon} {cat.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder={`Search ${selectedCategory}...`}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 text-white"
-                  style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}
-                />
-              </div>
-
-              {compareItems.length > 0 && (
-                <Button onClick={clearComparison} variant="outline" size="sm"
-                        style={{ borderColor: logoColors.primaryRed, color: logoColors.primaryRed }}>
-                  Clear All
-                </Button>
-              )}
-
-              <div className="text-sm text-gray-400">
-                {compareItems.length}/6 items selected
-              </div>
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder={`Search ${selectedCategory}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 text-white"
+                style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.3) }}
+              />
             </div>
 
-            {/* Comparison View */}
-            <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
-                 style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-center">Comparison</h3>
-                <div className="text-sm text-gray-400">Max 6 items</div>
-              </div>
-              <div className="h-full overflow-y-auto">
-                {renderComparison()}
-              </div>
-            </div>
+            {compareItems.length > 0 && (
+              <Button onClick={clearComparison} variant="outline" size="sm"
+                      style={{ borderColor: logoColors.primaryRed, color: logoColors.primaryRed }}>
+                Clear All
+              </Button>
+            )}
 
-            {/* Available Items */}
-            <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
-                 style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
-              <h3 className="text-lg font-bold mb-4">Available {categories.find(c => c.value === selectedCategory)?.label}</h3>
-              
-              {loading ? (
-                <div className="text-center py-8 text-gray-400">Loading...</div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
-                  {filteredItems.map(item => {
-                    const isSelected = isInComparison(item.id);
-                    const canAdd = !isSelected && canAddMore;
-                    
-                    return (
-                      <div key={item.id} 
-                           className={`p-3 rounded-lg border transition-all ${canAdd || isSelected ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-60'}`}
-                           style={{ 
-                             backgroundColor: isSelected
-                               ? logoColors.primaryBlueAlpha(0.2) 
-                               : logoColors.blackAlpha(0.2),
-                             borderColor: isSelected
-                               ? logoColors.primaryBlue
-                               : logoColors.primaryBlueAlpha(0.3)
-                           }}
-                           onClick={() => {
-                             if (isSelected) {
-                               removeFromComparison(item.id);
-                             } else if (canAdd) {
-                               addToComparison(item);
-                             }
-                           }}>
-                        
-                        <div className="flex items-center gap-2">
-                          <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'} 
-                               alt={item.name} className="w-8 h-8 rounded" />
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-white truncate">{item.name}</div>
-                            <div className="text-xs text-gray-400 truncate">
-                              {selectedCategory === 'characters' && item.position}
-                              {selectedCategory === 'items' && item.category}
-                              {selectedCategory === 'techniques' && item.type}
-                              {selectedCategory === 'coaches' && item.title}
-                            </div>
-                          </div>
-                          
-                          {isSelected ? (
-                            <X className="h-4 w-4 text-red-400" 
-                               onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
-                          ) : canAdd ? (
-                            <Scale className="h-4 w-4 text-green-400" />
-                          ) : (
-                            <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)">
-                              <Scale className="h-4 w-4" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+            <div className="text-sm text-gray-400">
+              {compareItems.length}/6 items selected
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+
+          {/* Comparison View */}
+          <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
+               style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-center">Comparison</h3>
+              <div className="text-sm text-gray-400">Max 6 items</div>
+            </div>
+            <div className="h-full overflow-y-auto">
+              {renderComparison()}
+            </div>
+          </div>
+
+          {/* Available Items */}
+          <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
+               style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
+            <h3 className="text-lg font-bold mb-4">Available {categories.find(c => c.value === selectedCategory)?.label}</h3>
+            
+            {loading ? (
+              <div className="text-center py-8 text-gray-400">Loading...</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
+                {filteredItems.map(item => {
+                  const isSelected = isInComparison(item.id);
+                  const canAdd = !isSelected && canAddMore;
+                  
+                  return (
+                    <div key={item.id} 
+                         className={`p-3 rounded-lg border transition-all ${canAdd || isSelected ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-60'}`}
+                         style={{ 
+                           backgroundColor: isSelected
+                             ? logoColors.primaryBlueAlpha(0.2) 
+                             : logoColors.blackAlpha(0.2),
+                           borderColor: isSelected
+                             ? logoColors.primaryBlue
+                             : logoColors.primaryBlueAlpha(0.3)
+                         }}
+                         onClick={() => {
+                           if (isSelected) {
+                             removeFromComparison(item.id);
+                           } else if (canAdd) {
+                             addToComparison(item);
+                           }
+                         }}>
+                      
+                      <div className="flex items-center gap-2">
+                        <img src={item.image || item.icon || item.portrait || '/api/placeholder/40/40'} 
+                             alt={item.name} className="w-8 h-8 rounded" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-white truncate">{item.name}</div>
+                          <div className="text-xs text-gray-400 truncate">
+                            {selectedCategory === 'characters' && item.position}
+                            {selectedCategory === 'items' && item.category}
+                            {selectedCategory === 'techniques' && item.type}
+                            {selectedCategory === 'coaches' && item.title}
+                          </div>
+                        </div>
+                        
+                        {isSelected ? (
+                          <X className="h-4 w-4 text-red-400" 
+                             onClick={(e) => { e.stopPropagation(); removeFromComparison(item.id); }} />
+                        ) : canAdd ? (
+                          <Scale className="h-4 w-4 text-green-400" />
+                        ) : (
+                          <div className="h-4 w-4 text-gray-600" title="Comparison limit reached (6 items max)">
+                            <Scale className="h-4 w-4" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
