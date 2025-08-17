@@ -11,7 +11,7 @@ import { mockHissatsu, mockEquipment, calculateStats } from '../data/mock';
 import { useAuth } from '../contexts/AuthContext';
 
 const ComparisonTool = () => {
-  const { loadCharacters, loadCoaches } = useAuth();
+  const { loadCharacters, loadCoaches, loadTechniques, loadEquipment } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [compareItems, setCompareItems] = useState([]);
   const [availableItems, setAvailableItems] = useState([]);
