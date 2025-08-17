@@ -289,7 +289,7 @@ const ComparisonTool = () => {
 
   // ===== Techniques Comparison Table =====
   const renderTechniqueComparisonTable = () => {
-    const maxPower = Math.max(0, ...compareItems.map(t => t.power || 0));
+    const maxPower = Math.max(0, ...compareItems.map(t => Number.isFinite(t.power) ? t.power : 0));
     return (
       <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse">
