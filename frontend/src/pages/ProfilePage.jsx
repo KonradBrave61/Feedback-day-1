@@ -578,30 +578,43 @@ const ProfilePage = () => {
                         Edit Profile
                       </Button>
                     ) : followStatus.can_follow ? (
-                      <Button
-                        onClick={handleFollow}
-                        className="w-full text-white border hover:opacity-80"
-                        style={{ 
-                          backgroundColor: followStatus.is_following 
-                            ? logoColors.primaryOrangeAlpha(0.4)
-                            : logoColors.primaryBlueAlpha(0.4),
-                          borderColor: followStatus.is_following 
-                            ? logoColors.primaryOrange
-                            : logoColors.primaryBlue
-                        }}
-                      >
-                        {followStatus.is_following ? (
-                          <>
-                            <UserCheck className="h-4 w-4 mr-2" />
-                            Unfollow
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="h-4 w-4 mr-2" />
-                            Follow
-                          </>
+                      <div className="space-y-2">
+                        <Button
+                          onClick={handleFollow}
+                          className="w-full text-white border hover:opacity-80"
+                          style={{ 
+                            backgroundColor: followStatus.is_following 
+                              ? logoColors.primaryOrangeAlpha(0.4)
+                              : logoColors.primaryBlueAlpha(0.4),
+                            borderColor: followStatus.is_following 
+                              ? logoColors.primaryOrange
+                              : logoColors.primaryBlue
+                          }}
+                        >
+                          {followStatus.is_following ? (
+                            <>
+                              <UserCheck className="h-4 w-4 mr-2" />
+                              Unfollow
+                            </>
+                          ) : (
+                            <>
+                              <UserPlus className="h-4 w-4 mr-2" />
+                              Follow
+                            </>
+                          )}
+                        </Button>
+                        
+                        {followStatus.is_following && (
+                          <Button
+                            onClick={handleStartChat}
+                            className="w-full text-black font-bold hover:opacity-80"
+                            style={{ background: logoColors.yellowOrangeGradient }}
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Start Chat
+                          </Button>
                         )}
-                      </Button>
+                      </div>
                     ) : null}
                   </>
                 )}
