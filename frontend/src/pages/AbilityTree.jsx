@@ -175,7 +175,7 @@ const AbilityTree = () => {
 
   const Node = ({ n }) => {
     const unlockable = isUnlockable(n) && (lpLeft >= (n.cost || 0));
-    const commonProps = { onClick: () => handleNodeClick(n), style: { cursor: unlockable ? 'pointer' : 'default' } };
+    const commonProps = { onClick: (evt) => handleNodeClick(n, evt), style: { cursor: unlockable ? 'pointer' : 'default' } };
 
     if (n.type === 'Shot') {
       const active = n.unlocked;
