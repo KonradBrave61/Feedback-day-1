@@ -34,8 +34,6 @@ const ComparisonTool = () => {
   const loadComparisonData = async (category, filters = {}) => {
     // Use proper environment variable for HTTPS backend URL
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    console.log(`🔍 DEBUG: Environment variable REACT_APP_BACKEND_URL:`, backendUrl);
-    console.log(`🔍 DEBUG: All process.env keys:`, Object.keys(process.env).filter(key => key.startsWith('REACT_APP')));
     console.log(`Loading comparison data for ${category}, backend URL: ${backendUrl}`);
     
     try {
