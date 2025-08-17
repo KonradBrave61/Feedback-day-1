@@ -160,7 +160,7 @@ class ComparisonToolAPITester:
         
         try:
             # Test GET /api/equipment with authentication
-            response = requests.get(f"{BACKEND_URL}/equipment", headers=self.get_headers())
+            response = requests.get(f"{BACKEND_URL}/equipment/", headers=self.get_headers())
             
             if response.status_code == 200:
                 data = response.json()
