@@ -53,10 +53,11 @@ class ComparisonToolAPITester:
         except Exception as e:
             self.log_result("Login with test credentials", False, f"Login failed: {str(e)}")
         
-        # If login fails, try to register the test user
+        # If login fails, try to register a new test user with unique credentials
+        unique_id = uuid.uuid4().hex[:8]
         register_data = {
-            "username": "test@test.com",
-            "email": "test@test.com",
+            "username": f"comptest_{unique_id}@test.com",
+            "email": f"comptest_{unique_id}@test.com",
             "password": "test123",
             "favourite_team": "Raimon",
             "profile_picture": "https://example.com/avatar.jpg",
@@ -69,13 +70,13 @@ class ComparisonToolAPITester:
                 data = response.json()
                 self.auth_token = data.get("access_token")
                 self.user_id = data.get("user_id")
-                self.log_result("Register test user", True, f"User registered and token obtained")
+                self.log_result("Register new test user", True, f"User registered and token obtained")
                 return True
             else:
-                self.log_result("Register test user", False, f"Registration failed: {response.status_code} - {response.text}")
+                self.log_result("Register new test user", False, f"Registration failed: {response.status_code} - {response.text}")
                 return False
         except Exception as e:
-            self.log_result("Register test user", False, f"Registration error: {str(e)}")
+            self.log_result("Register new test user", False, f"Registration error: {str(e)}")
             return False
     
     def get_headers(self):
