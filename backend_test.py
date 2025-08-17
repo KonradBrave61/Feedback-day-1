@@ -28,9 +28,10 @@ class CommunityProfileChatTester:
         self.log("🔐 Testing user registration and login...")
         
         # Register User A
+        unique_id = str(uuid.uuid4())[:8]
         user_a_data = {
-            "username": "alice_community",
-            "email": "alice@example.com",
+            "username": f"alice_community_{unique_id}",
+            "email": f"alice_{unique_id}@example.com",
             "password": "password123",
             "coach_level": 15,
             "favorite_position": "MF",
