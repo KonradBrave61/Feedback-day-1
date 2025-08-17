@@ -77,7 +77,14 @@ const ComparisonTool = () => {
 
   const addToComparison = (item) => {
     if (compareItems.find(i => i.id === item.id)) return;
-    setCompareItems([...compareItems, item]);
+    
+    // Limit to maximum 2 items for comparison
+    if (compareItems.length >= 2) {
+      // Remove the first item and add the new one
+      setCompareItems([compareItems[1], item]);
+    } else {
+      setCompareItems([...compareItems, item]);
+    }
   };
 
   const removeFromComparison = (itemId) => {
