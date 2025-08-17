@@ -33,7 +33,7 @@ const ComparisonTool = () => {
   // Direct API calls without authentication for comparison tool (public access)
   const loadComparisonData = async (category, filters = {}) => {
     // Force HTTPS URL to fix mixed content error
-    const httpsBackendUrl = 'https://item-compare-fix.preview.emergentagent.com';
+    const httpsBackendUrl = 'https://content-security-fix.preview.emergentagent.com';
     console.log(`Loading comparison data for ${category}, backend URL: ${httpsBackendUrl}`);
     
     try {

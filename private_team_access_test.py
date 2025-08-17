@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Get backend URL from environment
-BACKEND_URL = "https://item-compare-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://content-security-fix.preview.emergentagent.com/api"
 
 def test_private_team_access():
     """Test private team loading for owner works via GET /api/teams/{team_id}/details after toggling to private"""

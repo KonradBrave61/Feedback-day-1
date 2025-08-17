@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://item-compare-fix.preview.emergentagent.com/api"
+BACKEND_URL = "https://content-security-fix.preview.emergentagent.com/api"
 
 class ReviewSpecificTester:
     def __init__(self):

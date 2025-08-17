@@ -21,7 +21,7 @@ import os
 from typing import Dict, Any
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://item-compare-fix.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://content-security-fix.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
 class ComparisonToolTester:
