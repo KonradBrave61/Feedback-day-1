@@ -501,10 +501,12 @@ const ComparisonTool = () => {
 
   const renderComparison = () => {
     if (compareItems.length === 0) {
+      const categoryLabel = categories.find(c => c.value === selectedCategory)?.label.toLowerCase() || 'items';
       return (
         <div className="text-center py-8 text-gray-400">
           <Scale className="w-12 h-12 mx-auto mb-2 opacity-50" />
-          <p>Add up to 6 items to start comparing</p>
+          <p>Add up to 6 {categoryLabel} to start comparing</p>
+          <p className="text-sm mt-2">Select {categoryLabel} from the list below to compare their stats and attributes</p>
         </div>
       );
     }
