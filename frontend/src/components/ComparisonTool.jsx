@@ -227,7 +227,7 @@ const ComparisonTool = () => {
 
   // ===== Items Comparison Table =====
   const renderItemComparisonTable = () => {
-    const allStats = [...new Set(compareItems.flatMap(item => Object.keys(item.stats || {})))];
+    const allStats = [...new Set(compareItems.flatMap(item => Object.keys(item.stats || {})))].sort();
 
     const valueByItem = compareItems.map(item => ({ id: item.id, data: item.stats || {} }));
     const maxByStat = allStats.reduce((acc, s) => {
