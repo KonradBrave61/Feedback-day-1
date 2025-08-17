@@ -930,15 +930,38 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                    borderColor: logoColors.primaryBlueAlpha(0.3)
                  }}>
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Select Technique for Slot {selectedCategory + 1}</h3>
+                <h3 className="text-lg font-bold">
+                  {selectedCategory === 'mixiMax' 
+                    ? 'Select Mixi Max Technique' 
+                    : `Select Technique for Slot ${selectedCategory + 1}`
+                  }
+                </h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowHissatsuList(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {mockHissatsu.map((hissatsu) => {
+                {mockHissatsu
+                  .filter(hissatsu => {
+                    // Filter techniques based on slot type
+                    if (selectedCategory === 'mixiMax') {
+                      return hissatsu.type === 'mixi-max' || hissatsu.type === 'mix-max';
+                    } else {
+                      // Regular slots should NOT show Mixi Max techniques
+                      return hissatsu.type !== 'mixi-max' && hissatsu.type !== 'mix-max';
+                    }
+                  })
+                  .map((hissatsu) => {
                   const currentPreset = `preset${activePreset}`;
-                  const isUsedInPreset = (selectedHissatsu?.[currentPreset] || []).some(h => h && h.id === hissatsu.id);
+                  let isUsedInPreset = false;
+                  
+                  if (selectedCategory === 'mixiMax') {
+                    // Check if already used in Mixi Max slot
+                    isUsedInPreset = selectedHissatsu?.mixiMax?.id === hissatsu.id;
+                  } else {
+                    // Check if used in regular preset
+                    isUsedInPreset = (selectedHissatsu?.[currentPreset] || []).some(h => h && h.id === hissatsu.id);
+                  }
                   
                   return (
                     <div
