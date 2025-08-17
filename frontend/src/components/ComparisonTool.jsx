@@ -613,8 +613,12 @@ const ComparisonTool = () => {
           <div className="flex-1 border rounded-lg p-4 overflow-hidden" 
                style={{ borderColor: logoColors.primaryBlueAlpha(0.3), backgroundColor: logoColors.blackAlpha(0.1) }}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-center">Comparison</h3>
-              <div className="text-sm text-gray-400">Max 6 items</div>
+              <h3 className="text-lg font-bold text-center">
+                {categories.find(c => c.value === selectedCategory)?.icon} {categories.find(c => c.value === selectedCategory)?.label} Comparison
+              </h3>
+              <div className="text-sm text-gray-400">
+                {compareItems.length} selected (Max 6)
+              </div>
             </div>
             <div className="h-full overflow-y-auto">
               {renderComparison()}
