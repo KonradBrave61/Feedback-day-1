@@ -480,7 +480,7 @@ const ComparisonTool = () => {
       </div>
 
       {/* Comparison Modal */}
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col text-white" 
+      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[95vh] flex flex-col text-white overflow-y-auto" 
                      style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.3) }}>
         <TooltipProvider>
           <DialogHeader className="flex-shrink-0">
