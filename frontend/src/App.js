@@ -52,6 +52,7 @@ function App() {
             <Notification />
             <Toaster />
           </BrowserRouter>
+        </ComparisonProvider>
         </AuthProvider>
       </DndProvider>
     </div>
