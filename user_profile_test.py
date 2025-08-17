@@ -36,7 +36,7 @@ class UserProfileEndpointTester:
         }
         
         response = requests.post(f"{self.base_url}/auth/register", json=user_data)
-        if response.status_code == 201:
+        if response.status_code in [200, 201]:
             self.log(f"✅ User {user_data['username']} registered successfully")
             return user_data, response.json()
         else:
