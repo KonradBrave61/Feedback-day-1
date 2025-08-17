@@ -245,7 +245,7 @@ class ComparisonToolAPITester:
                         # Test technique_type filtering for comparison tool specific types
                         technique_types = ['avatar', 'totem', 'mixi-max', 'mix-max']
                         for tech_type in technique_types:
-                            filter_response = requests.get(f"{BACKEND_URL}/techniques?technique_type={tech_type}", 
+                            filter_response = requests.get(f"{BACKEND_URL}/techniques/?technique_type={tech_type}", 
                                                          headers=self.get_headers())
                             if filter_response.status_code == 200:
                                 filtered_data = filter_response.json()
