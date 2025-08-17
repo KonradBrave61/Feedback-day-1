@@ -605,7 +605,7 @@ const ComparisonTool = () => {
             )}
 
             <div className="text-sm text-gray-400">
-              {compareItems.length}/6 items selected
+              {compareItems.length}/6 {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} selected
             </div>
           </div>
 
