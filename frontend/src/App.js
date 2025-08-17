@@ -45,6 +45,7 @@ function App() {
             </Routes>
             {/* Global overlays */}
             <ChatBubble />
+            <ComparisonTool />
             <Notification />
             <Toaster />
           </BrowserRouter>
