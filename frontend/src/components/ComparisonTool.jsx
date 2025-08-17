@@ -659,7 +659,7 @@ const ComparisonTool = () => {
                               {selectedCategory === 'characters' && item.position}
                               {selectedCategory === 'items' && item.category}
                               {selectedCategory === 'techniques' && item.type}
-                              {(selectedCategory === 'coaches' || selectedCategory === 'managers') && item.title}
+                              {selectedCategory === 'coaches' && item.title}
                             </div>
                           </div>
                           
