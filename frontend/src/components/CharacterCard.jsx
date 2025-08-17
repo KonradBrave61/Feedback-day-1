@@ -7,6 +7,12 @@ import { logoColors } from '../styles/colors';
 import { useComparison } from '../contexts/ComparisonContext';
 
 const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
+  const { addToComparison, isInComparison } = useComparison();
+
+  const handleCompareClick = (e) => {
+    e.stopPropagation(); // Prevent card click from triggering
+    addToComparison(character);
+  };
   const getPositionColor = (position) => {
     switch (position) {
       case 'FW': return 'bg-red-500 text-white';
