@@ -78,7 +78,14 @@ const TeamCard = ({
             </CardTitle>
             {showAuthor && (team.username || team.creator?.username) && (
               <p className="text-sm text-gray-300 mt-1">
-                by {team.username || team.creator?.username}
+                by{' '}
+                <span 
+                  onClick={handleAuthorClick}
+                  className="text-blue-400 hover:text-blue-300 cursor-pointer underline"
+                  style={{ color: logoColors.primaryBlue }}
+                >
+                  {team.username || team.creator?.username}
+                </span>
               </p>
             )}
           </div>
