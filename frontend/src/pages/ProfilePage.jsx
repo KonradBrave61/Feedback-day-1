@@ -90,7 +90,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [userId, user]);
 
   // Add effect to watch for user becoming null (session expired)
   useEffect(() => {
