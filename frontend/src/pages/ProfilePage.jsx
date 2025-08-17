@@ -687,23 +687,25 @@ const ProfilePage = () => {
                             <p className="text-sm text-gray-300 mb-2">{team.formation_name}</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleQuickPrivacyToggle(team);
-                              }}
-                              className="p-2 hover:opacity-80 hover:text-white"
-                              style={{ 
-                                backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
-                                color: logoColors.white
-                              }}
-                              title={team.is_public ? 'Make Private' : 'Make Public'}
-                            >
-                              {team.is_public ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
-                            </Button>
+                            {isOwnProfile && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleQuickPrivacyToggle(team);
+                                  }}
+                                  className="p-2 hover:opacity-80 hover:text-white"
+                                  style={{ 
+                                    backgroundColor: team.is_public ? logoColors.primaryBlueAlpha(0.3) : logoColors.blackAlpha(0.5),
+                                    color: logoColors.white
+                                  }}
+                                  title={team.is_public ? 'Make Private' : 'Make Public'}
+                                >
+                                  {team.is_public ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                                </Button>
 
-                            <AlertDialog>
+                                <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
                                   size="sm"
