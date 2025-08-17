@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
-import { X, Plus, Scale, Search, Filter } from 'lucide-react';
+import { X, Scale, Search, Filter } from 'lucide-react';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { logoColors } from '../styles/colors';
