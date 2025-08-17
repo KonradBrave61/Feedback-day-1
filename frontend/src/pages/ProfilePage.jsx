@@ -49,7 +49,8 @@ const ProfilePage = () => {
     loadUserProfile,
     loadUserTeams,
     checkFollowStatus,
-    followUser
+    followUser,
+    startConversation
   } = useAuth();
   const navigate = useNavigate();
   const { userId } = useParams();
