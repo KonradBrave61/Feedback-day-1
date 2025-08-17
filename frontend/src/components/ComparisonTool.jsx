@@ -236,6 +236,268 @@ const ComparisonTool = () => {
     </Card>
   );
 
+  // New table-based comparison renderers for columns and rows layout
+  const renderCharacterComparisonTable = () => {
+    const allStats = ['kick', 'control', 'technique', 'intelligence', 'pressure', 'agility', 'physical'];
+    
+    return (
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse">
+          {/* Header Row */}
+          <thead>
+            <tr>
+              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              {compareItems.map(character => (
+                <th key={character.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                  <div className="flex flex-col items-center gap-1">
+                    <img src={character.image} alt={character.name} className="w-10 h-10 rounded-full" />
+                    <div className="text-xs">{character.name}</div>
+                    <div className="flex gap-1">
+                      <Badge className={`${getPositionColor(character.position)} text-xs px-1`}>
+                        {character.position}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
+                        {character.element}
+                      </Badge>
+                    </div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Basic Info Row */}
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Position</td>
+              {compareItems.map(character => (
+                <td key={character.id} className="p-2 border border-gray-600 text-center text-white">
+                  {character.position}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Element</td>
+              {compareItems.map(character => (
+                <td key={character.id} className="p-2 border border-gray-600 text-center text-white">
+                  {character.element}
+                </td>
+              ))}
+            </tr>
+            
+            {/* Stats Rows */}
+            {allStats.map(statName => (
+              <tr key={statName}>
+                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
+                  {statName}
+                </td>
+                {compareItems.map(character => {
+                  const stats = calculateStats(character, {}, character.level || 99, character.rarity || 'Legendary');
+                  const statValue = stats[statName]?.main || character.base_stats?.[statName] || 0;
+                  return (
+                    <td key={character.id} className="p-2 border border-gray-600 text-center text-white font-bold">
+                      {statValue}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderItemComparisonTable = () => {
+    const allCategories = [...new Set(compareItems.map(item => item.category))];
+    const allRarities = [...new Set(compareItems.map(item => item.rarity))];
+    const allStats = [...new Set(compareItems.flatMap(item => Object.keys(item.stats || {})))];
+
+    return (
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              {compareItems.map(item => (
+                <th key={item.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                  <div className="flex flex-col items-center gap-1">
+                    <img src={item.icon} alt={item.name} className="w-10 h-10" />
+                    <div className="text-xs">{item.name}</div>
+                    <Badge className={getRarityColor(item.rarity)} variant="outline" className="text-xs">
+                      {item.rarity}
+                    </Badge>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Category</td>
+              {compareItems.map(item => (
+                <td key={item.id} className="p-2 border border-gray-600 text-center text-white">
+                  {item.category}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Rarity</td>
+              {compareItems.map(item => (
+                <td key={item.id} className="p-2 border border-gray-600 text-center text-white">
+                  {item.rarity}
+                </td>
+              ))}
+            </tr>
+            
+            {allStats.map(statName => (
+              <tr key={statName}>
+                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
+                  {statName}
+                </td>
+                {compareItems.map(item => (
+                  <td key={item.id} className="p-2 border border-gray-600 text-center text-white font-bold">
+                    {item.stats?.[statName] ? `+${item.stats[statName]}` : '-'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderTechniqueComparisonTable = () => {
+    return (
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              {compareItems.map(technique => (
+                <th key={technique.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                  <div className="flex flex-col items-center gap-1">
+                    <img src={technique.icon || '/api/placeholder/40/40'} alt={technique.name} className="w-10 h-10" />
+                    <div className="text-xs">{technique.name}</div>
+                    <Badge variant="outline" className="text-xs" style={{ color: logoColors.primaryBlue, borderColor: logoColors.primaryBlue }}>
+                      {technique.type || technique.technique_type}
+                    </Badge>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Type</td>
+              {compareItems.map(technique => (
+                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
+                  {technique.type || technique.technique_type}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Element</td>
+              {compareItems.map(technique => (
+                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
+                  {technique.element || '-'}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Power</td>
+              {compareItems.map(technique => (
+                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white font-bold">
+                  {technique.power || '-'}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Category</td>
+              {compareItems.map(technique => (
+                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white">
+                  {technique.category || '-'}
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Description</td>
+              {compareItems.map(technique => (
+                <td key={technique.id} className="p-2 border border-gray-600 text-center text-white text-xs">
+                  {technique.description || '-'}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderCoachComparisonTable = () => {
+    const allBonusStats = [...new Set(compareItems.flatMap(coach => Object.keys(coach.bonuses?.teamStats || {})))];
+    
+    return (
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-left">Attribute</th>
+              {compareItems.map(coach => (
+                <th key={coach.id} className="p-2 border border-gray-600 bg-gray-800 text-white font-bold text-center min-w-[120px]">
+                  <div className="flex flex-col items-center gap-1">
+                    <img src={coach.portrait || '/api/placeholder/40/40'} alt={coach.name} className="w-10 h-10 rounded-full" />
+                    <div className="text-xs">{coach.name}</div>
+                    <div className="text-xs text-gray-300">{coach.title}</div>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Title</td>
+              {compareItems.map(coach => (
+                <td key={coach.id} className="p-2 border border-gray-600 text-center text-white">
+                  {coach.title}
+                </td>
+              ))}
+            </tr>
+            
+            {allBonusStats.map(statName => (
+              <tr key={statName}>
+                <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium capitalize">
+                  {statName} Bonus
+                </td>
+                {compareItems.map(coach => (
+                  <td key={coach.id} className="p-2 border border-gray-600 text-center text-white font-bold">
+                    {coach.bonuses?.teamStats?.[statName] ? `+${coach.bonuses.teamStats[statName]}` : '-'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            
+            <tr>
+              <td className="p-2 border border-gray-600 bg-gray-700 text-white font-medium">Specialties</td>
+              {compareItems.map(coach => (
+                <td key={coach.id} className="p-2 border border-gray-600 text-center text-white text-xs">
+                  <div className="flex flex-wrap gap-1 justify-center">
+                    {coach.specialties?.map((specialty, idx) => (
+                      <Badge key={idx} variant="outline" className="text-xs"
+                             style={{ color: logoColors.primaryYellow, borderColor: logoColors.primaryYellow }}>
+                        {specialty}
+                      </Badge>
+                    )) || '-'}
+                  </div>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   const renderComparison = () => {
     if (compareItems.length === 0) {
       return (
