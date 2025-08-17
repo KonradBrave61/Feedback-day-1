@@ -645,6 +645,12 @@ const ComparisonTool = () => {
             
             {loading ? (
               <div className="text-center py-8 text-gray-400">Loading...</div>
+            ) : availableItems.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                No {categories.find(c => c.value === selectedCategory)?.label.toLowerCase()} available
+                <br />
+                <small>Debug: availableItems.length = {availableItems.length}</small>
+              </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
                 {filteredItems.map(item => {
