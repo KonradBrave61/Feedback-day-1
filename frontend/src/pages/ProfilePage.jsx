@@ -37,8 +37,27 @@ import { logoColors, componentColors } from '../styles/colors';
 import { showSessionExpiredNotification } from '../components/Notification';
 
 const ProfilePage = () => {
-  const { user, loading: authLoading, updateProfile, loadTeams, loadFollowers, loadFollowing, updateTeam, deleteTeam } = useAuth();
+  const { 
+    user, 
+    loading: authLoading, 
+    updateProfile, 
+    loadTeams, 
+    loadFollowers, 
+    loadFollowing, 
+    updateTeam, 
+    deleteTeam,
+    loadUserProfile,
+    loadUserTeams,
+    checkFollowStatus,
+    followUser
+  } = useAuth();
   const navigate = useNavigate();
+  const { userId } = useParams();
+  
+  // Determine if we're viewing own profile or another user's profile
+  const isOwnProfile = !userId || userId === user?.id;
+  const [profileUser, setProfileUser] = useState(null);
+  const [followStatus, setFollowStatus] = useState({ is_following: false, can_follow: false });
   
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
