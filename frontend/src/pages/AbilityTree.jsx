@@ -327,11 +327,11 @@ const AbilityTree = () => {
         </div>
 
         {/* Canvas */}
-        <div className="relative rounded-xl overflow-hidden border" style={{ ...bgStyle, borderColor: 'rgba(56,189,248,0.4)' }}>
+        <div ref={containerRef} className="relative rounded-xl overflow-hidden border" style={{ ...bgStyle, borderColor: 'rgba(56,189,248,0.4)' }}>
           {/* soft energy core */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,180,255,0.35) 0%, rgba(0,0,0,0) 65%)', filter: 'blur(1px)' }} />
 
-          <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} width="100%" height="560" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
+          <svg ref={svgRef} viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} width="100%" height="560" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
             {renderGlowDefs()}
             {/* edges */}
             {edges.map(e => (
@@ -340,6 +340,47 @@ const AbilityTree = () => {
             {/* nodes */}
             {nodes.map(n => <Node key={n.id} n={n} />)}
           </svg>
+
+          {/* inline selection state popup */}
+          {selecting && anchor && (
+            <div
+              className="absolute z-50 w-[340px] rounded-lg border shadow-xl"
+              style={{
+                left: Math.min(Math.max(12, anchor.left - 160), (containerRef.current?.clientWidth || 360) - 360),
+                top: Math.min(Math.max(12, anchor.top + 18), (560 - 300)),
+                backgroundColor: logoColors.blackAlpha(0.92),
+                borderColor: logoColors.primaryBlueAlpha(0.35)
+              }}
+            >
+              <div className="p-3 border-b" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
+                <div className="flex items-center justify-between">
+                  <div className="text-white text-sm font-semibold">Select {selecting.type}</div>
+                  <div className="text-[11px] px-2 py-0.5 rounded bg-blue-600/30 text-blue-200 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>Cost +{selecting.cost} LP</div>
+                </div>
+              </div>
+              <div className="max-h-[260px] overflow-y-auto">
+                {listByType(selecting.type).map(t => (
+                  <button
+                    key={t.id}
+                    onClick={() => unlockWithTechnique(t)}
+                    className="w-full text-left px-3 py-2 hover:bg-blue-800/30 flex items-center gap-3"
+                    style={{ borderBottom: `1px solid ${logoColors.primaryBlueAlpha(0.12)}` }}
+                  >
+                    <img src={t.icon} alt={t.name} className="w-7 h-7" />
+                    <div className="min-w-0">
+                      <div className="text-white text-sm font-medium truncate">{t.name}</div>
+                      <div className="text-[11px] text-gray-300 truncate">{t.description}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className="p-2 flex justify-end">
+                <Button variant="ghost" className="text-white hover:bg-blue-700/30" onClick={() => setSelecting(null)}>
+                  <X className="h-4 w-4 mr-1" /> Close
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* bottom-left helper (placeholder) */}
           <div className="absolute left-2 bottom-2 text-[11px] text-blue-200/80">Use LP to unlock nodes → choose technique</div>
