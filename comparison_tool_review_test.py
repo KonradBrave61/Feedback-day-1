@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://technique-compare.preview.emergentagent.com/api"
+BACKEND_URL = "https://selection-bubble.preview.emergentagent.com/api"
 
 class ComparisonToolTester:
     def __init__(self):
