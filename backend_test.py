@@ -63,9 +63,10 @@ class CommunityProfileChatTester:
             self.user_a_id = user_a_auth["user"]["id"]
         
         # Register User B
+        unique_id_b = str(uuid.uuid4())[:8]
         user_b_data = {
-            "username": "bob_profile",
-            "email": "bob@example.com", 
+            "username": f"bob_profile_{unique_id_b}",
+            "email": f"bob_{unique_id_b}@example.com", 
             "password": "password123",
             "coach_level": 20,
             "favorite_position": "FW",
