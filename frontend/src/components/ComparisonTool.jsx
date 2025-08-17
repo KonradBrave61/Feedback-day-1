@@ -512,7 +512,7 @@ const ComparisonTool = () => {
         {selectedCategory === 'characters' && renderCharacterComparisonTable()}
         {selectedCategory === 'items' && renderItemComparisonTable()}
         {selectedCategory === 'techniques' && renderTechniqueComparisonTable()}
-        {(selectedCategory === 'coaches' || selectedCategory === 'managers') && renderCoachComparisonTable()}
+        {selectedCategory === 'coaches' && renderCoachComparisonTable()}
       </div>
     );
   };
