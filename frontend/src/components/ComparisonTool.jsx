@@ -76,7 +76,15 @@ const ComparisonTool = () => {
       const httpsUrl = url.replace(/^http:\/\//, 'https://');
       console.log(`🔒 Force HTTPS URL: ${httpsUrl}`);
       
-      const response = await fetch(httpsUrl);
+      // Create custom fetch with HTTPS enforcement
+      const response = await fetch(httpsUrl, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       console.log(`Response status: ${response.status}`);
       
       if (!response.ok) {
