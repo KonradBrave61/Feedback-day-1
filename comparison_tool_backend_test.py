@@ -299,7 +299,7 @@ class ComparisonToolAPITester:
                         
                         # Test individual coach retrieval
                         coach_id = coach['id']
-                        detail_response = requests.get(f"{BACKEND_URL}/teams/coaches/{coach_id}", 
+                        detail_response = requests.get(f"{BACKEND_URL}/teams/coaches/{coach_id}/", 
                                                      headers=self.get_headers())
                         if detail_response.status_code == 200:
                             detail_data = detail_response.json()
