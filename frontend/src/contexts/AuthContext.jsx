@@ -808,7 +808,7 @@ export const AuthProvider = ({ children }) => {
     // Coaches API
     loadCoaches: async () => {
       try {
-        const response = await makeAuthenticatedRequest(`${backendUrl}/api/coaches`);
+        const response = await makeAuthenticatedRequest(`${backendUrl}/api/teams/coaches/`);
         if (!response.ok) return { success: false };
         const data = await response.json();
         return { success: true, coaches: data };
