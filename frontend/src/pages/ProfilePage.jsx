@@ -61,12 +61,12 @@ const ProfilePage = () => {
   
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState({
-    username: user?.username || '',
-    email: user?.email || '',
-    coachLevel: user?.coach_level || 1,
-    favoritePosition: user?.favorite_position || 'FW',
-    favoriteElement: user?.favorite_element || 'Fire',
-    favoriteTeam: user?.favourite_team || ''
+    username: '',
+    email: '',
+    coachLevel: 1,
+    favoritePosition: 'FW',
+    favoriteElement: 'Fire',
+    favoriteTeam: ''
   });
   const [teams, setTeams] = useState([]);
   const [stats, setStats] = useState({
