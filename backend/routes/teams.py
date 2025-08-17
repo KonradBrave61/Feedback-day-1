@@ -82,6 +82,18 @@ async def get_formations():
     """Get all available formations"""
     db = await get_database()
     
+    # Initialize database with sample formations if empty
+    count = await db.formations.count_documents({})
+    if count == 0:
+        from data.sample_formations import sample_formations
+        formations_to_insert = []
+        for formation_data in sample_formations:
+            formation = Formation(**formation_data)
+            formations_to_insert.append(formation.dict())
+        
+        if formations_to_insert:
+            await db.formations.insert_many(formations_to_insert)
+    
     cursor = db.formations.find({})
     formations = await cursor.to_list(length=None)
     
