@@ -384,10 +384,11 @@ const ProfilePage = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            Coach Profile
+            {isOwnProfile ? 'Your Profile' : `${profileUser?.username || 'User'}'s Profile`}
           </h1>
-
-          <p className="text-gray-300">Manage your Inazuma Eleven journey</p>
+          <p className="text-gray-300">
+            {isOwnProfile ? 'Manage your Inazuma Eleven journey' : 'Explore their teams and achievements'}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
