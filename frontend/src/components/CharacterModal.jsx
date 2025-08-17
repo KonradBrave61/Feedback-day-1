@@ -1007,7 +1007,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                 {mockHissatsu
                   .filter(hissatsu => {
                     // Filter techniques based on slot type
-                    if (selectedCategory === 'mixiMax') {
+                    if (selectedCategory === 'mixiMax1' || selectedCategory === 'mixiMax2') {
                       return hissatsu.type === 'mixi-max' || hissatsu.type === 'mix-max';
                     } else {
                       // Regular slots should NOT show Mixi Max techniques
@@ -1018,9 +1018,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
                   const currentPreset = `preset${activePreset}`;
                   let isUsedInPreset = false;
                   
-                  if (selectedCategory === 'mixiMax') {
-                    // Check if already used in Mixi Max slot
-                    isUsedInPreset = selectedHissatsu?.mixiMax?.id === hissatsu.id;
+                  if (selectedCategory === 'mixiMax1' || selectedCategory === 'mixiMax2') {
+                    // Check if already used in either Mixi Max slot
+                    isUsedInPreset = selectedHissatsu?.mixiMax1?.id === hissatsu.id || 
+                                    selectedHissatsu?.mixiMax2?.id === hissatsu.id;
                   } else {
                     // Check if used in regular preset
                     isUsedInPreset = (selectedHissatsu?.[currentPreset] || []).some(h => h && h.id === hissatsu.id);
