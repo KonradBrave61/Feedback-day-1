@@ -84,6 +84,30 @@ async def get_user_profile(
     
     return UserPublic(**user_data)
 
+@router.get("/users/{user_id}/follow-status")
+async def get_follow_status(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Check if current user is following the specified user"""
+    db = await get_database()
+    
+    # Check if target user exists
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    current_user_doc = await db.users.find_one({"id": current_user.id})
+    following = current_user_doc.get("following", [])
+    
+    return {
+        "is_following": user_id in following,
+        "can_follow": user_id != current_user.id  # Cannot follow yourself
+    }
+
 @router.get("/users/{user_id}/teams", response_model=List[Team])
 async def get_user_public_teams(
     user_id: str,
