@@ -349,6 +349,33 @@ const ProfilePage = () => {
     await handleTeamPrivacyToggle(team.id, !team.is_public);
   };
 
+  const handleFollow = async () => {
+    if (!followStatus.can_follow || isOwnProfile) return;
+    
+    try {
+      const result = await followUser(userId);
+      if (result.success) {
+        setFollowStatus(prev => ({
+          ...prev,
+          is_following: result.following
+        }));
+        
+        // Update follower count
+        setStats(prev => ({
+          ...prev,
+          followers: prev.followers + (result.following ? 1 : -1)
+        }));
+        
+        toast.success(result.following ? 'User followed!' : 'User unfollowed!');
+      } else {
+        toast.error('Failed to update follow status');
+      }
+    } catch (error) {
+      console.error('Follow error:', error);
+      toast.error('Failed to update follow status');
+    }
+  };
+
   return (
     <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
       <Navigation />
