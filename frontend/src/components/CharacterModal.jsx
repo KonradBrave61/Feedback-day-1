@@ -40,11 +40,13 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
       // Legacy: flat array. Interpret as 6 for preset1 and next 6 for preset2
       const p1 = raw.slice(0, 6);
       const p2 = raw.slice(6, 12);
-      const mixiMax = raw.slice(12, 13) || [null]; // Mixi Max slot
+      const mixiMax1 = raw.slice(12, 13) || [null]; // First Mixi Max slot
+      const mixiMax2 = raw.slice(13, 14) || [null]; // Second Mixi Max slot
       return {
         preset1: makeSlots(p1),
         preset2: makeSlots(p2),
-        mixiMax: mixiMax[0] || null
+        mixiMax1: mixiMax1[0] || null,
+        mixiMax2: mixiMax2[0] || null
       };
     }
     if (raw && (Array.isArray(raw.preset1) || Array.isArray(raw.preset2))) {
