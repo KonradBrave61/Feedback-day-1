@@ -872,7 +872,9 @@ const TeamBuilder = () => {
               userEquipment: playerData.user_equipment || { boots: null, bracelets: null, pendants: null, special: null },
               userHissatsu: {
                 preset1: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(0, 3) : (hissatsuRaw?.preset1 || []),
-                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || [])
+                preset2: Array.isArray(hissatsuRaw) ? hissatsuRaw.slice(3, 6) : (hissatsuRaw?.preset2 || []),
+                mixiMax1: hissatsuRaw?.mixiMax1 || null,
+                mixiMax2: hissatsuRaw?.mixiMax2 || null
               },
               name: base?.name || playerData.name || `Player ${playerData.character_id}`,
               nickname: base?.nickname || playerData.nickname || base?.name || `P${playerData.character_id}`,
