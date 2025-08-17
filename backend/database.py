@@ -24,9 +24,9 @@ async def init_database():
     if tactics_count == 0:
         await populate_default_tactics()
     
-    coaches_count = await db.coaches.count_documents({})
-    if coaches_count == 0:
-        await populate_default_coaches()
+    # Force coaches reinitialization by clearing and repopulating
+    await db.coaches.delete_many({})
+    await populate_default_coaches()
     
     equipment_count = await db.equipment.count_documents({})
     if equipment_count == 0:
