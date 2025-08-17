@@ -958,6 +958,7 @@ agent_communication:
 ## test_plan:
   current_focus:
     - "Comparison Tool Mixed Content Security Error Fix"
+    - "Comparison Tool data loading for Characters/Items/Techniques"
   stuck_tasks:
     - "Comparison Tool Item Selection Fix"
   test_all: false
