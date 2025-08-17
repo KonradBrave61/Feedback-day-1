@@ -93,7 +93,7 @@ async def populate_default_tactics():
     await db.tactics.insert_many(tactics)
 
 async def populate_default_coaches():
-    """Populate default coaches"""
+    """Populate default coaches and managers"""
     coaches = [
         {
             "id": "1",
@@ -127,6 +127,50 @@ async def populate_default_coaches():
                 "description": "Balanced training for all aspects"
             },
             "specialties": ["Physical Training", "Endurance", "Technique Mastery"]
+        },
+        {
+            "id": "4",
+            "name": "Nelly Raimon",
+            "title": "Team Manager",
+            "portrait": "/api/placeholder/150/150",
+            "bonuses": {
+                "teamStats": {"agility": 12, "control": 10, "intelligence": 8},
+                "description": "Boosts team coordination and spirit"
+            },
+            "specialties": ["Team Coordination", "Morale Boost", "Strategic Planning"]
+        },
+        {
+            "id": "5",
+            "name": "Aki Kino",
+            "title": "Assistant Manager", 
+            "portrait": "/api/placeholder/150/150",
+            "bonuses": {
+                "teamStats": {"technique": 11, "intelligence": 9, "control": 7},
+                "description": "Enhances technical skills and team harmony"
+            },
+            "specialties": ["Technical Analysis", "Team Support", "Data Management"]
+        },
+        {
+            "id": "6",
+            "name": "Haruna Otonashi",
+            "title": "Club Manager",
+            "portrait": "/api/placeholder/150/150", 
+            "bonuses": {
+                "teamStats": {"pressure": 13, "physical": 9, "agility": 6},
+                "description": "Increases team determination and resilience"
+            },
+            "specialties": ["Mental Toughness", "Team Discipline", "Motivation"]
+        },
+        {
+            "id": "7",
+            "name": "Midori Seto",
+            "title": "Strategic Manager",
+            "portrait": "/api/placeholder/150/150",
+            "bonuses": {
+                "teamStats": {"intelligence": 14, "technique": 8, "kick": 6},
+                "description": "Provides advanced tactical insights"
+            },
+            "specialties": ["Match Analysis", "Formation Planning", "Player Development"]
         }
     ]
     await db.coaches.insert_many(coaches)
