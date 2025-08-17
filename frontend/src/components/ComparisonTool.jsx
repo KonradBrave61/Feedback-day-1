@@ -24,8 +24,7 @@ const ComparisonTool = () => {
     { value: 'characters', label: 'Characters', icon: '👤' },
     { value: 'items', label: 'Items', icon: '🎒' },
     { value: 'techniques', label: 'Techniques', icon: '⚡' },
-    { value: 'coaches', label: 'Coaches', icon: '👨‍💼' },
-    { value: 'managers', label: 'Managers', icon: '👩‍💼' }
+    { value: 'coaches', label: 'Coaches', icon: '👨‍💼' }
   ];
 
   // Direct API calls without authentication for comparison tool (public access)
