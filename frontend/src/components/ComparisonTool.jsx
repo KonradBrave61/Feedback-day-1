@@ -378,8 +378,8 @@ const ComparisonTool = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-full overflow-y-auto">
                   {filteredItems.map(item => {
-                    const isSelected = compareItems.find(i => i.id === item.id);
-                    const canAdd = !isSelected && compareItems.length < 6;
+                    const isSelected = isInComparison(item.id);
+                    const canAdd = !isSelected && canAddMore;
                     
                     return (
                       <div key={item.id} 
