@@ -558,7 +558,7 @@ const ComparisonTool = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 h-full overflow-y-auto">
                   {filteredItems.map(item => {
                     const isSelected = isInComparison(item.id, selectedCategory);
-                    const canAdd = !isSelected &amp;&amp; canAddMore(selectedCategory);
+                    const canAdd = !isSelected && canAddMore(selectedCategory);
                     return (
                       <div key={item.id}
                            className={`p-3 rounded-lg border transition-all ${canAdd || isSelected ? 'cursor-pointer hover:scale-[1.02]' : 'cursor-not-allowed opacity-60'}`}
