@@ -20,6 +20,7 @@ import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./contexts/AuthContext";
 import Notification from "./components/Notification";
 import ChatBubble from "./components/ChatBubble";
+import ComparisonTool from "./components/ComparisonTool";
 
 function App() {
   return (
