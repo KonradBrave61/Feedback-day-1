@@ -281,6 +281,8 @@ const ComparisonTool = () => {
     }
   };
 
+  if (!user) return null;
+
   return (
     <>
       {/* Floating Comparison Button */}
