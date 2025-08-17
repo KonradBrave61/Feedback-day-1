@@ -533,7 +533,7 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <StatRadarChart stats={calculatedStats} />
+                  <StatRadarChart stats={calculatedStats} element={currentCharacter?.element} />
                 </div>
                 <div className="space-y-2">
                   {Object.entries(calculatedStats).map(([stat, values]) => (
