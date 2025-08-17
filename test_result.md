@@ -103,37 +103,12 @@
 #====================================================================================================
 
 ## user_problem_statement: 
-Load the code 
-Team Builder 
-Player equipment set up doesnt save and the stats of the team doesnt add with the items repait it 
-Repiar Paremeters Radar optimalize the scale with the stats and also cause I cannot see the stats on the radar at some point 
-Character detail modal add to team does not add players to the team  repair it 
-Items 
-look image and recreate the same thing on the website 
-
-CONTINUATION REQUEST:
-In every browser /searching on the team builder remove one X the closing tab button look pic 1  remove the one without the box 
-second thing pic 2 in quick builder-> team composition The user should be able to move players between position and bench  also make people able to add more than 3 FW on their squad and etc so in game there will be an option to play with the players on different positions
-Another thing look pic 3 when I select a player and then remove it by X he stays selected but dissapear on the pitch thats good but just he display is working here wrongly and also I dont like the green selection box around it remove it for now 
-Look pic 4 There is a problem cause the user cant select the configuration button cause the X is covering it try to find a solution for it
-
-LATEST TASK:
-load the code 
-and recreate the helper and support that is on this website https://follow-chat-system.preview.emergentagent.com/helper 
-
-CURRENT TASK:
-there is a problem with tactical visualization after selecting any type of tactic look image 1 
-pic 2 in the dashboard community hub there is another problem or just the community hub is bugged 
-in the constelacions make the button other color look pic 3 cause the star is not visable well 
-users after saving team cannot access it or even change status of that team from private to public and from public to private 
-
-CONTINUATION REQUEST:
-On the profile page after user log in he need to be able to access the team and also to change the team from public to private and from private to public in the profile page lets player be able to click on team and then a window with this team open like q preview . In the Team Builder add option to load a team and make it that the user can pick from his saved teams and also give an idea how user will be able to load someones team 
-
-LATEST CONTINUATION REQUEST:
-Quick action team builder the clear team button background should be transparent or some different color for team to see or maybe text be black , 
-Apply Team have bugged number of players it should count when user is adding a character 
-Profile Page Team preview the stats of players doesnt match their real stats and make that the techniques shows instead of stats and next to rarity add the element of that character also there is a problem with bench that players from the bench doesnt save and load . 
+Community hub when looking at someone team at see " by .. " let the name of the creator by clickable so I can see his profile page and I let me follow it so I can chat with others users . And make comparison working
+Current task: 
+1. Make creator names in community hub clickable (navigate to profile pages) ✅ 
+2. Enable follow/unfollow from profile pages ✅
+3. Add chat functionality from profile pages ✅
+4. Fix comparison tool so users can pick items ✅ 
 
 ✅ CONTINUATION REQUEST FIXES COMPLETED:
 1. **Fixed Clear Team Button Styling**: Updated Clear Team button in both TeamBuilder.jsx and PlayerSearch.jsx to have transparent background with gray borders and black text that transitions to white on hover (bg-transparent border-gray-500/40 hover:bg-gray-800/20 text-black hover:text-white) instead of the previous red styling ✅
