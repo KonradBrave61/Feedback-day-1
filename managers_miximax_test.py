@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://team-connect-12.preview.emergentagent.com/api"
+BACKEND_URL = "https://follow-chat-system.preview.emergentagent.com/api"
 
 class ManagersMixiMaxTester:
     def __init__(self):
