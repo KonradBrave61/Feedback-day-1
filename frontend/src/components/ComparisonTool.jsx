@@ -38,18 +38,22 @@ const ComparisonTool = () => {
           }
           break;
         case 'items':
-          // Flatten equipment data
-          const allEquipment = Object.values(mockEquipment).flat();
-          setAvailableItems(allEquipment);
+          const equipmentData = await loadEquipment();
+          if (equipmentData?.success) {
+            setAvailableItems(equipmentData.equipment || []);
+          }
           break;
         case 'techniques':
-          setAvailableItems(mockHissatsu);
+          const techniquesData = await loadTechniques();
+          if (techniquesData?.success) {
+            setAvailableItems(techniquesData.techniques || []);
+          }
           break;
         case 'coaches':
         case 'managers':
           const coachesData = await loadCoaches();
           if (coachesData?.success) {
-            setAvailableItems(coachesData || []);
+            setAvailableItems(coachesData.coaches || []);
           }
           break;
         default:
