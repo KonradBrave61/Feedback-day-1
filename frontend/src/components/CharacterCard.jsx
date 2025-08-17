@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Users } from 'lucide-react';
+import { Button } from './ui/button';
+import { Users, Scale } from 'lucide-react';
 import { logoColors } from '../styles/colors';
+import { useComparison } from '../contexts/ComparisonContext';
 
 const CharacterCard = ({ character, onClick, viewMode = 'grid' }) => {
   const getPositionColor = (position) => {
