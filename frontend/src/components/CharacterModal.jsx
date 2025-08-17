@@ -243,10 +243,10 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
 
   const handleHissatsuSelect = (hissatsu) => {
     // Handle Mixi Max selection
-    if (selectedCategory === 'mixiMax') {
+    if (selectedCategory === 'mixiMax1' || selectedCategory === 'mixiMax2') {
       setSelectedHissatsu(prev => ({
         ...prev,
-        mixiMax: hissatsu
+        [selectedCategory]: hissatsu
       }));
       setShowHissatsuList(false);
       setSelectedCategory(null);
