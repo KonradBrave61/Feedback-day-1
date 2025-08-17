@@ -53,7 +53,8 @@ const CharacterModal = ({ character, isOpen, onClose, allCharacters, onAddToTeam
       return {
         preset1: makeSlots(raw.preset1 || []),
         preset2: makeSlots(raw.preset2 || []),
-        mixiMax: raw.mixiMax || null
+        mixiMax1: raw.mixiMax1 || raw.mixiMax || null,  // Support legacy mixiMax
+        mixiMax2: raw.mixiMax2 || null
       };
     }
     // Fallback to character's default techniques
