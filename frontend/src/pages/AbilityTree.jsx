@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import Navigation from '../components/Navigation';
 import { AuthContext } from '../contexts/AuthContext';
 import { logoColors } from '../styles/colors';
-import { mockHissatsu } from '../data/mock';
-import { Lock, Zap, Footprints, Target, Shield, X, Sparkles } from 'lucide-react';
+import { Lock, Zap, X } from 'lucide-react';
 
 // Ability tree data structure matching the screenshot layout
 const abilityTreeData = {
