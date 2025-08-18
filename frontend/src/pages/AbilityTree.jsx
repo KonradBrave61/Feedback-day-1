@@ -1,92 +1,147 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import Navigation from '../components/Navigation';
-import { Button } from '../components/ui/button';
-import { Dialog, DialogContent, DialogHeader } from '../components/ui/dialog';
-import { Badge } from '../components/ui/badge';
+import { AuthContext } from '../contexts/AuthContext';
 import { logoColors } from '../styles/colors';
 import { mockHissatsu } from '../data/mock';
-import { Lock, Zap, Footprints, Target, Shield, X } from 'lucide-react';
+import { Lock, Zap, Footprints, Target, Shield, X, Sparkles } from 'lucide-react';
 
-// Utility: pick a subset by type
-const listByType = (type) => {
-  const t = type === 'Defense' ? 'Block' : type;
-  return mockHissatsu.filter(h => h.type === t).slice(0, 8);
+// Ability tree data structure matching the screenshot layout
+const abilityTreeData = {
+  // Character info displayed at top
+  character: {
+    id: 'sakuya',
+    name: '桜井スゴ',
+    level: 12,
+    avatar: '/api/placeholder/80/80',
+    element: 'Fire'
+  },
+  
+  // Learning points system
+  learningPoints: {
+    current: 18,
+    total: 25
+  },
+  
+  // Skill nodes positioned to match the screenshot
+  nodes: [
+    // Central character node
+    { 
+      id: 'center', 
+      x: 500, y: 280, 
+      type: 'character', 
+      unlocked: true, 
+      technique: null 
+    },
+    
+    // Upper right branch (red orbs from screenshot)
+    { 
+      id: 'upper_right_1', 
+      x: 650, y: 200, 
+      type: 'technique', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'center',
+      technique: { name: '音雷', type: 'Shot', power: 138, description: 'シュート技かかった低空飛弾でかく乱する連続シュート。' }
+    },
+    { 
+      id: 'upper_right_2', 
+      x: 750, y: 170, 
+      type: 'technique', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'upper_right_1',
+      technique: { name: '剛乱', type: 'Shot', power: 145, description: '剛鉄一回転をかけた低空飛弾で撹乱する連続シュート。' }
+    },
+    
+    // Left side nodes (blue/purple nodes)
+    { 
+      id: 'left_1', 
+      x: 350, y: 320, 
+      type: 'stat_boost', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'center',
+      boost: { type: 'kick', value: 5 }
+    },
+    { 
+      id: 'left_2', 
+      x: 280, y: 380, 
+      type: 'technique', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'left_1',
+      technique: { name: 'ドリブル技', type: 'Dribble', power: 98, description: 'スクリュー回転をかけた低空飛弾で攪乱する連続ドリブル。' }
+    },
+    
+    // Lower center vertical chain
+    { 
+      id: 'lower_1', 
+      x: 500, y: 380, 
+      type: 'stat_boost', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'center',
+      boost: { type: 'technique', value: 5 }
+    },
+    { 
+      id: 'lower_2', 
+      x: 500, y: 450, 
+      type: 'stat_boost', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'lower_1',
+      boost: { type: 'control', value: 5 }
+    },
+    
+    // Right side defensive node
+    { 
+      id: 'right_1', 
+      x: 650, y: 350, 
+      type: 'technique', 
+      unlocked: false, 
+      cost: 6, 
+      parent: 'center',
+      technique: { name: 'ブロック技', type: 'Block', power: 112, description: 'スクリュー回転をかけた低空飛弾で攪乱する連続ブロック。' }
+    },
+    
+    // Lower right gate/special node
+    { 
+      id: 'gate_1', 
+      x: 600, y: 480, 
+      type: 'gate', 
+      unlocked: false, 
+      cost: 0, 
+      parent: 'right_1'
+    }
+  ],
+  
+  // Connection paths between nodes
+  connections: [
+    { from: 'center', to: 'upper_right_1', color: '#FF6B47' },
+    { from: 'upper_right_1', to: 'upper_right_2', color: '#FF6B47' },
+    { from: 'center', to: 'left_1', color: '#4A9EFF' },
+    { from: 'left_1', to: 'left_2', color: '#4A9EFF' },
+    { from: 'center', to: 'lower_1', color: '#22C55E' },
+    { from: 'lower_1', to: 'lower_2', color: '#22C55E' },
+    { from: 'center', to: 'right_1', color: '#A855F7' },
+    { from: 'right_1', to: 'gate_1', color: '#A855F7' }
+  ]
 };
 
-// Icon for type
-const TypeIcon = ({ type, className = 'h-4 w-4' }) => {
-  switch (type) {
-    case 'Shot': return <Zap className={className} />;
-    case 'Dribble': return <Footprints className={className} />;
-    case 'Pass': return <Target className={className} />;
-    case 'Defense':
-    case 'Block': return <Shield className={className} />;
-    default: return null;
-  }
+// Cosmic background style matching the screenshot
+const cosmicBackground = {
+  background: `
+    radial-gradient(circle at 20% 50%, rgba(30, 144, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.9), transparent),
+    linear-gradient(125deg, #001827 0%, #003785 35%, #0066CC 100%)
+  `
 };
-
-// ViewBox coordinate system (fixed) so we can position 1:1
-const VIEW_W = 1000; // width units
-const VIEW_H = 560;  // height units
-
-// Background star field + energy mesh using layered gradients
-const bgStyle = {
-  backgroundImage: `radial-gradient(800px 500px at 55% 50%, rgba(0,160,255,0.35), rgba(0,0,0,0) 60%), radial-gradient(1200px 700px at 20% 80%, rgba(0,191,255,0.26), rgba(0,0,0,0) 60%), radial-gradient(1000px 600px at 90% 10%, rgba(255,215,0,0.12), rgba(0,0,0,0) 60%), radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.9), rgba(255,255,255,0) 60%), radial-gradient(2px 2px at 25% 60%, rgba(255,255,255,0.9), rgba(255,255,255,0) 60%), radial-gradient(2px 2px at 60% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0) 60%), radial-gradient(2px 2px at 80% 70%, rgba(255,255,255,0.8), rgba(255,255,255,0) 60%)`,
-  backgroundColor: '#001327'
-};
-
-// Branch palette to match screenshot accents
-const branchColors = {
-  shot: '#FFD94A',      // glowing yellow
-  dribble: '#22C55E',   // green
-  pass: '#38BDF8',      // blue
-  defense: '#F59E0B'    // amber/orange
-};
-
-// Nodes definition positioned to mimic the screenshot layout
-const initialNodes = [
-  // center card anchor root
-  { id: 'root', x: 500, y: 300, type: 'Core', unlocked: true, cost: 0, branch: 'shot' },
-
-  // highlighted shot path on the right-top
-  { id: 'shot1', x: 650, y: 260, type: 'Shot', unlocked: false, cost: 6, parent: 'root', branch: 'shot' },
-  { id: 'shot2', x: 760, y: 225, type: 'Shot', unlocked: false, cost: 6, parent: 'shot1', branch: 'shot' },
-  { id: 'shot3', x: 840, y: 270, type: 'Shot', unlocked: false, cost: 6, parent: 'shot2', branch: 'shot' },
-
-  // lower-left branch like green/blue chain with +6 clips
-  { id: 'dribble1', x: 450, y: 420, type: 'Dribble', unlocked: false, cost: 6, parent: 'root', branch: 'dribble' },
-  { id: 'pass1', x: 380, y: 470, type: 'Pass', unlocked: false, cost: 6, parent: 'dribble1', branch: 'pass' },
-  { id: 'plus1', x: 500, y: 470, type: 'Plus', value: 6, unlocked: false, cost: 0, parent: 'dribble1', branch: 'dribble' },
-
-  // right-lower gate
-  { id: 'defense1', x: 600, y: 350, type: 'Defense', unlocked: false, cost: 6, parent: 'root', branch: 'defense' },
-  { id: 'gate1', x: 560, y: 440, type: 'Gate', unlocked: false, cost: 0, parent: 'defense1', branch: 'defense' },
-
-  // sample plus circles on vertical chain (like screenshot middle)
-  { id: 'plus2', x: 500, y: 360, type: 'Plus', value: 6, unlocked: false, cost: 0, parent: 'root', branch: 'pass' },
-  { id: 'plus3', x: 500, y: 420, type: 'Plus', value: 6, unlocked: false, cost: 0, parent: 'plus2', branch: 'pass' }
-];
-
-// Edges are polylines with right-angle segments (to mimic image)
-const initialEdges = [
-  // root to shot path
-  { id: 'e_r_s1', branch: 'shot', points: [[500,300],[580,300],[650,260]] },
-  { id: 'e_s1_s2', branch: 'shot', points: [[650,260],[710,240],[760,225]] },
-  { id: 'e_s2_s3', branch: 'shot', points: [[760,225],[800,240],[840,270]] },
-
-  // left lower chain
-  { id: 'e_r_d1', branch: 'dribble', points: [[500,300],[480,340],[450,420]] },
-  { id: 'e_d1_p1', branch: 'pass', points: [[450,420],[420,450],[380,470]] },
-  { id: 'e_d1_plus1', branch: 'dribble', points: [[450,420],[470,440],[500,470]] },
-
-  // defense gate path
-  { id: 'e_r_def1', branch: 'defense', points: [[500,300],[560,320],[600,350]] },
-  { id: 'e_def1_gate', branch: 'defense', points: [[600,350],[580,390],[560,440]] },
-
-  // middle vertical small pluses
-  { id: 'e_r_plus2', branch: 'pass', points: [[500,300],[500,360]] },
-  { id: 'e_plus2_plus3', branch: 'pass', points: [[500,360],[500,420]] }
-];
 
 const AbilityTree = () => {
   const containerRef = useRef(null);
