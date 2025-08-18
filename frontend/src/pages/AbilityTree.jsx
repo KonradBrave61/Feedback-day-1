@@ -143,7 +143,7 @@ const cosmicBackground = {
 };
 
 const AbilityTree = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext) || {};
   const svgRef = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [showTechniqueDetail, setShowTechniqueDetail] = useState(false);
@@ -198,17 +198,17 @@ const AbilityTree = () => {
       const strokeWidth = isActive ? 3 : 2;
 
       return (
-        <line
-          key={`${conn.from}-${conn.to}`}
-          x1={fromNode.x}
-          y1={fromNode.y}
-          x2={toNode.x}
-          y2={toNode.y}
-          stroke={strokeColor}
-          strokeWidth={strokeWidth}
-          opacity={isActive ? 1 : 0.6}
-          filter={isActive ? 'url(#glow)' : 'none'}
-        />
+        React.createElement('line', {
+          key: `${conn.from}-${conn.to}`,
+          x1: fromNode.x,
+          y1: fromNode.y,
+          x2: toNode.x,
+          y2: toNode.y,
+          stroke: strokeColor,
+          strokeWidth: strokeWidth,
+          opacity: isActive ? 1 : 0.6,
+          filter: isActive ? 'url(#glow)' : 'none'
+        })
       );
     });
   };
@@ -220,109 +220,134 @@ const AbilityTree = () => {
 
     if (node.type === 'character') {
       return (
-        <g key={node.id}>
-          <circle
-            cx={node.x}
-            cy={node.y}
-            r={35}
-            fill="url(#characterGradient)"
-            stroke="#FFFFFF"
-            strokeWidth={3}
-            filter="url(#glow)"
-          />
-          <foreignObject x={node.x - 30} y={node.y - 30} width={60} height={60}>
-            <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-              12
-            </div>
-          </foreignObject>
-        </g>
+        React.createElement('g', { key: node.id }, [
+          React.createElement('circle', {
+            key: 'char-circle',
+            cx: node.x,
+            cy: node.y,
+            r: 35,
+            fill: 'url(#characterGradient)',
+            stroke: '#FFFFFF',
+            strokeWidth: 3,
+            filter: 'url(#glow)'
+          }),
+          React.createElement('foreignObject', {
+            key: 'char-content',
+            x: node.x - 30,
+            y: node.y - 30,
+            width: 60,
+            height: 60
+          }, React.createElement('div', {
+            className: 'w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg'
+          }, '12'))
+        ])
       );
     }
 
     if (node.type === 'technique') {
       const orbColor = isUnlocked ? '#FF6B47' : (isClickable ? '#FF8B6B' : '#666666');
       return (
-        <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node)}>
-          <circle
-            cx={node.x}
-            cy={node.y}
-            r={25}
-            fill={orbColor}
-            stroke="#FFFFFF"
-            strokeWidth={isUnlocked ? 3 : 2}
-            opacity={isUnlocked ? 1 : (isClickable ? 0.8 : 0.4)}
-            filter={isUnlocked ? 'url(#glow)' : 'none'}
-          />
-          {!isUnlocked && (
-            <foreignObject x={node.x - 8} y={node.y - 8} width={16} height={16}>
-              <div className="w-4 h-4 text-white">
-                <Zap className="w-4 h-4" />
-              </div>
-            </foreignObject>
-          )}
-          {!isUnlocked && node.cost > 0 && (
-            <foreignObject x={node.x - 12} y={node.y + 30} width={24} height={16}>
-              <div className="bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30">
-                +{node.cost}
-              </div>
-            </foreignObject>
-          )}
-        </g>
+        React.createElement('g', { 
+          key: node.id, 
+          style: { cursor: isClickable ? 'pointer' : 'default' },
+          onClick: () => handleNodeClick(node)
+        }, [
+          React.createElement('circle', {
+            key: 'tech-circle',
+            cx: node.x,
+            cy: node.y,
+            r: 25,
+            fill: orbColor,
+            stroke: '#FFFFFF',
+            strokeWidth: isUnlocked ? 3 : 2,
+            opacity: isUnlocked ? 1 : (isClickable ? 0.8 : 0.4),
+            filter: isUnlocked ? 'url(#glow)' : 'none'
+          }),
+          !isUnlocked && React.createElement('foreignObject', {
+            key: 'tech-icon',
+            x: node.x - 8,
+            y: node.y - 8,
+            width: 16,
+            height: 16
+          }, React.createElement('div', {
+            className: 'w-4 h-4 text-white'
+          }, React.createElement(Zap, { className: 'w-4 h-4' }))),
+          !isUnlocked && node.cost > 0 && React.createElement('foreignObject', {
+            key: 'tech-cost',
+            x: node.x - 12,
+            y: node.y + 30,
+            width: 24,
+            height: 16
+          }, React.createElement('div', {
+            className: 'bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30'
+          }, `+${node.cost}`))
+        ])
       );
     }
 
     if (node.type === 'stat_boost') {
       const orbColor = isUnlocked ? '#4A9EFF' : (isClickable ? '#6AB5FF' : '#666666');
       return (
-        <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node)}>
-          <circle
-            cx={node.x}
-            cy={node.y}
-            r={20}
-            fill={orbColor}
-            stroke="#FFFFFF"
-            strokeWidth={isUnlocked ? 3 : 2}
-            opacity={isUnlocked ? 1 : (isClickable ? 0.8 : 0.4)}
-          />
-          <text
-            x={node.x}
-            y={node.y + 4}
-            textAnchor="middle"
-            fill="white"
-            fontSize="12"
-            fontWeight="bold"
-          >
-            +{node.boost?.value || 5}
-          </text>
-          {!isUnlocked && node.cost > 0 && (
-            <foreignObject x={node.x - 12} y={node.y + 25} width={24} height={16}>
-              <div className="bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30">
-                +{node.cost}
-              </div>
-            </foreignObject>
-          )}
-        </g>
+        React.createElement('g', { 
+          key: node.id, 
+          style: { cursor: isClickable ? 'pointer' : 'default' },
+          onClick: () => handleNodeClick(node)
+        }, [
+          React.createElement('circle', {
+            key: 'stat-circle',
+            cx: node.x,
+            cy: node.y,
+            r: 20,
+            fill: orbColor,
+            stroke: '#FFFFFF',
+            strokeWidth: isUnlocked ? 3 : 2,
+            opacity: isUnlocked ? 1 : (isClickable ? 0.8 : 0.4)
+          }),
+          React.createElement('text', {
+            key: 'stat-text',
+            x: node.x,
+            y: node.y + 4,
+            textAnchor: 'middle',
+            fill: 'white',
+            fontSize: '12',
+            fontWeight: 'bold'
+          }, `+${node.boost?.value || 5}`),
+          !isUnlocked && node.cost > 0 && React.createElement('foreignObject', {
+            key: 'stat-cost',
+            x: node.x - 12,
+            y: node.y + 25,
+            width: 24,
+            height: 16
+          }, React.createElement('div', {
+            className: 'bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30'
+          }, `+${node.cost}`))
+        ])
       );
     }
 
     if (node.type === 'gate') {
       return (
-        <g key={node.id}>
-          <circle
-            cx={node.x}
-            cy={node.y}
-            r={18}
-            fill="#A855F7"
-            stroke="#FFFFFF"
-            strokeWidth={2}
-            opacity={0.7}
-          />
-          <foreignObject x={node.x - 8} y={node.y - 8} width={16} height={16}>
-            <div className="w-4 h-4 text-white">
-              <Lock className="w-4 h-4" />
-            </div>
-          </foreignObject>
-        </g>
+        React.createElement('g', { key: node.id }, [
+          React.createElement('circle', {
+            key: 'gate-circle',
+            cx: node.x,
+            cy: node.y,
+            r: 18,
+            fill: '#A855F7',
+            stroke: '#FFFFFF',
+            strokeWidth: 2,
+            opacity: 0.7
+          }),
+          React.createElement('foreignObject', {
+            key: 'gate-icon',
+            x: node.x - 8,
+            y: node.y - 8,
+            width: 16,
+            height: 16
+          }, React.createElement('div', {
+            className: 'w-4 h-4 text-white'
+          }, React.createElement(Lock, { className: 'w-4 h-4' })))
+        ])
       );
     }
 
@@ -330,128 +355,232 @@ const AbilityTree = () => {
   };
 
   return (
-    <div className="min-h-screen text-white" style={cosmicBackground}>
-      <Navigation />
+    React.createElement('div', { 
+      className: 'min-h-screen text-white',
+      style: cosmicBackground
+    }, [
+      React.createElement(Navigation, { key: 'nav' }),
       
-      {/* Top Character Info Panel */}
-      <div className="container mx-auto px-4 pt-6">
-        <div className="flex items-center justify-between mb-4">
-          {/* SPEC Label */}
-          <div className="text-white text-3xl font-bold tracking-wider">
-            SPEC
-          </div>
+      React.createElement('div', { 
+        key: 'container',
+        className: 'container mx-auto px-4 pt-6'
+      }, [
+        // Top Character Info Panel
+        React.createElement('div', { 
+          key: 'top-panel',
+          className: 'flex items-center justify-between mb-4'
+        }, [
+          // SPEC Label
+          React.createElement('div', {
+            key: 'spec-label',
+            className: 'text-white text-3xl font-bold tracking-wider'
+          }, 'SPEC'),
           
-          {/* Character Info Card */}
-          <div className="flex items-center gap-4 bg-blue-900/30 rounded-lg px-4 py-2 border border-blue-500/30">
-            <img 
-              src={abilityTreeData.character.avatar} 
-              alt={abilityTreeData.character.name}
-              className="w-12 h-12 rounded-full border-2 border-white/50"
-            />
-            <div>
-              <div className="text-white font-medium">{abilityTreeData.character.name}</div>
-              <div className="text-blue-300 text-sm">Lv. {abilityTreeData.character.level}</div>
-            </div>
-          </div>
+          // Character Info Card
+          React.createElement('div', {
+            key: 'char-info',
+            className: 'flex items-center gap-4 bg-blue-900/30 rounded-lg px-4 py-2 border border-blue-500/30'
+          }, [
+            React.createElement('img', {
+              key: 'char-avatar',
+              src: abilityTreeData.character.avatar,
+              alt: abilityTreeData.character.name,
+              className: 'w-12 h-12 rounded-full border-2 border-white/50'
+            }),
+            React.createElement('div', { key: 'char-details' }, [
+              React.createElement('div', {
+                key: 'char-name',
+                className: 'text-white font-medium'
+              }, abilityTreeData.character.name),
+              React.createElement('div', {
+                key: 'char-level',
+                className: 'text-blue-300 text-sm'
+              }, `Lv. ${abilityTreeData.character.level}`)
+            ])
+          ]),
           
-          {/* Learning Points */}
-          <div className="bg-blue-600/80 rounded-lg px-4 py-2 text-center border border-blue-400/30">
-            <div className="text-blue-200 text-xs font-medium">ラーニングポイント</div>
-            <div className="text-white text-xl font-bold">
-              {availableLP}<span className="text-blue-300">/{abilityTreeData.learningPoints.total}P</span>
-            </div>
-          </div>
-        </div>
+          // Learning Points
+          React.createElement('div', {
+            key: 'lp-display',
+            className: 'bg-blue-600/80 rounded-lg px-4 py-2 text-center border border-blue-400/30'
+          }, [
+            React.createElement('div', {
+              key: 'lp-label',
+              className: 'text-blue-200 text-xs font-medium'
+            }, 'ラーニングポイント'),
+            React.createElement('div', {
+              key: 'lp-value',
+              className: 'text-white text-xl font-bold'
+            }, [
+              availableLP,
+              React.createElement('span', {
+                key: 'lp-total',
+                className: 'text-blue-300'
+              }, `/${abilityTreeData.learningPoints.total}P`)
+            ])
+          ])
+        ]),
 
-        {/* Ability Tree Canvas */}
-        <div className="relative bg-black/20 rounded-xl border border-blue-500/30 overflow-hidden">
-          <svg 
-            ref={svgRef}
-            viewBox="0 0 1000 600" 
-            className="w-full h-[600px]"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            {/* Gradients and Effects */}
-            <defs>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
+        // Ability Tree Canvas
+        React.createElement('div', {
+          key: 'canvas',
+          className: 'relative bg-black/20 rounded-xl border border-blue-500/30 overflow-hidden'
+        }, [
+          React.createElement('svg', {
+            key: 'svg',
+            ref: svgRef,
+            viewBox: '0 0 1000 600',
+            className: 'w-full h-[600px]',
+            preserveAspectRatio: 'xMidYMid meet'
+          }, [
+            // Gradients and Effects
+            React.createElement('defs', { key: 'defs' }, [
+              React.createElement('filter', {
+                key: 'glow-filter',
+                id: 'glow',
+                x: '-50%',
+                y: '-50%',
+                width: '200%',
+                height: '200%'
+              }, [
+                React.createElement('feGaussianBlur', {
+                  key: 'blur',
+                  stdDeviation: '4',
+                  result: 'coloredBlur'
+                }),
+                React.createElement('feMerge', { key: 'merge' }, [
+                  React.createElement('feMergeNode', {
+                    key: 'merge-blur',
+                    in: 'coloredBlur'
+                  }),
+                  React.createElement('feMergeNode', {
+                    key: 'merge-source',
+                    in: 'SourceGraphic'
+                  })
+                ])
+              ]),
               
-              <radialGradient id="characterGradient" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#60A5FA"/>
-                <stop offset="50%" stopColor="#3B82F6"/>
-                <stop offset="100%" stopColor="#1E40AF"/>
-              </radialGradient>
-            </defs>
+              React.createElement('radialGradient', {
+                key: 'char-gradient',
+                id: 'characterGradient',
+                cx: '50%',
+                cy: '50%',
+                r: '50%'
+              }, [
+                React.createElement('stop', {
+                  key: 'stop1',
+                  offset: '0%',
+                  stopColor: '#60A5FA'
+                }),
+                React.createElement('stop', {
+                  key: 'stop2',
+                  offset: '50%',
+                  stopColor: '#3B82F6'
+                }),
+                React.createElement('stop', {
+                  key: 'stop3',
+                  offset: '100%',
+                  stopColor: '#1E40AF'
+                })
+              ])
+            ]),
 
-            {/* Connection Lines */}
-            {renderConnections()}
+            // Connection Lines
+            ...renderConnections(),
             
-            {/* Skill Nodes */}
-            {nodes.map(renderNode)}
-          </svg>
-        </div>
-      </div>
+            // Skill Nodes
+            ...nodes.map(renderNode)
+          ])
+        ])
+      ]),
 
-      {/* Technique Detail Modal */}
-      {showTechniqueDetail && selectedNode && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowTechniqueDetail(false)}>
-          <div 
-            className="bg-gradient-to-br from-blue-900/95 to-purple-900/95 rounded-lg border border-blue-400/50 p-6 max-w-md mx-4"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-blue-300 text-sm font-medium">選択アビリティを装備しよう</div>
-              <button 
-                onClick={() => setShowTechniqueDetail(false)}
-                className="text-white/70 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      // Technique Detail Modal
+      showTechniqueDetail && selectedNode && React.createElement('div', {
+        key: 'modal',
+        className: 'fixed inset-0 bg-black/50 flex items-center justify-center z-50',
+        onClick: () => setShowTechniqueDetail(false)
+      }, [
+        React.createElement('div', {
+          key: 'modal-content',
+          className: 'bg-gradient-to-br from-blue-900/95 to-purple-900/95 rounded-lg border border-blue-400/50 p-6 max-w-md mx-4',
+          onClick: e => e.stopPropagation()
+        }, [
+          React.createElement('div', {
+            key: 'modal-header',
+            className: 'flex items-center justify-between mb-4'
+          }, [
+            React.createElement('div', {
+              key: 'modal-title',
+              className: 'text-blue-300 text-sm font-medium'
+            }, '選択アビリティを装備しよう'),
+            React.createElement('button', {
+              key: 'modal-close',
+              onClick: () => setShowTechniqueDetail(false),
+              className: 'text-white/70 hover:text-white'
+            }, React.createElement(X, { className: 'w-5 h-5' }))
+          ]),
+          
+          React.createElement('div', {
+            key: 'technique-info',
+            className: 'bg-blue-800/30 rounded-lg p-4 mb-4'
+          }, [
+            React.createElement('div', {
+              key: 'technique-header',
+              className: 'flex items-center gap-3 mb-3'
+            }, [
+              React.createElement('div', {
+                key: 'technique-icon',
+                className: 'w-8 h-8 bg-red-500 rounded-full flex items-center justify-center'
+              }, React.createElement(Zap, { className: 'w-4 h-4 text-white' })),
+              React.createElement('div', { key: 'technique-details' }, [
+                React.createElement('div', {
+                  key: 'technique-name',
+                  className: 'text-white font-bold text-lg'
+                }, selectedNode.technique?.name),
+                React.createElement('div', {
+                  key: 'technique-type',
+                  className: 'text-blue-300 text-sm'
+                }, selectedNode.technique?.type)
+              ]),
+              React.createElement('div', {
+                key: 'technique-power',
+                className: 'ml-auto text-right'
+              }, [
+                React.createElement('div', {
+                  key: 'power-value',
+                  className: 'text-white font-bold text-lg'
+                }, selectedNode.technique?.power),
+                React.createElement('div', {
+                  key: 'power-label',
+                  className: 'text-blue-300 text-xs'
+                }, 'TENSION')
+              ])
+            ]),
             
-            <div className="bg-blue-800/30 rounded-lg p-4 mb-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <div className="text-white font-bold text-lg">{selectedNode.technique?.name}</div>
-                  <div className="text-blue-300 text-sm">{selectedNode.technique?.type}</div>
-                </div>
-                <div className="ml-auto text-right">
-                  <div className="text-white font-bold text-lg">{selectedNode.technique?.power}</div>
-                  <div className="text-blue-300 text-xs">TENSION</div>
-                </div>
-              </div>
-              
-              <div className="text-white/90 text-sm leading-relaxed">
-                {selectedNode.technique?.description}
-              </div>
-            </div>
-            
-            <div className="flex gap-3">
-              <button 
-                onClick={() => setShowTechniqueDetail(false)}
-                className="flex-1 bg-gray-600/50 text-white px-4 py-2 rounded-lg border border-gray-500/30 hover:bg-gray-600/70 transition-colors"
-              >
-                キャンセル
-              </button>
-              <button 
-                onClick={() => unlockNode(selectedNode)}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg border border-blue-500/30 hover:bg-blue-700 transition-colors font-medium"
-              >
-                装備
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+            React.createElement('div', {
+              key: 'technique-description',
+              className: 'text-white/90 text-sm leading-relaxed'
+            }, selectedNode.technique?.description)
+          ]),
+          
+          React.createElement('div', {
+            key: 'modal-buttons',
+            className: 'flex gap-3'
+          }, [
+            React.createElement('button', {
+              key: 'cancel-btn',
+              onClick: () => setShowTechniqueDetail(false),
+              className: 'flex-1 bg-gray-600/50 text-white px-4 py-2 rounded-lg border border-gray-500/30 hover:bg-gray-600/70 transition-colors'
+            }, 'キャンセル'),
+            React.createElement('button', {
+              key: 'equip-btn',
+              onClick: () => unlockNode(selectedNode),
+              className: 'flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg border border-blue-500/30 hover:bg-blue-700 transition-colors font-medium'
+            }, '装備')
+          ])
+        ])
+      ])
+    ])
   );
 };
 
