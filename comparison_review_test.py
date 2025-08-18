@@ -21,7 +21,7 @@ import os
 from typing import Dict, Any
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://element-mapper.preview.emergentagent.com')
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://tree-image-clone.preview.emergentagent.com')
 BASE_URL = f"{BACKEND_URL}/api"
 
 class ComparisonToolTester:

@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://element-mapper.preview.emergentagent.com/api"
+BASE_URL = "https://tree-image-clone.preview.emergentagent.com/api"
 
 class UserProfileEndpointTester:
     def __init__(self):

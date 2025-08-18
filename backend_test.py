@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 # Get backend URL from environment
-BACKEND_URL = "https://58a01a64-9567-4b51-bd38-6bbf621bdf87.preview.emergentagent.com"
+BACKEND_URL = "https://tree-image-clone.preview.emergentagent.com"
 
 def test_health_ping():
     """Quick health ping test for core endpoints"""

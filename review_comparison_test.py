@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # Configuration - Use the HTTPS URL from frontend .env
-BACKEND_URL = "https://element-mapper.preview.emergentagent.com/api"
+BACKEND_URL = "https://tree-image-clone.preview.emergentagent.com/api"
 
 class ComparisonToolReviewTester:
     def __init__(self):
@@ -210,7 +210,7 @@ class ComparisonToolReviewTester:
         self.log("🌐 Testing CORS headers...")
         
         # Check if frontend origin is allowed
-        frontend_origin = "https://element-mapper.preview.emergentagent.com"
+        frontend_origin = "https://tree-image-clone.preview.emergentagent.com"
         
         # Test with Origin header
         headers = {"Origin": frontend_origin}

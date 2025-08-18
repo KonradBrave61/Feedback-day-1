@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://element-mapper.preview.emergentagent.com/api"
+BACKEND_URL = "https://tree-image-clone.preview.emergentagent.com/api"
 
 class ComparisonToolAPITester:
     def __init__(self):

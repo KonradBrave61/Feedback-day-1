@@ -10,7 +10,7 @@ import sys
 from typing import Dict, Any
 
 # Get the HTTPS backend URL from frontend/.env
-BACKEND_URL = "https://element-mapper.preview.emergentagent.com/api"
+BACKEND_URL = "https://tree-image-clone.preview.emergentagent.com/api"
 
 def test_endpoint(endpoint: str, expected_count: int = None, description: str = "") -> Dict[str, Any]:
     """Test a single endpoint and return results"""
