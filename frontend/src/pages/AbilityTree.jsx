@@ -144,341 +144,314 @@ const cosmicBackground = {
 };
 
 const AbilityTree = () => {
-  const containerRef = useRef(null);
+  const { user } = useContext(AuthContext);
   const svgRef = useRef(null);
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
-  const [selecting, setSelecting] = useState(null); // selected node for inline card
-  const [anchor, setAnchor] = useState(null); // {left, top} relative to container
-  const totalLP = 25;
-  const [usedLP, setUsedLP] = useState(7); // some pre-spent
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [showTechniqueDetail, setShowTechniqueDetail] = useState(false);
+  const [nodes, setNodes] = useState(abilityTreeData.nodes);
+  const [availableLP, setAvailableLP] = useState(abilityTreeData.learningPoints.current);
 
-  const nodeById = useMemo(() => Object.fromEntries(nodes.map(n => [n.id, n])), [nodes]);
+  // Get node by ID
+  const getNodeById = (id) => nodes.find(n => n.id === id);
 
-  const lpLeft = totalLP - usedLP;
-
-  // Close on ESC
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setSelecting(null); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  const isUnlockable = (n) => {
-    if (!n) return false;
-    if (n.unlocked) return false;
-    if (!n.parent) return true;
-    return !!nodeById[n.parent]?.unlocked;
+  // Check if a node can be unlocked
+  const canUnlockNode = (node) => {
+    if (node.unlocked) return false;
+    if (node.cost > availableLP) return false;
+    if (!node.parent) return true; // Root nodes
+    const parent = getNodeById(node.parent);
+    return parent && parent.unlocked;
   };
 
-  const handleNodeClick = (n, evt) => {
-    if (!n) return;
-    if (n.type === 'Plus' || n.type === 'Gate') return; // not selectable
-    if (!isUnlockable(n)) return;
-    if ((n.cost || 0) > lpLeft) return;
-    if (n.type === 'Shot' || n.type === 'Dribble' || n.type === 'Pass' || n.type === 'Defense') {
-      // Anchor relative to container so it sticks during scroll and layout
-      const svgRect = svgRef.current?.getBoundingClientRect();
-      const contRect = containerRef.current?.getBoundingClientRect();
-      if (svgRect && contRect) {
-        const px = svgRect.left + (n.x / VIEW_W) * svgRect.width;
-        const py = svgRect.top + (n.y / VIEW_H) * svgRect.height;
-        setAnchor({ left: px - contRect.left, top: py - contRect.top });
+  // Handle node click
+  const handleNodeClick = (node) => {
+    if (node.type === 'character') return;
+    
+    if (canUnlockNode(node)) {
+      if (node.type === 'technique') {
+        setSelectedNode(node);
+        setShowTechniqueDetail(true);
       } else {
-        setAnchor({ left: window.innerWidth / 2, top: window.innerHeight / 2 });
+        // Unlock stat boost or other nodes directly
+        unlockNode(node);
       }
-      setSelecting(n);
     }
   };
 
-  const unlockWithTechnique = (tech) => {
-    if (!selecting) return;
-    setNodes(prev => prev.map(x => x.id === selecting.id ? { ...x, unlocked: true, technique: tech } : x));
-    setUsedLP(v => v + (selecting.cost || 0));
-    setSelecting(null);
+  // Unlock a node
+  const unlockNode = (node) => {
+    setNodes(prev => prev.map(n => 
+      n.id === node.id ? { ...n, unlocked: true } : n
+    ));
+    setAvailableLP(prev => prev - node.cost);
+    setShowTechniqueDetail(false);
   };
 
-  // SVG helpers
-  const renderGlowDefs = () => (
-    <defs>
-      <filter id="glow-strong" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-      <radialGradient id="orb-red" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#FF5A3C"/>
-        <stop offset="70%" stopColor="#D63A2A"/>
-        <stop offset="100%" stopColor="#6B1D14"/>
-      </radialGradient>
-      <radialGradient id="orb-blue" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#7DD3FC"/>
-        <stop offset="70%" stopColor="#38BDF8"/>
-        <stop offset="100%" stopColor="#0EA5E9"/>
-      </radialGradient>
-      <radialGradient id="orb-green" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#86EFAC"/>
-        <stop offset="70%" stopColor="#22C55E"/>
-        <stop offset="100%" stopColor="#16A34A"/>
-      </radialGradient>
-      <radialGradient id="orb-purple" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#E9D5FF"/>
-        <stop offset="70%" stopColor="#A78BFA"/>
-        <stop offset="100%" stopColor="#7C3AED"/>
-      </radialGradient>
-    </defs>
-  );
+  // Render connection lines
+  const renderConnections = () => {
+    return abilityTreeData.connections.map(conn => {
+      const fromNode = getNodeById(conn.from);
+      const toNode = getNodeById(conn.to);
+      if (!fromNode || !toNode) return null;
 
-  const Edge = ({ points, branch, active }) => {
-    const color = active ? branchColors[branch] : 'rgba(255,255,255,0.28)';
-    const width = active ? 4 : 2;
-    const glow = active ? 'url(#glow-strong)' : 'none';
-    const d = points.map((p,i) => `${i===0?'M':'L'} ${p[0]} ${p[1]}`).join(' ');
-    return (
-      <path d={d} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" filter={active ? 'url(#glow-strong)' : undefined} />
-    );
-  };
+      const isActive = fromNode.unlocked && toNode.unlocked;
+      const strokeColor = isActive ? conn.color : 'rgba(255,255,255,0.3)';
+      const strokeWidth = isActive ? 3 : 2;
 
-  const Node = ({ n }) => {
-    const unlockable = isUnlockable(n) && (lpLeft >= (n.cost || 0));
-    const commonProps = { onClick: (evt) => handleNodeClick(n, evt), style: { cursor: unlockable ? 'pointer' : 'default' } };
-
-    if (n.type === 'Shot') {
-      const active = n.unlocked;
       return (
-        <g {...commonProps}>
-          {active && (<circle cx={n.x} cy={n.y} r={26} fill={branchColors['shot']} opacity="0.3" />)}
-          <circle cx={n.x} cy={n.y} r={22} fill="url(#orb-red)" stroke="#0B0B0B" strokeWidth={3} filter={active ? 'url(#glow-strong)' : undefined} />
-          <circle cx={n.x} cy={n.y} r={12} fill="#B91C1C" opacity="0.9" />
-          {/* icon */}
-          <foreignObject x={n.x-8} y={n.y-8} width="16" height="16">
-            <div className="w-4 h-4 text-white" style={{ lineHeight: 0 }}><TypeIcon type="Shot" /></div>
-          </foreignObject>
-          {!n.unlocked && n.cost ? (
-            <foreignObject x={n.x-18} y={n.y+24} width="36" height="18">
-              <div className="w-full h-full text-[11px] text-white bg-black/70 border border-white/20 rounded px-1 flex items-center justify-center">+{n.cost}</div>
-            </foreignObject>
-          ) : null}
-        </g>
+        <line
+          key={`${conn.from}-${conn.to}`}
+          x1={fromNode.x}
+          y1={fromNode.y}
+          x2={toNode.x}
+          y2={toNode.y}
+          stroke={strokeColor}
+          strokeWidth={strokeWidth}
+          opacity={isActive ? 1 : 0.6}
+          filter={isActive ? 'url(#glow)' : 'none'}
+        />
       );
-    }
-
-    if (n.type === 'Dribble' || n.type === 'Pass' || n.type === 'Defense') {
-      const grad = n.type === 'Dribble' ? 'url(#orb-green)' : n.type === 'Pass' ? 'url(#orb-blue)' : 'url(#orb-purple)';
-      const active = n.unlocked;
-      return (
-        <g {...commonProps}>
-          {active && (<circle cx={n.x} cy={n.y} r={24} fill={branchColors[n.branch]} opacity="0.3" />)}
-          <circle cx={n.x} cy={n.y} r={20} fill={grad} stroke="#0B0B0B" strokeWidth={3} filter={active ? 'url(#glow-strong)' : undefined} />
-          <circle cx={n.x} cy={n.y} r={10} fill="rgba(0,0,0,0.35)" />
-          <foreignObject x={n.x-8} y={n.y-8} width="16" height="16">
-            <div className="w-4 h-4 text-white" style={{ lineHeight: 0 }}><TypeIcon type={n.type} /></div>
-          </foreignObject>
-          {!n.unlocked && n.cost ? (
-            <foreignObject x={n.x-18} y={n.y+22} width="36" height="18">
-              <div className="w-full h-full text-[11px] text-white bg-black/70 border border-white/20 rounded px-1 flex items-center justify-center">+{n.cost}</div>
-            </foreignObject>
-          ) : null}
-        </g>
-      );
-    }
-
-    if (n.type === 'Plus') {
-      return (
-        <g>
-          <circle cx={n.x} cy={n.y} r={15} fill="url(#orb-blue)" stroke="#0B0B0B" strokeWidth={2} />
-          <text x={n.x} y={n.y+4} textAnchor="middle" fontSize="12" fill="#00111E" fontWeight="700">+{n.value || 6}</text>
-        </g>
-      );
-    }
-
-    if (n.type === 'Gate') {
-      return (
-        <g>
-          <circle cx={n.x} cy={n.y} r={16} fill="url(#orb-purple)" stroke="#0B0B0B" strokeWidth={3} />
-          <foreignObject x={n.x-7} y={n.y-7} width="14" height="14">
-            <div className="w-3.5 h-3.5 text-white" style={{ lineHeight: 0 }}><Lock className="h-3.5 w-3.5" /></div>
-          </foreignObject>
-        </g>
-      );
-    }
-
-    // Core
-    return (
-      <g>
-        <circle cx={n.x} cy={n.y} r={22} fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
-      </g>
-    );
-  };
-
-  // Edge active if child unlocked (so path glows progressively)
-  const edgeActive = (edge) => {
-    // infer by closest end point mapping to a node and checking unlocked
-    const last = edge.points[edge.points.length - 1];
-    // find closest node to the end
-    let closest = null, dmin = 999999;
-    nodes.forEach(n => {
-      const dx = n.x - last[0], dy = n.y - last[1];
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if (d < dmin) { dmin = d; closest = n; }
     });
-    return closest?.unlocked;
   };
-          {/* inline selection state popup */}
-          {selecting && anchor && (
-            <div
-              className="absolute z-50 w-[340px] rounded-lg border shadow-xl"
-              style={{
-                left: Math.max(12, Math.min(anchor.x - 160, window.innerWidth - 360)) - (document.querySelector('body')?.getBoundingClientRect()?.left || 0),
-                top: Math.max(12, anchor.y + 16) - (document.querySelector('body')?.getBoundingClientRect()?.top || 0),
-                backgroundColor: logoColors.blackAlpha(0.92),
-                borderColor: logoColors.primaryBlueAlpha(0.35)
-              }}
-            >
-              <div className="p-3 border-b" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                <div className="flex items-center justify-between">
-                  <div className="text-white text-sm font-semibold">Select {selecting.type}</div>
-                  <div className="text-[11px] px-2 py-0.5 rounded bg-blue-600/30 text-blue-200 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>Cost +{selecting.cost} LP</div>
-                </div>
-              </div>
-              <div className="max-h-[260px] overflow-y-auto">
-                {listByType(selecting.type).map(t => (
-                  <button
-                    key={t.id}
-                    onClick={() => unlockWithTechnique(t)}
-                    className="w-full text-left px-3 py-2 hover:bg-blue-800/30 flex items-center gap-3"
-                    style={{ borderBottom: `1px solid ${logoColors.primaryBlueAlpha(0.12)}` }}
-                  >
-                    <img src={t.icon} alt={t.name} className="w-7 h-7" />
-                    <div className="min-w-0">
-                      <div className="text-white text-sm font-medium truncate">{t.name}</div>
-                      <div className="text-[11px] text-gray-300 truncate">{t.description}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              <div className="p-2 flex justify-end">
-                <Button variant="ghost" className="text-white hover:bg-blue-700/30" onClick={() => setSelecting(null)}>
-                  <X className="h-4 w-4 mr-1" /> Close
-                </Button>
-              </div>
-            </div>
-          )}
 
+  // Render individual nodes
+  const renderNode = (node) => {
+    const isClickable = canUnlockNode(node);
+    const isUnlocked = node.unlocked;
+
+    if (node.type === 'character') {
+      return (
+        <g key={node.id}>
+          <circle
+            cx={node.x}
+            cy={node.y}
+            r={35}
+            fill="url(#characterGradient)"
+            stroke="#FFFFFF"
+            strokeWidth={3}
+            filter="url(#glow)"
+          />
+          <foreignObject x={node.x - 30} y={node.y - 30} width={60} height={60}>
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+              12
+            </div>
+          </foreignObject>
+        </g>
+      );
+    }
+
+    if (node.type === 'technique') {
+      const orbColor = isUnlocked ? '#FF6B47' : (isClickable ? '#FF8B6B' : '#666666');
+      return (
+        <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node)}>
+          <circle
+            cx={node.x}
+            cy={node.y}
+            r={25}
+            fill={orbColor}
+            stroke="#FFFFFF"
+            strokeWidth={isUnlocked ? 3 : 2}
+            opacity={isUnlocked ? 1 : (isClickable ? 0.8 : 0.4)}
+            filter={isUnlocked ? 'url(#glow)' : 'none'}
+          />
+          {!isUnlocked && (
+            <foreignObject x={node.x - 8} y={node.y - 8} width={16} height={16}>
+              <div className="w-4 h-4 text-white">
+                <Zap className="w-4 h-4" />
+              </div>
+            </foreignObject>
+          )}
+          {!isUnlocked && node.cost > 0 && (
+            <foreignObject x={node.x - 12} y={node.y + 30} width={24} height={16}>
+              <div className="bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30">
+                +{node.cost}
+              </div>
+            </foreignObject>
+          )}
+        </g>
+      );
+    }
+
+    if (node.type === 'stat_boost') {
+      const orbColor = isUnlocked ? '#4A9EFF' : (isClickable ? '#6AB5FF' : '#666666');
+      return (
+        <g key={node.id} style={{ cursor: isClickable ? 'pointer' : 'default' }} onClick={() => handleNodeClick(node)}>
+          <circle
+            cx={node.x}
+            cy={node.y}
+            r={20}
+            fill={orbColor}
+            stroke="#FFFFFF"
+            strokeWidth={isUnlocked ? 3 : 2}
+            opacity={isUnlocked ? 1 : (isClickable ? 0.8 : 0.4)}
+          />
+          <text
+            x={node.x}
+            y={node.y + 4}
+            textAnchor="middle"
+            fill="white"
+            fontSize="12"
+            fontWeight="bold"
+          >
+            +{node.boost?.value || 5}
+          </text>
+          {!isUnlocked && node.cost > 0 && (
+            <foreignObject x={node.x - 12} y={node.y + 25} width={24} height={16}>
+              <div className="bg-black/70 text-white text-xs px-1 py-0.5 rounded text-center border border-white/30">
+                +{node.cost}
+              </div>
+            </foreignObject>
+          )}
+        </g>
+      );
+    }
+
+    if (node.type === 'gate') {
+      return (
+        <g key={node.id}>
+          <circle
+            cx={node.x}
+            cy={node.y}
+            r={18}
+            fill="#A855F7"
+            stroke="#FFFFFF"
+            strokeWidth={2}
+            opacity={0.7}
+          />
+          <foreignObject x={node.x - 8} y={node.y - 8} width={16} height={16}>
+            <div className="w-4 h-4 text-white">
+              <Lock className="w-4 h-4" />
+            </div>
+          </foreignObject>
+        </g>
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <div className="min-h-screen" style={{ background: logoColors.backgroundGradient }}>
+    <div className="min-h-screen text-white" style={cosmicBackground}>
       <Navigation />
-      <div className="container mx-auto px-4 py-6">
-        {/* Top bar mimic */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-white text-2xl font-semibold tracking-wider">SPEC</div>
-          <div className="rounded-xl px-4 py-2 text-right" style={{ background: 'linear-gradient(180deg, rgba(21,94,239,0.9), rgba(7,89,196,0.9))', boxShadow: '0 6px 20px rgba(0,0,0,0.25)' }}>
-            <div className="text-[12px] text-blue-200">Learning Points</div>
-            <div className="text-white text-lg font-bold">{lpLeft}<span className="text-blue-200">/{totalLP}p</span></div>
+      
+      {/* Top Character Info Panel */}
+      <div className="container mx-auto px-4 pt-6">
+        <div className="flex items-center justify-between mb-4">
+          {/* SPEC Label */}
+          <div className="text-white text-3xl font-bold tracking-wider">
+            SPEC
+          </div>
+          
+          {/* Character Info Card */}
+          <div className="flex items-center gap-4 bg-blue-900/30 rounded-lg px-4 py-2 border border-blue-500/30">
+            <img 
+              src={abilityTreeData.character.avatar} 
+              alt={abilityTreeData.character.name}
+              className="w-12 h-12 rounded-full border-2 border-white/50"
+            />
+            <div>
+              <div className="text-white font-medium">{abilityTreeData.character.name}</div>
+              <div className="text-blue-300 text-sm">Lv. {abilityTreeData.character.level}</div>
+            </div>
+          </div>
+          
+          {/* Learning Points */}
+          <div className="bg-blue-600/80 rounded-lg px-4 py-2 text-center border border-blue-400/30">
+            <div className="text-blue-200 text-xs font-medium">ラーニングポイント</div>
+            <div className="text-white text-xl font-bold">
+              {availableLP}<span className="text-blue-300">/{abilityTreeData.learningPoints.total}P</span>
+            </div>
           </div>
         </div>
 
-        {/* Canvas */}
-        <div ref={containerRef} className="relative rounded-xl overflow-hidden border" style={{ ...bgStyle, borderColor: 'rgba(56,189,248,0.4)' }}>
-          {/* soft energy core */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(0,180,255,0.35) 0%, rgba(0,0,0,0) 65%)', filter: 'blur(1px)' }} />
+        {/* Ability Tree Canvas */}
+        <div className="relative bg-black/20 rounded-xl border border-blue-500/30 overflow-hidden">
+          <svg 
+            ref={svgRef}
+            viewBox="0 0 1000 600" 
+            className="w-full h-[600px]"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {/* Gradients and Effects */}
+            <defs>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              
+              <radialGradient id="characterGradient" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#60A5FA"/>
+                <stop offset="50%" stopColor="#3B82F6"/>
+                <stop offset="100%" stopColor="#1E40AF"/>
+              </radialGradient>
+            </defs>
 
-          <svg ref={svgRef} viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} width="100%" height="560" preserveAspectRatio="xMidYMid meet" style={{ display: 'block' }}>
-            {renderGlowDefs()}
-            {/* edges */}
-            {edges.map(e => (
-              <Edge key={e.id} points={e.points} branch={e.branch} active={edgeActive(e)} />
-            ))}
-            {/* nodes */}
-            {nodes.map(n => <Node key={n.id} n={n} />)}
+            {/* Connection Lines */}
+            {renderConnections()}
+            
+            {/* Skill Nodes */}
+            {nodes.map(renderNode)}
           </svg>
-
-          {/* inline selection state popup */}
-          {selecting && anchor && (
-            <div
-              className="absolute z-50 w-[340px] rounded-lg border shadow-xl"
-              style={{
-                left: Math.min(Math.max(12, anchor.left - 160), (containerRef.current?.clientWidth || 360) - 360),
-                top: Math.min(Math.max(12, anchor.top + 18), (560 - 300)),
-                backgroundColor: logoColors.blackAlpha(0.92),
-                borderColor: logoColors.primaryBlueAlpha(0.35)
-              }}
-            >
-              <div className="p-3 border-b" style={{ borderColor: logoColors.primaryBlueAlpha(0.2) }}>
-                <div className="flex items-center justify-between">
-                  <div className="text-white text-sm font-semibold">Select {selecting.type}</div>
-                  <div className="text-[11px] px-2 py-0.5 rounded bg-blue-600/30 text-blue-200 border" style={{ borderColor: logoColors.primaryBlueAlpha(0.3) }}>Cost +{selecting.cost} LP</div>
-                </div>
-              </div>
-              <div className="max-h-[260px] overflow-y-auto">
-                {listByType(selecting.type).map(t => (
-                  <button
-                    key={t.id}
-                    onClick={() => unlockWithTechnique(t)}
-                    className="w-full text-left px-3 py-2 hover:bg-blue-800/30 flex items-center gap-3"
-                    style={{ borderBottom: `1px solid ${logoColors.primaryBlueAlpha(0.12)}` }}
-                  >
-                    <img src={t.icon} alt={t.name} className="w-7 h-7" />
-                    <div className="min-w-0">
-                      <div className="text-white text-sm font-medium truncate">{t.name}</div>
-                      <div className="text-[11px] text-gray-300 truncate">{t.description}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              <div className="p-2 flex justify-end">
-                <Button variant="ghost" className="text-white hover:bg-blue-700/30" onClick={() => setSelecting(null)}>
-                  <X className="h-4 w-4 mr-1" /> Close
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* bottom-left helper (placeholder) */}
-          <div className="absolute left-2 bottom-2 text-[11px] text-blue-200/80">Use LP to unlock nodes → choose technique</div>
-
-          {/* action buttons */}
-          <div className="absolute right-3 bottom-3 flex gap-2">
-            <Button className="text-black" style={{ background: logoColors.yellowOrangeGradient }} onClick={() => { setNodes(initialNodes); setEdges(initialEdges); setUsedLP(7); }}>Reset</Button>
-          </div>
         </div>
       </div>
 
-      {/* Technique Selection Modal */}
-      <Dialog open={!!selecting} onOpenChange={() => setSelecting(null)}>
-        <DialogContent className="max-w-2xl text-white border" style={{ backgroundColor: logoColors.blackAlpha(0.95), borderColor: logoColors.primaryBlueAlpha(0.4) }}>
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-semibold">Select Technique</h3>
-                <p className="text-sm text-gray-300 mt-1">{selecting ? `${selecting.type} · Cost +${selecting.cost} LP` : ''}</p>
-              </div>
-              <Badge className="bg-blue-600/30 text-blue-200 border-blue-400/30">LP Left: {lpLeft}</Badge>
+      {/* Technique Detail Modal */}
+      {showTechniqueDetail && selectedNode && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowTechniqueDetail(false)}>
+          <div 
+            className="bg-gradient-to-br from-blue-900/95 to-purple-900/95 rounded-lg border border-blue-400/50 p-6 max-w-md mx-4"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-blue-300 text-sm font-medium">選択アビリティを装備しよう</div>
+              <button 
+                onClick={() => setShowTechniqueDetail(false)}
+                className="text-white/70 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-          </DialogHeader>
-          <div className="grid grid-cols-2 gap-3 max-h-[360px] overflow-y-auto mt-2">
-            {listByType(selecting?.type).map(t => (
-              <div key={t.id} className="rounded-lg border p-3 hover:scale-[1.01] transition-all cursor-pointer" style={{ backgroundColor: logoColors.blackAlpha(0.5), borderColor: logoColors.primaryBlueAlpha(0.25) }} onClick={() => unlockWithTechnique(t)}>
-                <div className="flex items-center gap-3">
-                  <img src={t.icon} alt={t.name} className="w-8 h-8" />
-                  <div className="min-w-0">
-                    <div className="font-medium truncate">{t.name}</div>
-                    <div className="text-xs text-gray-300 truncate">{t.description}</div>
-                  </div>
+            
+            <div className="bg-blue-800/30 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <div className="text-white font-bold text-lg">{selectedNode.technique?.name}</div>
+                  <div className="text-blue-300 text-sm">{selectedNode.technique?.type}</div>
+                </div>
+                <div className="ml-auto text-right">
+                  <div className="text-white font-bold text-lg">{selectedNode.technique?.power}</div>
+                  <div className="text-blue-300 text-xs">TENSION</div>
                 </div>
               </div>
-            ))}
+              
+              <div className="text-white/90 text-sm leading-relaxed">
+                {selectedNode.technique?.description}
+              </div>
+            </div>
+            
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setShowTechniqueDetail(false)}
+                className="flex-1 bg-gray-600/50 text-white px-4 py-2 rounded-lg border border-gray-500/30 hover:bg-gray-600/70 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button 
+                onClick={() => unlockNode(selectedNode)}
+                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg border border-blue-500/30 hover:bg-blue-700 transition-colors font-medium"
+              >
+                装備
+              </button>
+            </div>
           </div>
-          <div className="flex justify-end mt-4">
-            <Button variant="ghost" className="text-white hover:bg-blue-700/30" onClick={() => setSelecting(null)}>
-              <X className="h-4 w-4 mr-1" /> Close
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      )}
     </div>
   );
 };
